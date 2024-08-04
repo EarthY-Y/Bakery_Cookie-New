@@ -1,9 +1,9 @@
 //import,require ตัว packet ที่เราต้องการใช้เข้ามา
-import cors from "cors";
-import session from "express-session";
-import dotenv from "dotenv";
-const express = require('express')
-const mysql = require('mysql')
+import cors from "../../node_modules/cors";
+import session from "../../node_modules/express-session";
+import dotenv from "../../node_modules/dotenv";
+const express = require('../../node_modules/express')
+const mysql = require('../../node_modules/mysql')
 
 dotenv.config();
 app.use(express.json());
