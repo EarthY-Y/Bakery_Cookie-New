@@ -1,6 +1,6 @@
-import {seque} from "seque" //Sequelize
+import sequelize from "sequelize" //Sequelize
 
-const db = new seque('bakery_cookie_new',/*ชื่อ database*/ 
+const db = new sequelize('bakery_cookie_new',/*ชื่อ database*/ 
     'root' /* user */ , 
     '', /* password */ 
     {

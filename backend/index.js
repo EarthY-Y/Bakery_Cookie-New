@@ -1,15 +1,27 @@
 //import,require ตัว packet ที่เราต้องการใช้เข้ามา
+import express from'express';
+import mysql from 'mysql';
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
-const express = require('express')
-const mysql = require('mysql')
+import customerRoute from "./routes/customer-Route.js";
+import orderRount from "./routes/order-Route.js";
+import db from "./config/dataBase.js";
+
 
 dotenv.config();
-app.use(express.json());
-
 //เรียกใช้ express ด้วย app
 const app = express();
+
+
+app.use(express.json()); //convert object to json object
+app.use(customerRoute);
+app.use(orderRount);
+
+// คำสั่งสร้าง dataTable
+// (async () => {
+//   await db.sync();
+// })();
 
 //setting packet ต่างๆที่เรานำเข้ามาใช้ให้กับ express
 app.use(session ({

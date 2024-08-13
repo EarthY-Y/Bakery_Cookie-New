@@ -1,0 +1,12 @@
+POST  http://localhost:5173/customer
+Content-Type: : application/json
+
+{
+    "phone_number": "+66918402145",
+    "f_name": "John Doe",
+    "l_name": "John Doe",
+    "username": "John Doe",
+    "password": "John Doe",
+    "confPassword": "John Doe",
+
+}
