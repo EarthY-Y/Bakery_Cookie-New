@@ -31,7 +31,8 @@ export const getCustomerById = async (req, res) => {
 
 export const createCustomer = async (req, res) => {
     const {phone_number, username, password, confPassword} = req.body;
-    if(password !== confPassword) return res.status(400).json({msg: "Password dan Confirm Password tidak cocok"});
+    
+    if(password !== confPassword) return res.status(400).json({msg: "Password not match"});
     //เข้ารหัส password กันโดนโจมตีระหว่างทาง
     const hashPassword = await argon2.hash(password);
     try {
@@ -40,7 +41,7 @@ export const createCustomer = async (req, res) => {
             phone_number: phone_number,
             password: hashPassword,
         });
-        res.status(201).json({msg: "Register Berhasil"});
+        res.status(201).json({msg: "Register complete"});
     } catch (error) {
         res.status(400).json({msg: error.message});
     }
