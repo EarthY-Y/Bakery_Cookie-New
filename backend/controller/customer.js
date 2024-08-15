@@ -1,8 +1,10 @@
 import Customer from "../models/customer-model.js"
 import argon2 from "argon2";
 
+//ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
     try {
+        //findAll เป็น menthod ของ Sequelize ใช้หาข้อมูลตาม attributes ที่กำหนด
         const response = await User.findAll({
             attributes:['phone_number','f_name','l_name','username']
         });
@@ -30,10 +32,11 @@ export const getCustomerById = async (req, res) => {
 }
 
 export const createCustomer = async (req, res) => {
+    //เวลา cilent ส่งอะไรมาจะถูกเก็บไว้ใน req.body
     const {phone_number, username, password, confPassword} = req.body;
     
     if(password !== confPassword) return res.status(400).json({msg: "Password not match"});
-    //เข้ารหัส password กันโดนโจมตีระหว่างทาง
+    //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
     const hashPassword = await argon2.hash(password);
     try {
         await User.create({
