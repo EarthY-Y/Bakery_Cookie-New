@@ -2,17 +2,19 @@
   "dependencies": {
     "argon2": "^0.40.3",
     "cors": "^2.8.5",
+    "cra-template": "1.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "mysql": "^2.18.1",
-    "sequelize": "^6.37.3",
-    "sequelize-cli": "^6.6.2",
     "mysql2": "^3.11.0",
     "nodemon": "^3.1.4",
-    "package-name": "^0.1.0",
-    "react-router-dom": "^6.24.1",
-    "seque": "^1.2.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "5.0.1",
+    "seque": "^1.2.1",
+    "sequelize": "^6.37.3",
+    "sequelize-cli": "^6.6.2"
   },
   "name": "bakery_cookie-new",
   "type": "module",
@@ -24,7 +26,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemon": "/bakery_store/backend/index.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",

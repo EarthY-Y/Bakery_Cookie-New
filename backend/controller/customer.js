@@ -1,11 +1,11 @@
-import Customer from "../models/customer-model.js"
+import Customer from "../models/customer-model.js" //ใช้สร้าง table เเละจัดการข้อมููลที่อยู่ใน database ด้วย lib sequelize
 import argon2 from "argon2";
 
 //ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
     try {
-        //findAll เป็น menthod ของ Sequelize ใช้หาข้อมูลตาม attributes ที่กำหนด
-        const response = await User.findAll({
+        //.findAll .fineOne .create เป็น menthod ของ Sequelize ใช้หาข้อมูลตาม attributes ที่กำหนด
+        const response = await Customer.findAll({
             attributes:['phone_number','f_name','l_name','username']
         });
         res.status(200).json(response);
@@ -18,7 +18,7 @@ export const getCustomerById = async (req, res) => {
     console.log(req);
     console.log(res);
     try {
-        const response = await User.findOne({
+        const response = await Customer.findOne({
             attributes:['phone_number','f_name','l_name','username'],
             
             where: {
@@ -39,7 +39,7 @@ export const createCustomer = async (req, res) => {
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
     const hashPassword = await argon2.hash(password);
     try {
-        await User.create({
+        await Customer.create({
             username: username,
             phone_number: phone_number,
             password: hashPassword,
