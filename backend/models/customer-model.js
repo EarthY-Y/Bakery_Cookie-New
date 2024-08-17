@@ -7,14 +7,13 @@ const {DataTypes} = sequelize
 const Users = db.define('customer', {
     phone_number: {
         type: DataTypes.INTEGER,
-        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         validate: {
             notEmpty: true
         }
     },
 
-    user_name: {
+    username: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -31,6 +30,22 @@ const Users = db.define('customer', {
             len: [3, 1000]
         }
     },
+    f_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+            len: [3, 1000]
+        }
+    },
+    l_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+            len: [3, 1000]
+        }
+    },
 
     role_function: {
         type: DataTypes.STRING,
@@ -39,7 +54,7 @@ const Users = db.define('customer', {
             notEmpty: true,
             len: [3, 1000]
         }
-    }
+    },
 
 },{
     freezeTableName: true

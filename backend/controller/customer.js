@@ -6,7 +6,7 @@ export const getCustomer = async (req, res) => {
     try {
         //.findAll .fineOne .create เป็น menthod ของ Sequelize ใช้หาข้อมูลตาม attributes ที่กำหนด
         const response = await Customer.findAll({
-            attributes:['phone_number','f_name','l_name','username']
+            attributes:['phone_number','f_name','l_name','username', 'createdAt', 'updatedAt']
         });
         res.status(200).json(response);
     } catch (error) {
@@ -33,7 +33,9 @@ export const getCustomerById = async (req, res) => {
 
 export const createCustomer = async (req, res) => {
     //เวลา cilent ส่งอะไรมาจะถูกเก็บไว้ใน req.body
-    const {phone_number, username, password, confPassword} = req.body;
+    console.log(req.body);
+    
+    const {phone_number, username, password, confPassword, role_function, f_name, l_name} = req.body;
     
     if(password !== confPassword) return res.status(400).json({msg: "Password not match"});
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
@@ -43,6 +45,9 @@ export const createCustomer = async (req, res) => {
             username: username,
             phone_number: phone_number,
             password: hashPassword,
+            f_name: f_name,
+            l_name: l_name,
+            role_function: role_function,
         });
         res.status(201).json({msg: "Register complete"});
     } catch (error) {
