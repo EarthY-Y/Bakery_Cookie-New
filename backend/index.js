@@ -5,7 +5,8 @@ import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
 import customerRoute from "./routes/customer-Route.js";
-import orderRount from "./routes/order-Route.js";
+import orderRounte from "./routes/order-Route.js";
+import authRoute from "./routes/auth-Route.js"
 import db from "./config/dataBase.js";
 
 
@@ -15,8 +16,7 @@ const app = express();
 
 
 app.use(express.json()); //convert object to json object
-app.use(customerRoute);
-app.use(orderRount);
+
 
 // คำสั่งสร้าง dataTable
 // (async () => {
@@ -43,3 +43,8 @@ app.use(cors({
 app.listen(process.env.APP_PORT, () => {
   console.log(`Server is running `);
 })
+
+//เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
+app.use(customerRoute);
+app.use(orderRounte);
+app.use(authRoute);
