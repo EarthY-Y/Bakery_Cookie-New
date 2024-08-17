@@ -4,7 +4,7 @@ import db from "../config/dataBase.js"
 //โมเดลมีไว้เพื่อสร้าง DataTable มั้ง
 const {DataTypes} = sequelize
 
-const Users = db.define('customer', {
+const Customer = db.define('customer', {
     phone_number: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -60,4 +60,4 @@ const Users = db.define('customer', {
     freezeTableName: true
 });
 
-export default Users;
+export default Customer;
