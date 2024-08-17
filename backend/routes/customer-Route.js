@@ -8,6 +8,7 @@ import {
 } from "../controller/customer.js"
 
 const router = express.Router();
+router.use(express.json());
 
 router.get('/customer', getCustomer);
 router.get('/customer/:id', getCustomerById);

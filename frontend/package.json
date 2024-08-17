@@ -1,18 +1,9 @@
 {
   "dependencies": {
-    "argon2": "^0.40.3",
-    "cors": "^2.8.5",
     "cra-template": "1.2.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "express-session": "^1.18.0",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.11.0",
-    "nodemon": "^3.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
-    "seque": "^1.2.1",
     "vite": "^5.4.1"
   },
   "name": "bakery_cookie-new",
@@ -37,7 +28,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
-    "start": "nodemon backend/index.js",
+    "start": "nodemon ../backend/index.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

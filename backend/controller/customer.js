@@ -1,7 +1,7 @@
 import db from "../config/dataBase.js"
 import argon2 from "argon2";
 
-//เชื่อมต่อกับฐานข้อมูล
+
 db.connect((err) => {
     if(err){
         console.log(err) //ถ้า error อาจจะต้องกำหนดหรือดู port ของ xmapp ด้วย
@@ -15,7 +15,7 @@ export const getCustomer = async (req, res) => {
     try {
         db.query(
             //สร้าง Query มาทำงาน 
-            "SELECT * FROM users ", 
+            "SELECT * FROM customer", 
             //results คือค่าที่เราจะได้จากการไป get มา
             (errr, results, fields) => {
                 if(errr){
