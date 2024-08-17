@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get('/customer', getCustomer);
 router.get('/customer/:id', getCustomerById);
-router.post('/customer', createCustomer);
+router.post('/customer/sign', createCustomer);
 router.patch('/customer/:id', updateCustomer);
 router.delete('/customer/:id', deleteCustomer);
 

@@ -1,11 +1,11 @@
-import sequelize from "sequelize" //Sequelize
+import mysql from "mysql"
 
-const db = new sequelize('myproject',/*ชื่อ database*/ 
-    'root' /* user */ , 
-    '', /* password */ 
-    {
+//กำหนด MySql Connection 
+const db = mysql.createConnection({
     host: 'localhost',
-    dialect: "mysql"
+    user: 'root',
+    password: '', //ถ้าเป็น xampp ไม่ต้องใส่
+    database: 'myproject'
 })
 
 //set ค่าให้เป็นค่าเริ่มต้นของ Module นี้ซึ่งมีได้เเค่ค่าเดียว เเต่ถ้าต้องการส่งออกหลายค่าให้เอาออก

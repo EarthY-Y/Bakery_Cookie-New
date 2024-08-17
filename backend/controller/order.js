@@ -1,4 +1,5 @@
-import Order from "../models/order-model.js"
+import db from "../config/dataBase.js"
+
 
 export const getOrder = (req, res) => {
 
