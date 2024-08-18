@@ -23,7 +23,7 @@ function navbar() {
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/product">product</a>
+                <a class="nav-link active" aria-current="page" href="dashboard/product">product</a>
                 {/* <NavLink to = {"/product"}>product</NavLink> */}
               </li>
               <li class="nav-item dropdown">
