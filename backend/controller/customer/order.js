@@ -1,4 +1,4 @@
-import db from "../config/dataBase.js"
+import db from "../../config/dataBase.js"
 
 
 export const getOrder = (req, res) => {

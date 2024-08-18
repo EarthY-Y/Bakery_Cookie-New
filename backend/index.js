@@ -4,8 +4,8 @@ import mysql from 'mysql';
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
-import customerRoute from "./routes/customer-Route.js";
-import orderRounte from "./routes/order-Route.js";
+import customerRoute from "./routes/customer/customer-Route.js";
+import orderRounte from "./routes/customer/order-Route.js";
 import authRoute from "./routes/auth-Route.js"
 import db from "./config/dataBase.js";
 

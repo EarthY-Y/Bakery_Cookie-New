@@ -1,15 +1,9 @@
-import db from "../config/dataBase.js"
+import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 
 
-db.connect((err) => {
-    if(err){
-        console.log(err) //ถ้า error อาจจะต้องกำหนดหรือดู port ของ xmapp ด้วย
-        return;
-    }
-    console.log('mysql successfully connect')
-})
+
 
 //ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
@@ -53,10 +47,8 @@ export const getCustomerById = async (req, res) => {
         console.log(id);
         
         db.query(
-            //สร้าง Query มาทำงาน 
             "SELECT * FROM customer WHERE id = ?",
             [id], 
-            //results คือค่าที่เราจะได้จากการไป get มา
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
