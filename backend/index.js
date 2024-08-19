@@ -35,11 +35,13 @@ app.use(session ({
   }
 }))
 
+//กำหนดต้นทางหรือ origin
 app.use(cors({
   credential: true,
   origin: ["http://localhost:3000"],
 }));
 
+//ตามด้วยการ origin ของ express ที่เราจะใช้ในการส่ง request ต่างๆไปยัง origin ดนบ้าน
 app.listen(process.env.APP_PORT, () => {
   console.log(`Server is running `);
 })

@@ -71,7 +71,7 @@ export const createCustomer = async (req, res) => {
     
     if(password !== confPassword) return res.status(400).json({msg: "Password not match"});
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
-    const hashPassword = await argon2.hash(password);
+    const hashPassword = await argon2.hash(password); //function hash(password, options) option เช่น ขนาด รูปเบบ เเละการกินพื้นที่ ต่างๆ
     try {
         db.query(
         "INSERT INTO users (phone_number, f_name, l_name, username, password, role_function, id) VALUES(?, ?, ?, ?, ?, ?, ? )",
