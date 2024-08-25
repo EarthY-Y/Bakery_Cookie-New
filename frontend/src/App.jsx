@@ -2,8 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '../public/vite.svg'
 import { BrowserRouter, Routes,  Route} from 'react-router-dom'
-import Dashboard from '../components/admin/dashboard'
-import Login from '../components/login-page/login-page'
+import Dashboard from '../page/dashboard/dashboard'
+import Login from '../page/login-page/login'
 
 
 function App() {
