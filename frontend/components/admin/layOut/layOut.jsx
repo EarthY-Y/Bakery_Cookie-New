@@ -2,15 +2,15 @@
 import React from 'react'
 import Navbar from './navbar/navbar'
 
-const layOut = ({children}) => {
+const layOutComponent = ({children}) => {
   return (
     <React.Fragment>
       <Navbar />
-        <div class="">
+        <div className="">
           <main>{children}</main>
         </div>
     </React.Fragment>
   )
 }
 
-export default layOut
+export default layOutComponent

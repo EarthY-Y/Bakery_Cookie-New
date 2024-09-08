@@ -1,12 +1,12 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 
-const Login = () => {
+const listProduct = () => {
 
-  const [column, setColumn] = useState([]);
-  const [record, setRecord] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const [records, setRecords] = useState([]);
   useEffect (() => {
-    axios.get('http://localhost:5000/Product')
+    axios.get('http://localhost:5000/Material')
     .then(res => {
       setColumn(Object.keys(res.data[0]))
       setRecord(res.data)
@@ -18,13 +18,13 @@ const Login = () => {
       <table className='table'>
         <tbody>
           <tr>
-            {column.map((c,i) => (
+            {columns.map((c,i) => (
               <th key={i}>{c}</th>
             ))}
           </tr>          
         </tbody>
             {
-              data.map((d, i) => (
+              records.map((d, i) => (
                 <tr key={i}>
                   <td>{d.product_name}</td>
                   <td>{d.status_product	}</td>
@@ -39,4 +39,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default listProduct;

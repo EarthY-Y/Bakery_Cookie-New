@@ -1,7 +1,7 @@
 import db from "../../config/dataBase.js"
 
 
-export const getProduct = (req, res) => {
+export const getProduct = async (req, res) => {
     try {
         db.query(
             `SELECT * FROM products `, 
@@ -12,18 +12,18 @@ export const getProduct = (req, res) => {
     }
 }
 
-export const getProductById = (req, res) => {
+export const getProductById = async (req, res) => {
     
 }
 
-export const createProduct = (req, res) => {
+export const createProduct = async (req, res) => {
     
 }
 
-export const updateProduct = (req, res) => {
+export const updateProduct = async (req, res) => {
     
 }
 
-export const deleteProduct = (req, res) => {
+export const deleteProduct = async (req, res) => {
     
 }
