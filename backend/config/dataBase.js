@@ -5,7 +5,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '', //ถ้าเป็น xampp ไม่ต้องใส่
-    database: 'myproject',
+    database: 'bakery_cookie_new',
 })
 
 db.connect((err) => {

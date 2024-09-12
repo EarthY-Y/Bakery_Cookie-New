@@ -8,7 +8,7 @@ export const Login = async (req, res) =>{
     const username = req.body.username
     db.query(
         //สร้าง Query มาทำงาน 
-        "SELECT username, role_function, id, password FROM customer WHERE username = ?",
+        "SELECT username, role_function, customerId, password FROM customer WHERE username = ?",
         [username], 
         //results คือค่าที่เราจะได้จากการไป get มา
         async (err, results) => {
@@ -35,12 +35,12 @@ export const Login = async (req, res) =>{
             }
     
             // ตั้งค่า session หรือการสร้าง seesion โดยใช้ filed id
-            req.session.userId = user.id;
+            req.session.userId = user.customerId;
             console.log(req.session.userId);
             
             
             //เเค่ให้เเสดงใน json
-            const id = user.id;
+            const customerId  = user.customerId ;
             const username = user.username;
             const role_function = user.role_function;
     

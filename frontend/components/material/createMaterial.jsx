@@ -8,11 +8,11 @@ const createMaterial = () => {
   const [quantity, setQuantity] = useState("");
   const [cost, setCost] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios.post('http://localhost:5000/material/create',{material_name, quantity, cost})
+    await axios.post('http://localhost:5000/material/create',{material_name: material_name, quantity: quantity, cost:cost})
     .then(res => {
-      navigate('/')
+      navigate('/material')
       console.log(res);
     }).catch(err => console.log(err))
   }

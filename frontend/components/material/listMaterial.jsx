@@ -1,10 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const listMaterial = () => {
+const ListMaterial = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const { data: res } = await axios.get("http://localhost:5000/material"); 
+        setPosts(res);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    getPosts();
+  }, []);
+
   return (
     <div className="container mt-5">
+      <div className="col-12">
+        <a className="btn btn-primary nav-link active" href="/material/create">เพิ่มวัตถุดิบ</a>
+      </div>
+
+      <p>จำนวน {posts.length} รายการ</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ชื่อวัตถุดิบ</th>
+            <th scope="col">จำนวน</th>
+            <th scope="col">ต้นทุน</th>
+            <th scope="col">วันที่สร้าง</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          {posts.map((posts, index) => (
+              <tr key={posts.material_id}>
+                <td>{posts.material_name}</td>
+                <td>{posts.quantity}</td>
+                <td>{posts.cost}</td>
+                <td>{new Date(posts.created_at).toISOString().split('T')[0]}</td>
+            </tr>
+          ) )}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default listMaterial;
+export default ListMaterial;

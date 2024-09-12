@@ -5,7 +5,7 @@ import {
     createMaterial, 
     updateMaterial, 
     deleteMaterial
-} from "../../controller/admin/material"
+} from "../../controller/admin/material.js"
 
 //import { verifyMaterial } from "../../middleware/authAdmin.js"
 
