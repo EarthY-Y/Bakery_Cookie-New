@@ -22,7 +22,7 @@ function App() {
           <Route path="/material/create" element={<CreateMaterial />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/create" element={<CreateAdmin />} />
-        </Routes>
+        </Routes> 
       </BrowserRouter>
     </div>
   )
