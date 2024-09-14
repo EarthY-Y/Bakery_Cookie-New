@@ -20,7 +20,7 @@ const ListAdmin = () => {
   return (
     <div className="container mt-5">
       <div className="col-12">
-        <a className="btn btn-primary nav-link active" href="/admin/create">เพิ่มวัตถุดิบ</a>
+        <a className="btn btn-primary nav-link active" href="/admin/create">เพิ่มพนักงาน</a>
       </div>
 
       <p>จำนวน {posts.length} รายการ</p>
