@@ -27,14 +27,14 @@ const createAdmin = () => {
           <p>{msg}</p>
         </div>
         <div className="mb-3">
-          <label className="form-label">ชื่อ</label>
+          <label className="form-label">ชื่อจริง</label>
           <input type="text" className="form-control" placeholder="ไม่บอก" 
             value={firstname} 
             onChange={(e) => setF_name(e.target.value)}
             />
         </div>
         <div className="mb-3">
-          <label className="form-label">นามสกุล</label>
+          <label className="form-label">นามสกุลจริง</label>
           <input type="text" className="form-control" placeholder="ไม่บอก" 
             value={lastname} 
             onChange={(e) => setL_name(e.target.value)}
