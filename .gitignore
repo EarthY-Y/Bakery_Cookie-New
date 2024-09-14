@@ -12,7 +12,7 @@ node_modules
 .env
 
 #config
-backend/config/dataBase.js
+dataBase
 
 # Log files
 *.log
