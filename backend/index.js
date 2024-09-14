@@ -47,14 +47,14 @@ app.use(session ({
   }
 }))
 
+//
+app.listen(process.env.APP_PORT, () => {
+  console.log(`Server is running `);
+})
+
 //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
 app.use(customerRoute);
 app.use(orderRounte);
 app.use(materialRounte);
 app.use(authRoute);
 app.use(adminRoute);
-
-//ตามด้วยการ origin ของ express ที่เราจะใช้ในการส่ง request ต่างๆไปยัง origin ดนบ้าน
-app.listen(process.env.APP_PORT, () => {
-  console.log(`Server is running `);
-})
