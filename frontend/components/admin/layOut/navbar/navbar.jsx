@@ -17,7 +17,6 @@ function navbar() {
               <button className="btn btn-outline-light" type="submit"><i className="bi bi-search"></i></button>
             </form>
          <div className='col-md-3 text-end'>
-          
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
