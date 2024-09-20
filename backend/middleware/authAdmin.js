@@ -6,12 +6,12 @@ export const verifyAdmin = async (req, res , next) => {
     if(!req.session.userId){
         return res.status(401).json({msg: "Please login to your account!"});
     }
-    const username = req.session.userName
-    console.log(userId);
+    const id = req.session.userId
+    console.log(id);
     
     db.query(
-        "SELECT admin_id, userName, role_function FROM admin WHERE userName = ?",
-        [username], 
+        "SELECT admin_id, userName, role_function FROM admin WHERE admin_id = ?",
+        [id], 
 
         (errr, results, fields) => {
             console.log(results);
