@@ -36,8 +36,8 @@ app.use(cors({
 }));
 
 //setting packet ต่างๆที่เรานำเข้ามาใช้ให้กับ express
+/* ***สิ่งที่ต้องทำเพิ่มคือสร้าง Table เพื่อเก็บ Session เอาไว้ใน Database เพื่อเวลาเอาไปใช้ต่อตอนเช็ค middleware */
 app.use(session ({
-  // secret: 'secret',
   secret: process.env.SEESION_SECRET,
   resave: false,
   saveUninitialized: true,
