@@ -15,7 +15,7 @@ export const getCustomer = async (req, res) => {
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
-                    return res.status(400),send();
+                    return res.status(400).send()
                 }
                 console.log(results)
                 res.status(200).json(results);
@@ -52,7 +52,7 @@ export const getCustomerById = async (req, res) => {
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
-                    return res.status(400),send();
+                    return res.status(400).send()
                 }
                 console.log(results)
                 res.status(200).json(results);
@@ -79,7 +79,7 @@ export const createCustomer = async (req, res) => {
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
-                    return res.status(400),send();
+                    return res.status(400).send()
                 }
         res.status(201).json({msg: "Register complete"}); 
     }

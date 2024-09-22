@@ -106,7 +106,7 @@ export const checkLogin = async (req, res) =>{
             console.log(results);
             if(errr){
                 console.log(errr)
-                return res.status(400),send();
+                return res.status(400).send()
             }
             if(!results) return res.status(404).json({msg: "User not found"});
             console.log(results)

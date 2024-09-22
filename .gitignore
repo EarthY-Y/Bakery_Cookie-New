@@ -9,10 +9,13 @@ lerna-debug.log*
 
 #Node modules
 node_modules
+
+#environment
 .env
 
 #config
-backend\config\dataBase.js
+configs/
+service/
 
 # Log files
 *.log

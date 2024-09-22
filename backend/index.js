@@ -1,6 +1,5 @@
 //import,require ตัว packet ที่เราต้องการใช้เข้ามา
 import express from'express';
-import mysql from 'mysql';
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
@@ -9,7 +8,6 @@ import orderRounte from "./routes/customer/order-Route.js";
 import materialRounte from "./routes/admin/material-Route.js";
 import adminRoute from "./routes/admin/admin-Route.js";
 import authRoute from "./routes/auth-Route.js"
-import db from "./config/dataBase.js";
 
 //เรียกใช้ express ด้วย app
 const app = express();
