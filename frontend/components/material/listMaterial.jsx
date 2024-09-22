@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const ListMaterial = () => {
@@ -20,11 +21,11 @@ const ListMaterial = () => {
   return (
     <div className="container mt-5">
       <div className="col-12">
-        <a className="btn btn-primary nav-link active" href="/material/create">เพิ่มวัตถุดิบ</a>
+        <Link className="btn btn-primary nav-link active" to="/material/create">เพิ่มวัตถุดิบ</Link>
       </div>
 
       <p>จำนวน {posts.length} รายการ</p>
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">ชื่อวัตถุดิบ</th>
@@ -36,7 +37,7 @@ const ListMaterial = () => {
         <tbody>
           
           {posts.map((posts, index) => (
-              <tr key={posts.material_id}>
+              <tr key={index}>
                 <td>{posts.material_name}</td>
                 <td>{posts.quantity}</td>
                 <td>{posts.cost}</td>
