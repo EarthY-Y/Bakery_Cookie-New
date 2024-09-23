@@ -7,7 +7,7 @@ import Product from '../page/product-page/listProduct-page'
 import ListMaterial from '../page/material-page/listMaterial-page'
 import CreateMaterial from '../page/material-page/createMaterial-page'
 import CreateAdmin from '../page/admin-page/createAdmin-page'
-import Admin from '../page/admin-page/listAdmin-page'
+import ListAdmin from '../page/admin-page/listAdmin-page'
 
 const router = createBrowserRouter( [
   {
@@ -17,20 +17,21 @@ const router = createBrowserRouter( [
   },
   {
     path: "/material",
-    element: <ListMaterial />,
-    // children: [
-    //   {
-    //     path: "/material/:id",
-    //     element: <EditMaterial />,
-    //   }
-    // ],
+    children: [
+      {
+        path: "",
+        element: <ListMaterial />,
+      },
+      {
+        path: "/material/create",
+        element: <CreateMaterial />,
+      },
+      // {
+      //   path: "/material/:id",
+      //   element: <EditMaterial />,
+      // }
+    ],
   },
-
-  {
-    path: "/material/create",
-    element: <CreateMaterial />,
-  },
-  
   {
     path: "/login",
     element: <Login />,
@@ -47,18 +48,20 @@ const router = createBrowserRouter( [
   },
   {
     path: "/admin",
-    element: <Admin />,
-    // children: [
-    //   {
-    //     path: "create/:id", 
-    //     element: <EditAdmin />,
-    //   },
-    // ],
-  },
-  
-  {
-    path: "/admin/create",
-    element: <CreateAdmin />,
+    children: [
+      {
+        path: "", 
+        element: <ListAdmin />,
+      },
+      {
+        path: "/admin/create",
+        element: <CreateAdmin />,
+      },
+      // {
+      //   path: "edit/:id", 
+      //   element: <EditAdmin />,
+      // },
+    ],
   },
   
 ]);

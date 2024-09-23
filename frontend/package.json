@@ -8,7 +8,7 @@
     "react-dom": "^18.3.1",
     "react-icon": "^1.0.0",
     "react-router-dom": "^6.26.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^3.0.1",
     "vite": "^5.4.1"
   },
   "name": "bakery_cookie-new",
