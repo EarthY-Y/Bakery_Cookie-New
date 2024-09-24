@@ -27,21 +27,6 @@ export const getCustomer = async (req, res) => {
 }
 
 export const getCustomerById = async (req, res) => {
-    // console.log(req);
-    // console.log(res);
-    // try {
-    //     const response = await Customer.findOne({
-    //         attributes:['phone_number','f_name','l_name','username'],
-            
-    //         where: {
-    //             phone_number: req.params.phone_number
-    //         }
-    //     });
-    //     res.status(200).json(response);
-    // } catch (error) {
-    //     res.status(500).json({msg: error.message});
-    // }
-
     try {
         const id = req.params.id
         console.log(id);

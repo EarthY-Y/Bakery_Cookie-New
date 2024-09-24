@@ -72,8 +72,8 @@ export const LoginRoleAdmin = async (req, res) =>{
             if (!match) {
                 return res.status(400).json({ msg: "Wrong Password" });
             }
-            req.session.id = user.customerId;
-            req.session.role = user.role_function; //set role จาก role_function  
+            req.session.id = user.admin_id;
+            // req.session.role = user.role_function; //set role จาก role_function  
             console.log(req.session.id);
     
             //เเค่ให้เเสดงใน json

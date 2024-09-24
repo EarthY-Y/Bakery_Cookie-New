@@ -21,7 +21,7 @@ export const verifyAdmin = async (req, res , next) => {
             }
             if(!results) return res.status(404).json({msg: "User not found"});
             //ต้อง เช็คผ่าน seesion ที่ได้จาก auth ที่ table admin
-            if(results.role_function === "admin") return res.status(403).json({msg: "You ain't got no right"});
+            if(results.role_function !== "admin") return res.status(403).json({msg: "You ain't got no right"});
             req.username = results.userName;
             req.role_function = results.role_function;
             next();
