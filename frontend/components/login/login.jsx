@@ -6,27 +6,35 @@ const Login = () => {
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card">
-            <div className="card-body">
-              <h3 className="card-title text-center">เข้าสู่ระบบ</h3>
+            <div className="px-5 card-body">
+              <h3 className="mb-4 card-title text-center">เข้าสู่ระบบ</h3>
               <form>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">อีเมล</label>
-                  <input type="email" className="form-control" id="email" placeholder="อีเมล หรือ เบอร์โทรศัพท์" />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">รหัสผ่าน</label>
-                  <input type="password" className="form-control" id="password" placeholder="รหัสผ่าน" />
-                  <div className="d-flex justify-content-end mb-3">
-                    <a href="#forgot-password">ลืมรหัสผ่าน</a>
+               <div className="row mb-4">
+                  <label htmlFor="email" className="col-3 col-auto col-form-label">อีเมล</label>
+                  <div className="col-8">
+                    <input type="email" className="form-control" id="email" placeholder="อีเมล หรือ เบอร์โทรศัพท์"/>
                   </div>
-                  <label ></label>
+               </div>
+                <div className="row">
+                  <label htmlFor="password" className="col-3 col-auto col-form-label">รหัสผ่าน</label>
+                  <div className="col-8">
+                    <input type="password" className="form-control" id="password" placeholder="รหัสผ่าน" />
+                  </div>
                 </div>
-                <div className="d-grid">
-                  <button type="submit" className="btn btn-primary">เข้าสู่ระบบ</button>
+                <div className="mb-4 text-end col-11">
+                  <a href="#" className="small">ลืมรหัสผ่าน</a>
                 </div>
-                <div className="text-center">
-                  <span>ยังไม่ได้สมัครสมาชิก ? <a href="#register">สมัครสมาชิก</a></span>
-                </div>
+                <div className="mb-4 row justify-content-center">
+                  <div className="col-5">
+                    <button style={{ backgroundColor: '#A8E5F8'}} type="submit" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
+                  </div>
+                  <div className="col-5">
+                    <button style={{ backgroundColor: '#A8E5F8'}} type="back" className="btn btn-outline-dark w-100">กลับ</button>
+                  </div>
+               </div>
+               <div className="mt-3 text-center">
+                <p className="small">ยังไม่ได้เป็นสมาชิก? <a href="#">สมัครสมาชิก</a></p>
+              </div>
               </form>
             </div>
           </div>
