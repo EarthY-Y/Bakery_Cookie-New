@@ -16,10 +16,16 @@ const Login = () => {
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">รหัสผ่าน</label>
                   <input type="password" className="form-control" id="password" placeholder="รหัสผ่าน" />
+                  <div className="d-flex justify-content-end mb-3">
+                    <a href="#forgot-password">ลืมรหัสผ่าน</a>
+                  </div>
                   <label ></label>
                 </div>
                 <div className="d-grid">
                   <button type="submit" className="btn btn-primary">เข้าสู่ระบบ</button>
+                </div>
+                <div className="text-center">
+                  <span>ยังไม่ได้สมัครสมาชิก ? <a href="#register">สมัครสมาชิก</a></span>
                 </div>
               </form>
             </div>
