@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   return (
@@ -33,7 +34,7 @@ const Login = () => {
                   </div>
                </div>
                <div className="mt-3 text-center">
-                <p className="small">ยังไม่ได้เป็นสมาชิก? <a href="#">สมัครสมาชิก</a></p>
+                <p className="small">ยังไม่ได้เป็นสมาชิก? <Link to="/signup">สมัครสมาชิก</Link></p>
               </div>
               </form>
             </div>
