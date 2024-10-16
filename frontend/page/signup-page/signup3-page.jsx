@@ -1,15 +1,15 @@
 import React from 'react'
 import LayOut from '../../components/admin/layOut/layOut'
-import Signup2 from '../../components/signup/signup2'
+import Signup3 from '../../components/signup/signup3'
 
-function signup2() {
+function signup3() {
   return (
     <div>
       <LayOut>
-        <Signup2 />
+        <Signup3 />
       </LayOut>
     </div>
   )
 }
 
-export default signup2
+export default signup3

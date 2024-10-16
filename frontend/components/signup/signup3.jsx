@@ -60,8 +60,8 @@ const Signup3 = () => {
                     </Link>
                   </div>
                   <div className="col-5">
-                    <Link to="/signup3">
-                    <button style={{ backgroundColor: '#FFE194'}} type="ok" className="btn btn-outline-dark w-100">สมัครสมาชิก</button>
+                    <Link to="/signup3"
+                    style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">สมัครสมาชิก
                     </Link>
                   </div>
                 </div>

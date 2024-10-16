@@ -27,10 +27,10 @@ const Login = () => {
                 </div>
                 <div className="mb-4 row justify-content-center">
                   <div className="col-5">
-                    <button style={{ backgroundColor: '#F2EEB0'}} type="submit" className="btn btn-outline-dark w-100">กลับ</button>
+                    <button style={{ backgroundColor: '#F2EEB0'}} type="back" className="btn btn-outline-dark w-100">กลับ</button>
                   </div>
                   <div className="col-5">
-                    <button style={{ backgroundColor: '#A8E5F8'}} type="back" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
+                    <button style={{ backgroundColor: '#A8E5F8'}} type="submit" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
                   </div>
                </div>
                <div className="mt-3 text-center">

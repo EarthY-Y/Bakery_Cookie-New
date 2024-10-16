@@ -42,12 +42,12 @@ const Signup = () => {
                 <div className="mb-4 row justify-content-center">
                   <div className="col-5">
                     <Link to="/Login">
-                    <button style={{ backgroundColor: '#F2EEB0'}} type="goback" className="btn btn-outline-dark w-100">ย้อนกลับ</button>
+                    <button style={{ backgroundColor: '#F2EEB0'}} type="back" className="btn btn-outline-dark w-100">ย้อนกลับ</button>
                     </Link>
                   </div>
                   <div className="col-5">
-                    <Link to="/signup2">
-                    <button style={{ backgroundColor: '#C1F2B0'}} type="ok" className="btn btn-outline-dark w-100">ยืนยัน</button>
+                    <Link to="/signup2"
+                      style={{ backgroundColor: '#C1F2B0'}} type="submit" className="btn btn-outline-dark w-100">ยืนยัน
                     </Link>
                   </div>
                </div>

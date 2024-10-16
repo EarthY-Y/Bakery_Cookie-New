@@ -20,11 +20,11 @@ function navbar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link active text-light" aria-current="page" href="#">เข้าสู่ระบบ</a>
+                <a className="nav-link active text-light" aria-current="page" href="Login">เข้าสู่ระบบ</a>
               </li>
               <i className="bi bi-dash-lg fs-3 text-black" style={{ transform: 'rotate(90deg)' }}></i>
               <li className="nav-item">
-                <a className="nav-link active text-light" aria-current="page" href="dashboard/product">สมัครสมาชิก</a>
+                <a className="nav-link active text-light" aria-current="page" href="signup">สมัครสมาชิก</a>
                 {/* <NavLink to = {"/product"}>product</NavLink> */}
               </li>
               <li className="nav-item">

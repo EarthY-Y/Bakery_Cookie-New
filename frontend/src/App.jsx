@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import { BrowserRouter, Routes,  Route} from 'react-router-dom'
+import { BrowserRouter, Routes,  Route } from 'react-router-dom'
 import Dashboard from '../page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import Product from '../page/product-page/listProduct-page'
@@ -8,9 +8,9 @@ import Material from '../page/material-page/listMaterial-page'
 import CreateMaterial from '../page/material-page/createMaterial-page'
 import CreateAdmin from '../page/admin-page/createAdmin-page'
 import Admin from '../page/admin-page/listAdmin-page'
-import Signup from '../components/signup/signup'
-import Signup2 from '../components/signup/signup2'
-import Signup3 from '../components/signup/signup3'
+import Signup from '../page/signup-page/signup-page'
+import Signup2 from '../page/signup-page/signup2-page'
+import Signup3 from '../page/signup-page/signup3-page'
 
 
 function App() {
