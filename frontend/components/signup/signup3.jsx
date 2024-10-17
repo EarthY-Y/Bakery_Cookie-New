@@ -61,7 +61,7 @@ const Signup3 = () => {
                   </div>
                   <div className="col-5">
                     <Link to="/signup3"
-                    style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">สมัครสมาชิก
+                      style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">สมัครสมาชิก
                     </Link>
                   </div>
                 </div>

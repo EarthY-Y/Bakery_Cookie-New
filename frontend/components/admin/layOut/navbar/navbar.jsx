@@ -22,7 +22,7 @@ function navbar() {
               </li>
               <i className="bi bi-dash-lg fs-3 text-black" style={{ transform: 'rotate(90deg)' }}></i>
               <li className="nav-item">
-                <a className="nav-link active text-light" aria-current="page" href="signup">สมัครสมาชิก</a>
+                <a className="nav-link active text-light" aria-current="page" href="/signup">สมัครสมาชิก</a>
                 {/* <NavLink to = {"/product"}>product</NavLink> */}
               </li>
               <li className="nav-item">

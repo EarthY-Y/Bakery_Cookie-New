@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
-
 import Dashboard from '../page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import Product from '../page/product-page/listProduct-page'
@@ -18,7 +16,7 @@ import ListAdmin from '../page/admin-page/listAdmin-page'
 
 const router = createBrowserRouter( [
   {
-    path: "/",
+    path: "",
     element: <Dashboard />,
     errorElement:<div>404 Not Found</div>
   },
@@ -68,6 +66,23 @@ const router = createBrowserRouter( [
       //   path: "edit/:id", 
       //   element: <EditAdmin />,
       // },
+    ],
+  },
+  {
+    path: "/signup",
+    children: [
+      {
+        path: "", 
+        element: <Signup />,
+      },
+      {
+        path: "/signup/step2",
+        element: <Signup2 />,
+      },
+      {
+        path: "/signup/step3", 
+        element: <Signup3 />,
+      },
     ],
   },
   

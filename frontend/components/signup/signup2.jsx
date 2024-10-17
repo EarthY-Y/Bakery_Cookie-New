@@ -39,8 +39,8 @@ const Signup2 = () => {
                     </Link>
                   </div>
                   <div className="col-5">
-                    <Link to="/signup3"
-                    style={{ backgroundColor: '#C1F2B0'}} type="submit" className="btn btn-outline-dark w-100">ยืนยัน
+                    <Link to="/signup/step3"
+                      style={{ backgroundColor: '#C1F2B0'}} type="submit" className="btn btn-outline-dark w-100">ยืนยัน
                     </Link>
                   </div>
                 </div>
