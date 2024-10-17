@@ -2,9 +2,6 @@ import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 
-
-
-
 //ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
     try {
@@ -59,8 +56,8 @@ export const createCustomer = async (req, res) => {
     const hashPassword = await argon2.hash(password); //function hash(password, options) option เช่น ขนาด รูปเบบ เเละการกินพื้นที่ ต่างๆ
     try {
         db.query(
-        "INSERT INTO customer (customerId, phone_number, f_name, l_name, username, password, role_function,) VALUES(?, ?, ?, ?, ?, ?, ? )",
-        [id, f_name, l_name, username, hashPassword, "usere", id],
+        "INSERT INTO customer (customerId, phone_number, f_name, l_name, username, password, status, role_function) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+        [id, phone_number, f_name, l_name, username, hashPassword, "Y" ,"usere"],
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
