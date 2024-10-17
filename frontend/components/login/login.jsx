@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Footer from '../admin/layOut/footer/footer';
 
 const Login = () => {
   return (

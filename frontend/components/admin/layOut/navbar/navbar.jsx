@@ -9,6 +9,7 @@ import { FaArrowRight } from 'react-icons/fa';
 
 function navbar() {
   return (
+    <div>
     <div class="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C'}}>
       <nav className="navbar navbar-expand-lg navbar-light " >
         <div className="container-fluid" >
@@ -37,6 +38,20 @@ function navbar() {
         </div>
       </nav>
       </div>
+      <div className="container text-center my-4">
+        <img
+          src="https://example.com/logo.png" // เปลี่ยน URL เป็นโลโก้ของคุณ
+          alt="Bakery Cookie New Happy Family"
+          style={{ width: '150px' }}
+        />
+        <nav className="container text-center col-5 mt-3 border rounded-pill p-1 border-dark"style={{ backgroundColor: '#C40C0C'}}>
+          <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
+          <button className="btn btn-warning rounded-pill mx-1">หมวดหมู่</button>
+          <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
+          <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
+        </nav>
+      </div>
+    </div>
   )
 }
 
