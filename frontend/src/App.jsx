@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
+
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
+
 import Dashboard from '../page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import Product from '../page/product-page/listProduct-page'
 import ListMaterial from '../page/material-page/listMaterial-page'
 import CreateMaterial from '../page/material-page/createMaterial-page'
 import CreateAdmin from '../page/admin-page/createAdmin-page'
+import Admin from '../page/admin-page/listAdmin-page'
+import Signup from '../page/signup-page/signup-page'
+import Signup2 from '../page/signup-page/signup2-page'
+import Signup3 from '../page/signup-page/signup3-page'
 import ListAdmin from '../page/admin-page/listAdmin-page'
+
 
 const router = createBrowserRouter( [
   {
