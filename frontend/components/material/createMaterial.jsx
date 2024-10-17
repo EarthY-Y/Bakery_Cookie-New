@@ -1,7 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
 
 const createMaterial = () => {
 
@@ -40,7 +39,7 @@ const createMaterial = () => {
   return (
     <div className="container mt-5">
       <form onSubmit={handleSubmit}>
-      <div className="mb-3">
+        <div className="mb-3">
           <label className="form-label">ชื่อสินค้า</label>
           <input type="text" className="form-control" placeholder="ชื่อสินค้า" 
             value={MaterialName} 

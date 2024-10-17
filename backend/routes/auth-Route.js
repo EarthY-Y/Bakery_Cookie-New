@@ -1,6 +1,6 @@
 import express from "express";
 import {Login,
-    logOut
+        logOut
 } from "../controller/auth.js"
 
 const router = express.Router();
