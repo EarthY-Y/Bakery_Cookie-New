@@ -1,7 +1,4 @@
 import React from 'react'
-// import reactLogo from '../../../../src/assets/react.svg '
-// import viteLogo from '../../../public/vite.svg'  
-// import '../../../../src/App.css'
 import { NavLink } from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';

@@ -24,7 +24,7 @@ const ListAdmin = () => {
       </div>
 
       <p>จำนวน {posts.length} รายการ</p>
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">ชื่อผู้ใช้</th>
@@ -36,7 +36,7 @@ const ListAdmin = () => {
         <tbody>
           
           {posts.map((posts, index) => (
-              <tr key={posts.userName}>
+              <tr key={index}>
                 <td>{posts.userName}</td>
                 <td>{posts.f_name}</td>
                 <td>{posts.l_name}</td>

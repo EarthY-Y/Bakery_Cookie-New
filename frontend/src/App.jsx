@@ -1,37 +1,84 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import { BrowserRouter, Routes,  Route } from 'react-router-dom'
+
+import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
+
 import Dashboard from '../page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import Product from '../page/product-page/listProduct-page'
-import Material from '../page/material-page/listMaterial-page'
+import ListMaterial from '../page/material-page/listMaterial-page'
 import CreateMaterial from '../page/material-page/createMaterial-page'
 import CreateAdmin from '../page/admin-page/createAdmin-page'
 import Admin from '../page/admin-page/listAdmin-page'
 import Signup from '../page/signup-page/signup-page'
 import Signup2 from '../page/signup-page/signup2-page'
 import Signup3 from '../page/signup-page/signup3-page'
+import ListAdmin from '../page/admin-page/listAdmin-page'
 
+
+const router = createBrowserRouter( [
+  {
+    path: "/",
+    element: <Dashboard />,
+    errorElement:<div>404 Not Found</div>
+  },
+  {
+    path: "/material",
+    children: [
+      {
+        path: "",
+        element: <ListMaterial />,
+      },
+      {
+        path: "/material/create",
+        element: <CreateMaterial />,
+      },
+      // {
+      //   path: "/material/:id",
+      //   element: <EditMaterial />,
+      // }
+    ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/product",
+    element: <Product />,
+    // children: [
+    //   {
+    //     path: "product/:id", 
+    //     element: <EditProduct />,
+    //   },
+    // ],
+  },
+  {
+    path: "/admin",
+    children: [
+      {
+        path: "", 
+        element: <ListAdmin />,
+      },
+      {
+        path: "/admin/create",
+        element: <CreateAdmin />,
+      },
+      // {
+      //   path: "edit/:id", 
+      //   element: <EditAdmin />,
+      // },
+    ],
+  },
+  
+]);
 
 function App() {
   return (
-    <div >
-      <BrowserRouter>
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signup2" element={<Signup2 />} />
-          <Route path="/signup3" element={<Signup3 />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/material" element={<Material />} />
-          <Route path="/material/create" element={<CreateMaterial />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/create" element={<CreateAdmin />} />
-        </Routes> 
-      </BrowserRouter>
+    <div>
+      <RouterProvider router={router} />
     </div>
-  )
+  );
 }
 
 export default App

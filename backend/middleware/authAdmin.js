@@ -6,22 +6,23 @@ export const verifyAdmin = async (req, res , next) => {
     if(!req.session.userId){
         return res.status(401).json({msg: "Please login to your account!"});
     }
-    const userId = req.params.userId
-    console.log(userId);
+    const id = req.session.userId
+    console.log(id);
     
     db.query(
-        "SELECT username, role_function, id FROM customer WHERE id = ?",
-        [userId], 
+        "SELECT admin_id, userName, role_function FROM admin WHERE admin_id = ?",
+        [id], 
 
         (errr, results, fields) => {
             console.log(results);
             if(errr){
                 console.log(errr)
-                return res.status(400),send();
+                return res.status(400).json({ msg: "Bad Request" });
             }
             if(!results) return res.status(404).json({msg: "User not found"});
-            if(results.role_function === "admin") return res.status(403).json({msg: "You ain't got no right"});
-            req.userId = results.id;
+            //ต้อง เช็คผ่าน seesion ที่ได้จาก auth ที่ table admin
+            if(results.role_function !== "admin") return res.status(403).json({msg: "You ain't got no right"});
+            req.username = results.userName;
             req.role_function = results.role_function;
             next();
         }

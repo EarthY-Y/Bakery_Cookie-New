@@ -15,7 +15,7 @@ export const getCustomer = async (req, res) => {
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
-                    return res.status(400),send();
+                    return res.status(400).send()
                 }
                 console.log(results)
                 res.status(200).json(results);
@@ -27,21 +27,6 @@ export const getCustomer = async (req, res) => {
 }
 
 export const getCustomerById = async (req, res) => {
-    // console.log(req);
-    // console.log(res);
-    // try {
-    //     const response = await Customer.findOne({
-    //         attributes:['phone_number','f_name','l_name','username'],
-            
-    //         where: {
-    //             phone_number: req.params.phone_number
-    //         }
-    //     });
-    //     res.status(200).json(response);
-    // } catch (error) {
-    //     res.status(500).json({msg: error.message});
-    // }
-
     try {
         const id = req.params.id
         console.log(id);
@@ -52,7 +37,7 @@ export const getCustomerById = async (req, res) => {
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
-                    return res.status(400),send();
+                    return res.status(400).send()
                 }
                 console.log(results)
                 res.status(200).json(results);
@@ -79,7 +64,7 @@ export const createCustomer = async (req, res) => {
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
-                    return res.status(400),send();
+                    return res.status(400).send()
                 }
         res.status(201).json({msg: "Register complete"}); 
     }

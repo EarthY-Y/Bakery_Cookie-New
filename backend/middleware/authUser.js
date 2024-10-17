@@ -1,26 +1,27 @@
 import db from "../config/dataBase.js"
 
+//เป็นการเช็ค การร้องขอเข้าถึง API ในส่วนของหลังบ้านซึ่งจะนำไปใช้กับการทำ Route API หลังบ้าน
 export const verifyCustomer = async (req, res , next) => {
-    console.log(req.session.userId);
+    console.log(req.session.id);
     if(!req.session.userId){
         return res.status(401).json({msg: "Please login to your account!"});
     }
-    const userId = req.params.userId
-    console.log(userId);
+    const id = req.session.id
+    console.log(id);
     
     db.query(
 
-        "SELECT username, role_function, id FROM customer WHERE id = ?",
-        [userId], 
+        "SELECT customerId, userName, role_function, is_active FROM customer WHERE customerId = ?",
+        [id], 
 
         (errr, results, fields) => {
             console.log(results);
             if(errr){
                 console.log(errr)
-                return res.status(400),send();
+                return res.status(400).json({ msg: "Bad Request" });
             }
             if(!results) return res.status(404).json({msg: "User not found"});
-            req.userId = results.id;
+            req.username = results.userName;
             req.role_function = results.role_function;
             next();
         }
