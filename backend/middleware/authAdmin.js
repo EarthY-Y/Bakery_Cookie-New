@@ -1,30 +1,28 @@
 import db from "../config/dataBase.js"
 
 export const verifyAdmin = async (req, res , next) => {
-    console.log(req.session.userId);
-    ///ถ้าไม่มี session user นี้ เป็นเหมือนสิทธิ์การเข้าถึง
-    if(!req.session.userId){
-        return res.status(401).json({msg: "Please login to your account!"});
-    }
-    const id = req.session.userId
-    console.log(id);
-    
-    db.query(
-        "SELECT admin_id, userName, role_function FROM admin WHERE admin_id = ?",
-        [id], 
-
-        (errr, results, fields) => {
-            console.log(results);
-            if(errr){
-                console.log(errr)
-                return res.status(400).json({ msg: "Bad Request" });
+    //token with Local storage 
+    try {
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        let authToken = ""
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            if (authHeader) {
+                authToken = authHeader.split(' ')[1]
             }
-            if(!results) return res.status(404).json({msg: "User not found"});
-            //ต้อง เช็คผ่าน seesion ที่ได้จาก auth ที่ table admin
-            if(results.role_function !== "admin") return res.status(403).json({msg: "You ain't got no right"});
-            req.username = results.userName;
-            req.role_function = results.role_function;
+            console.log(authToken)
+            //เข้าถึง JWT ด้วยรหัสที่ตั้งไว้
+            const userJWT = jwt.verify(authToken, process.env.JWT_SECRET) 
+            console.log(userJWT)
+            const [checkToken] = await db.query("SELECT admin_id FROM admin WHERE admin_id = ?", //อนาคตต้องเพิ่มการเช็ค role ด้วยได้มาจาก 3 ตารางเชื่อมมกันเเต่จะ select เเค่ชื่อมาเช็ค
+                [userJWT], )
+            if(!checkToken[0]){
+                throw{ msg: "user not found" } //throw ลงไป catch
+            }
             next();
         }
-    )
+
+    } catch (err) {
+        console.log('Error',err)
+        res.status(500).send({ message: 'Server error' })
+    }
 }
