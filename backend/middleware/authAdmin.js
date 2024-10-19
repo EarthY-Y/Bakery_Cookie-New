@@ -20,7 +20,7 @@ export const verifyAdmin = async (req, res , next) => {
             if (results.length === 0) {
                 return res.status(404).json({ msg: "User not found" });
             }
-            return res.json({results, isAdmin: "admin" });
+            return res.status(200).json({results, isAdmin: "admin" });
         })
         
 

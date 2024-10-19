@@ -22,7 +22,7 @@ export const verifyCustomer = async (req, res , next) => {
                 console.log('in length = 0');
                 return res.status(404).json({ msg: "User not found" });
             }
-            return res.json({results, isCustomer: "customer" });
+            return res.status(200).json({results, isAdmin: "admin" });
         })
         
 
