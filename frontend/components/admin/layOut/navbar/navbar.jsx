@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { FaArrowRight } from 'react-icons/fa';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 function navbar() {
   return (
@@ -41,9 +42,15 @@ function navbar() {
           alt="Bakery Cookie New Happy Family"
           style={{ width: '150px' }}
         />
-        <nav className="container text-center col-5 mt-3 border rounded-pill p-1 border-dark"style={{ backgroundColor: '#C40C0C'}}>
+        <nav className="container text-center col-5 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: '#C40C0C'}}>
           <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
-          <button className="btn btn-warning rounded-pill mx-1">หมวดหมู่</button>
+          <button type="button" className="btn btn-danger dropdown-toggle rounded-pill  text-primary" data-bs-toggle="dropdown" aria-expanded="false" style={{ backgroundColor: '#FFDB00'}}>หมวดหมู่</button>
+            <ul className="dropdown-menu">
+            <li><a className="dropdown-item" href="#">เค้ก</a></li>
+            <li><a className="dropdown-item" href="#">คุกกี้</a></li>
+            <li><a className="dropdown-item" href="#">ขนทปัง</a></li>
+            <li><a className="dropdown-item" href="#">Separated link</a></li>
+            </ul>
           <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
           <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
         </nav>
