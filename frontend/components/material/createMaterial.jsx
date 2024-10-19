@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { createMaterialService } from '../../API/materialService';
 
 const createMaterial = () => {
 
@@ -10,7 +11,7 @@ const createMaterial = () => {
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios.post('http://localhost:5000/material/create',{material_name: MaterialName, quantity: Quantities, cost:Costes})
+    await createMaterialService(MaterialName, Quantities, Costes)
     .then(res => {
       navigate('/material')
       console.log(res);

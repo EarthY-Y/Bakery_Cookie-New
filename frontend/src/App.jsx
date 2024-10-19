@@ -12,7 +12,7 @@ import Signup from '../page/signup-page/signup-page'
 import Signup2 from '../page/signup-page/signup2-page'
 import Signup3 from '../page/signup-page/signup3-page'
 import ListAdmin from '../page/admin-page/listAdmin-page'
-import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/register/authService';
+import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Home from '../page/customer-page/home/home-page'
 
 const router = createBrowserRouter([

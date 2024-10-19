@@ -1,11 +1,12 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
+import { passToken } from "../../middleware/passAuth.js";
 
 export const getMaterial = async (req, res) => {
     try {
         db.query(
-            "SELECT material_name, quantity, cost, created_at FROM material", 
+            "SELECT material_name, quantity, cost, materialpic_url, materialpic_type, created_at, updated_at FROM material", 
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
@@ -25,14 +26,16 @@ export const getMaterialById = async (req, res) => {
 }
 
 export const createMaterial = async (req, res) => {
+    const authHeader = req.headers['authorization']
+    const token = passToken(authHeader)
     const id = uuidv4();
-    const { material_name, quantity, cost } = req.body;
+    const { material_name, quantity, cost, materialpic_url, materialpic_type, } = req.body;
     console.log(material_name);
     
     try {
         db.query(
-            "INSERT INTO material (material_id, material_name, quantity, cost, admin_id) VALUES(?, ?, ?, ?, ?)",
-            [id, material_name, quantity, cost, "38d00d41-e6f9-477e-837d-53c40a82770d"],
+            "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_url, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
+            [id, material_name, quantity, materialpic_url, materialpic_type, cost, token.admin_id],
             (err, results, fields) => {
                 if (err) {
                     console.log(err);
