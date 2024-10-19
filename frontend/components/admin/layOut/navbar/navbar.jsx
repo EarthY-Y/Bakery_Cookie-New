@@ -7,7 +7,7 @@ import { FaArrowRight } from 'react-icons/fa';
 function navbar() {
   return (
     <div>
-    <div class="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C'}}>
+    <div className="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C'}}>
       <nav className="navbar navbar-expand-lg navbar-light " >
         <div className="container-fluid" >
         <form className="d-flex">

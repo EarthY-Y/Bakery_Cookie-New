@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { Link,useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {login} from '../../API/register/authService'
 
 const Login = () => {
   const [userName, setuserName] = useState("");
@@ -9,10 +9,16 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/login',{userName: userName, passWord: passWord})
+      const res = await login(userName, passWord); 
       console.log(res.data);
       localStorage.setItem('token', res.data.token)
-      navigate('/material')
+      const userRole = res.data.role
+      if(userRole === 'admin'){
+        navigate("/dashboard")
+      }
+      else if(userRole === 'user'){
+        navigate("/home")
+      }
     }catch(err){
       console.log(err);
     }
