@@ -128,8 +128,8 @@ function autoRemoveToken(token) {
   const timeUntilExpiration = (tokenParts.exp - now) * 1000; // เวลาที่เหลือในหน่วยมิลลิวินาที
 
   if (timeUntilExpiration > 0) {
-      setTimeout(() => {
-          removeToken(); // ลบ token เมื่อหมดอายุ
+      setTimeout(() => { //set เวลาตามเวลาของ timeUntilExpiration ที่เหลือเพื่อรอลบ token
+          removeToken(); 
           alert('Please log in again.');
       }, timeUntilExpiration);
   } else {
