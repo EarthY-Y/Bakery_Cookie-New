@@ -2,8 +2,22 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
-export const createMaterialService = async(MaterialName, Quantities, Costes) => {
-    await axios.post('http://localhost:5000/material/create',{material_name: MaterialName, quantity: Quantities, cost:Costes})
+export const createMaterialService = async(MaterialName, Quantities, Costes, /*Picture,*/ authToken) => { 
+    
+    try {
+        const res = await axios.post('http://localhost:5000/material/create', { material_name: MaterialName, quantity: Quantities, cost:Costes, /*materialpic_name:Picture*/ },
+            {
+                headers: {
+                    'authorization': `Bearer ${authToken}`
+                }
+            }
+        );
+        console.log(res);
+        return res;
+      } catch (error) {
+        console.error("Error during login:", error);
+        throw error; // ส่ง error ออกไปให้ component จัดการ
+      }
 }
 const validateInputs = (inputs, validationRules) => {
     for (const key in validationRules) {
@@ -25,3 +39,4 @@ const validateInputs = (inputs, validationRules) => {
         }
     }
 };
+

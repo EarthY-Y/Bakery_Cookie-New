@@ -4,18 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import { createMaterialService } from '../../API/materialService';
 
 const createMaterial = () => {
-
+  const authToken = localStorage.getItem('token')
   const [MaterialName, setMaterial_name] = useState("");
   const [Quantities, setQuantity] = useState("");
+  const [Picture, setPicture] = useState("");
   const [Costes, setCost] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await createMaterialService(MaterialName, Quantities, Costes)
-    .then(res => {
-      navigate('/material')
+    try {
+      const res = await createMaterialService(MaterialName, Quantities, Costes, /*Picture,*/ authToken);
+      navigate('/material');
       console.log(res);
-    }).catch(err => console.log(err))
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   // const [posts, setPosts] = useState([]);
@@ -61,6 +64,15 @@ const createMaterial = () => {
             onChange={(e) => setCost(e.target.value)}
           />
         </div>
+
+        {/* <div className="mb-3">
+          <label  className="form-label">Upload Picture</label>
+          <input type="file" className="form-control"  placeholder=".png /.jpeg /.pdf"
+            value={Picture} 
+            onChange={(e) => setPicture(e.target.value)}
+          />
+        </div> */}
+
         {/* <label  className="form-label">เลือกชื่อพนักงาน</label>
         <select className="form-select mb-3" aria-label="Default select example" onChange={handleSelectChange} value={selectedOption}>
           <option value="">เลือก admin</option>

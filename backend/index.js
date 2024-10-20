@@ -3,22 +3,23 @@ import express from'express';
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
+import bodyParser from 'body-parser';
 import customerRoute from "./routes/customer/customer-Route.js";
 import orderRounte from "./routes/customer/order-Route.js";
 import materialRounte from "./routes/admin/material-Route.js";
 import adminRoute from "./routes/admin/admin-Route.js";
 import authRoute from "./routes/auth-Route.js"
 import cookieParser from 'cookie-parser'
-
-
+  
 //เรียกใช้ express ด้วย app
 const app = express();
-// app.use(express.json()); 
+
 dotenv.config();
 
+app.use(bodyParser.json()); 
 app.use(express.json({ //convert object to json object
-  //strict: true,  // ตั้งค่าให้ตรวจสอบ JSON ที่ไม่ถูกต้องอย่างเคร่งครัด
-  //limit: '1mb',  // จำกัดขนาดของ body เพื่อป้องกันการส่งข้อมูลที่มากเกินไป
+  strict: true,  // ตั้งค่าให้ตรวจสอบ JSON ที่ไม่ถูกต้องอย่างเคร่งครัด
+  limit: '1mb',  // จำกัดขนาดของ body เพื่อป้องกันการส่งข้อมูลที่มากเกินไป
 }));
 
 app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ่าน backend

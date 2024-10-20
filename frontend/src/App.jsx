@@ -81,6 +81,10 @@ const router = createBrowserRouter([
 
   //route User
   {
+    path: "",
+    element: <Home />,
+  },
+  {
     element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
     children: [
       {

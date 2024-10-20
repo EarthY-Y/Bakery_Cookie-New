@@ -9,10 +9,8 @@ export const verifyCustomer = async (req, res , next) => {
     //token with Local storage 
     try {
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
-        console.log("authHeader", authHeader);
 
         const authToken = await passToken(authHeader)
-        console.log('authToken',authToken)
 
         await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
             [authToken.customerId],
@@ -23,6 +21,34 @@ export const verifyCustomer = async (req, res , next) => {
                 return res.status(404).json({ msg: "User not found" });
             }
             return res.status(200).json({results, isAdmin: "admin" });
+        })
+        
+
+    } catch (err) {
+        console.log('Error',err)
+        res.status(500).send({ msg: 'Server error' })
+    }
+}
+
+export const verifyCustomerMid = async (req, res , next) => {
+    //token with Local storage 
+    try {
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
+            [authToken.customerId],
+        (err, results) => {
+            console.log('results',results);
+            if (results.length === 0) {
+                console.log('in length = 0');
+                return res.status(404).json({ msg: "User not found" });
+            }
+            next()
         })
         
 

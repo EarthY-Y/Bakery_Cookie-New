@@ -5,15 +5,15 @@ import { passToken } from "../../middleware/passAuth.js";
 
 export const getMaterial = async (req, res) => {
     try {
-        db.query(
-            "SELECT material_name, quantity, cost, materialpic_url, materialpic_type, created_at, updated_at FROM material", 
+        await db.query(
+            "SELECT material_name, quantity, cost, materialpic_name, materialpic_type, create_at, updated_at FROM material", 
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
                     return res.status(400).send()
                 }
-                console.log(results)
-                res.status(200).json(results);
+                console.log('ผลของการค้นหาคือ',results)
+                return res.json(results);
             }
         )
     } catch (error) {
@@ -27,16 +27,19 @@ export const getMaterialById = async (req, res) => {
 
 export const createMaterial = async (req, res) => {
     const authHeader = req.headers['authorization']
-    const token = passToken(authHeader)
+    
+    const token = await passToken(authHeader)
     const id = uuidv4();
-    const { material_name, quantity, cost, materialpic_url, materialpic_type, } = req.body;
+    const { material_name, quantity, cost } = req.body;
     console.log(material_name);
     
     try {
-        db.query(
-            "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_url, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
-            [id, material_name, quantity, materialpic_url, materialpic_type, cost, token.admin_id],
+        await db.query(
+            "INSERT INTO material (material_id, material_name, quantity, cost, admin_id) VALUES(?, ?, ?, ?, ?)",
+            [id, material_name, quantity, cost, token.admin_id],
             (err, results, fields) => {
+                console.log('its results ',results);
+                
                 if (err) {
                     console.log(err);
                     return res.status(400).send({ msg: "Error creating material" });

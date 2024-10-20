@@ -6,17 +6,17 @@ import {
     updateMaterial, 
     deleteMaterial
 } from "../../controller/admin/material.js"
-import { verifyAdmin } from "../../middleware/authAdmin.js"
+import { verifyAdminMid } from "../../middleware/authAdmin.js"
 
 
 const router = express.Router();
 router.use(express.json());
 
-router.get('/Material',verifyAdmin, getMaterial);
-router.get('/Material/:id',verifyAdmin, getMaterialById);
-router.post('/Material/sign',verifyAdmin, createMaterial);
-router.patch('/Material/:id',verifyAdmin, updateMaterial);
-router.delete('/Material/:id',verifyAdmin, deleteMaterial);
+router.get('/material',verifyAdminMid, getMaterial);
+router.get('/material/:id',verifyAdminMid, getMaterialById);
+router.post('/material/create',verifyAdminMid, createMaterial);
+router.patch('/material/:id',verifyAdminMid, updateMaterial);
+router.delete('/material/:id',verifyAdminMid, deleteMaterial);
 
 
 export default router
