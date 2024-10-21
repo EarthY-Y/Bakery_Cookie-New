@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const ListAdmin = () => {
   const [posts, setPosts] = useState([]);
@@ -20,7 +21,7 @@ const ListAdmin = () => {
   return (
     <div className="container mt-5">
       <div className="col-12">
-        <a className="btn btn-primary nav-link active" href="/admin/create">เพิ่มพนักงาน</a>
+        <Link className="btn btn-primary nav-link active" to="/admin/create">เพิ่มพนักงาน</Link>
       </div>
 
       <p>จำนวน {posts.length} รายการ</p>

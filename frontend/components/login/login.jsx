@@ -23,7 +23,6 @@ const Login = () => {
       console.log(err);
     }
   }
-  return (
     <form onSubmit={handleSubmit}>
       <div className="container mt-5" >
         <div className="row justify-content-center">
@@ -39,6 +38,7 @@ const Login = () => {
                         onChange={(e) => setuserName(e.target.value)}
                       />
                     </div>
+
                   </div>
                   <div className="row">
                     <label htmlFor="password" className="col-3 col-auto col-form-label">รหัสผ่าน</label>
@@ -60,6 +60,8 @@ const Login = () => {
                       <button style={{ backgroundColor: '#A8E5F8'}} type="submit" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
                     </div>
                 </div>
+                <div className="mb-4 text-end col-11">
+                  <Link to="#" className="small">ลืมรหัสผ่าน</Link>
                 <div className="mt-3 text-center">
                   <p className="small">ยังไม่ได้เป็นสมาชิก? <Link to="/signup">สมัครสมาชิก</Link></p>
                 </div>
@@ -72,4 +74,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login; 

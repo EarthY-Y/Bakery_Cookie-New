@@ -55,7 +55,7 @@ const Signup3 = () => {
 
                <div className="mb-4 row justify-content-center">
                   <div className="col-5">
-                    <Link to="/signup2">
+                    <Link to="/signup/step2">
                     <button style={{ backgroundColor: '#F2EEB0'}} type="goback" className="btn btn-outline-dark w-100">ย้อนกลับ</button>
                     </Link>
                   </div>
