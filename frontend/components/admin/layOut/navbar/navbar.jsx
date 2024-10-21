@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { FaArrowRight } from 'react-icons/fa';
@@ -24,14 +24,14 @@ function navbar() {
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                   <li className="nav-item">
-                    <a className="nav-link active text-light" aria-current="page" href="Login">เข้าสู่ระบบ</a>
+                    <Link className="nav-link active text-light" aria-current="page" to="/Login">เข้าสู่ระบบ</Link>
                   </li>
                   <i className="bi bi-dash-lg fs-3 text-black d-none d-lg-inline" style={{ transform: 'rotate(90deg)' }}></i>
                   <li className="nav-item">
-                    <a className="nav-link active text-light" aria-current="page" href="/signup">สมัครสมาชิก</a>
+                    <Link className="nav-link active text-light" aria-current="page" to="/signup">สมัครสมาชิก</Link>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link active text-light" href="#">฿ 0.00</a>
+                    <Link className="nav-link active text-light" to="#">฿ 0.00</Link>
                   </li>
                   <li className="nav-item">
                     <i className="bi bi-basket3 fs-3 text-light"></i>
@@ -52,10 +52,10 @@ function navbar() {
           <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
           <button type="button" className="btn btn-danger dropdown-toggle rounded-pill  text-primary" data-bs-toggle="dropdown" aria-expanded="false" style={{ backgroundColor: '#FFDB00'}}>หมวดหมู่</button>
             <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">เค้ก</a></li>
-            <li><a className="dropdown-item" href="#">คุกกี้</a></li>
-            <li><a className="dropdown-item" href="#">ขนทปัง</a></li>
-            <li><a className="dropdown-item" href="#">Separated link</a></li>
+            <li><Link className="dropdown-item" href="#">เค้ก</Link></li>
+            <li><Link className="dropdown-item" href="#">คุกกี้</Link></li>
+            <li><Link className="dropdown-item" href="#">ขนทปัง</Link></li>
+            <li><Link className="dropdown-item" href="#">Separated link</Link></li>
             </ul>
           <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
           <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
