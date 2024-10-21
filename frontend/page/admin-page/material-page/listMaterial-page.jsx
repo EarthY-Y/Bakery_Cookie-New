@@ -1,6 +1,6 @@
 import React from 'react'
-import LayOut from '../../components/admin/layOut/layOut'
-import Material from '../../components/material/listMaterial'
+import LayOut from '../../../components/admin/layOut/layOut'
+import Material from '../../../components/admin/material/listMaterial'
 
 function listMaterial() {
   return (

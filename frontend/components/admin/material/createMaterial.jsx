@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { createMaterialService } from '../../API/materialService';
+import { createMaterialService } from '../../../API/materialService';
 
 const createMaterial = () => {
   const authToken = localStorage.getItem('token')
@@ -29,7 +29,7 @@ const createMaterial = () => {
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit} enctype="multipart/form-data">
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="mb-3">
           <label className="form-label">ชื่อสินค้า</label>
           <input type="text" className="form-control" placeholder="ชื่อสินค้า" 

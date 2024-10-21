@@ -1,6 +1,6 @@
 import React from 'react'
-import LayOut from '../../components/admin/layOut/layOut'
-import Signup3 from '../../components/signup/signup3'
+import LayOut from '../../../components/customer/layOut/layOut'
+import Signup3 from '../../../components/customer/signup/signup3'
 
 function signup3() {
   return (

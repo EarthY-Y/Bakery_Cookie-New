@@ -1,5 +1,5 @@
 import React from 'react'
-import LayOut from '../../components/admin/layOut/layOut'
+import LayOut from '../../../components/admin/layOut/layOut'
 
 const dashboard = () => {
   return (

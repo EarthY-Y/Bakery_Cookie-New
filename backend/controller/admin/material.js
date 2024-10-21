@@ -32,13 +32,14 @@ export const createMaterial = async (req, res) => {
     const token = await passToken(authHeader)
     const id = uuidv4();
     const { material_name, quantity, cost } = req.body;
-    
-    const materialPic = req.file.filename;
-    console.log('file name ',materialPic);
+    console.log('file req',req.file);
+    const materialPictureName = req.file.filename;
+    const materialPictureType = req.file.mimetype;
+    console.log('file name ',materialPictureName ,'and', materialPictureType);
     try {
         await db.query(
-            "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, admin_id) VALUES(?, ?, ?, ?, ?, ?)",
-            [id, material_name, quantity, cost, materialPic, token.admin_id],
+            "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
+            [id, material_name, quantity, cost, materialPictureName, materialPictureType, token.admin_id],
             (err, results, fields) => {
                 console.log('its results ',results);
                 
