@@ -24,7 +24,7 @@ const Login = () => {
                   </div>
                 </div>
                 <div className="mb-4 text-end col-11">
-                  <a href="#" className="small">ลืมรหัสผ่าน</a>
+                  <Link to="#" className="small">ลืมรหัสผ่าน</Link>
                 </div>
                 <div className="mb-4 row justify-content-center">
                   <div className="col-5">

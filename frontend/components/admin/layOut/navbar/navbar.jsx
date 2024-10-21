@@ -54,7 +54,7 @@ function navbar() {
             <ul className="dropdown-menu">
             <li><Link className="dropdown-item" href="#">เค้ก</Link></li>
             <li><Link className="dropdown-item" href="#">คุกกี้</Link></li>
-            <li><Link className="dropdown-item" href="#">ขนทปัง</Link></li>
+            <li><Link className="dropdown-item" href="#">ขนมปัง</Link></li>
             <li><Link className="dropdown-item" href="#">Separated link</Link></li>
             </ul>
           <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
