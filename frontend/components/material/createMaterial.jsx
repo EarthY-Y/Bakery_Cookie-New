@@ -1,46 +1,36 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
+import { createMaterialService } from '../../API/materialService';
 
 const createMaterial = () => {
-
+  const authToken = localStorage.getItem('token')
   const [MaterialName, setMaterial_name] = useState("");
   const [Quantities, setQuantity] = useState("");
   const [Costes, setCost] = useState("");
+  const [Picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios.post('http://localhost:5000/material/create',{material_name: MaterialName, quantity: Quantities, cost:Costes})
-    .then(res => {
-      navigate('/material')
+    try {
+      const formData = new FormData();  // ใช้ formData แทน fromData
+      formData.append('MaterialName', MaterialName);
+      formData.append('Quantities', Quantities);
+      formData.append('Costes', Costes);
+      formData.append('file', Picture); // ต้องตรงกับชื่อที่ server ใช้
+      console.log("Selected file:", Picture);
+      const res = await createMaterialService(formData, authToken);
+      navigate('/material');
       console.log(res);
-    }).catch(err => console.log(err))
+    } catch (err) {
+      console.log(err);
+    }
   }
-
-  // const [posts, setPosts] = useState([]);
-  // const [selectedOption, setSelectedOption] = useState(''); // To store the selected option
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     try {
-  //       const { data: res } = await axios.get("http://localhost:5000/admin"); 
-  //       setPosts(res);
-  //     } catch (err) {
-  //       console.error("Error fetching data:", err);
-  //     }
-  //   };
-
-  //   getPosts();
-  // }, []);
-
-  // const handleSelectChange = (e) => {
-  //   setSelectedOption(e.target.value);
-  // };
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit}>
-      <div className="mb-3">
+      <form onSubmit={handleSubmit} enctype="multipart/form-data">
+        <div className="mb-3">
           <label className="form-label">ชื่อสินค้า</label>
           <input type="text" className="form-control" placeholder="ชื่อสินค้า" 
             value={MaterialName} 
@@ -61,15 +51,18 @@ const createMaterial = () => {
             onChange={(e) => setCost(e.target.value)}
           />
         </div>
-        {/* <label  className="form-label">เลือกชื่อพนักงาน</label>
-        <select className="form-select mb-3" aria-label="Default select example" onChange={handleSelectChange} value={selectedOption}>
-          <option value="">เลือก admin</option>
-          {posts.map((post, index) => (
-            <option  key={index} value={post.value}>
-              {post.userName} {}
-            </option> 
-          ))}
-        </select> */}
+
+        <div className="mb-3">
+          <label className="form-label">Upload Picture</label>
+          <input 
+            type="file" 
+            className="form-control" 
+            id="fileInput" 
+            placeholder=".png /.jpeg /.pdf"
+            onChange={(e) => setPicture(e.target.files[0])}
+          />
+        </div>
+
         <div className="col-12">
           <button className="btn btn-primary" type="submit">Submit</button>
         </div>

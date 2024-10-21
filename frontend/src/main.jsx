@@ -8,7 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  // <StrictMode> //StrictMode ทำให้เกิดการ render สองครั้งในระหว่างการพัฒนา response ที่ได้เบิ้ลเป็นสองรอบ
+  //   <App />
+  // </StrictMode>,
+  <App /> // ถอด StrictMode ออกชั่วคราว
 )

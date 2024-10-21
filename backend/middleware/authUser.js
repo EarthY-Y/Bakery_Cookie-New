@@ -1,33 +1,59 @@
 import db from "../config/dataBase.js"
 import jwt from 'jsonwebtoken'
 import dotenv from "dotenv";
+import { passToken } from "./passAuth.js";
 
 dotenv.config();
 //เป็นการเช็ค การร้องขอเข้าถึง API ในส่วนของหลังบ้านซึ่งจะนำไปใช้กับการทำ Route API หลังบ้าน
 export const verifyCustomer = async (req, res , next) => {
-
     //token with Local storage 
     try {
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
-        let authToken = ""
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            if (authHeader) {
-                authToken = authHeader.split(' ')[1]
+
+        const authToken = await passToken(authHeader)
+
+        await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
+            [authToken.customerId],
+        (err, results) => {
+            console.log('results',results);
+            if (results.length === 0) {
+                console.log('in length = 0');
+                return res.status(404).json({ msg: "User not found" });
             }
-            console.log(authToken)
-            //เข้าถึง JWT ด้วยรหัสที่ตั้งไว้
-            const userJWT = jwt.verify(authToken, process.env.JWT_SECRET) 
-            console.log(userJWT)
-            const [checkToken] = await db.query("SELECT customerId FROM customer WHERE customerId = ?",
-                [userJWT], )
-            if(!checkToken[0]){
-                throw{ msg: "user not found" } //throw ลงไป catch
-            }
-            next();
-        }
+            return res.status(200).json({results, isAdmin: "admin" });
+        })
+        
 
     } catch (err) {
         console.log('Error',err)
-        res.status(500).send({ message: 'Server error' })
+        res.status(500).send({ msg: 'Server error' })
+    }
+}
+
+export const verifyCustomerMid = async (req, res , next) => {
+    //token with Local storage 
+    try {
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
+            [authToken.customerId],
+        (err, results) => {
+            console.log('results',results);
+            if (results.length === 0) {
+                console.log('in length = 0');
+                return res.status(404).json({ msg: "User not found" });
+            }
+            next()
+        })
+        
+
+    } catch (err) {
+        console.log('Error',err)
+        res.status(500).send({ msg: 'Server error' })
     }
 }

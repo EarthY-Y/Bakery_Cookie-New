@@ -14,7 +14,7 @@ node_modules
 .env
 
 #config
-config/
+database.js
 service/
 
 # Log files
@@ -41,3 +41,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+picture/

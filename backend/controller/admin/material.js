@@ -1,18 +1,20 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
+import { passToken } from "../../middleware/passAuth.js";
+import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 
 export const getMaterial = async (req, res) => {
     try {
-        db.query(
-            "SELECT material_name, quantity, cost, created_at FROM material", 
+        await db.query(
+            "SELECT material_name, quantity, cost, materialpic_name, materialpic_type, create_at, updated_at FROM material", 
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
                     return res.status(400).send()
                 }
-                console.log(results)
-                res.status(200).json(results);
+                console.log('ผลของการค้นหาคือ',results)
+                return res.status(200).json(results);
             }
         )
     } catch (error) {
@@ -25,15 +27,21 @@ export const getMaterialById = async (req, res) => {
 }
 
 export const createMaterial = async (req, res) => {
+    const authHeader = req.headers['authorization']
+    
+    const token = await passToken(authHeader)
     const id = uuidv4();
     const { material_name, quantity, cost } = req.body;
-    console.log(material_name);
     
+    const materialPic = req.file.filename;
+    console.log('file name ',materialPic);
     try {
-        db.query(
-            "INSERT INTO material (material_id, material_name, quantity, cost, admin_id) VALUES(?, ?, ?, ?, ?)",
-            [id, material_name, quantity, cost, "38d00d41-e6f9-477e-837d-53c40a82770d"],
+        await db.query(
+            "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, admin_id) VALUES(?, ?, ?, ?, ?, ?)",
+            [id, material_name, quantity, cost, materialPic, token.admin_id],
             (err, results, fields) => {
+                console.log('its results ',results);
+                
                 if (err) {
                     console.log(err);
                     return res.status(400).send({ msg: "Error creating material" });

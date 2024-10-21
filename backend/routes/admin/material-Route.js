@@ -1,4 +1,5 @@
 import express from "express";
+import multer from 'multer'
 import {
     getMaterial, 
     getMaterialById, 
@@ -6,24 +7,23 @@ import {
     updateMaterial, 
     deleteMaterial
 } from "../../controller/admin/material.js"
+import { verifyAdminMid } from "../../middleware/authAdmin.js"
+import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 
-//import { verifyMaterial } from "../../middleware/authAdmin.js"
-
-
-const router = express.Router();
+const router = express()
 router.use(express.json());
 
-// router.get('/Material',verifyMaterial, getMaterial);
-// router.get('/Material/:id',verifyMaterial, getMaterialById);
-// router.post('/Material/sign',verifyMaterial, createMaterial);
-// router.patch('/Material/:id',verifyMaterial, updateMaterial);
-// router.delete('/Material/:id',verifyMaterial, deleteMaterial);
+router.get('/material',verifyAdminMid, getMaterial);
+router.get('/material/:id',verifyAdminMid, getMaterialById);
+router.post('/material/create', verifyAdminMid, uploadSingle, (req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
+    // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
+    if (!req.file) {
+        return res.status(400).send({ message: 'No file uploaded!' });
+    }
+  createMaterial(req, res); // เรียกใช้ createMaterial พร้อม req และ res
+});
+router.patch('/material/:id',verifyAdminMid, updateMaterial);
+router.delete('/material/:id',verifyAdminMid, deleteMaterial);
 
-
-router.get('/material', getMaterial);
-router.get('/material/:id', getMaterialById);
-router.post('/material/create', createMaterial);
-router.patch('/material/:id', updateMaterial);
-router.delete('/material/:id', deleteMaterial);
 
 export default router

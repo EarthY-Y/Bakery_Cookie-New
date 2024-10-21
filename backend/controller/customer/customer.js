@@ -49,15 +49,15 @@ export const createCustomer = async (req, res) => {
     //gen id ให้ไม่ซ้ำกัน
     const id = uuidv4();
     //เวลา cilent ส่งอะไรมาจะถูกเก็บไว้ใน req.body
-    const {phone_number, username, password, confPassword, f_name, l_name} = req.body;
+    const {phone_number, username, password, confPassword, f_name, l_name, is_active} = req.body;
     
     if(password !== confPassword) return res.status(400).json({msg: "Password not match"});
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
     const hashPassword = await argon2.hash(password); //function hash(password, options) option เช่น ขนาด รูปเบบ เเละการกินพื้นที่ ต่างๆ
     try {
         db.query(
-        "INSERT INTO customer (customerId, phone_number, f_name, l_name, username, password, status, role_function) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
-        [id, phone_number, f_name, l_name, username, hashPassword, "Y" ,"usere"],
+        "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password, is_active) VALUES(?, ?, ?, ?, ?, ?, ?)",
+        [id, phone_number, f_name, l_name, username, hashPassword, "Y"],
             (errr, results, fields) => {
                 if(errr){
                     console.log(errr)
