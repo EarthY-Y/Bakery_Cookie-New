@@ -8,33 +8,39 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 function navbar() {
   return (
     <div>
-    <div class="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C'}}>
-      <nav className="navbar navbar-expand-lg navbar-light " >
-        <div className="container-fluid" >
-        <form className="d-flex">
-              <input className="form-control me-2" style={{ width: '400px', borderRadius: '10px' }} type="search" placeholder="Search" aria-label="Search" />
+      {/* Navbar ส่วนบน */}
+      <div className="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C'}}>
+        <nav className="navbar navbar-expand-lg navbar-light">
+          <div className="container-fluid">
+            {/* Search bar */}
+            <form className="d-flex flex-grow-1">
+              <input className="form-control me-2" style={{ width: '100%', maxWidth: '400px', borderRadius: '10px' }} type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-outline-light" type="submit"><i className="bi bi-search"></i></button>
             </form>
-         <div className='col-md-3 text-end'>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link active text-light" aria-current="page" href="Login">เข้าสู่ระบบ</a>
-              </li>
-              <i className="bi bi-dash-lg fs-3 text-black" style={{ transform: 'rotate(90deg)' }}></i>
-              <li className="nav-item">
-                <a className="nav-link active text-light" aria-current="page" href="/signup">สมัครสมาชิก</a>
-                {/* <NavLink to = {"/product"}>product</NavLink> */}
-              </li>
-              <li className="nav-item">
-                <a className="nav-link active text-light" aria-current="page" href="#">฿ 0.00</a>
-              </li>
-              <i className="bi bi-alarm fs-3 bi-basket3 text-light"></i>
-            </ul>
+            <div className="text-end">
+              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                  <li className="nav-item">
+                    <a className="nav-link active text-light" aria-current="page" href="Login">เข้าสู่ระบบ</a>
+                  </li>
+                  <i className="bi bi-dash-lg fs-3 text-black d-none d-lg-inline" style={{ transform: 'rotate(90deg)' }}></i>
+                  <li className="nav-item">
+                    <a className="nav-link active text-light" aria-current="page" href="/signup">สมัครสมาชิก</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link active text-light" href="#">฿ 0.00</a>
+                  </li>
+                  <li className="nav-item">
+                    <i className="bi bi-basket3 fs-3 text-light"></i>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
-          </div>
-        </div>
-      </nav>
+        </nav>
       </div>
       <div className="container text-center my-4">
         <img

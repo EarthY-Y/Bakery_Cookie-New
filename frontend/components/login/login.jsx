@@ -6,9 +6,9 @@ const Login = () => {
   return (
     <div className="container mt-5" >
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div className="col-12 col-md-8 col-lg-6">
           <div className="card">
-            <div className="px-5 card-body">
+            <div className="card-body px-4">
               <h3 className="mb-4 card-title text-center">เข้าสู่ระบบ</h3>
               <form>
                <div className="row mb-4">
@@ -46,4 +46,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login; 
