@@ -23,6 +23,7 @@ const Login = () => {
       console.log(err);
     }
   }
+  return (
     <form onSubmit={handleSubmit}>
       <div className="container mt-5" >
         <div className="row justify-content-center">
@@ -65,13 +66,14 @@ const Login = () => {
                 <div className="mt-3 text-center">
                   <p className="small">ยังไม่ได้เป็นสมาชิก? <Link to="/signup">สมัครสมาชิก</Link></p>
                 </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </form>
+    );
 };
 
 export default Login; 
