@@ -7,13 +7,19 @@ const createMaterial = () => {
   const authToken = localStorage.getItem('token')
   const [MaterialName, setMaterial_name] = useState("");
   const [Quantities, setQuantity] = useState("");
-  const [Picture, setPicture] = useState("");
   const [Costes, setCost] = useState("");
+  const [Picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await createMaterialService(MaterialName, Quantities, Costes, /*Picture,*/ authToken);
+      const formData = new FormData();  // ใช้ formData แทน fromData
+      formData.append('MaterialName', MaterialName);
+      formData.append('Quantities', Quantities);
+      formData.append('Costes', Costes);
+      formData.append('file', Picture); // ต้องตรงกับชื่อที่ server ใช้
+      console.log("Selected file:", Picture);
+      const res = await createMaterialService(formData, authToken);
       navigate('/material');
       console.log(res);
     } catch (err) {
@@ -21,28 +27,9 @@ const createMaterial = () => {
     }
   }
 
-  // const [posts, setPosts] = useState([]);
-  // const [selectedOption, setSelectedOption] = useState(''); // To store the selected option
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     try {
-  //       const { data: res } = await axios.get("http://localhost:5000/admin"); 
-  //       setPosts(res);
-  //     } catch (err) {
-  //       console.error("Error fetching data:", err);
-  //     }
-  //   };
-
-  //   getPosts();
-  // }, []);
-
-  // const handleSelectChange = (e) => {
-  //   setSelectedOption(e.target.value);
-  // };
-
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} enctype="multipart/form-data">
         <div className="mb-3">
           <label className="form-label">ชื่อสินค้า</label>
           <input type="text" className="form-control" placeholder="ชื่อสินค้า" 
@@ -65,23 +52,17 @@ const createMaterial = () => {
           />
         </div>
 
-        {/* <div className="mb-3">
-          <label  className="form-label">Upload Picture</label>
-          <input type="file" className="form-control"  placeholder=".png /.jpeg /.pdf"
-            value={Picture} 
-            onChange={(e) => setPicture(e.target.value)}
+        <div className="mb-3">
+          <label className="form-label">Upload Picture</label>
+          <input 
+            type="file" 
+            className="form-control" 
+            id="fileInput" 
+            placeholder=".png /.jpeg /.pdf"
+            onChange={(e) => setPicture(e.target.files[0])}
           />
-        </div> */}
+        </div>
 
-        {/* <label  className="form-label">เลือกชื่อพนักงาน</label>
-        <select className="form-select mb-3" aria-label="Default select example" onChange={handleSelectChange} value={selectedOption}>
-          <option value="">เลือก admin</option>
-          {posts.map((post, index) => (
-            <option  key={index} value={post.value}>
-              {post.userName} {}
-            </option> 
-          ))}
-        </select> */}
         <div className="col-12">
           <button className="btn btn-primary" type="submit">Submit</button>
         </div>

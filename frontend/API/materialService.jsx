@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
-export const createMaterialService = async(MaterialName, Quantities, Costes, /*Picture,*/ authToken) => { 
+export const createMaterialService = async(fromData,authToken) => { 
+    console.log(fromData);
     
     try {
-        const res = await axios.post('http://localhost:5000/material/create', { material_name: MaterialName, quantity: Quantities, cost:Costes, /*materialpic_name:Picture*/ },
+        const res = await axios.post('http://localhost:5000/material/create', fromData,
             {
                 headers: {
                     'authorization': `Bearer ${authToken}`

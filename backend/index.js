@@ -36,6 +36,8 @@ app.use((err, req, res, next) => {
 app.use(cors({
   credential: true,
   origin: ["http://localhost:5173"], //กำหนดอยู่ใน vite.config
+  //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
+  allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
 }));
 
 //อนุญาติการใช้ session storage

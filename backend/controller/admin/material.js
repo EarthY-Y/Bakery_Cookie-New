@@ -2,6 +2,7 @@ import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
+import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 
 export const getMaterial = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ export const getMaterial = async (req, res) => {
                     return res.status(400).send()
                 }
                 console.log('ผลของการค้นหาคือ',results)
-                return res.json(results);
+                return res.status(200).json(results);
             }
         )
     } catch (error) {
@@ -31,12 +32,13 @@ export const createMaterial = async (req, res) => {
     const token = await passToken(authHeader)
     const id = uuidv4();
     const { material_name, quantity, cost } = req.body;
-    console.log(material_name);
     
+    const materialPic = req.file.filename;
+    console.log('file name ',materialPic);
     try {
         await db.query(
-            "INSERT INTO material (material_id, material_name, quantity, cost, admin_id) VALUES(?, ?, ?, ?, ?)",
-            [id, material_name, quantity, cost, token.admin_id],
+            "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, admin_id) VALUES(?, ?, ?, ?, ?, ?)",
+            [id, material_name, quantity, cost, materialPic, token.admin_id],
             (err, results, fields) => {
                 console.log('its results ',results);
                 
