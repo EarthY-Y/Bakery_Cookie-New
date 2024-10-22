@@ -52,10 +52,10 @@ function navbar() {
           <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
           <button type="button" className="btn btn-danger dropdown-toggle rounded-pill  text-primary" data-bs-toggle="dropdown" aria-expanded="false" style={{ backgroundColor: '#FFDB00'}}>หมวดหมู่</button>
             <ul className="dropdown-menu">
-            <li><Link className="dropdown-item" href="#">เค้ก</Link></li>
-            <li><Link className="dropdown-item" href="#">คุกกี้</Link></li>
-            <li><Link className="dropdown-item" href="#">ขนมปัง</Link></li>
-            <li><Link className="dropdown-item" href="#">Separated link</Link></li>
+            <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
+            <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>
+            <li><Link className="dropdown-item" to="#">ขนมปัง</Link></li>
+            <li><Link className="dropdown-item" to="#">Separated link</Link></li>
             </ul>
           <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
           <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
