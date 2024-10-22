@@ -1,32 +1,46 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { Link } from 'react-router-dom';
+import { Accordion, Nav } from 'react-bootstrap';
 
 function Sidebaradmin() {
   return (
-    <div className="d-flex">
-      {/* Sidebar */}
-      <div className="bg-light border" id="sidebar-wrapper" style={{ width: '250px', height: '100vh' }}>
-        <div className="sidebar-heading">My Sidebar</div>
-        <div className="list-group list-group-flush">
-          <Link to="#" className="list-group-item list-group-item-action bg-light">Dashboard</Link>
-          <Link to="#" className="list-group-item list-group-item-action bg-light">Profile</Link>
-          <Link to="#" className="list-group-item list-group-item-action bg-light">Settings</Link>
-          <Link to="#" className="list-group-item list-group-item-action bg-light">Help</Link>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container-fluid">
-        <button className="btn btn-primary mt-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar-wrapper" aria-controls="sidebar-wrapper">
-          Toggle Sidebar
-        </button>
-        <div className="mt-5">
-          <h2>Main Content Area</h2>
-          <p>This is where your main content will go.</p>
-        </div>
-      </div>
+    <div className="d-flex flex-column p-3 bg-light" style={{ width: '280px', height: '1000px' }}>
+      <Nav className="flex-column">
+        <Nav.Item>
+          <Nav.Link to="#">สถิติ</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link to="#">ประเภทสินค้า</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link to="#">สินค้าหน้าร้าน</Nav.Link>
+        </Nav.Item>
+        <Accordion defaultActiveKey="0">
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>คลังวัตถุดิบ</Accordion.Header>
+            <Accordion.Body>
+              <Nav.Item>
+                <Nav.Link to="#">วัตถุดิบ</Nav.Link>
+              </Nav.Item>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+        <Nav.Item>
+          <Nav.Link to="#">บรรจุภัณฑ์</Nav.Link>
+        </Nav.Item>
+        <Accordion defaultActiveKey="1">
+          <Accordion.Item eventKey="1">
+            <Accordion.Header>การสั่งซื้อ</Accordion.Header>
+            <Accordion.Body>
+              <Nav.Item>
+                <Nav.Link to="#">รายการการสั่งซื้อ</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link to="#">ประวัติการสั่งซื้อ</Nav.Link>
+              </Nav.Item>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+      </Nav>
     </div>
   );
 }
