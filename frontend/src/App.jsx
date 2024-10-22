@@ -39,7 +39,7 @@ const router = createBrowserRouter([
   },
   //route Admin
   {
-    element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
+    // element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
     children: [
       {
         path: "/dashboard",
@@ -85,7 +85,7 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
+    // element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
     children: [
       {
         path: "/home",
