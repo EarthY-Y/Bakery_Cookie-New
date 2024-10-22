@@ -14,96 +14,107 @@ import Signup3 from '../page/customer-page/signup-page/signup3-page'
 import ListAdmin from '../page/admin-page/listAdmin-page'
 import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Home from '../page/customer-page/home/home-page'
-
+import ErrorBoundary from '../components/error/ErrorBoundary'
+import { ErrorFallback } from '../components/error/errorFallback'
 const router = createBrowserRouter([
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
+    path: "",
+    errorElement: <ErrorFallback />,
     children: [
       {
         path: "",
-        element: <Signup />,
+        element: <Home />,
       },
       {
-        path: "step2",
-        element: <Signup2 />,
+        path: "/login",
+        element: <Login />,
       },
       {
-        path: "step3",
-        element: <Signup3 />,
-      },
-    ],
-  },
-  //route Admin
-  {
-    element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
-    children: [
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-        errorElement: <div>404 Not Found</div>,
-      },
-      {
-        path: "/material",
+        path: "/signup",
         children: [
           {
             path: "",
-            element: <ListMaterial />,
+            element: <Signup />,
           },
           {
-            path: "create", // ลบ '/' หน้า path
-            element: <CreateMaterial />,
+            path: "step2",
+            element: <Signup2 />,
+          },
+          {
+            path: "step3",
+            element: <Signup3 />,
           },
         ],
       },
+    
+      //route Admin
       {
-        path: "/product",
-        element: <Product />,
-      },
-      {
-        path: "/admin",
+        element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
         children: [
           {
-            path: "",
-            element: <ListAdmin />,
+            path: "/dashboard",
+            element: <Dashboard />,
           },
           {
-            path: "create",
-            element: <CreateAdmin />,
+            path: "/material",
+            children: [
+              {
+                path: "",
+                element: <ListMaterial />,
+              },
+              {
+                path: "create", // ลบ '/' หน้า path
+                element: <CreateMaterial />,
+              },
+            ],
+          },
+          {
+            path: "/product",
+            element: <Product />,
+          },
+          {
+            path: "/admin",
+            children: [
+              {
+                path: "",
+                element: <ListAdmin />,
+              },
+              {
+                path: "create",
+                element: <CreateAdmin />,
+              },
+            ],
           },
         ],
       },
-    ],
+    
+      //route User
+    
+      {
+        element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
+        children: [
+          {
+            path: "/home",
+            children: [
+              {
+                path: "",
+                element: <Home />,
+              },
+            ],
+          },
+        ],
+      }
+    ]
   },
 
-  //route User
-  {
-    path: "",
-    element: <Home />,
-  },
-  {
-    element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
-    children: [
-      {
-        path: "/home",
-        children: [
-          {
-            path: "",
-            element: <Home />,
-          },
-        ],
-      },
-    ],
-  }
 ]);
 
 function App() {
   return (
     <div>
-      <RouterProvider router={router} />
+      <ErrorBoundary>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
     </div>
   );
 }
