@@ -1,7 +1,7 @@
 import express from "express";
 import {Login,
         logOut
-} from "../controller/auth.js"
+} from "../controller/login.js"
 import { verifyAdmin } from "../middleware/authAdmin.js";
 import { verifyCustomer } from "../middleware/authUser.js";
 
