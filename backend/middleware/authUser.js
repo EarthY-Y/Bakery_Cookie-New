@@ -18,15 +18,14 @@ export const verifyCustomer = async (req, res , next) => {
             console.log('results',results);
             if (results.length === 0) {
                 console.log('in length = 0');
-                return res.status(404).json({ msg: "User not found" });
+                return res.status(404).json({ message: "User not found" });
             }
             return res.status(200).json({results, isAdmin: "admin" });
-        })
-        
+        })  
 
     } catch (err) {
         console.log('Error',err)
-        res.status(500).send({ msg: 'Server error' })
+        res.status(500).send({ message: 'Server error' })
     }
 }
 
@@ -37,7 +36,7 @@ export const verifyCustomerMid = async (req, res , next) => {
 
         const authToken = await passToken(authHeader)
         if(!authToken){
-            return res.status(404).json({ msg: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
 
         await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
@@ -46,14 +45,13 @@ export const verifyCustomerMid = async (req, res , next) => {
             console.log('results',results);
             if (results.length === 0) {
                 console.log('in length = 0');
-                return res.status(404).json({ msg: "User not found" });
+                return res.status(404).json({ message: "User not found" });
             }
             next()
         })
         
-
     } catch (err) {
         console.log('Error',err)
-        res.status(500).send({ msg: 'Server error' })
+        res.status(500).send({ message: 'Server error' })
     }
 }

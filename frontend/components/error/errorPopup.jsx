@@ -1,12 +1,13 @@
 // Pop-up Modal Component
-export const Modal = ({ messages, onClose }) => {
-    message = messages.response.data.msg
+export const Modal = ({ message, onClose }) => {
+    console.log(message);
+    const errorMessage = message.response.data.message
     
     return (
       <div style={modalStyles}>
         <div style={modalContentStyles}>
           <h2>เกิดข้อผิดพลาด</h2>
-          <p>{message}</p>
+          <p>{errorMessage}</p>
           <button onClick={onClose}>ปิด</button>
         </div>
       </div>

@@ -5,21 +5,16 @@ import argon2 from "argon2";
 //ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
     try {
-        db.query(
-            //สร้าง Query มาทำงาน 
-            "SELECT * FROM customer", 
-            //results คือค่าที่เราจะได้จากการไป get มา
-            (errr, results, fields) => {
-                if(errr){
-                    console.log(errr)
-                    return res.status(400).send()
-                }
-                console.log(results)
-                res.status(200).json(results);
-            }
-        )
+        const results = await new Promise((resolve, reject) => {
+            db.query("SELECT * FROM customer", (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            })
+        })
+        return res.status(200).json(results);
     } catch (error) {
-        res.status(500).json({msg: error.message});
+        console.error("Error creating material:", error);
+        res.status(400).json({ message: "Error creating material", error: error.message });
     }
 }
 
@@ -27,21 +22,16 @@ export const getCustomerById = async (req, res) => {
     try {
         const id = req.params.id
         console.log(id);
-        
-        db.query(
-            "SELECT * FROM customer WHERE id = ?",
-            [id], 
-            (errr, results, fields) => {
-                if(errr){
-                    console.log(errr)
-                    return res.status(400).send()
-                }
-                console.log(results)
-                res.status(200).json(results);
-            }
-        )
+        const results = await new Promise((resolve, reject) => {
+            db.query("SELECT * FROM customer WHERE id = ?", (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            })
+        })
+        return res.status(200).json(results);
     } catch (error) {
-        res.status(500).json({msg: error.message});
+        console.error("Error creating material:", error);
+        res.status(400).json({ message: "Error creating material", error: error.message });
     }
 }
 
@@ -51,23 +41,25 @@ export const createCustomer = async (req, res) => {
     //เวลา cilent ส่งอะไรมาจะถูกเก็บไว้ใน req.body
     const {phone_number, username, password, confPassword, f_name, l_name, is_active} = req.body;
     
-    if(password !== confPassword) return res.status(400).json({msg: "Password not match"});
+    if(password !== confPassword) return res.status(400).json({message: "Password not match"});
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
     const hashPassword = await argon2.hash(password); //function hash(password, options) option เช่น ขนาด รูปเบบ เเละการกินพื้นที่ ต่างๆ
     try {
-        db.query(
-        "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password, is_active) VALUES(?, ?, ?, ?, ?, ?, ?)",
-        [id, phone_number, f_name, l_name, username, hashPassword, "Y"],
-            (errr, results, fields) => {
-                if(errr){
-                    console.log(errr)
-                    return res.status(400).send()
+        const results = await new Promise((resolvem, reject) => {
+            db.query(
+                "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password, is_active) VALUES(?, ?, ?, ?, ?, ?, ?)",
+                [id, phone_number, f_name, l_name, username, hashPassword, "Y"],  (err, results) => {
+                    if (err) return reject(err);
+                    resolvem({message: "Register complete", results});
                 }
-        res.status(201).json({msg: "Register complete"}); 
-    }
-    )
+            )
+        })
+
+        return res.status(201).json(results.message); 
+    
     } catch (error) {
-        res.status(400).json({msg: error.message});
+        console.error("Error creating material:", error);
+        res.status(400).json({ message: "Error creating material", error: error.message });
     }
 }
 

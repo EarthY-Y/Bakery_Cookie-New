@@ -27,7 +27,7 @@ app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ�
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
     console.error('Bad JSON:', err.message);
-    return res.status(400).send({ msg: "Bad JSON format" });
+    return res.status(400).send({ message: "Bad JSON format" });
   }
   next();
 });
