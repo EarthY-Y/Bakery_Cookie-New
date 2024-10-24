@@ -8,11 +8,14 @@ const layOutComponent = ({children}) => {
   return (
     <React.Fragment>
       <Navbar />
-        <div >
-        <Sidebaradmin/>
-          <main className="d-flex flex-column min-vh-100">{children}</main>
+      <div className='d-flex'>
+        <div className='d-flex flex-column col-2 min-vh-100'>
+          <Sidebaradmin />
+        </div>  
+        <div className='col-10 min-vh-100'>
+          <main className="">{children}</main>
         </div>
-        <Footer/>
+      </div>
     </React.Fragment>
   )
 }

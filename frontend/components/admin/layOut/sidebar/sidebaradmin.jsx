@@ -1,6 +1,6 @@
 import React from 'react';
 import { Accordion, Nav } from 'react-bootstrap';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Sidebaradmin() {
   return (
@@ -20,7 +20,7 @@ function Sidebaradmin() {
             <Accordion.Header>คลังวัตถุดิบ</Accordion.Header>
             <Accordion.Body style={{ backgroundColor: '#f8f9fa' }}>
               <Nav.Item>
-                <Link to="/material" style={{ color: 'Black' }}>วัตถุดิบ</Link>
+                <Nav.Link as={Link} to="/material" style={{ color: 'Black' }}>วัตถุดิบ</Nav.Link>
               </Nav.Item>
             </Accordion.Body>
           </Accordion.Item>
