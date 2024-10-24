@@ -62,7 +62,6 @@ const Login = () => {
                     </div>
                 </div>
                 <div className="mb-4 text-end col-11">
-                  <Link to="#" className="small">ลืมรหัสผ่าน</Link>
                 <div className="mt-3 text-center">
                   <p className="small">ยังไม่ได้เป็นสมาชิก? <Link to="/signup">สมัครสมาชิก</Link></p>
                 </div>
