@@ -16,8 +16,8 @@ export const getAdmin = async (req, res) => {
         return res.status(200).json(results);
 
     } catch (error) {
-        console.error("Error creating material:", error);
-        res.status(400).json({ message: "Error creating material", error: error.message });
+        console.error("Error get admin:", error);
+        res.status(400).json({ message: "Error get admin", error: error.message });
     }
 }
 
@@ -37,8 +37,8 @@ export const getAdminById = async (req, res) => {
         return res.status(200).json(results);
             
     } catch (error) {
-        console.error("Error creating material:", error);
-        res.status(400).json({ message: "Error creating material", error: error.message });
+        console.error("Error get admin by id", error);
+        res.status(400).json({ message: "Error get admin by id", error: error.message });
     }
 }
 
@@ -66,8 +66,8 @@ export const createAdmin = async (req, res) => {
         return res.status(201).json(results.message); 
             
     } catch (error) {
-        console.error("Error creating material:", error);
-        return res.status(400).json({ message: "Error creating material", error: error.message });
+        console.error("Error creating admin:", error);
+        return res.status(400).json({ message: "Error creating admin", error: error.message });
     }
 }
 
