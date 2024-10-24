@@ -22,13 +22,13 @@
   "type": "module",
   "description": "project จบ ปี 4",
   "version": "1.0.0",
-  "main": "/bakery_store/backend/index.js",
+  "main": "./server.js",
   "devDependencies": {
     "coffee-script": "^1.3.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

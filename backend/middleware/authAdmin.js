@@ -17,13 +17,11 @@ export const verifyAdmin = async (req, res , next) => {
             (err, results) => {
                 console.log('results ',results);
                 if (results.length === 0) {
-                    return res.status(404).json({ msg: "User not found" });
+                    return res.status(404).json({ message: "User not found" });
                 }
-                res.status(200).json({results, isAdmin: "admin" });
-                next()
+                return res.status(200).json({results, isAdmin: "admin" });
         })
         
-
     } catch (err) {
         console.log('Error',err)
         res.status(500).send({ message: 'Server error' })
@@ -38,7 +36,7 @@ export const verifyAdminMid = async (req, res , next) => {
         
         const authToken = await passToken(authHeader)
         if(!authToken){
-            return res.status(404).json({ msg: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
 
         db.query("SELECT admin_id FROM admin WHERE admin_id = ?", //อนาคตต้องเพิ่มการเช็ค role ด้วยได้มาจาก 3 ตารางเชื่อมมกันเเต่จะ select เเค่ชื่อมาเช็ค
@@ -46,12 +44,11 @@ export const verifyAdminMid = async (req, res , next) => {
             (err, results) => {
                 console.log('results ',results);
                 if (results.length === 0) {
-                    return res.status(404).json({ msg: "User not found" });
+                    return res.status(404).json({ message: "User not found" });
                 }
                 next()
         })
         
-
     } catch (err) {
         console.log('Error',err)
         res.status(500).send({ message: 'Server error' })

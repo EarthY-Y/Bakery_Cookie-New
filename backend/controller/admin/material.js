@@ -6,19 +6,19 @@ import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 
 export const getMaterial = async (req, res) => {
     try {
-        await db.query(
-            "SELECT material_name, quantity, cost, materialpic_name, materialpic_type, create_at, updated_at FROM material", 
-            (errr, results, fields) => {
-                if(errr){
-                    console.log(errr)
-                    return res.status(400).send()
+        const results = await new Promise((resolve, reject) => {
+            db.query("SELECT material_name, quantity, cost, materialpic_name, materialpic_type, create_at, updated_at FROM material", 
+                (err, result) => {
+                    if(err) return reject(err)
+                    resolve(result)
                 }
-                console.log('ผลของการค้นหาคือ',results)
-                return res.status(200).json(results);
-            }
-        )
+            )
+        })
+        console.log('results material ', results)
+        return res.status(200).json(results);
     } catch (error) {
-        res.status(500).json({msg: error.message});
+        console.error("Error get material", error);
+        res.status(400).json({ message: "Error get material", error: error.message });
     }
 }
 
@@ -36,22 +36,27 @@ export const createMaterial = async (req, res) => {
     const materialPictureName = req.file.filename;
     const materialPictureType = req.file.mimetype;
     console.log('file name ',materialPictureName ,'and', materialPictureType);
+
+    if (!req.file) {
+        return res.status(400).send({ message: "Material picture is required." });
+    }
     try {
-        await db.query(
-            "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
-            [id, material_name, quantity, cost, materialPictureName, materialPictureType, token.admin_id],
-            (err, results, fields) => {
-                console.log('its results ',results);
-                
-                if (err) {
-                    console.log(err);
-                    return res.status(400).send({ msg: "Error creating material" });
+        const results = await new Promise((resolve, reject) => {
+            db.query(
+                "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
+                [id, material_name, quantity, cost, materialPictureName, materialPictureType, token.admin_id],
+                (err, results, fields) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(results);
                 }
-                res.status(201).json({ msg: "Material created successfully" });
-            }
-        );
+            );
+        });
+        res.status(200).json({ message: "Material created successfully", results });
     } catch (error) {
-        res.status(400).json({ msg: error.message });
+        console.error("Error creating material:", error);
+        res.status(400).json({ message: "Error creating material", error: error.message });
     }
 }
 
