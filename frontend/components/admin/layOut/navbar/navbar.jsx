@@ -1,68 +1,17 @@
-import React from 'react'
-import { Link, NavLink } from "react-router-dom"
+import React from 'react';
+import { Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { FaArrowRight } from 'react-icons/fa';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import Logoeiei from '../../../../src/assets/Logoeiei.png'
 
-function navbar() {
+function Navbaradmin() {
   return (
-    <div>
-      {/* Navbar ส่วนบน */}
-      <div className="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C'}}>
-        <nav className="navbar navbar-expand-lg navbar-light">
-          <div className="container-fluid">
-            {/* Search bar */}
-            <form className="d-flex flex-grow-1">
-              <input className="form-control me-2" style={{ width: '100%', maxWidth: '400px', borderRadius: '10px' }} type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-light" type="submit"><i className="bi bi-search"></i></button>
-            </form>
-            <div className="text-end">
-              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <Link className="nav-link active text-light" aria-current="page" to="/Login">เข้าสู่ระบบ</Link>
-                  </li>
-                  <i className="bi bi-dash-lg fs-3 text-black d-none d-lg-inline" style={{ transform: 'rotate(90deg)' }}></i>
-                  <li className="nav-item">
-                    <Link className="nav-link active text-light" aria-current="page" to="/signup">สมัครสมาชิก</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link active text-light" to="#">฿ 0.00</Link>
-                  </li>
-                  <li className="nav-item">
-                    <i className="bi bi-basket3 fs-3 text-light"></i>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </div>
-      <div className="container text-center my-4">
-        <img
-          src="https://example.com/logo.png" // เปลี่ยน URL เป็นโลโก้ของคุณ
-          alt="Bakery Cookie New Happy Family"
-          style={{ width: '150px' }}
+    <div className="p-1 mb-2 text-dark" style={{ backgroundColor: '#347928', width: '100%', height: '50px' }}>
+        <img className=' mt-auto mb-auto '
+          src={Logoeiei} // เปลี่ยน URL เป็นโลโก้ของคุณ
+          style={{ width: 'auto', height: '100%' }}
         />
-        <nav className="container text-center col-5 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: '#C40C0C'}}>
-          <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
-          <button type="button" className="btn btn-danger dropdown-toggle rounded-pill  text-primary" data-bs-toggle="dropdown" aria-expanded="false" style={{ backgroundColor: '#FFDB00'}}>หมวดหมู่</button>
-            <ul className="dropdown-menu">
-            <li><Link className="dropdown-item" href="#">เค้ก</Link></li>
-            <li><Link className="dropdown-item" href="#">คุกกี้</Link></li>
-            <li><Link className="dropdown-item" href="#">ขนมปัง</Link></li>
-            <li><Link className="dropdown-item" href="#">Separated link</Link></li>
-            </ul>
-          <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
-          <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
-        </nav>
-      </div>
-    </div>
+    </div> 
   )
 }
 
-export default navbar
+export default Navbaradmin;
