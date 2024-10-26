@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { createMaterialService } from '../../../API/materialService';
 
 const createMaterial = () => {
-  const authToken = localStorage.getItem('token')
   const [MaterialName, setMaterial_name] = useState("");
   const [Quantities, setQuantity] = useState("");
   const [Costes, setCost] = useState("");
@@ -14,12 +13,12 @@ const createMaterial = () => {
     event.preventDefault();
     try {
       const formData = new FormData();  // ใช้ formData แทน fromData
-      formData.append('MaterialName', MaterialName);
-      formData.append('Quantities', Quantities);
-      formData.append('Costes', Costes);
+      formData.append('material_name', MaterialName);
+      formData.append('quantity', Quantities);
+      formData.append('cost', Costes);
       formData.append('file', Picture); // ต้องตรงกับชื่อที่ server ใช้
       console.log("Selected file:", Picture);
-      const res = await createMaterialService(formData, authToken);
+      const res = await createMaterialService(formData);
       navigate('/material');
       console.log(res);
     } catch (err) {

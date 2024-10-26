@@ -24,11 +24,11 @@ export const verifyAdmin = async (req, res , next) => {
         
     } catch (err) {
         console.log('Error',err)
-        res.status(500).send({ message: 'Server error' })
+        return res.status(500).send({ message: 'Server error' })
     }
 }
 
-//
+//เอาไว้เช็คหลังบ้าน เพราะว่ามีปัญหาที่ตัวบนต้อง return ค่าเลยทำให้ component ที่เอาไปใช้ไปไม่ถึงการทำงานหลัก
 export const verifyAdminMid = async (req, res , next) => {
     //token with Local storage 
     try {
@@ -42,6 +42,9 @@ export const verifyAdminMid = async (req, res , next) => {
         db.query("SELECT admin_id FROM admin WHERE admin_id = ?", //อนาคตต้องเพิ่มการเช็ค role ด้วยได้มาจาก 3 ตารางเชื่อมมกันเเต่จะ select เเค่ชื่อมาเช็ค
             [authToken.admin_id], 
             (err, results) => {
+                if(err){
+                    return res.status(422).json(err)
+                }
                 console.log('results ',results);
                 if (results.length === 0) {
                     return res.status(404).json({ message: "User not found" });
@@ -51,6 +54,6 @@ export const verifyAdminMid = async (req, res , next) => {
         
     } catch (err) {
         console.log('Error',err)
-        res.status(500).send({ message: 'Server error' })
+        return res.status(500).send({ message: 'Server error' })
     }
 }

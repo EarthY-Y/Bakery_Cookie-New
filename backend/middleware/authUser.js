@@ -25,7 +25,7 @@ export const verifyCustomer = async (req, res , next) => {
 
     } catch (err) {
         console.log('Error',err)
-        res.status(500).send({ message: 'Server error' })
+        return res.status(500).send({ message: 'Server error' })
     }
 }
 
@@ -42,6 +42,9 @@ export const verifyCustomerMid = async (req, res , next) => {
         await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
             [authToken.customerId],
         (err, results) => {
+            if(err){
+                return res.status(422).json(err)
+            }
             console.log('results',results);
             if (results.length === 0) {
                 console.log('in length = 0');
@@ -52,6 +55,6 @@ export const verifyCustomerMid = async (req, res , next) => {
         
     } catch (err) {
         console.log('Error',err)
-        res.status(500).send({ message: 'Server error' })
+        return res.status(500).send({ message: 'Server error' })
     }
 }

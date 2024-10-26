@@ -10,9 +10,14 @@ import materialRounte from "./routes/admin/material-Route.js";
 import adminRoute from "./routes/admin/admin-Route.js";
 import authRoute from "./routes/auth-Route.js"
 import cookieParser from 'cookie-parser'
+import path from 'path'
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
   
 //เรียกใช้ express ด้วย app
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -21,6 +26,7 @@ app.use(express.json({ //convert object to json object
   strict: true,  // ตั้งค่าให้ตรวจสอบ JSON ที่ไม่ถูกต้องอย่างเคร่งครัด
   limit: '1mb',  // จำกัดขนาดของ body เพื่อป้องกันการส่งข้อมูลที่มากเกินไป
 }));
+
 
 app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ่าน backend
 
@@ -51,14 +57,14 @@ app.use(session ({
   }
 }))
 
-  app.listen(process.env.APP_PORT, () => {
-    console.log(`Server is running `);
-  })
+app.listen(process.env.APP_PORT, () => {
+  console.log(`Server is running `);
+})
+app.use('/picture', express.static(path.join(__dirname, 'picture')));
+//เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
+app.use(customerRoute);
+app.use(orderRounte);
+app.use(materialRounte);
+app.use(authRoute);
+app.use(adminRoute);
 
-
-  //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
-  app.use(customerRoute);
-  app.use(orderRounte);
-  app.use(materialRounte);
-  app.use(authRoute);
-  app.use(adminRoute);
