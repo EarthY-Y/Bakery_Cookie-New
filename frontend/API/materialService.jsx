@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
-const authToken = localStorage.getItem('token')
-console.log(authToken);
+
 
 export const createMaterialService = async(fromData) => { 
     console.log(fromData);
     try {
+        const authToken = localStorage.getItem('token')
+        console.log(authToken);
         const res = await axios.post('http://localhost:5000/material/create', fromData,
             {
                 headers: {
@@ -23,6 +24,8 @@ export const createMaterialService = async(fromData) => {
 }
 export const listMaterialService = async() => {
     try {
+        const authToken = localStorage.getItem('token')
+        console.log(authToken);
         const  response = await axios.get("http://localhost:5000/material", 
           {
             headers: {

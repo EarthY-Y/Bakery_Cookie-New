@@ -41,7 +41,7 @@ app.use((err, req, res, next) => {
 //กำหนดต้นทางหรือ origin ที่จะเข้ามาใช้ API ของเรา
 app.use(cors({
   credential: true,
-  origin: ["http://localhost:5173"], //กำหนดอยู่ใน vite.config
+  origin: [process.env.FRONTEND], //กำหนดอยู่ใน vite.config
   //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
 }));
