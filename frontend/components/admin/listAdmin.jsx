@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-const authToken = localStorage.getItem('token')
+import { listAdminService } from '../../API/adminService';
 
 const ListAdmin = () => {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     const getPosts = async () => {
       try {
-        const { data: res } = await axios.get("http://localhost:5000/admin",
-          {
-            headers: {
-              'authorization': `Bearer ${authToken}`
-            }
-          }) 
-        setPosts(res);
+        const { data: res } = await listAdminService()
+        setPosts(res)
       } catch (err) {
         console.error("Error fetching data:", err);
       }

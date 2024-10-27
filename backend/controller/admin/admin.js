@@ -48,14 +48,21 @@ export const createAdmin = async (req, res) => {
         const id = uuidv4();
         //เวลา cilent ส่งอะไรมาจะถูกเก็บไว้ใน req.body
         const {userName, passWord, f_name, l_name, confPassword} = req.body;
-        console.log(req.body);
+        const materialPictureName = req.file.filename;
+        const materialPictureType = req.file.mimetype;
+        console.log('req.bod = ',req.body);
+        console.log('file name ',materialPictureName ,'and', materialPictureType);
+
+        if (!req.file) {
+            return res.status(400).send({ message: "Material picture is required." });
+        }
         
         if(passWord !== confPassword) return res.status(400).json({message: "Password not match"});
         //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
         const hashPassword = await argon2.hash(passWord); //function hash(password, options) option เช่น ขนาด รูปเบบ เเละการกินพื้นที่ ต่างๆ
         const results = await new Promise((resolve, reject)=> {
-            db.query("INSERT INTO admin (admin_id, userName, password, f_name, l_name, is_active) VALUES(?, ?, ?, ?, ?, ?)",
-                    [id, userName, hashPassword, f_name, l_name, 'Y'], 
+            db.query("INSERT INTO admin (admin_id, userName, password, f_name, l_name, adminpic, is_active) VALUES(?, ?, ?, ?, ?, ?, ?)",
+                    [id, userName, hashPassword, f_name, l_name, materialPictureName , 'Y'], 
                     (err, result) =>{
                         if(err) return reject(err);
                         resolve({message: "Register complete", result});

@@ -117,22 +117,28 @@ export const ProtectedRouteCustomer = () => {
 function removeToken() {
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
   console.log('Token has been removed. Please log in again.');
+  location.reload(); 
 }
 
 // ฟังก์ชันในการตรวจสอบและลบ token อัตโนมัติ
 function autoRemoveToken(token) {
   if (!token) return;
 
-  const tokenParts = JSON.parse(atob(token.split('.')[1])); //atob Decode token โดยไม่ต้องใช้กุญเเจที่เราตั้งได้เลย
-  const now = Math.floor(Date.now() / 1000); // เวลาปัจจุบันเป็น Unix timestamp
-  const timeUntilExpiration = (tokenParts.exp - now) * 1000; // เวลาที่เหลือในหน่วยมิลลิวินาที
+  try {
+    const tokenParts = JSON.parse(atob(token.split('.')[1])); // Decode token โดยไม่ต้องใช้กุญเเจที่เราตั้งได้เลย
+    const now = Math.floor(Date.now() / 1000); // เวลาปัจจุบันเป็น Unix timestamp
+    const timeUntilExpiration = (tokenParts.exp - now) * 1000; // เวลาที่เหลือในหน่วยมิลลิวินาที
 
-  if (timeUntilExpiration > 0) {
-      setTimeout(() => { //set เวลาตามเวลาของ timeUntilExpiration ที่เหลือเพื่อรอลบ token
-          removeToken(); 
-          alert('Please log in again.');
-      }, timeUntilExpiration);
-  } else {
-      removeToken(); // หาก token หมดอายุแล้วให้ลบทันที
+    if (timeUntilExpiration > 0) {
+        setTimeout(() => { // ตั้งเวลาให้ตรงตามเวลาที่เหลือก่อน token จะหมด
+            removeToken(); 
+            alert('Token has expired. Please log in again.');
+        }, timeUntilExpiration);
+    } else {
+        removeToken(); // หาก token หมดอายุแล้วให้ลบทันที
+    }
+  } catch (error) {
+    console.error("Invalid token format:", error); // จัดการกับกรณี token ผิดรูปแบบ
+    removeToken(); // ลบ token เพื่อบังคับให้ผู้ใช้ล็อกอินใหม่
   }
 }

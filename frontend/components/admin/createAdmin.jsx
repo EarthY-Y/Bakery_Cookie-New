@@ -1,30 +1,45 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { createAdminService } from '../../API/adminService';
 
 const createAdmin = () => {
-
   const [firstname, setF_name] = useState("");
   const [lastname, setL_name] = useState("");
   const [UserName, setuserName] = useState("");
   const [password, setpassWord] = useState("");
   const [comPassword, setconfPassword] = useState("");
+  const [Picture, setPicture] = useState(null); 
   const [msg, setmsg] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios.post('http://localhost:5000/admin/create',{f_name: firstname, l_name: lastname, userName:UserName, passWord: password, confPassword: comPassword})
-    .then(res => {
-      navigate('/admin')
+    try {
+      const formData = new FormData();  // ใช้ formData แทน fromData
+      formData.append('userName', UserName);
+      formData.append('passWord', password);
+      formData.append('confPassword', comPassword);
+      formData.append('f_name', firstname); 
+      formData.append('l_name', lastname);
+      formData.append('file', Picture);
+      console.log('file', Picture);
+      
+      const res = await createAdminService(formData)
       console.log(res);
-    }).catch(err => console.log(err))
+      navigate('/admin')
+
+    } catch (error) {
+      setmsg(error)
+      console.log(error);
+      
+    }
+
   }
 
   return (
     <div className="container mt-5">
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <p>{msg}</p>
         </div>
         <div className="mb-3">
           <label className="form-label">ชื่อจริง</label>
@@ -61,6 +76,18 @@ const createAdmin = () => {
             onChange={(e) => setconfPassword(e.target.value)}
           />
         </div>
+
+        <div className="mb-3">
+          <label className="form-label">Upload Picture</label>
+          <input 
+            type="file" 
+            className="form-control" 
+            id="fileInput" 
+            placeholder=".png /.jpeg /.pdf"
+            onChange={(e) => setPicture(e.target.files[0])}
+          />
+        </div>
+
         <div className="col-12">
           <button className="btn btn-primary" type="submit">Submit</button>
         </div>

@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
-
-export const createMaterialService = async(fromData) => { 
+export const createAdminService = async(fromData) => { 
     console.log(fromData);
     try {
         const authToken = localStorage.getItem('token')
         console.log(authToken);
-        const res = await axios.post('http://localhost:5000/material/create', fromData,
+        const res = await axios.post('http://localhost:5000/admin/create', fromData,
             {
                 headers: {
                     'authorization': `Bearer ${authToken}`
@@ -22,11 +21,12 @@ export const createMaterialService = async(fromData) => {
         throw error; // ส่ง error ออกไปให้ component จัดการ
       }
 }
-export const listMaterialService = async() => {
+
+export const listAdminService = async() => {
     try {
         const authToken = localStorage.getItem('token')
         console.log(authToken);
-        const response = await axios.get("http://localhost:5000/material", 
+        const response = await axios.get("http://localhost:5000/admin", 
           {
             headers: {
               'authorization': `Bearer ${authToken}`
@@ -39,24 +39,3 @@ export const listMaterialService = async() => {
         console.error("Error during login:", error);
     }
 }
-const validateInputs = (inputs, validationRules) => {
-    for (const key in validationRules) {
-        const { value, required, type, min } = validationRules[key];
-
-        // Check if the field is required and not provided
-        if (required && (value === undefined || value === null)) {
-            throw new Error(`${key} is required.`);
-        }
-
-        // Check type
-        if (type && typeof value !== type) {
-            throw new Error(`${key} must be of type ${type}.`);
-        }
-
-        // Check minimum value
-        if (min !== undefined && value < min) {
-            throw new Error(`${key} must be greater than or equal to ${min}.`);
-        }
-    }
-};
-

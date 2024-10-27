@@ -18,7 +18,7 @@ export const getMaterial = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get material", error);
-        res.status(400).json({ message: "Error get material", error: error.message });
+        return res.status(400).json({ message: "Error get material", error: error.message });
     }
 }
 
@@ -27,23 +27,22 @@ export const getMaterialById = async (req, res) => {
 }
 
 export const createMaterial = async (req, res) => {
-    const authHeader = req.headers['authorization']
-    
-    const token = await passToken(authHeader)
-    const id = uuidv4();
-    const { material_name, quantity, cost } = req.body;
-    console.log('file req',req.file);
-    const materialPictureName = req.file.filename;
-    const materialPictureType = req.file.mimetype;
-    console.log('file name ',materialPictureName ,'and', materialPictureType);
-
-    if (!req.file) {
-        return res.status(400).send({ message: "Material picture is required." });
-    }
     try {
+        const authHeader = req.headers['authorization']
+    
+        const token = await passToken(authHeader)
+        const id = uuidv4();
+        const { material_name, quantity, cost } = req.body;
+        console.log('file req',req.file);
+        const materialPictureName = req.file.filename;
+        const materialPictureType = req.file.mimetype;
+        console.log('file name ',materialPictureName ,'and', materialPictureType);
+    
+        if (!req.file) {
+            return res.status(400).send({ message: "Material picture is required." });
+        }
         const results = await new Promise((resolve, reject) => {
-            db.query(
-                "INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
+            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
                 [id, material_name, quantity, cost, materialPictureName, materialPictureType, token.admin_id],
                 (err, results, fields) => {
                     if (err) {
@@ -53,10 +52,10 @@ export const createMaterial = async (req, res) => {
                 }
             );
         });
-        res.status(200).json({ message: "Material created successfully", results });
+        return res.status(200).json({ message: "Material created successfully", results });
     } catch (error) {
         console.error("Error creating material:", error);
-        res.status(400).json({ message: "Error creating material", error: error.message });
+        return res.status(400).json({ message: "Error creating material", error: error.message });
     }
 }
 
