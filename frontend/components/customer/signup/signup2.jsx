@@ -1,7 +1,13 @@
-import React from 'react';
+import React ,{useContext}from 'react';
 import { Link } from 'react-router-dom';
+import { FormContext } from '../../../API/signUpService';
 
 const Signup2 = () => {
+  const { formData, setFormData } = useContext(FormContext);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   return (
     <div className="container mt-5" >
       <div className="row justify-content-center">
@@ -14,21 +20,21 @@ const Signup2 = () => {
                <div className="row mb-4">
                   <label htmlFor="user" className="col-3 col-auto col-form-label">ชื่อผู้ใช้</label>
                   <div className="col-8">
-                    <input type="user" className="form-control" id="user" placeholder="ชื่อผู้ใช้"/>
+                    <input name='username' type="text" onChange={handleChange} value={formData.username} required className="form-control" id="user" placeholder="ชื่อผู้ใช้"/>
                   </div>
                </div>
 
                <div className="row mb-4">
                   <label htmlFor="password" className="col-3 col-auto col-form-label">รหัสผ่าน</label>
                   <div className="col-8">
-                    <input type="password" className="form-control" id="password" placeholder="รหัสผ่าน"/>
+                    <input name='password' type="password" onChange={handleChange} value={formData.password} required className="form-control" id="password" placeholder="รหัสผ่าน"/>
                   </div>
                </div>
 
                <div className="row mb-4">
                  <label htmlFor="confirm password" className="col-3 col-auto col-form-label">ยืนยันรหัสผ่าน</label>
                  <div className="col-8">
-                   <input type="confirm password" className="form-control" id="confirm password" placeholder="ยืนยันรหัสผ่าน"/>
+                   <input name='confPassword' type="password" onChange={handleChange} value={formData.confPassword} required className="form-control" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน"/>
                  </div>
                </div>
                 

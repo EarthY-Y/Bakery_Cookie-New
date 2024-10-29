@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_Port
 
 export const createMaterialService = async(fromData) => { 
     console.log(fromData);
     try {
         const authToken = localStorage.getItem('token')
         console.log(authToken);
-        const res = await axios.post('http://localhost:5000/material/create', fromData,
+        const res = await axios.post(API_URL + '/material/create', fromData,
             {
                 headers: {
                     'authorization': `Bearer ${authToken}`
@@ -24,9 +25,10 @@ export const createMaterialService = async(fromData) => {
 }
 export const listMaterialService = async() => {
     try {
+
         const authToken = localStorage.getItem('token')
         console.log(authToken);
-        const response = await axios.get("http://localhost:5000/material", 
+        const response = await axios.get(API_URL + "/material", 
           {
             headers: {
               'authorization': `Bearer ${authToken}`

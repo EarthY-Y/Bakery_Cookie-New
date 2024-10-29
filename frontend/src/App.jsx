@@ -16,6 +16,8 @@ import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Home from '../page/customer-page/home/home-page'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
+import { FormProvider } from '../API/signUpService'
+
 const router = createBrowserRouter([
   {
     path: "",
@@ -34,15 +36,27 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <Signup />,
+            element: (
+              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
+                <Signup />
+              </FormProvider>
+            ),
           },
           {
             path: "step2",
-            element: <Signup2 />,
+            element: (
+              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
+                <Signup2 />
+              </FormProvider>
+            ),
           },
           {
             path: "step3",
-            element: <Signup3 />,
+            element: (
+              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
+                <Signup3 />
+              </FormProvider>
+            ),
           },
         ],
       },

@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { FormContext } from '../../../API/signUpService';
 
 const Signup = () => {
+  const { formData, setFormData } = useContext(FormContext);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   return (
     <div className="container mt-5" >
       <div className="row justify-content-center">
@@ -14,28 +20,28 @@ const Signup = () => {
                <div className="row mb-4">
                   <label htmlFor="fname" className="col-3 col-auto col-form-label">ชื่อ</label>
                   <div className="col-8">
-                    <input type="fname" className="form-control" id="fname" placeholder="ชื่อ"/>
+                    <input name='f_name' type="fname" onChange={handleChange} value={formData.f_name} required className="form-control" id="fname" placeholder="ชื่อ"/>
                   </div>
                </div>
 
                <div className="row mb-4">
                   <label htmlFor="sname" className="col-3 col-auto col-form-label">นามสกุล</label>
                   <div className="col-8">
-                    <input type="sname" className="form-control" id="sname" placeholder="นามสกุล"/>
+                    <input name='l_name' type="sname" onChange={handleChange} value={formData.l_name} required  className="form-control" id="sname" placeholder="นามสกุล"/>
                   </div>
                </div>
 
-               <div className="row mb-4">
+               {/* <div className="row mb-4">
                   <label htmlFor="email" className="col-3 col-auto col-form-label">อีเมล</label>
                   <div className="col-8">
-                    <input type="email" className="form-control" id="email" placeholder="อีเมล"/>
+                    <input type="email" onChange={handleChange} value={formData.username}  className="form-control" id="email" placeholder="อีเมล"/>
                   </div>
-               </div>
+               </div> */}
 
                <div className="row mb-4">
                  <label htmlFor="phone" className="col-3 col-auto col-form-label">เบอร์โทรศัพท์</label>
                  <div className="col-8">
-                   <input type="phone" className="form-control" id="phone" placeholder="เบอร์โทรศัพท์"/>
+                   <input name='phone_number' type="phone" onChange={handleChange} value={formData.phone_number} required  className="form-control" id="phone" placeholder="เบอร์โทรศัพท์"/>
                  </div>
                </div>
 
@@ -47,7 +53,7 @@ const Signup = () => {
                   </div>
                   <div className="col-5">
                     <Link to="/signup/step2"
-                      style={{ backgroundColor: '#C1F2B0'}} type="submit" className="btn btn-outline-dark w-100">ยืนยัน
+                      style={{ backgroundColor: '#C1F2B0'}} type="" className="btn btn-outline-dark w-100">ยืนยัน
                     </Link>
                   </div>
                </div>
