@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { listMaterialService } from '../../../API/materialService';
 import { formatDate } from '../../datetime';
+import { Table, Button } from 'react-bootstrap';
 
 const ListMaterial = () => {
   const [posts, setPosts] = useState([]);
@@ -16,7 +17,7 @@ const ListMaterial = () => {
         
         setPosts(res.data);
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error data:", err);
       }
     };
 
@@ -30,16 +31,19 @@ const ListMaterial = () => {
       </div>
 
       <p>จำนวน {posts.length} รายการ</p>
-      <table className="table">
+      <Table striped bordered hover>
         <thead>
           <tr>
-            <th scope="col">รูปปลากรอบ</th>
-            <th scope="col">ชื่อวัตถุดิบ</th>
-            <th scope="col">จำนวน</th>
-            <th scope="col">ต้นทุน</th>
-            <th scope="col">วันที่สร้าง</th>
+            <th style={{width: '20%' }}>รูปภาพ</th>
+            <th style={{width: '30%' }}>ชื่อวัตถุดิบ</th>
+            <th style={{width: '10%' }}>ราคา</th>
+            <th style={{width: '10%' }}>จำนวน</th>
+            <th style={{width: '10%' }}>สถานะ</th>
+            <th style={{width: '10%' }}>แก้ไข</th>
+            <th style={{width: '10%' }}>ลบ</th>
           </tr>
         </thead>
+      
         <tbody>
           
           {posts.map((posts, index) => (
@@ -52,7 +56,7 @@ const ListMaterial = () => {
             </tr>
           ) )}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };
