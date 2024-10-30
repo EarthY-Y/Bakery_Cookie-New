@@ -2,6 +2,7 @@ import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
+import { resolve } from "path";
 
 //ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
@@ -32,7 +33,7 @@ export const getCustomerById = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get customer by id:", error);
-        res.status(400).json({ message: "Error get customer by id", error: error.message });
+        return res.status(400).json({ message: "Error get customer by id", error: error.message });
     }
 }
 
@@ -48,12 +49,12 @@ export const createCustomer = async (req, res) => {
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
     const hashPassword = await argon2.hash(password); //function hash(password, options) option เช่น ขนาด รูปเบบ เเละการกินพื้นที่ ต่างๆ
     try {
-        const response = await new Promise((resolvem, reject) => {
+        const response = await new Promise((resolve, reject) => {
             db.query(
                 "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password, is_active) VALUES(?, ?, ?, ?, ?, ?, ?)",
                 [id, phone_number, f_name, l_name, username, hashPassword, "Y"],  (err, results) => {
                     if (err) return reject(err);
-                    resolvem(results);
+                    resolve(results);
                 }
             )
         })

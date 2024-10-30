@@ -26,11 +26,6 @@ export const FormProvider = ({ children }) => {
     username: '',
     password: '',
     confPassword: '',
-    homeNumber: '',
-    subdistrict: '',
-    district: '',
-    province: '',
-    postCode: '',
   });
 
 

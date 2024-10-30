@@ -1,32 +1,45 @@
-import React, {useContext } from 'react';
+import React, { useContext,useState, useEffect } from 'react';
+import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 import { FormContext } from '../../../API/signUpService';
-import { createCustomer } from '../../../API/signUpService';
+
 
 const Signup3 = () => {
+  const [provinces, setProvinces] = useState([]);
+  const [amphures, setAmphures] = useState([]);
+  const [tambons, setTambons] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectedAmphure, setSelectedAmphure] = useState(null);
   const { formData, setFormData } = useContext(FormContext);
   const navigate = useNavigate();
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault(); //ต้องมี เพราะ ป้องกันการรีเฟรชหน้าเว็บของ form, ควบคุมการส่งข้อมูลเอง
-    try {
-      const response = await createCustomer(formData)
-      console.log('Form Submitted:', response);
-      if (response.data.status === "success") {
-        console.log(response.data.message);  // Log ข้อความที่ได้จากหลังบ้าน
-        navigate('/Login');
-      } else {
-        throw new Error(response.data.message);  // ข้อความข้อผิดพลาด
-      }
-    } catch (error) {
-      console.log('Error submitting form:', error);
-      alert('Error submitting form');
-      navigate('/Login');
+  useEffect(() => {
+    const getProvinces = async () => {const response = await axios.get("http://localhost:5000/getProvice")
+      console.log(response);
+      setProvinces(response.data)
     }
-  };
+    getProvinces()
+  }, []);
+  useEffect( () => {
+    console.log(selectedProvince);
+    
+      if (selectedProvince) {
+          axios.get(`http://localhost:5000/amphure/${selectedProvince}`)
+              .then(response => setAmphures(response.data))
+              .catch(error => console.error("Error fetching amphures:", error));
+      } else {
+          setAmphures([]);
+      }
+  }, [selectedProvince]);
+  useEffect( () => {
+    if (selectedAmphure) {
+        axios.get(`http://localhost:5000/tambon/${selectedAmphure}`)
+            .then(response => setTambons(response.data))
+            .catch(error => console.error("Error fetching tambons:", error));
+    } else {
+        setTambons([]);
+    }
+  }, [selectedAmphure]);
+
   return (
     <div className="container mt-5" >
       <div className="row justify-content-center">
@@ -35,39 +48,60 @@ const Signup3 = () => {
             <div className="px-5 card-body">
               <h3 className="mb-4 card-title text-center">สมัครสมาชิก</h3>
 
-              <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <form >
                <div className="row mb-4">
                   <label htmlFor="home number" className="col-3 col-auto col-form-label">บ้านเลขที่</label>
                   <div className="col-8">
-                    <input name='homeNumber' type="text" onChange={handleChange} value={formData.homeNumber} className="form-control" id="homeNumber" placeholder="บ้านเลขที่"/>
+                    <input name='homeNumber' type="text" className="form-control" id="homeNumber" placeholder="บ้านเลขที่"/>
                   </div>
                </div>
 
                <div className="row mb-4">
-                  <label htmlFor="subdistrict" className="col-3 col-auto col-form-label">แขวง/ตำบล</label>
-                  <div className="col-8">
-                    <input name='subdistrict' type="text" onChange={handleChange} value={formData.subdistrict} className="form-control" id="subdistrict" placeholder="แขวง/ตำบล"/>
-                  </div>
+                <label htmlFor="subdistrict" className="col-3 col-auto col-form-label">จังหวัด</label>
+                <div className="col-8">
+                  <select onChange={(e) => setSelectedProvince(e.target.value)} className="form-select" defaultValue="">
+                    <option value="" disabled>Select Province</option>
+                    {provinces.map((province) => (
+                        <option name='province' key={province.province_id}  value={province.province_id}>
+                            {province.province_nameTH}
+                        </option>
+                    ))}
+                  </select>
+                </div>
                </div>
 
                <div className="row mb-4">
                   <label htmlFor="district" className="col-3 col-auto col-form-label">เขต/อำเภอ</label>
                   <div className="col-8">
-                    <input name='district' type="text" onChange={handleChange} value={formData.district} className="form-control" id="district" placeholder="เขต/อำเภอ"/>
+                    <select onChange={(e) => setSelectedAmphure(e.target.value)} className="form-select" defaultValue="" disabled={!selectedProvince}>
+                      <option value="" disabled>Select Amphure</option>
+                      {amphures.map((amphure) => (
+                          <option name='district' key={amphure.amphure_id} value={amphure.amphure_id}>
+                              {amphure.amphure_nameTH}
+                          </option>
+                      ))}
+                    </select>
                   </div>
                </div>
 
                <div className="row mb-4">
-                 <label htmlFor="province" className="col-3 col-auto col-form-label">จังหวัด</label>
-                 <div className="col-8">
-                   <input name='province' type="text" onChange={handleChange} value={formData.province} className="form-control" id="province" placeholder="จังหวัด"/>
-                 </div>
+                  <label htmlFor="province" className="col-3 col-auto col-form-label">แขวง/ตำบล</label>
+                  <div className="col-8">
+                    <select defaultValue="" className="form-select" disabled={!selectedAmphure}>
+                    <option value="" disabled >Select Tambon</option>
+                      {tambons.map((tambon) => (
+                        <option name='subdistrict' key={tambon.tambon_id} value={tambon.tambon_id}>
+                            {tambon.tambon_nameTH}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                </div>
 
                <div className="row mb-4">
                  <label htmlFor="postal code" className="col-3 col-auto col-form-label">รหัสไปรษณีย์</label>
                  <div className="col-8">
-                   <input name='postCode' type="text" onChange={handleChange} value={formData.postCode} className="form-control" id="postalCode" placeholder="รหัสไปรษณีย์"/>
+                   <input name='postCode' type="text"  value={formData.postCode} className="form-control" id="postalCode" placeholder="รหัสไปรษณีย์"/>
                  </div>
                </div>
 

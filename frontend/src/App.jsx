@@ -50,20 +50,12 @@ const router = createBrowserRouter([
               </FormProvider>
             ),
           },
-          {
-            path: "step3",
-            element: (
-              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
-                <Signup3 />
-              </FormProvider>
-            ),
-          },
         ],
       },
     
       //route Admin
       {
-        // element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
+        element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
         children: [
           {
             path: "/dashboard",
@@ -113,7 +105,7 @@ const router = createBrowserRouter([
     
       //route User
       {
-        // element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
+        element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
         children: [
           {
             path: "/home",
