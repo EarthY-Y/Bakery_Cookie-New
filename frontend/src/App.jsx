@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
-import Product from '../page/admin-page/product-page/listProduct-page'
+import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListMaterial from '../page/admin-page/material-page/listMaterial-page'
 import CreateMaterial from '../page/admin-page/material-page/createMaterial-page'
 import CreateAdmin from '../page/admin-page/createAdmin-page'
@@ -18,6 +17,7 @@ import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
 import { FormProvider } from '../API/signUpService'
 
+import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 const router = createBrowserRouter([
   {
     path: "",
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     
       //route Admin
       {
-        element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
+        // element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
         children: [
           {
             path: "/dashboard",
@@ -84,7 +84,16 @@ const router = createBrowserRouter([
           },
           {
             path: "/product",
-            element: <Product />,
+            children: [
+              {
+                path: "",
+                element: <ListProduct />,
+              },
+              {
+                path: "create", // ลบ '/' หน้า path
+                element: <CreateProduct />,
+              },
+            ],
           },
           {
             path: "/admin",
@@ -104,7 +113,7 @@ const router = createBrowserRouter([
     
       //route User
       {
-        element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
+        // element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
         children: [
           {
             path: "/home",
