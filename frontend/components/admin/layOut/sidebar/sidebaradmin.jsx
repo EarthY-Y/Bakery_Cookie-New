@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom';
 
 function Sidebaradmin() {
   return (
-    <div className="d-flex flex-column p-3 bg-light" style={{ width: '240px', height: '1000px'}}>
+    <div className="d-flex flex-column p-3 bg-light" style={{ width: '250px', height: '1000px'}}>
       <Nav className="flex-column">
         <Nav.Item>
-          <Nav.Link to="/frontend/page/admin-page/dashboard/dashboard.jsx" style={{ color: 'Black' }}>สถิติ</Nav.Link>
+          <Nav.Link as={Link} to="/dashboard" style={{ color: 'Black' }}>สถิติ</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link to="#" style={{ color: 'Black' }}>ประเภทสินค้า</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link to="#" style={{ color: 'Black' }}>สินค้าหน้าร้าน</Nav.Link>
+          <Nav.Link as={Link} to="/product" style={{ color: 'Black' }}>สินค้าหน้าร้าน</Nav.Link>
         </Nav.Item>
         <Accordion defaultActiveKey="0">
           <Accordion.Item eventKey="0" style={{ border: 'none'}}>

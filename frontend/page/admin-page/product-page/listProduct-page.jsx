@@ -1,6 +1,6 @@
 import React from 'react'
 import LayOut from '../../../components/admin/layOut/layOut'
-import Product from '../../../components/admin/product/createProduct'
+import Product from '../../../components/admin/product/listProduct'
 
 function listProduct() {
   return (
