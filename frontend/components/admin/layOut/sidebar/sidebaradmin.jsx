@@ -22,12 +22,15 @@ function Sidebaradmin() {
               <Nav.Item>
                 <Nav.Link as={Link} to="/material" style={{ color: 'Black' }}>วัตถุดิบ</Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link as={Link} to="/material" style={{ color: 'Black' }}>บรรจุภัณฑ์</Nav.Link>
+              </Nav.Item>
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
-        <Nav.Item>
+        {/* <Nav.Item>
           <Nav.Link to="#" style={{ color: 'Black' }}>บรรจุภัณฑ์</Nav.Link>
-        </Nav.Item>
+        </Nav.Item> */}
         <Accordion defaultActiveKey="1">
           <Accordion.Item eventKey="1" style={{ border: 'none' }}>
             <Accordion.Header>การสั่งซื้อ</Accordion.Header>

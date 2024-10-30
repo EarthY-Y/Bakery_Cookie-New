@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createMaterialService } from '../../../API/materialService';
 import { Link } from 'react-router-dom';
 
-const createMaterial = () => {
+const editMaterial = () => {
   const [MaterialName, setMaterial_name] = useState("");
   const [Quantities, setQuantity] = useState("");
   const [Costes, setCost] = useState("");
@@ -32,20 +32,10 @@ const createMaterial = () => {
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="mb-3">
         <div className="d-flex justify-content-between align-items-center mb-3">
-        <Link to="/material" className="btn btn-light text-black">
+        <Link to="/material" className="btn btn-outline-secondary text-black">
           ย้อนกลับ
         </Link>
       </div>
-      <div className="mb-3">
-          <label className="form-label">Upload Picture</label>
-          <input 
-            type="file" 
-            className="form-control" 
-            id="fileInput" 
-            placeholder=".png /.jpeg /.pdf"
-            onChange={(e) => setPicture(e.target.files[0])}
-          />
-        </div>
           <label className="form-label">ชื่อสินค้า</label>
           <input type="text" className="form-control" placeholder="ชื่อสินค้า" 
             value={MaterialName} 
@@ -53,28 +43,21 @@ const createMaterial = () => {
             />
         </div>
         <div className="mb-3">
-          <label className="form-label">รหัสสินค้า</label>
-          <input type="number" className="form-control" placeholder="รหัสสินค้า" 
+          <label className="form-label">ปริมาณ</label>
+          <input type="number" className="form-control" placeholder="กิโล" 
             value={Quantities} 
             onChange={(e) => setQuantity(e.target.value)}
             />
         </div>
         <div className="mb-3">
-          <label  className="form-label">ต้นทุนสินค้า</label>
-          <input type="number" className="form-control"  placeholder="ต้นทุนสินค้า"
-            value={Costes} 
-            onChange={(e) => setCost(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label  className="form-label">ราคาสินค้า</label>
-          <input type="number" className="form-control"  placeholder="ราคาสินค้า"
+          <label  className="form-label">ต้นทุน</label>
+          <input type="number" className="form-control"  placeholder="100 บาท"
             value={Costes} 
             onChange={(e) => setCost(e.target.value)}
           />
         </div>
 
-        {/* <div className="mb-3">
+        <div className="mb-3">
           <label className="form-label">Upload Picture</label>
           <input 
             type="file" 
@@ -83,25 +66,14 @@ const createMaterial = () => {
             placeholder=".png /.jpeg /.pdf"
             onChange={(e) => setPicture(e.target.files[0])}
           />
-        </div> */}
+        </div>
 
         <div className="col-12">
-        <button
-            className="btn btn-primary me-2"
-            type="submit"
-            style={{ width: '100px', height: '40px' }}>
-            ยกเลิก
-          </button>
-          <button
-            className="btn btn-primary"
-            type="submit"
-            style={{ width: '100px', height: '40px' }}>
-            เพิ่ม
-          </button>
+          <button className="btn btn-primary" type="submit">Submit</button>
         </div>
       </form>
     </div>
   );
 };
 
-export default createMaterial;
+export default editMaterial;

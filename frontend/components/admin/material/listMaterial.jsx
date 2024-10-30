@@ -26,21 +26,24 @@ const ListMaterial = () => {
 
   return (
     <div className="container mt-5">
-      <div className="col-12">
-        <Link className="btn btn-primary nav-link active" to="/material/create">เพิ่มวัตถุดิบ</Link>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>วัตถุดิบ</h2>
+        <Link to="/material/create" className="btn btn-outline-warning text-black">
+          เพิ่มวัตถุดิบ
+        </Link>
       </div>
 
       <p>จำนวน {posts.length} รายการ</p>
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th style={{width: '20%' }}>รูปภาพ</th>
-            <th style={{width: '30%' }}>ชื่อวัตถุดิบ</th>
-            <th style={{width: '10%' }}>ราคา</th>
-            <th style={{width: '10%' }}>จำนวน</th>
-            <th style={{width: '10%' }}>สถานะ</th>
-            <th style={{width: '10%' }}>แก้ไข</th>
-            <th style={{width: '10%' }}>ลบ</th>
+            <th className="text-center align-middle" style={{width: '20%' }}>รูปภาพ</th>
+            <th className="text-center align-middle" style={{width: '30%' }}>ชื่อวัตถุดิบ</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>ต้นทุน</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>จำนวน</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>สถานะ</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>แก้ไข</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>ลบ</th>
           </tr>
         </thead>
       
