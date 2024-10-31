@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
-import Product from '../page/admin-page/product-page/listProduct-page'
+import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListMaterial from '../page/admin-page/material-page/listMaterial-page'
 import CreateMaterial from '../page/admin-page/material-page/createMaterial-page'
 import CreateAdmin from '../page/admin-page/createAdmin-page'
@@ -16,6 +15,9 @@ import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Home from '../page/customer-page/home/home-page'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
+import { FormProvider } from '../API/signUpService'
+
+import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 const router = createBrowserRouter([
   {
     path: "",
@@ -34,15 +36,19 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <Signup />,
+            element: (
+              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
+                <Signup />
+              </FormProvider>
+            ),
           },
           {
             path: "step2",
-            element: <Signup2 />,
-          },
-          {
-            path: "step3",
-            element: <Signup3 />,
+            element: (
+              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
+                <Signup2 />
+              </FormProvider>
+            ),
           },
         ],
       },
@@ -70,7 +76,16 @@ const router = createBrowserRouter([
           },
           {
             path: "/product",
-            element: <Product />,
+            children: [
+              {
+                path: "",
+                element: <ListProduct />,
+              },
+              {
+                path: "create", // ลบ '/' หน้า path
+                element: <CreateProduct />,
+              },
+            ],
           },
           {
             path: "/admin",

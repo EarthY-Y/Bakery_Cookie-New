@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_Port
+
 export const createAdminService = async(fromData) => { 
     console.log(fromData);
     try {
         const authToken = localStorage.getItem('token')
         console.log(authToken);
-        const res = await axios.post('http://localhost:5000/admin/create', fromData,
+        const res = await axios.post(API_URL+'/admin/create', fromData,
             {
                 headers: {
                     'authorization': `Bearer ${authToken}`
@@ -26,7 +28,7 @@ export const listAdminService = async() => {
     try {
         const authToken = localStorage.getItem('token')
         console.log(authToken);
-        const response = await axios.get("http://localhost:5000/admin", 
+        const response = await axios.get(API_URL+"/admin", 
           {
             headers: {
               'authorization': `Bearer ${authToken}`

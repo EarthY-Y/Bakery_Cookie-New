@@ -1,7 +1,31 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React ,{useContext,useState, useEffect}from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FormContext } from '../../../API/signUpService';
+import { createCustomer } from '../../../API/signUpService';
 
 const Signup2 = () => {
+  const { formData, setFormData } = useContext(FormContext);
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault(); //ต้องมี เพราะ ป้องกันการรีเฟรชหน้าเว็บของ form, ควบคุมการส่งข้อมูลเอง
+    try {
+      const response = await createCustomer(formData)
+      console.log('Form Submitted:', response);
+      if (response.data.status === "success") {
+        console.log(response.data.message);  // Log ข้อความที่ได้จากหลังบ้าน
+        navigate('/Login');
+      } else {
+        throw new Error(response.data.message);  // ข้อความข้อผิดพลาด
+      }
+    } catch (error) {
+      console.log('Error submitting form:', error);
+      alert('Error submitting form');
+      navigate('/Login');
+    }
+  }
   return (
     <div className="container mt-5" >
       <div className="row justify-content-center">
@@ -10,25 +34,25 @@ const Signup2 = () => {
             <div className="px-5 card-body">
               <h3 className="mb-4 card-title text-center">สมัครสมาชิก</h3>
 
-              <form>
+              <form onSubmit={handleSubmit} encType="multipart/form-data">
                <div className="row mb-4">
                   <label htmlFor="user" className="col-3 col-auto col-form-label">ชื่อผู้ใช้</label>
                   <div className="col-8">
-                    <input type="user" className="form-control" id="user" placeholder="ชื่อผู้ใช้"/>
+                    <input name='username' type="text" onChange={handleChange} value={formData.username} required className="form-control" id="user" placeholder="ชื่อผู้ใช้"/>
                   </div>
                </div>
 
                <div className="row mb-4">
                   <label htmlFor="password" className="col-3 col-auto col-form-label">รหัสผ่าน</label>
                   <div className="col-8">
-                    <input type="password" className="form-control" id="password" placeholder="รหัสผ่าน"/>
+                    <input name='password' type="password" onChange={handleChange} value={formData.password} required className="form-control" id="password" placeholder="รหัสผ่าน"/>
                   </div>
                </div>
 
                <div className="row mb-4">
                  <label htmlFor="confirm password" className="col-3 col-auto col-form-label">ยืนยันรหัสผ่าน</label>
                  <div className="col-8">
-                   <input type="confirm password" className="form-control" id="confirm password" placeholder="ยืนยันรหัสผ่าน"/>
+                   <input name='confPassword' type="password" onChange={handleChange} value={formData.confPassword} required className="form-control" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน"/>
                  </div>
                </div>
                 
@@ -39,9 +63,7 @@ const Signup2 = () => {
                     </Link>
                   </div>
                   <div className="col-5">
-                    <Link to="/signup/step3"
-                      style={{ backgroundColor: '#C1F2B0'}} type="submit" className="btn btn-outline-dark w-100">ยืนยัน
-                    </Link>
+                    <button style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">สมัครสมาชิก</button>
                   </div>
                 </div>
 

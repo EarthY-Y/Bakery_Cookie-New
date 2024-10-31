@@ -14,7 +14,7 @@ router.use(express.json());
 
 router.get('/customer',verifyCustomerMid, getCustomer);
 router.get('/customer/:id',verifyCustomerMid, getCustomerById);
-router.post('/customer/sign', createCustomer);
+router.post('/customer/create', createCustomer);
 router.patch('/customer/:id',verifyCustomerMid, updateCustomer);
 router.delete('/customer/:id',verifyCustomerMid, deleteCustomer);
 

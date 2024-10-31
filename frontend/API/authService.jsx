@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_Port
 //ระบบ login
 export const login = async (userName, passWord) => {
   try {
-    const res = await axios.post('http://localhost:5000/login', { userName, passWord });
+    const res = await axios.post(API_URL+'/login', { userName, passWord });
     console.log(res);
     return res;
   } catch (error) {
@@ -30,7 +31,7 @@ export const ProtectedRouteAdmin = () => {
       autoRemoveToken(token)
       try {
         console.log("Verifying token...");
-        const resAdmin = await axios.get('http://localhost:5000/verifyAdmin', {
+        const resAdmin = await axios.get(API_URL+'/verifyAdmin', {
           headers: {
             'authorization': `Bearer ${token}`
           }
@@ -79,7 +80,7 @@ export const ProtectedRouteCustomer = () => {
       autoRemoveToken(token)
       try {
         console.log("Verifying token...");
-        const resCustomer = await axios.get('http://localhost:5000/verifyCustomer', {
+        const resCustomer = await axios.get(API_URL+'/verifyCustomer', {
           headers: {
             'authorization': `Bearer ${token}`
           }
