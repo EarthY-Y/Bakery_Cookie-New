@@ -39,8 +39,8 @@ const ListMaterial = () => {
           <tr>
             <th className="text-center align-middle" style={{width: '20%' }}>รูปภาพ</th>
             <th className="text-center align-middle" style={{width: '30%' }}>ชื่อวัตถุดิบ</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>ปริมาณ</th>
             <th className="text-center align-middle" style={{width: '10%' }}>ต้นทุน</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>จำนวน</th>
             <th className="text-center align-middle" style={{width: '10%' }}>สถานะ</th>
             <th className="text-center align-middle" style={{width: '10%' }}>แก้ไข</th>
             <th className="text-center align-middle" style={{width: '10%' }}>ลบ</th>
@@ -53,7 +53,7 @@ const ListMaterial = () => {
               <tr key={index}>
                 <td><img src={"http://localhost:5000/picture/" + posts.materialpic_name} height={75} width={120} className='text-center'/></td>
                 <td>{posts.material_name}</td>
-                <td>{posts.quantity}</td>
+                <td>{posts.quantity} กรัม </td>
                 <td>{posts.cost}</td>
                 <td>{formatDate(posts.create_at)}</td>
             </tr>

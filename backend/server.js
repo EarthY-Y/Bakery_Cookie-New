@@ -10,6 +10,7 @@ import materialRounte from "./routes/admin/material-Route.js";
 import adminRoute from "./routes/admin/admin-Route.js";
 import authRoute from "./routes/auth-Route.js"
 import provinceAmphureTambon from "./routes/addressRoute.js"
+import productPoute from "./routes/admin/product-Route.js"
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -66,6 +67,7 @@ app.use('/picture', express.static(path.join(__dirname, 'picture')));
 app.use(customerRoute);
 app.use(orderRounte);
 app.use(materialRounte);
+app.use(productPoute);
 app.use(authRoute);
 app.use(adminRoute);
 app.use(provinceAmphureTambon);

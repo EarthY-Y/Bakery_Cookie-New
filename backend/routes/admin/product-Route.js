@@ -8,15 +8,21 @@ import {
 } from "../../controller/admin/product.js"
 
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
-
+import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 
 const router = express.Router();
 router.use(express.json());
 
-router.get('/Product',verifyAdminMid, getProduct);
-router.get('/Product/:id',verifyAdminMid, getProductById);
-router.post('/Product/sign',verifyAdminMid, createProduct);
-router.patch('/Product/:id',verifyAdminMid, updateProduct);
-router.delete('/Product/:id',verifyAdminMid, deleteProduct);
+router.get('/product',verifyAdminMid, getProduct);
+router.get('/product/:id',verifyAdminMid, getProductById);
+router.post('/product/create',verifyAdminMid, verifyAdminMid, uploadSingle, (req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
+    // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
+    if (!req.file) {
+        return res.status(400).send({ message: 'No file uploaded!' });
+    }
+  createProduct(req, res); // เรียกใช้ createMaterial พร้อม req และ res
+});
+router.patch('/product/:id',verifyAdminMid, updateProduct);
+router.delete('/product/:id',verifyAdminMid, deleteProduct);
 
 export default router

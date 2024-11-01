@@ -44,11 +44,11 @@ export const createMaterial = async (req, res) => {
         const results = await new Promise((resolve, reject) => {
             db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, materialpic_type, admin_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
                 [id, material_name, quantity, cost, materialPictureName, materialPictureType, token.admin_id],
-                (err, results, fields) => {
+                (err, result, fields) => {
                     if (err) {
                         return reject(err);
                     }
-                    resolve(results);
+                    resolve(result);
                 }
             );
         });

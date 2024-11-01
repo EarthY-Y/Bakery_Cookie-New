@@ -26,7 +26,7 @@ export const getProvice = async(req, res) => {
                 })
         })
         if(!response){
-            throw new Error(response.data.message)
+            throw new Error("query error")
         }
         return res.status(200).json(response);
     } catch (error) {

@@ -2,15 +2,15 @@ import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../datetime';
 import { Table, Button } from 'react-bootstrap';
+import { listProductService } from '../../../API/productService';
 
 const listProduct = () => {
   const [posts, setPosts] = useState([]);
   
   useEffect(() => {
-
     const getPosts = async () => {
       try {
-        const res = await listMaterialService()
+        const res = await listProductService()
         console.log(res.data);
         
         setPosts(res.data);
@@ -46,15 +46,15 @@ const listProduct = () => {
       
         <tbody>
           
-          {/* {posts.map((posts, index) => (
+           {posts.map((posts, index) => (
               <tr key={index}>
-                <td><img src={"http://localhost:5000/picture/" + posts.materialpic_name} height={75} width={120} className='text-center'/></td>
-                <td>{posts.material_name}</td>
+                <td><img src={"http://localhost:5000/picture/" + posts.productpic_name} height={75} width={120} className='text-center'/></td>
+                <td>{posts.product_name}</td>
                 <td>{posts.quantity}</td>
                 <td>{posts.cost}</td>
                 <td>{formatDate(posts.create_at)}</td>
             </tr>
-          ) )} */}
+          ) )}
         </tbody>
       </Table>
     </div>

@@ -8,9 +8,9 @@ import { resolve } from "path";
 export const getCustomer = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT * FROM customer", (err, results) => {
+            db.query("SELECT * FROM customer", (err, result) => {
                 if (err) return reject(err);
-                resolve(results);
+                resolve(result);
             })
         })
         return res.status(200).json(results);
@@ -25,9 +25,9 @@ export const getCustomerById = async (req, res) => {
         const id = req.params.id
         console.log(id);
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT * FROM customer WHERE id = ?", (err, results) => {
+            db.query("SELECT * FROM customer WHERE id = ?", (err, result) => {
                 if (err) return reject(err);
-                resolve(results);
+                resolve(result);
             })
         })
         return res.status(200).json(results);
@@ -52,9 +52,9 @@ export const createCustomer = async (req, res) => {
         const response = await new Promise((resolve, reject) => {
             db.query(
                 "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password, is_active) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                [id, phone_number, f_name, l_name, username, hashPassword, "Y"],  (err, results) => {
+                [id, phone_number, f_name, l_name, username, hashPassword, "Y"],  (err, result) => {
                     if (err) return reject(err);
-                    resolve(results);
+                    resolve(result);
                 }
             )
         })

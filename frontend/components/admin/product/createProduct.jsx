@@ -1,27 +1,30 @@
 import React, { useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { createProductService } from '../../../API/productService';
 
 const CreateProduct = () => {
-  const [ProductName, setProduct_name] = useState("");
-  const [ProductCode, setProductCode] = useState("");
-  const [ProductCost, setProductCost] = useState("");
-  const [ProductPrice, setProductPrice] = useState("");
-  const [ProductDescription, setProductDescription] = useState("");
-  const [Picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
+  const [productName, setProduct_name] = useState("");
+  const [productQuantity, setProductQuantity] = useState("");
+  const [productCost, setProductCost] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+  const [picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
+
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const formData = new FormData();  // ใช้ formData แทน fromData
-      formData.append('product_name', ProductName);
-      formData.append('productcode', ProductCode);
-      formData.append('productcost', ProductCost);
-      formData.append('productprice', ProductPrice);
-      formData.append('productcost', ProductDescription);
-      formData.append('file', Picture); // ต้องตรงกับชื่อที่ server ใช้
-      console.log("Selected file:", Picture);
-      const res = await createMaterialService(formData);
-      navigate('/material');
+      formData.append('product_name', productName);
+      formData.append('quantity', productQuantity);
+      formData.append('cost', productCost);
+      formData.append('price', productPrice);
+      formData.append('description', productDescription);
+      formData.append('file', picture); // ต้องตรงกับชื่อที่ server ใช้
+      console.log("Selected file:", picture);
+      const res = await createProductService(formData);
+      navigate('/product');
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -52,20 +55,20 @@ const CreateProduct = () => {
               type="text" 
               className="form-control" 
               placeholder="ชื่อสินค้า" 
-              value={ProductName} 
+              value={productName} 
               onChange={(e) => setProduct_name(e.target.value)} 
             />
           </div>
         </div>
         <div className="row mb-3 justify-content-center">
-          <label className="col-sm-2 col-form-label">รหัสสินค้า</label>
+          <label className="col-sm-2 col-form-label">จำนวน</label>
           <div className="row col-sm-5">
             <input 
               type="text" 
               className="form-control" 
-              placeholder="รหัสสินค้า" 
-              value={ProductCode} 
-              onChange={(e) => setProductCode(e.target.value)} 
+              placeholder="จำนวน" 
+              value={productQuantity} 
+              onChange={(e) => setProductQuantity(e.target.value)} 
             />
           </div>
         </div>
@@ -76,7 +79,7 @@ const CreateProduct = () => {
               type="text" 
               className="form-control" 
               placeholder="ต้นทุนสินค้า" 
-              value={ProductCost} 
+              value={productCost} 
               onChange={(e) => setProductCost(e.target.value)} 
             />
           </div>
@@ -88,7 +91,7 @@ const CreateProduct = () => {
               type="text" 
               className="form-control" 
               placeholder="ราคาสินค้า" 
-              value={ProductPrice} 
+              value={productPrice} 
               onChange={(e) => setProductPrice(e.target.value)} 
             />
           </div>
@@ -100,12 +103,12 @@ const CreateProduct = () => {
               type="text" 
               className="form-control" 
               placeholder="รายละเอียดสินค้า" 
-              value={ProductDescription} 
+              value={productDescription} 
               onChange={(e) => setProductDescription(e.target.value)} 
             />
           </div>
         </div>
-
+        
         <div className="d-md-flex justify-content-center">
         <button
             className="btn btn-secondary me-2"
