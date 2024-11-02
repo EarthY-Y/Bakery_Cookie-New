@@ -17,7 +17,6 @@ export const passToken = (token) => {
             return userJWT
             
         }
-        return
     } catch (err) {
         console.log(err);
     }

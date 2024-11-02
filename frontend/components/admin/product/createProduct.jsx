@@ -1,62 +1,53 @@
-import React, { useEffect, useState} from 'react';
+import React, { useContext,useEffect, useState} from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { createProductService } from '../../../API/productService';
+import { FormContextMaterialProduct } from '../../../API/productService';
 
 const CreateProduct = () => {
-  const [productName, setProduct_name] = useState("");
-  const [productQuantity, setProductQuantity] = useState("");
-  const [productCost, setProductCost] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
-
-  const navigate = useNavigate();
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const formData = new FormData();  // ใช้ formData แทน fromData
-      formData.append('product_name', productName);
-      formData.append('quantity', productQuantity);
-      formData.append('cost', productCost);
-      formData.append('price', productPrice);
-      formData.append('description', productDescription);
-      formData.append('file', picture); // ต้องตรงกับชื่อที่ server ใช้
-      console.log("Selected file:", picture);
-      const res = await createProductService(formData);
-      navigate('/product');
-      console.log(res);
-    } catch (err) {
-      console.log(err);
+  const { formData, setFormData } = useContext(FormContextMaterialProduct);
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    
+    if (name === 'file' && files.length > 0) {
+      // ตรวจสอบว่าเป็น input file และมีการเลือกไฟล์
+      const file = files[0]; // เอาไฟล์แรกที่ถูกเลือก
+      setFormData(prev => ({ ...prev, [name]: file })); // เก็บไฟล์ใน formData
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value })); // สำหรับ input อื่นๆ
     }
-  }
+  };
 
   return (
     <div className="container mt-5">
       <Link className="btn btn-light text-black" to="/product">ย้อนกลับ</Link>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
        <div className="mb-3 text-center">
           <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <span>เพิ่มรูปสินค้า</span>
           </div >
           <input 
             type="file" 
+            name='file'
             className="" 
             id="fileInput" 
-            placeholder=".png /.jpeg /.pdf"
-            onChange={(e) => setPicture(e.target.files[0])}
-          />
-        </div>
+            onChange={handleChange} 
+            />
+            {formData.file && (<p>ไฟล์ที่เลือก: {formData.file.name}</p>)}
+          </div>
 
         <div className="row mb-3 justify-content-center">
           <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
           <div className="row col-sm-5">
             <input 
               type="text" 
+              name='product_name'
               className="form-control" 
               placeholder="ชื่อสินค้า" 
-              value={productName} 
-              onChange={(e) => setProduct_name(e.target.value)} 
+              value={formData.product_name || ''} 
+              /* formData.product_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
+              เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
+              เเล้วไม่ได้ set ค่า เหมือนในหน้า signUp*/
+              onChange={handleChange} 
             />
           </div>
         </div>
@@ -65,10 +56,11 @@ const CreateProduct = () => {
           <div className="row col-sm-5">
             <input 
               type="text" 
+              name='quantity'
               className="form-control" 
               placeholder="จำนวน" 
-              value={productQuantity} 
-              onChange={(e) => setProductQuantity(e.target.value)} 
+              value={formData.quantity || ''} 
+              onChange={handleChange} 
             />
           </div>
         </div>
@@ -77,10 +69,11 @@ const CreateProduct = () => {
           <div className="row col-sm-5">
             <input 
               type="text" 
+              name='cost'
               className="form-control" 
               placeholder="ต้นทุนสินค้า" 
-              value={productCost} 
-              onChange={(e) => setProductCost(e.target.value)} 
+              value={formData.cost || ''} 
+              onChange={handleChange} 
             />
           </div>
         </div>
@@ -89,10 +82,11 @@ const CreateProduct = () => {
           <div className="row col-sm-5">
             <input 
               type="text" 
+              name='price'
               className="form-control" 
               placeholder="ราคาสินค้า" 
-              value={productPrice} 
-              onChange={(e) => setProductPrice(e.target.value)} 
+              value={formData.price || ''} 
+              onChange={handleChange} 
             />
           </div>
         </div>
@@ -101,14 +95,15 @@ const CreateProduct = () => {
           <div className="row col-sm-5">
             <input 
               type="text" 
+              name='description'
               className="form-control" 
               placeholder="รายละเอียดสินค้า" 
-              value={productDescription} 
-              onChange={(e) => setProductDescription(e.target.value)} 
+              value={formData.description || ''} 
+              onChange={handleChange} 
             />
           </div>
         </div>
-        
+
         <div className="d-md-flex justify-content-center">
         <button
             className="btn btn-secondary me-2"
@@ -116,14 +111,14 @@ const CreateProduct = () => {
             style={{ width: '100px', height: '40px' }}>
             ยกเลิก
           </button>
-          <button
+          <Link
             className="btn btn-primary"
             type="submit"
-            style={{ width: '100px', height: '40px' }}>
-            เพิ่ม
-          </button>
+            style={{ width: '100px', height: '40px' }}
+            to="materialproduct">
+            ต่อไป
+          </Link>
         </div>
-      </form>
     </div>
   );
 };

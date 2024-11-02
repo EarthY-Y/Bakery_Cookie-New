@@ -38,7 +38,7 @@ const listProduct = () => {
             <th className="text-center align-middle" style={{width: '30%' }}>ชื่อสินค้า</th>
             <th className="text-center align-middle" style={{width: '10%' }}>ต้นทุน</th>
             <th className="text-center align-middle" style={{width: '10%' }}>ราคาขาย</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>ติดจอง</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>จำนวน</th>
             <th className="text-center align-middle" style={{width: '10%' }}>แก้ไข</th>
             <th className="text-center align-middle" style={{width: '10%' }}>ลบ</th>
           </tr>
@@ -50,9 +50,10 @@ const listProduct = () => {
               <tr key={index}>
                 <td><img src={"http://localhost:5000/picture/" + posts.productpic_name} height={75} width={120} className='text-center'/></td>
                 <td>{posts.product_name}</td>
-                <td>{posts.quantity}</td>
                 <td>{posts.cost}</td>
-                <td>{formatDate(posts.create_at)}</td>
+                <td>{posts.price}</td>
+                <td>{posts.quantity}</td>
+                {/* <td>{formatDate(posts.create_at)}</td> */}
             </tr>
           ) )}
         </tbody>

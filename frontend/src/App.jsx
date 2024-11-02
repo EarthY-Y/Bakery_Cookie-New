@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
+import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
@@ -11,11 +12,12 @@ import Signup from '../page/customer-page/signup-page/signup-page'
 import Signup2 from '../page/customer-page/signup-page/signup2-page'
 import Signup3 from '../page/customer-page/signup-page/signup3-page'
 import ListAdmin from '../page/admin-page/listAdmin-page'
-import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
+import CreateProductMaterial from '../page/admin-page/product-page/createMaterialProduct-page';
 import Home from '../page/customer-page/home/home-page'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
-import { FormProvider } from '../API/signUpService'
+import { FormProviderSignUpService } from '../API/signUpService'
+import { FormProviderProductService } from '../API/productService'
 
 import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 const router = createBrowserRouter([
@@ -37,17 +39,17 @@ const router = createBrowserRouter([
           {
             path: "",
             element: (
-              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
+              <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
                 <Signup />
-              </FormProvider>
+              </FormProviderSignUpService>
             ),
           },
           {
             path: "step2",
             element: (
-              <FormProvider>  {/* ห่อหุ้มด้วย FormProvider ที่นี่ */}
+              <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
                 <Signup2 />
-              </FormProvider>
+              </FormProviderSignUpService>
             ),
           },
         ],
@@ -83,8 +85,27 @@ const router = createBrowserRouter([
               },
               {
                 path: "create", // ลบ '/' หน้า path
-                element: <CreateProduct />,
+                children: [
+                  {
+                    path: "",
+                    element: (
+                      <FormProviderProductService>
+                        <CreateProduct />
+                      </FormProviderProductService>
+                      ),
+                  },
+                  {
+                    path: "materialproduct", // ลบ '/' หน้า path
+                    element: (
+                    <FormProviderProductService>
+                      <CreateProductMaterial />
+                    </FormProviderProductService>
+                    ),
+                  },
+                ]
+
               },
+              
             ],
           },
           {
