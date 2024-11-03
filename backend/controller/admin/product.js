@@ -45,8 +45,8 @@ export const createProduct = async (req, res) => {
         });
 
         if (productResult) {
-            await createProductPicture(req, id);
-            await createProductMaterial(req, id);
+            await createProductPicture(req, id, token.admin_id);
+            await createProductMaterial(req, id, token.admin_id);
 
             return res.status(200).json({ message: "Product created successfully", productResult });
         }
@@ -68,7 +68,7 @@ export const deleteProduct = async (req, res) => {
     
 }
 
-const createProductPicture = async (req, id) => {
+const createProductPicture = async (req, id, tokenId) => {
     try {
         const idPicture = uuidv4();
         const productPictureName = req.file.filename;
@@ -80,8 +80,8 @@ const createProductPicture = async (req, id) => {
 
         const results = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO productpicture (productpic_id, product_id, productpic_name, productpic_type) VALUES (?, ?, ?, ?)",
-                [idPicture, id, productPictureName, materialPictureType],
+                "INSERT INTO productpicture (productpic_id, product_id, productpic_name, productpic_type, create_by) VALUES (?, ?, ?, ?, ?)",
+                [idPicture, id, productPictureName, materialPictureType, tokenId],
                 (err, result) => {
                     if (err) return reject(err);
                     resolve(result);
@@ -100,7 +100,7 @@ const createProductPicture = async (req, id) => {
     }
 };
 
-const createProductMaterial = async (req, id) => {
+const createProductMaterial = async (req, id, tokenId) => {
     try {
         let ingredients = req.body.ingredients;
 
@@ -113,11 +113,11 @@ const createProductMaterial = async (req, id) => {
             throw new Error("Ingredients is not an array");
         }
 
-        const ingredientValues = ingredients.map(item => [id, item.material_id, item.quantity]);
+        const ingredientValues = ingredients.map(item => [id, item.material_id, item.quantity, tokenId]);
 
         const results = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product_material (product_id, material_id, amount) VALUES ?",
+                "INSERT INTO product_material (product_id, material_id, amount, create_by) VALUES ?",
                 [ingredientValues],
                 (err, result) => {
                     if (err) return reject(err);
