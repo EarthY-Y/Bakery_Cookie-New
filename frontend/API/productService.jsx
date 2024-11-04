@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { createContext, useState } from 'react';
+const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 
 export const createProductService = async(fromData) => { 
     console.log(fromData);
     try {
-      const API_URL = import.meta.env.VITE_API_Port
+
       const authToken = localStorage.getItem('token')
       console.log(authToken);
       const res = await axios.post(API_URL + '/product/create', fromData,
@@ -24,7 +25,6 @@ export const createProductService = async(fromData) => {
 }
 export const listProductService = async() => {
     try {
-      const API_URL = import.meta.env.VITE_API_Port
       console.log(API_URL);
       const authToken = localStorage.getItem('token')
       console.log(authToken);

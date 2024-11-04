@@ -7,13 +7,29 @@ import Sidebaradmin from './sidebar/sidebaradmin'
 const layOutComponent = ({children}) => {
   return (
     <React.Fragment>
-      <Navbar />
-      <div className='d-flex'>
-        <div className='d-flex flex-column col-2 min-vh-100'>
+      {/* Navbar ที่จะเลื่อนตามด้านบน */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
+        <Navbar />
+      </div>
+
+      {/* โครงสร้างหลักของหน้า */}
+      <div className="d-flex">
+        {/* Sidebar ที่ไม่เลื่อนตาม */}
+        <div
+          className="d-flex flex-column col-2 min-vh-100"
+          style={{
+            position: 'fixed',
+            left: 0,
+            height: '100vh',
+            zIndex: 1000, // เพื่อให้ sidebar อยู่ด้านบนของ content อื่นถ้าทับกัน
+          }}
+        >
           <Sidebaradmin />
         </div>  
-        <div className='col-10 min-vh-100'>
-          <main className="">{children}</main>
+
+        {/* Main content ที่จะเลื่อนตามปกติ */}
+        <div className="col-10 offset-2 min-vh-100">
+          <main>{children}</main>
         </div>
       </div>
     </React.Fragment>

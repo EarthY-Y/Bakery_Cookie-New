@@ -35,7 +35,7 @@ export const createProduct = async (req, res) => {
 
         const productResult = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product (product_id, product_name, quantity, cost, price, description, create_by) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO product (product_id, product_name, quantity, cost, price, description, create_by) VALUES (?, ?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
                 [id, product_name, quantity, cost, price, description, token.admin_id],
                 (err, result) => {
                     if (err) return reject(err);

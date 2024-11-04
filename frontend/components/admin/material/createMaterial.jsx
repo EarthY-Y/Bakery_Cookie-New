@@ -79,9 +79,9 @@ const createMaterial = () => {
         </div> */}
 
         <div className="col-12">
-        <button
+          <button
             className="btn btn-primary me-2"
-            type="submit"
+            type=""
             style={{ width: '100px', height: '40px' }}>
             ยกเลิก
           </button>

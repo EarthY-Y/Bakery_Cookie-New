@@ -42,9 +42,9 @@ app.use((err, req, res, next) => {
 
 //กำหนดต้นทางหรือ origin ที่จะเข้ามาใช้ API ของเรา
 app.use(cors({
-  credential: true,
   origin: [process.env.FRONTEND], //กำหนดอยู่ใน vite.config
   //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
+  credential: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
 }));
 

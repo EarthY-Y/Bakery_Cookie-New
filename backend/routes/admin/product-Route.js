@@ -13,9 +13,9 @@ import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 const router = express.Router();
 router.use(express.json());
 
-router.get('/product',verifyAdminMid, getProduct);
-router.get('/product/:id',verifyAdminMid, getProductById);
-router.post('/product/create',verifyAdminMid, uploadSingle,(req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
+router.get('/admin/product',verifyAdminMid, getProduct);
+router.get('/admin/product/:id',verifyAdminMid, getProductById);
+router.post('/admin/product/create',verifyAdminMid, uploadSingle,(req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
     // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
     console.log(req.body);
     
@@ -26,7 +26,7 @@ router.post('/product/create',verifyAdminMid, uploadSingle,(req, res) => { //upl
     
     createProduct(req, res); // เรียกใช้ createMaterial พร้อม req และ res
 });
-router.patch('/product/:id',verifyAdminMid, updateProduct);
-router.delete('/product/:id',verifyAdminMid, deleteProduct);
+router.patch('/admin/product/:id',verifyAdminMid, updateProduct);
+router.delete('/admin/product/:id',verifyAdminMid, deleteProduct);
 
 export default router

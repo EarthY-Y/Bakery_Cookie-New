@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_Port
+const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 
 export const createAdminService = async(fromData) => { 
     console.log(fromData);

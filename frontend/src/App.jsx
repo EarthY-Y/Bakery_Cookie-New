@@ -5,6 +5,8 @@ import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListMaterial from '../page/admin-page/material-page/listMaterial-page'
+import ListMaterialById from '../page/admin-page/material-page/listByIdMaterial-page';
+import EditMaterial from '../page/admin-page/material-page/editMaterial-page';
 import CreateMaterial from '../page/admin-page/material-page/createMaterial-page'
 import CreateAdmin from '../page/admin-page/createAdmin-page'
 import Admin from '../page/admin-page/listAdmin-page'
@@ -71,8 +73,16 @@ const router = createBrowserRouter([
                 element: <ListMaterial />,
               },
               {
+                path: "view/:id",
+                element: <ListMaterialById />,
+              },
+              {
                 path: "create", // ลบ '/' หน้า path
                 element: <CreateMaterial />,
+              },
+              {
+                path: "edit/:id", // ลบ '/' หน้า path
+                element: <EditMaterial />,
               },
             ],
           },
