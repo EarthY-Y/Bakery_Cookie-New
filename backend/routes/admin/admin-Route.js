@@ -14,13 +14,7 @@ router.use(express.json());
 
 router.get('/admin',verifyAdminMid, getAdmin);
 router.get('/admin/:id',verifyAdminMid, getAdminById);
-router.post('/admin/create', verifyAdminMid, uploadSingle, (req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
-    // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
-    if (!req.file) {
-        return res.status(400).send({ message: 'No file uploaded!' });
-    }
-    createAdmin(req, res); // เรียกใช้ createMaterial พร้อม req และ res
-});
+router.post('/admin/create', createAdmin);
 router.patch('/admin/:id',verifyAdminMid, updateAdmin);
 router.delete('/admin/:id',verifyAdminMid, deleteAdmin);
 

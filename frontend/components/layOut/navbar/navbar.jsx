@@ -7,7 +7,7 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 function Navbar() {
   return (
-    <div style={{ backgroundColor: '#FFF2E1', minHeight: '20vh' }}> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
+    <div style={{ backgroundColor: '#FFF2E1', minHeight: '100vh' }}> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
       {/* Navbar ส่วนบน */}
       <div className="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C' }}>
         <nav className="navbar navbar-expand-lg navbar-light">
@@ -23,67 +23,19 @@ function Navbar() {
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <Link className="nav-link active text-light" aria-current="page" to="/Login">เข้าสู่ระบบ</Link>
-                  </li> */}
-                  <li className="nav-item">
-                    <Link className="nav-link active text-light" to="#">฿ 0.00</Link>
-                  </li>
-                  <li className="nav-item">
-                    <i className="bi bi-basket3 fs-3 text-light"></i>
                   </li>
                   <i className="bi bi-dash-lg fs-3 text-black d-none d-lg-inline" style={{ transform: 'rotate(90deg)' }}></i>
-                  {/* ปุ่ม Profile พร้อม dropdown เมนู */}
-                  <li className="nav-item dropdown ms-auto d-flex align-items-center position-relative">
-                    <button className="btn d-flex align-items-center caret-off" 
-                      id="profileDropdown" 
-                      data-bs-toggle="dropdown" 
-                      aria-expanded="false"
-                      style={{
-                        border: '1.5px solid #000',
-                        padding: '5px 10px',
-                        borderRadius: '10px',
-                        backgroundColor: 'transparent',
-                        color: '#FFFFFF',
-                        position: 'relative' // กำหนดให้ปุ่มมีตำแหน่งที่เป็นฐาน
-                      }}
-                    >
-                      <img
-                        src="https://example.com/profile.jpg"  // URL ของรูปโปรไฟล์
-                        alt="Profile"
-                        style={{
-                          width: '30px',
-                          height: '30px',
-                          borderRadius: '50%',
-                          marginRight: '8px'
-                        }}
-                      />
-                      <span>ชื่อโปรไฟล์</span>
-                    </button>
-                    <ul className="dropdown-menu dropdown-menu-end" 
-                      aria-labelledby="profileDropdown"
-                      style={{
-                        position: 'absolute', // ทำให้ dropdown เมนูเป็นตำแหน่งที่กำหนดเอง
-                        top: '100%', // อยู่ใต้ปุ่มพอดี
-                        left: '0',
-                        zIndex: '1000' // ให้ dropdown อยู่ด้านบน
-                      }}>
-                      <li><Link className="dropdown-item" to="/profile">โปรไฟล์ของฉัน</Link></li>
-                      <li><Link className="dropdown-item" to="/settings">การตั้งค่า</Link></li>
-                      <li><hr className="dropdown-divider" /></li>
-                      <li><Link className="dropdown-item" to="/logout">ออกจากระบบ</Link></li>
-                    </ul>
-                  </li>
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <Link className="nav-link active text-light" aria-current="page" to="/signup">สมัครสมาชิก</Link>
-                  </li> */}
-                  {/* <li className="nav-item">
+                  </li>
+                  <li className="nav-item">
                     <Link className="nav-link active text-light" to="#">฿ 0.00</Link>
-                  </li> */}
-                  {/* <li className="nav-item">
+                  </li>
+                  <li className="nav-item">
                     <i className="bi bi-basket3 fs-3 text-light"></i>
-                  </li> */}
-
+                  </li>
                 </ul>
               </div>
             </div>

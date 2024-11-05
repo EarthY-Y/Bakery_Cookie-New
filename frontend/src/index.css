@@ -1,0 +1,21 @@
+/* เปลี่ยนสีตัวอักษรเมื่อ hover ด้วย !important */
+.btn-outline:hover {
+    background-color: #FFDB00 !important; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
+    color: #0C359E !important; /* บังคับให้เปลี่ยนสีตัวอักษรเป็นสีที่ต้องการ */
+  }
+  
+/* แสดง dropdown เมื่อ hover ที่ปุ่มหมวดหมู่ */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    position: absolute; /* ตำแหน่งแบบ absolute เพื่อให้เมนูแสดงตรงด้านล่าง */
+    top: 100%; /* จัดให้เมนูอยู่ด้านล่างของปุ่ม */
+    left: 0;
+    margin-top: 0.8rem; /* ระยะห่างเล็กน้อยจากปุ่ม */
+  }
+
+  .profile-dropdown .dropdown-menu {
+    position: absolute;  /* ทำให้ dropdown แสดงตำแหน่งแบบกำหนดเอง */
+    top: 100%;           /* ให้ dropdown แสดงด้านล่างปุ่ม */
+    left: 0;             /* จัด dropdown ให้ตรงกับปุ่ม */
+    transform: none !important;  /* ปิดการใช้ transform ของ Bootstrap (ถ้ามีการใช้) */
+  }

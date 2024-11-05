@@ -53,7 +53,7 @@ const createMaterial = () => {
             />
         </div>
         <div className="mb-3">
-          <label className="form-label">รหัสสินค้า</label>
+          <label className="form-label">ปริมาณ</label>
           <input type="number" className="form-control" placeholder="รหัสสินค้า" 
             value={Quantities} 
             onChange={(e) => setQuantity(e.target.value)}
@@ -62,13 +62,6 @@ const createMaterial = () => {
         <div className="mb-3">
           <label  className="form-label">ต้นทุนสินค้า</label>
           <input type="number" className="form-control"  placeholder="ต้นทุนสินค้า"
-            value={Costes} 
-            onChange={(e) => setCost(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label  className="form-label">ราคาสินค้า</label>
-          <input type="number" className="form-control"  placeholder="ราคาสินค้า"
             value={Costes} 
             onChange={(e) => setCost(e.target.value)}
           />

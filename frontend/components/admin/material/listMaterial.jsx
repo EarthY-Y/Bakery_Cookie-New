@@ -51,7 +51,7 @@ const ListMaterial = () => {
           
           {posts.map((posts, index) => (
               <tr key={index}>
-                <td className="text-center align-middle"><img src={"http://localhost:5000/picture/" + posts.materialpic_name} height={75} width={120} className='text-center'/></td>
+                <td className="text-center align-middle"><img src={"http://localhost:3000/picture/" + posts.materialpic_name} height={75} width={120} className='text-center'/></td>
                 <td className="text-center align-middle">{posts.material_name}</td>
                 <td className="text-center align-middle">{posts.quantity}</td>
                 <td className="text-center align-middle">{posts.cost}</td>
