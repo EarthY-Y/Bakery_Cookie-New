@@ -1,28 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { listMaterialService } from '../../../API/materialService';
-import { formatDate } from '../../datetime';
-import { Table, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { listMaterialService, deleteMaterialByIdService } from '../../../API/materialService'
+import { formatDate } from '../../datetime'
+import { Table, Button } from 'react-bootstrap'
 
 const ListMaterial = () => {
-  const [posts, setPosts] = useState([]);
-  
-  useEffect(() => {
+  const [materials, setMaterials] = useState([])
 
-    const getPosts = async () => {
+  useEffect(() => {
+    const getMaterials = async () => {
       try {
         const res = await listMaterialService()
-        console.log(res.data);
-        
-        setPosts(res.data);
+        console.log(res.data)
+        setMaterials(res.data)
       } catch (err) {
-        console.error("Error data:", err);
+        console.error("Error fetching materials:", err)
       }
     };
 
-    getPosts();
-  }, []);
+    getMaterials()
+  }, [])
+
+  const handleDelete = (id) => {
+    deleteMaterialByIdService(id)
+      .then(() => {
+        // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
+        setMaterials(prevMaterials => prevMaterials.filter(material => material.material_id !== id))
+      })
+      .catch(err => console.log(err))
+  }
 
   return (
     <div className="container mt-5">
@@ -33,31 +39,33 @@ const ListMaterial = () => {
         </Link>
       </div>
 
-      <p>จำนวน {posts.length} รายการ</p>
+      <p>จำนวน {materials.length} รายการ</p>
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th className="text-center align-middle" style={{width: '20%' }}>รูปภาพ</th>
-            <th className="text-center align-middle" style={{width: '30%' }}>ชื่อวัตถุดิบ</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>ต้นทุน</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>จำนวน</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>สถานะ</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>แก้ไข</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>ลบ</th>
+            <th className="text-center align-middle" style={{ width: '20%' }}>รูปภาพ</th>
+            <th className="text-center align-middle" style={{ width: '30%' }}>ชื่อวัตถุดิบ</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>ต้นทุน</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สร้าง</th>
+            <th className="text-center align-middle" style={{ width: '5%' }}>ดู</th>
+            <th className="text-center align-middle" style={{ width: '5%' }}>แก้ไข</th>
+            <th className="text-center align-middle" style={{ width: '5%' }}>ลบ</th>
           </tr>
         </thead>
-      
         <tbody>
-          
-          {posts.map((posts, index) => (
-              <tr key={index}>
-                <td className="text-center align-middle"><img src={"http://localhost:3000/picture/" + posts.materialpic_name} height={75} width={120} className='text-center'/></td>
-                <td className="text-center align-middle">{posts.material_name}</td>
-                <td className="text-center align-middle">{posts.quantity}</td>
-                <td className="text-center align-middle">{posts.cost}</td>
-                <td className="text-center align-middle">{formatDate(posts.create_at)}</td>
+          {materials.map((material) => (
+            <tr key={material.material_id}>
+              <td><img src={"http://localhost:3000/picture/" + material.materialpic_name} height={75} width={120} alt={material.material_name} /></td>
+              <td>{material.material_name}</td>
+              <td>{material.quantity} กรัม</td>
+              <td>{material.cost}</td>
+              <td>{formatDate(material.create_at)}</td>
+              <td><Link to={`view/${material.material_id}`} className="btn btn-outline-warning text-black">View</Link></td>
+              <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-black">Edit</Link></td>
+              <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-outline-warning btn-danger text-black">Delete</button></td>
             </tr>
-          ) )}
+          ))}
         </tbody>
       </Table>
     </div>

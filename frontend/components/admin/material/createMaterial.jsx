@@ -54,14 +54,14 @@ const createMaterial = () => {
         </div>
         <div className="mb-3">
           <label className="form-label">ปริมาณ</label>
-          <input type="number" className="form-control" placeholder="รหัสสินค้า" 
+          <input type="number" className="form-control" placeholder="หน่วย กรัม" 
             value={Quantities} 
             onChange={(e) => setQuantity(e.target.value)}
             />
         </div>
         <div className="mb-3">
-          <label  className="form-label">ต้นทุนสินค้า</label>
-          <input type="number" className="form-control"  placeholder="ต้นทุนสินค้า"
+          <label  className="form-label">ต้นทุนวัตถุดิบ</label>
+          <input type="number" className="form-control"  placeholder="ต้นทุนวัตถุดิบ"
             value={Costes} 
             onChange={(e) => setCost(e.target.value)}
           />
@@ -79,9 +79,9 @@ const createMaterial = () => {
         </div> */}
 
         <div className="col-12">
-        <button
+          <button
             className="btn btn-primary me-2"
-            type="submit"
+            type=""
             style={{ width: '100px', height: '40px' }}>
             ยกเลิก
           </button>

@@ -24,7 +24,7 @@ export const getAdmin = async (req, res) => {
 export const getAdminById = async (req, res) => {
     try {
         const UserName = req.params.userName
-        console.log(id);
+        console.log(UserName);
         
         const results = await new Promise((resolve, reject) => {
             db.query("SELECT userName FROM Admin WHERE userName = ?", [UserName], (err, result) => {

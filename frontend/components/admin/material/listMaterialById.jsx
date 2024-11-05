@@ -1,0 +1,89 @@
+import React, { useEffect, useState} from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { createMaterialService } from '../../../API/materialService';
+import { Link, useParams } from 'react-router-dom';
+import { listMaterialByIdService } from '../../../API/materialService';
+import { formatDate } from '../../datetime';
+
+const listMaterialById = () => {
+  const {id} = useParams();
+  const [materialMyId, setMaterialMyId] = useState([])
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getlistMaterialById = async()=> {
+      try {
+        const response = await listMaterialByIdService(id)
+        console.log(response);
+        if(!response.data){
+          throw new Error("ไม่มีข้อมูล")
+        }
+        setMaterialMyId(response.data[0])
+      }
+      
+      catch (error) {
+        alert(error)
+      }
+    }
+    getlistMaterialById()
+  },[])
+
+  return (
+    <div className="container mt-5 p-4 border rounded shadow-sm bg-light">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+            <Link to="/material" className="btn btn-outline-secondary">
+                ย้อนกลับ
+            </Link>
+        </div>
+
+        <div className="text-center mb-4">
+            <img
+                src={"http://localhost:5000/picture/" + materialMyId.materialpic_name}
+                height={250}
+                width={400}
+                alt="Material"
+                className="rounded"
+            />
+        </div>
+
+        <div className="mb-3">
+            <label className="form-label fw-bold">รหัสวัตถุดิบ</label>
+            <p className="border p-2 rounded bg-white">{materialMyId.material_id}</p>
+        </div>
+
+        <div className="mb-3">
+            <label className="form-label fw-bold">ชื่อวัตถุดิบ</label>
+            <p className="border p-2 rounded bg-white">{materialMyId.material_name}</p>
+        </div>
+
+        <div className="mb-3">
+            <label className="form-label fw-bold">ต้นทุนวัตถุดิบ</label>
+            <p className="border p-2 rounded bg-white">{materialMyId.cost}</p>
+        </div>
+
+        <div className="mb-3">
+            <label className="form-label fw-bold">ปริมาณ</label>
+            <p className="border p-2 rounded bg-white">{materialMyId.quantity}</p>
+        </div>
+
+        <div className="mb-3 row">
+          <div className='col-6'>
+            <label className="form-label fw-bold ">สร้างโดย</label>
+            <p className="border p-2 rounded bg-white">{materialMyId.userName}</p>
+          </div>
+          <div className='col-6'>
+            <label className="form-label fw-bold ">เวลา</label>
+            <p className="border p-2 rounded bg-white">{formatDate(materialMyId.create_at)}</p>
+          </div>
+        </div>
+
+        <div className="text-center mt-4">
+          <Link to={`/material/edit/${materialMyId.material_id}`} className="text-center mt-3 px-4 btn btn-outline-warning text-black">Edit</Link>
+        </div>
+    </div>
+
+  );
+};
+
+export default listMaterialById;

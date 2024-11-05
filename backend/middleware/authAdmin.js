@@ -45,7 +45,7 @@ export const verifyAdminMid = async (req, res , next) => {
                 if(err){
                     return res.status(422).json(err)
                 }
-                console.log('results ',results);
+                console.log('results verifyAdminMid',results);
                 if (results.length === 0) {
                     return res.status(404).json({ message: "User not found" });
                 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_Port
+const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 
 export const createMaterialService = async(fromData) => { 
     console.log(fromData);
@@ -35,30 +35,46 @@ export const listMaterialService = async() => {
             }
           }
         ); 
-        console.log(response);
         return response
     } catch (error) {
         console.error("Error during login:", error);
     }
 }
-const validateInputs = (inputs, validationRules) => {
-    for (const key in validationRules) {
-        const { value, required, type, min } = validationRules[key];
 
-        // Check if the field is required and not provided
-        if (required && (value === undefined || value === null)) {
-            throw new Error(`${key} is required.`);
-        }
-
-        // Check type
-        if (type && typeof value !== type) {
-            throw new Error(`${key} must be of type ${type}.`);
-        }
-
-        // Check minimum value
-        if (min !== undefined && value < min) {
-            throw new Error(`${key} must be greater than or equal to ${min}.`);
-        }
+export const listMaterialByIdService = async(id) => {
+    try {
+        console.log(id);
+        
+        const authToken = localStorage.getItem('token')
+        console.log(authToken);
+        const response = await axios.get(API_URL + "/material/"+id, 
+          {
+            headers: {
+              'authorization': `Bearer ${authToken}`
+            }
+          }
+        ); 
+        return response
+    } catch (error) {
+        console.error("Error during login:", error);
     }
-};
+}
 
+export const deleteMaterialByIdService = async(id) => {
+    try {
+        console.log(id);
+        
+        const authToken = localStorage.getItem('token')
+        console.log(authToken);
+        const response = await axios.delete(API_URL + "/material/delete/"+id, 
+          {
+            headers: {
+              'authorization': `Bearer ${authToken}`
+            }
+          }
+        ); 
+        return response
+    } catch (error) {
+        console.error("Error during login:", error);
+    }
+}

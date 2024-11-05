@@ -18,7 +18,7 @@ export const createCustomer = async(fromData) => {
 
 export const FormContext = createContext();
 
-export const FormProvider = ({ children }) => {
+export const FormProviderSignUpService = ({ children }) => {
   const [formData, setFormData] = useState({
     f_name: '',
     l_name: '',
