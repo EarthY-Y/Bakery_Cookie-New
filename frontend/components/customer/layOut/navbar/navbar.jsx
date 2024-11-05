@@ -7,7 +7,7 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 function Navbar() {
   return (
-    <div style={{ backgroundColor: '#FFF2E1', minHeight: '20vh' }}> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
+    <div> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
       {/* Navbar ส่วนบน */}
       <div className="p-1 mb-2 text-dark" style={{ backgroundColor: '#C40C0C' }}>
         <nav className="navbar navbar-expand-lg navbar-light">

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function Sidebaradmin() {
   return (
-    <div className="d-flex flex-column p-3 bg-light" style={{ width: '250px', height: '1000px'}}>
+    <div className="d-flex flex-column p-3 bg-light" style={{ height: '1000px'}}>
       <Nav className="flex-column">
         <Nav.Item>
           <Nav.Link as={Link} to="/dashboard" style={{ color: 'Black' }}>สถิติ</Nav.Link>

@@ -1,6 +1,6 @@
 import React from 'react'
-import LayOut from '../../components/customer/layOut/layOut'
-import Login from '../../components/login/login'
+import LayOut from '../../components/guest/layOut/layOut'
+import Login from '../../components/guest/login/login'
 
 function login() {
   return (

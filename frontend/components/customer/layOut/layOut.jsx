@@ -6,11 +6,13 @@ import Footer from '../layOut/footer/footer'
 const layOutComponent = ({children}) => {
   return (
     <React.Fragment>
-      <Navbar />
+      <div style={{ backgroundColor: '#FFF2E1'}}>
+        <Navbar />
         <div >
           <main className="d-flex flex-column min-vh-100">{children}</main>
         </div>
-        <Footer/>
+      </div>
+      <Footer/>
     </React.Fragment>
   )
 }

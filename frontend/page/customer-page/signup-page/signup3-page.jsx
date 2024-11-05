@@ -1,13 +1,13 @@
 import React from 'react'
-import LayOut from '../../../components/customer/layOut/layOut'
+import Layout from '../../../components/guest/layOut/layOut'
 import Signup3 from '../../../components/customer/signup/signup3'
 
 function signup3() {
   return (
     <div>
-      <LayOut>
+      <Layout>
         <Signup3 />
-      </LayOut>
+      </Layout>
     </div>
   )
 }

@@ -17,6 +17,7 @@ import Signup3 from '../page/customer-page/signup-page/signup3-page'
 import ListAdmin from '../page/admin-page/listAdmin-page'
 import CreateProductMaterial from '../page/admin-page/product-page/createMaterialProduct-page';
 import Home from '../page/customer-page/home/home-page'
+import GuestHome from '../page/customer-page/home/guestHome-page'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
 import { FormProviderSignUpService } from '../API/signUpService'
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <GuestHome />,
       },
       {
         path: "/login",
@@ -118,9 +119,12 @@ const router = createBrowserRouter([
                     ),
                   },
                 ]
-
+                
               },
-              
+              {
+                path: "edit/:id",
+                element: <ListPorductById />,
+              },
             ],
           },
           {

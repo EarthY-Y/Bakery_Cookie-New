@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../API/authService';
-import { Modal } from '../error/errorPopup';
+import { login } from '../../../API/authService';
+import { Modal } from '../../error/errorPopup';
 const Login = () => {
   const [userName, setuserName] = useState("");
   const [passWord, setPassword] = useState("");
