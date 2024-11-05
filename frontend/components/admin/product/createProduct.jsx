@@ -19,19 +19,29 @@ const CreateProduct = () => {
   return (
     <div className="container mt-5">
       <Link className="btn btn-light text-black" to="/product">ย้อนกลับ</Link>
-       <div className="mb-3 text-center">
-          <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="mb-4 card col-md-12 px-40 card-body">
+        <h>เพิ่มสินค้า</h>
+        
+        <div className="mb-3 text-center">
+        <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          {formData.file ? (
+            <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : (
             <span>เพิ่มรูปสินค้า</span>
-          </div >
-          <input 
-            type="file" 
-            name='file'
-            className="" 
-            id="fileInput" 
-            onChange={handleChange} 
-            />
-            {formData.file && (<p>ไฟล์ที่เลือก: {formData.file.name}</p>)}
-          </div>
+          )}
+        </div>
+        
+        <input 
+          type="file" 
+          name="file"
+          className="position-absolute top-0 start-0 w-100 h-100" 
+          style={{ opacity: 0, cursor: 'pointer' }} 
+          onChange={handleChange} 
+        />
+        
+        {formData.file && <p>ไฟล์ที่เลือก: {formData.file.name}</p>}
+      </div>
+
 
         <div className="row mb-3 justify-content-center">
           <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
@@ -91,31 +101,24 @@ const CreateProduct = () => {
         <div className="row mb-3 justify-content-center">
           <label className="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
           <div className="row col-sm-5">
-            <input 
-              type="text" 
-              name='description'
-              className="form-control" 
-              placeholder="รายละเอียดสินค้า" 
-              value={formData.description || ''} 
-              onChange={handleChange} 
-            />
+            <textarea className="form-control" name='description' placeholder="รายละเอียดสินค้า"
+                value={formData.description || ''} 
+                onChange={handleChange} 
+                rows="3" // กำหนดความสูงของ textarea
+                style={{ minWidth: '100%' }} // กำหนดความกว้างของ textarea
+              />
+
           </div>
         </div>
 
-        <div className="d-md-flex justify-content-center">
-        <button
-            className="btn btn-secondary me-2"
-            type="submit"
-            style={{ width: '100px', height: '40px' }}>
-            ยกเลิก
-          </button>
+        <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
+        <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
           <Link
-            className="btn btn-primary"
-            type="submit"
-            style={{ width: '100px', height: '40px' }}
+            className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}
             to="materialproduct">
             ต่อไป
           </Link>
+        </div>
         </div>
     </div>
   );

@@ -56,14 +56,14 @@ const ListMaterial = () => {
         <tbody>
           {materials.map((material) => (
             <tr key={material.material_id}>
-              <td><img src={"http://localhost:3000/picture/" + material.materialpic_name} height={75} width={120} alt={material.material_name} /></td>
+              <td><img src={"http://localhost:5000/picture/" + material.materialpic_name} height={75} width={120} alt={material.material_name} /></td>
               <td>{material.material_name}</td>
               <td>{material.quantity} กรัม</td>
               <td>{material.cost}</td>
               <td>{formatDate(material.create_at)}</td>
               <td><Link to={`view/${material.material_id}`} className="btn btn-outline-warning text-black">View</Link></td>
-              <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-black">Edit</Link></td>
-              <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-outline-warning btn-danger text-black">Delete</button></td>
+              <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-black"><i className="bi bi-pencil"></i></Link></td>
+              <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-outline-warning btn-danger text-black"><i className="bi bi-trash"></i></button></td>
             </tr>
           ))}
         </tbody>

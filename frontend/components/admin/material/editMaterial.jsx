@@ -29,49 +29,56 @@ const editMaterial = () => {
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="mb-3">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-        <Link to="/material" className="btn btn-outline-secondary text-black">
-          ย้อนกลับ
-        </Link>
+      <Link className="btn btn-light text-black mb-4" to="/material">
+        <i class="bi bi-arrow-left"></i> ย้อนกลับ
+      </Link>
+      <div className="mb-4 card col-md-12 px-40 card-body">
+        <h>แก้ไขวัตถุดิบ</h>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <div className="mb-3 text-center">
+            <div className="position-relative" style={{ margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              {Picture ? (
+                <img src={URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+              ) : (
+                <span>เพิ่มรูปวัตถุดิบ</span>
+              )}
+              <input type="file" className="position-absolute top-0 start-0 w-100 h-100" style={{ opacity: 0, cursor: 'pointer' }} onChange={(e) => setPicture(e.target.files[0])} />
+            </div>
+          </div>
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">ชื่อวัตถุดิบ</label>
+            <div className="row col-sm-4">
+              <input type="text" className="form-control" placeholder="ชื่อวัตถุดิบ" 
+                value={MaterialName} 
+                onChange={(e) => setMaterial_name(e.target.value)} 
+              />
+            </div>
+          </div>
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
+            <div className="row col-sm-4">
+              <input type="number" className="form-control" placeholder="ต้นทุนวัตถุดิบ" 
+                value={Quantities} 
+                onChange={(e) => setQuantity(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">จำนวนวัตถุดิบ</label>
+            <div className="row col-sm-4">
+              <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" 
+                value={Costes} 
+                onChange={(e) => setCost(e.target.value)}
+              />
+            </div>
+          </div>
+          
+          <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
+            <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
+            <button className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}>แก้ไข</button>
+          </div>
+        </form>
       </div>
-          <label className="form-label">ชื่อสินค้า</label>
-          <input type="text" className="form-control" placeholder="ชื่อสินค้า" 
-            value={MaterialName} 
-            onChange={(e) => setMaterial_name(e.target.value)}
-            />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">ปริมาณ</label>
-          <input type="number" className="form-control" placeholder="กิโล" 
-            value={Quantities} 
-            onChange={(e) => setQuantity(e.target.value)}
-            />
-        </div>
-        <div className="mb-3">
-          <label  className="form-label">ต้นทุน</label>
-          <input type="number" className="form-control"  placeholder="100 บาท"
-            value={Costes} 
-            onChange={(e) => setCost(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Upload Picture</label>
-          <input 
-            type="file" 
-            className="form-control" 
-            id="fileInput" 
-            placeholder=".png /.jpeg /.pdf"
-            onChange={(e) => setPicture(e.target.files[0])}
-          />
-        </div>
-
-        <div className="col-12">
-          <button className="btn btn-primary" type="submit">Submit</button>
-        </div>
-      </form>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 export const getMaterial = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT material_id, material_name, quantity, cost, materialpic_name, materialpic_type, create_at, updated_at FROM material", 
+            db.query("SELECT material_id, material_name, quantity, cost, materialpic_name, materialpic_type, create_at, update_at FROM material", 
                 (err, result) => {
                     if(err) return reject(err)
                     resolve(result)
