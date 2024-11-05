@@ -34,12 +34,49 @@ export const listProductService = async() => {
             'authorization': `Bearer ${authToken}`
           }
         }
-      ); 
-      console.log(response);
+      );  
+      //console.log(response);
       return response
     }catch (error) {
       console.error("Error during login:", error);
     }
+}
+
+export const listProductByIdService = async(id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    console.log(authToken);
+    const response = await axios.get(API_URL + "/product/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    ); 
+    //console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error during login:", error);
+  }
+}
+
+export const deleteProductByIdService = async(id) => {
+  try {
+    console.log(id);
+    const authToken = localStorage.getItem('token')
+    console.log(authToken);
+    const response = await axios.delete(API_URL + "/product/delete/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    ); 
+    //console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error during login:", error);
+  }
 }
 
 export const FormContextMaterialProduct = createContext();

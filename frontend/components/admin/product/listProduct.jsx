@@ -2,10 +2,10 @@ import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../datetime';
 import { Table, Button } from 'react-bootstrap';
-import { listProductService } from '../../../API/productService';
+import { listProductService, deleteProductByIdService } from '../../../API/productService';
 
 const listProduct = () => {
-  const [posts, setPosts] = useState([]);
+  const [products, setProducts] = useState([]);
   
   useEffect(() => {
     const getPosts = async () => {
@@ -13,7 +13,7 @@ const listProduct = () => {
         const res = await listProductService()
         console.log(res.data);
         
-        setPosts(res.data);
+        setProducts(res.data);
       } catch (err) {
         console.error("Error data:", err);
       }
@@ -21,6 +21,16 @@ const listProduct = () => {
 
     getPosts();
   }, []);
+
+  const handleDelete = (id) => {
+    deleteProductByIdService(id)
+      .then(() => {
+        // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
+        setProducts(prevProduct => prevProduct.filter(product => product.product_id !== id))
+      })
+      .catch(err => console.log(err))
+  }
+
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -30,7 +40,7 @@ const listProduct = () => {
         </Link>
       </div>
 
-      <p>จำนวน {posts.length} รายการ</p>
+      <p>จำนวน {products.length} รายการ</p>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -39,21 +49,25 @@ const listProduct = () => {
             <th className="text-center align-middle" style={{width: '10%' }}>ต้นทุน</th>
             <th className="text-center align-middle" style={{width: '10%' }}>ราคาขาย</th>
             <th className="text-center align-middle" style={{width: '10%' }}>จำนวน</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>แก้ไข</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>ลบ</th>
+            <th className="text-center align-middle" style={{width: '5%' }}>ดู</th>
+            <th className="text-center align-middle" style={{width: '5%' }}>แก้ไข</th>
+            <th className="text-center align-middle" style={{width: '5%' }}>ลบ</th>
           </tr>
         </thead>
       
         <tbody>
           
-           {posts.map((posts, index) => (
+           {products.map((products, index) => (
               <tr key={index}>
-                <td><img src={"http://localhost:5000/picture/" + posts.productpic_name} height={75} width={120} className='text-center'/></td>
-                <td>{posts.product_name}</td>
-                <td>{posts.cost}</td>
-                <td>{posts.price}</td>
-                <td>{posts.quantity}</td>
-                {/* <td>{formatDate(posts.create_at)}</td> */}
+                <td><img src={"http://localhost:5000/picture/" + products.productpic_name} height={75} width={120} className='text-center'/></td>
+                <td>{products.product_name}</td>
+                <td>{products.cost}</td>
+                <td>{products.price}</td>
+                <td>{products.quantity}</td>
+                {/* <td>{formatDate(products.create_at)}</td> */}
+                <td><Link to={`view/${products.product_id}`} className="btn btn-outline-warning text-black">View</Link></td>
+                <td><Link to={`edit/product/${products.product_id}`} className="btn btn-outline-warning text-black">Edit</Link></td>
+                <td><button onClick={() => handleDelete(products.product_id)} className="btn btn-outline-warning btn-danger text-black">Delete</button></td>
             </tr>
           ) )}
         </tbody>

@@ -27,6 +27,6 @@ router.post('/admin/product/create',verifyAdminMid, uploadSingle,(req, res) => {
     createProduct(req, res); // เรียกใช้ createMaterial พร้อม req และ res
 });
 router.patch('/admin/product/:id',verifyAdminMid, updateProduct);
-router.delete('/admin/product/:id',verifyAdminMid, deleteProduct);
+router.delete('/admin/product/delete/:id',verifyAdminMid, deleteProduct);
 
 export default router

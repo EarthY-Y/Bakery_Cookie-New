@@ -4,6 +4,7 @@ import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
+import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
 import ListMaterial from '../page/admin-page/material-page/listMaterial-page'
 import ListMaterialById from '../page/admin-page/material-page/listByIdMaterial-page';
 import EditMaterial from '../page/admin-page/material-page/editMaterial-page';
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: <ListProduct />,
+              },
+              {
+                path: "view/:id",
+                element: <ListPorductById />,
               },
               {
                 path: "create", // ลบ '/' หน้า path
