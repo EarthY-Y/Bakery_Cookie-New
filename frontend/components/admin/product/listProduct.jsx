@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { formatDate } from '../../datetime';
 import { Table, Button } from 'react-bootstrap';
 import { listProductService, deleteProductByIdService } from '../../../API/productService';
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const listProduct = () => {
   const [products, setProducts] = useState([]);
@@ -59,14 +60,14 @@ const listProduct = () => {
           
            {products.map((products, index) => (
               <tr key={index}>
-                <td><img src={"http://localhost:5000/picture/" + products.productpic_name} height={75} width={120} className='text-center'/></td>
+                <td><img src={API_URL_PICTURE + products.productpic_name} height={75} width={120} className='text-center'/></td>
                 <td>{products.product_name}</td>
                 <td>{products.cost}</td>
                 <td>{products.price}</td>
                 <td>{products.quantity}</td>
                 {/* <td>{formatDate(products.create_at)}</td> */}
                 <td><Link to={`view/${products.product_id}`} className="btn btn-outline-warning text-black">View</Link></td>
-                <td><Link to={`edit/product/${products.product_id}`} className="btn btn-outline-warning text-black">Edit</Link></td>
+                <td><Link to={`edit/${products.product_id}`} className="btn btn-outline-warning text-black">Edit</Link></td>
                 <td><button onClick={() => handleDelete(products.product_id)} className="btn btn-outline-warning btn-danger text-black">Delete</button></td>
             </tr>
           ) )}

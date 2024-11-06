@@ -7,7 +7,7 @@ import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 export const getMaterial = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT material_id, material_name, quantity, cost, materialpic_name, materialpic_type, create_at, update_at FROM material", 
+            db.query("SELECT material_id, material_name, quantity, cost, cost_per_quantity, materialpic_name, materialpic_type, create_at, update_at FROM material", 
                 (err, result) => {
                     if(err) return reject(err)
                     resolve(result)
@@ -46,7 +46,7 @@ export const createMaterial = async (req, res) => {
     
         const token = await passToken(authHeader)
         const id = uuidv4();
-        const { material_name, quantity, cost } = req.body;
+        const { material_name, quantity, cost, costesperquantities } = req.body;
         console.log('file req',req.file);
         const materialPictureName = req.file.filename;
         const materialPictureType = req.file.mimetype;
@@ -56,8 +56,8 @@ export const createMaterial = async (req, res) => {
             return res.status(400).send({ message: "Material picture is required." });
         }
         const results = await new Promise((resolve, reject) => {
-            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, materialpic_type, create_by) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                [id, material_name, quantity, cost, materialPictureName, materialPictureType, token.admin_id],
+            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, cost_per_quantity, materialpic_type, create_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                [id, material_name, quantity, cost, materialPictureName, costesperquantities, materialPictureType, token.admin_id],
                 (err, result, fields) => {
                     if (err) {
                         return reject(err);

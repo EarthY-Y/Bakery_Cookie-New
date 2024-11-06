@@ -27,7 +27,7 @@ export const getProductById = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT p.product_id, p.product_name, p.quantity, p.cost, p.price, p.description, p.create_by, p.update_by, p.create_at, p.updated_at, "+
-                     "pp.productpic_name, pm.amount, m.material_name, a.userName FROM product p "+
+                     "pp.productpic_name, pm.amount, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
                      "INNER JOIN admin a ON a.admin_id = p.create_by "+ 
                      "INNER JOIN productpicture pp ON pp.product_id = p.product_id "+
                      "INNER JOIN product_material pm ON pm.product_id = p.product_id "+
@@ -51,12 +51,12 @@ export const createProduct = async (req, res) => {
         const token = await passToken(authHeader);
         const id = uuidv4();
         
-        const { product_name, quantity, cost, price, description } = req.body;
+        const { product_name, quantity, calculateTotalCost, price, description } = req.body;
 
         const productResult = await new Promise((resolve, reject) => {
             db.query(
                 "INSERT INTO product (product_id, product_name, quantity, cost, price, description, create_by) VALUES (?, ?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
-                [id, product_name, quantity, cost, price, description, token.admin_id],
+                [id, product_name, quantity, calculateTotalCost, price, description, token.admin_id],
                 (err, result) => {
                     if (err) return reject(err);
                     resolve(result);

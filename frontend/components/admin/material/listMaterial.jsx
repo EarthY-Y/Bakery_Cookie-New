@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { listMaterialService, deleteMaterialByIdService } from '../../../API/materialService'
 import { formatDate } from '../../datetime'
 import { Table, Button } from 'react-bootstrap'
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const ListMaterial = () => {
   const [materials, setMaterials] = useState([])
@@ -43,10 +44,11 @@ const ListMaterial = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th className="text-center align-middle" style={{ width: '20%' }}>รูปภาพ</th>
-            <th className="text-center align-middle" style={{ width: '30%' }}>ชื่อวัตถุดิบ</th>
+            <th className="text-center align-middle" style={{ width: '15%' }}>รูปภาพ</th>
+            <th className="text-center align-middle" style={{ width: '25%' }}>ชื่อวัตถุดิบ</th>
             <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
             <th className="text-center align-middle" style={{ width: '10%' }}>ต้นทุน</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>ต้นทุน/ปริมาณ</th>
             <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สร้าง</th>
             <th className="text-center align-middle" style={{ width: '5%' }}>ดู</th>
             <th className="text-center align-middle" style={{ width: '5%' }}>แก้ไข</th>
@@ -56,10 +58,11 @@ const ListMaterial = () => {
         <tbody>
           {materials.map((material) => (
             <tr key={material.material_id}>
-              <td><img src={"http://localhost:5000/picture/" + material.materialpic_name} height={75} width={120} alt={material.material_name} /></td>
+              <td><img src={API_URL_PICTURE + material.materialpic_name} height={75} width={120} alt={material.material_name} /></td>
               <td>{material.material_name}</td>
               <td>{material.quantity} กรัม</td>
-              <td>{material.cost}</td>
+              <td>{material.cost} บาท</td>
+              <td>{material.cost_per_quantity} บาท</td>
               <td>{formatDate(material.create_at)}</td>
               <td><Link to={`view/${material.material_id}`} className="btn btn-outline-warning text-black">View</Link></td>
               <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-black"><i className="bi bi-pencil"></i></Link></td>

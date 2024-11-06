@@ -5,6 +5,8 @@ import { Link, useParams } from 'react-router-dom';
 import { listProductByIdService } from '../../../API/productService';
 import { formatDate } from '../../datetime';
 
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+
 const listMaterialById = () => {
   const {id} = useParams();
   const [ productMyId, setproductMyId] = useState([])
@@ -38,7 +40,7 @@ const listMaterialById = () => {
 
         <div className="text-center mb-4">
             <img
-                src={"http://localhost:5000/picture/" + productMyId[0]?.productpic_name	}
+                src={API_URL_PICTURE+ productMyId[0]?.productpic_name	}
                 height={250}
                 width={400}
                 alt="Material"
@@ -57,11 +59,6 @@ const listMaterialById = () => {
         </div>
 
         <div className="mb-3">
-            <label className="form-label fw-bold">ต้นทุนวัตถุดิบ</label>
-            <p className="border p-2 rounded bg-white">{productMyId[0]?.cost}</p>
-        </div>
-
-        <div className="mb-3">
             <label className="form-label fw-bold">ปริมาณ</label>
             <p className="border p-2 rounded bg-white">{productMyId[0]?.quantity}</p>
         </div>
@@ -69,18 +66,24 @@ const listMaterialById = () => {
         {productMyId.map((product, index) => (
           <div key={index} className="border p-3 rounded mb-4 bg-light">
             <div className="mb-3 row">
-                <label className="form-label fw-bold col-6">วัตถุดิบที่ {index+1}</label>
-                <label className="form-label fw-bold col-2">ปริมาณ</label>
+                <label className="form-label fw-bold col-6 me-5">วัตถุดิบที่ {index+1}</label>
+                <label className="form-label fw-bold col-2 me-5">ปริมาณ</label>
+                <label className="form-label fw-bold col-2 me-5">ราคา/ปริมาณ</label>
                 
             </div>
 
             <div className="mb-3 row">
-                <p className="border p-2 rounded bg-white col-6">{product.material_name}</p>
-                <p className="border p-2 rounded bg-white col-2">{product.amount} กรัม</p>
+                <p className="border p-2 rounded bg-white col-6 me-5">{product.material_name}</p>
+                <p className="border p-2 rounded bg-white col-2 me-5">{product.amount} กรัม</p>
+                <p className="border p-2 rounded bg-white col-2 me-5">{product.cost_per_quantity} บาท/กรัม</p>
             </div>
           </div>
         ))}
 
+        <div className="mb-3">
+            <label className="form-label fw-bold">ต้นทุนวัตถุดิบ</label>
+            <p className="border p-2 rounded bg-white">{productMyId[0]?.cost}</p>
+        </div>
 
         <div className="mb-3 row">
           <div className='col-6'>

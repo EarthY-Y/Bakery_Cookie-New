@@ -6,6 +6,8 @@ import { Link, useParams } from 'react-router-dom';
 import { listMaterialByIdService } from '../../../API/materialService';
 import { formatDate } from '../../datetime';
 
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+
 const listMaterialById = () => {
   const {id} = useParams();
   const [materialMyId, setMaterialMyId] = useState([])
@@ -30,16 +32,14 @@ const listMaterialById = () => {
   },[])
 
   return (
-    <div className="container mt-5 p-4 border rounded shadow-sm bg-light">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-            <Link to="/material" className="btn btn-outline-secondary">
-                ย้อนกลับ
-            </Link>
-        </div>
-
+    <div className="container mt-5 p-4 ">
+      <Link to="/material" className="btn btn-light text-black mb-4">
+              <i className="bi bi-arrow-left"></i> ย้อนกลับ
+      </Link>
+      <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
         <div className="text-center mb-4">
             <img
-                src={"http://localhost:5000/picture/" + materialMyId.materialpic_name}
+                src={API_URL_PICTURE + materialMyId.materialpic_name}
                 height={250}
                 width={400}
                 alt="Material"
@@ -80,6 +80,7 @@ const listMaterialById = () => {
 
         <div className="text-center mt-4">
           <Link to={`/material/edit/${materialMyId.material_id}`} className="text-center mt-3 px-4 btn btn-outline-warning text-black">Edit</Link>
+        </div>
         </div>
     </div>
 
