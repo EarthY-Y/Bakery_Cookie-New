@@ -22,7 +22,13 @@ router.post('/admin/material/create', verifyAdminMid, uploadSingle, (req, res) =
     }
   createMaterial(req, res); // เรียกใช้ createMaterial พร้อม req และ res
 });
-router.patch('/admin/material/:id',verifyAdminMid, updateMaterial);
+router.patch('/admin/material/update/:id',verifyAdminMid, uploadSingle, (req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
+    // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
+    if (!req.file && !req.body.materialpic_name) {
+        return res.status(400).send({ message: 'No file uploaded!' });
+    }
+    updateMaterial(req, res); // เรียกใช้ createMaterial พร้อม req และ res
+});
 router.delete('/admin/material/delete/:id',verifyAdminMid, deleteMaterial);
 
 

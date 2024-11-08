@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { createMaterialService, listMaterialByIdService } from '../../../API/materialService';
+import { updateMaterialService, listMaterialByIdService } from '../../../API/materialService';
 import { Link, useParams } from 'react-router-dom';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const EditMaterial = () => {
@@ -10,28 +11,14 @@ const EditMaterial = () => {
   const [MaterialName, setMaterialName] = useState("");
   const [Quantities, setQuantity] = useState("");
   const [Costes, setCost] = useState("");
+  const [CostesPerQuantities, setCostesPerQuantities] = useState("");
+  const [NewCostesPerQuantities, setNewCostesPerQuantities] = useState("");
+  const [NewQuantity, setNewQuantity] = useState("");
+  const [TotalQuantity, setTotalQuantity] = useState("");
   const [Picture, setPicture] = useState(null); // เก็บทั้งรูปที่ดึงจากฐานข้อมูลและรูปใหม่ที่อัพโหลด
   const navigate = useNavigate();
   const { id } = useParams();
-
-  // ฟังก์ชัน handleSubmit สำหรับจัดการเมื่อกด submit
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append('material_name', MaterialName || materialMyId.material_name);
-      formData.append('quantity', Quantities || materialMyId.quantity);
-      formData.append('cost', Costes || materialMyId.cost);
-      formData.append('file', Picture); // ส่งรูปภาพที่เลือกใหม่ไปยัง server
-
-      const res = await createMaterialService(formData);
-      navigate('/material');
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
+  
   // useEffect สำหรับดึงข้อมูลวัตถุดิบ
   useEffect(() => {
     const getlistMaterialById = async () => {
@@ -40,17 +27,89 @@ const EditMaterial = () => {
         if (!response.data) {
           throw new Error("ไม่มีข้อมูล");
         }
+        console.log(response.data);
+        
         setMaterialMyId(response.data[0]);
         setMaterialName(response.data[0].material_name);
         setQuantity(response.data[0].quantity);
         setCost(response.data[0].cost);
-        setPicture(API_URL_PICTURE + response.data[0].materialpic_name); // ตั้งค่าให้ Picture เป็นชื่อไฟล์รูปจากฐานข้อมูล
+        setCostesPerQuantities(response.data[0].cost_per_quantity)
+        setPicture(response.data[0].materialpic_name); // ตั้งค่าให้ Picture เป็นชื่อไฟล์รูปจากฐานข้อมูล
       } catch (error) {
         alert(error);
       }
     };
     getlistMaterialById();
   }, [id]);
+  // ฟังก์ชัน handleSubmit สำหรับจัดการเมื่อกด submit
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const updatedData = {};
+      if (MaterialName !== materialMyId.material_name) updatedData.material_name = MaterialName;
+      if (TotalQuantity !== materialMyId.quantity) updatedData.quantity = TotalQuantity;
+      if (Costes !== materialMyId.cost) updatedData.cost = Costes;
+      if (NewCostesPerQuantities) updatedData.cost_per_quantity = NewCostesPerQuantities;
+      
+      if (Picture instanceof File) {
+        formData.append('file', Picture);
+      } else if (typeof Picture === 'string') {
+        updatedData.materialpic_name = Picture;
+      }
+    
+      if (Object.keys(updatedData).length === 0) {
+        alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
+        return;
+      }
+  
+      const formData = new FormData();
+      for (const key in updatedData) {
+        formData.append(key, updatedData[key]);
+      }
+  
+      console.log("FormData ส่งไปยัง Backend: ", Array.from(formData.entries()));
+      console.log(formData);
+      
+      // ส่งข้อมูลไป Backend
+      const res = await updateMaterialService(formData, id);
+      navigate('/material');
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addMaterial = () => {
+    const quantity = Quantities, newquantity = parseFloat(NewQuantity)
+    const sum =  quantity + newquantity
+    console.log(sum)
+    setTotalQuantity(sum)
+  }
+
+  const minusMaterial = () => {
+    const quantity = Quantities, newquantity = parseFloat(NewQuantity)
+    const sum =  quantity - newquantity
+    console.log(sum)
+    setTotalQuantity(sum)
+  }
+
+  useEffect(() => {
+    // ตรวจสอบให้แน่ใจว่า Quantities และ Costes มีค่า และ Quantities ไม่เป็น 0
+    if ( Costes !== materialMyId.cost && (NewQuantity !== 0 && null && undefined)) {
+      console.log(parseFloat(Costes) , materialMyId.cost ,parseFloat(NewQuantity) , materialMyId.quantity);
+      
+      const costPerQuantity = (parseFloat(Costes) + materialMyId.cost) / (parseFloat(NewQuantity) + materialMyId.quantity );
+      setNewCostesPerQuantities(costPerQuantity.toFixed(4)); // ปัดเป็นทศนิยม 2 ตำแหน่ง //!อาจจะต้องหา lib มาช่วยคำนวน
+    }
+    else if ( Costes !== materialMyId.cost ) {
+      console.log(parseFloat(Costes) , parseFloat(Quantities));
+      
+      const costPerQuantity = parseFloat(Costes) / parseFloat(Quantities)
+      setNewCostesPerQuantities(costPerQuantity.toFixed(4)); // ปัดเป็นทศนิยม 2 ตำแหน่ง //!อาจจะต้องหา lib มาช่วยคำนวน
+    } else {
+      setNewCostesPerQuantities(CostesPerQuantities); // ตั้งค่าให้ว่างถ้ายังไม่มีข้อมูล
+    }
+  }, [Costes]); 
 
   return (
     <div className="container mt-5">
@@ -58,7 +117,7 @@ const EditMaterial = () => {
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
-        <h>แก้ไขวัตถุดิบ</h>
+        <h5>แก้ไขวัตถุดิบ</h5>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="mb-3 text-center">
             <div
@@ -75,7 +134,7 @@ const EditMaterial = () => {
             >
               {Picture ? (
                 // ถ้ามี Picture จะสร้าง URL สำหรับแสดงรูปที่ดึงจากฐานข้อมูลหรือรูปที่อัพโหลดใหม่
-                <img src={typeof Picture === 'string' ? Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <span>เพิ่มรูปวัตถุดิบ</span>
               )}
@@ -83,7 +142,10 @@ const EditMaterial = () => {
                 type="file"
                 className="position-absolute top-0 start-0 w-100 h-100"
                 style={{ opacity: 0, cursor: 'pointer' }}
-                onChange={(e) => setPicture(e.target.files[0])}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setPicture(file);
+                }}
               />
             </div>
           </div>
@@ -99,8 +161,59 @@ const EditMaterial = () => {
               />
             </div>
           </div>
+
           <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
+            <label className="col-sm-2 col-form-label">จำนวนวัตถุดิบเดิม</label>
+            <div className="row col-sm-4">
+              <input
+                type="number"
+                className="form-control"
+                placeholder="จำนวนวัตถุดิบ"
+                value={Quantities}
+                onChange={(e) => setQuantity(e.target.value)}
+                readOnly
+              />
+            </div>
+          </div>
+
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">จำนวนวัตถุดิบใหม่</label>
+            <div className="row col-sm-4">
+              <input
+                type="number"
+                className="form-control"
+                placeholder="จำนวนวัตถุดิบ"
+                value={NewQuantity}
+                onChange={(e) => setNewQuantity(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label"></label>
+            <div className="row col-sm-4">
+              <button className="btn btn-primary ms-5" type="button" style={{ width: '100px', height: '40px' }} onClick={() => addMaterial()}>เพิ่มวัตถุดิบ</button> {/* type="button" เพื่อไม่ให้ถูกตีว่าเป็นการกด submit */}
+              <button className="btn btn-danger ms-5" type="button" style={{ width: '100px', height: '40px' }} onClick={() => minusMaterial()}>ลดวัตถุดิบ</button>
+            </div>
+          </div>
+
+
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">ผลลัพธ์จำนวนวัตถุดิบ</label>
+            <div className="row col-sm-4">
+              <input
+                type="number"
+                className="form-control"
+                placeholder="จำนวนวัตถุดิบ"
+                value={TotalQuantity}
+                onChange={(e) => setNewQuantity(e.target.value)}
+                readOnly
+              />
+            </div>
+          </div>
+
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบที่ซื้อมา</label>
             <div className="row col-sm-4">
               <input
                 type="number"
@@ -111,15 +224,17 @@ const EditMaterial = () => {
               />
             </div>
           </div>
+
           <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวนวัตถุดิบ</label>
+            <label className="col-sm-2 col-form-label">ต้นทุนต่อปริมาณ</label>
             <div className="row col-sm-4">
               <input
                 type="number"
                 className="form-control"
-                placeholder="จำนวนวัตถุดิบ"
-                value={Quantities}
-                onChange={(e) => setQuantity(e.target.value)}
+                placeholder="ต้นทุนวัตถุดิบ"
+                value={NewCostesPerQuantities}
+                onChange={(e) => setCost(e.target.value)}
+                readOnly
               />
             </div>
           </div>

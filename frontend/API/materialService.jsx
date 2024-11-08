@@ -4,12 +4,12 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 
-export const createMaterialService = async(fromData) => { 
-    console.log(fromData);
+export const createMaterialService = async(formData) => { 
+    console.log(formData);
     try {
         const authToken = localStorage.getItem('token')
         console.log(authToken);
-        const res = await axios.post(API_URL + '/material/create', fromData,
+        const res = await axios.post(API_URL + '/material/create', formData,
             {
                 headers: {
                     'authorization': `Bearer ${authToken}`
@@ -59,6 +59,26 @@ export const listMaterialByIdService = async(id) => {
         console.error("Error during login:", error);
     }
 }
+
+export const updateMaterialService = async(formData,id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    console.log(authToken);
+    const res = await axios.patch(API_URL + '/material/update/'+id, formData,
+      {
+          headers: {
+              'authorization': `Bearer ${authToken}`
+          }
+      }
+    );
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error; // ส่ง error ออกไปให้ component จัดการ
+  }
+}
+
 
 export const deleteMaterialByIdService = async(id) => {
     try {
