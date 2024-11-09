@@ -64,7 +64,7 @@ function Navbar() {
                       aria-labelledby="profileDropdown"
                       style={{
                         position: 'absolute', // ทำให้ dropdown เมนูเป็นตำแหน่งที่กำหนดเอง
-                        top: '100%', // อยู่ใต้ปุ่มพอดี
+                        top: '75%', // อยู่ใต้ปุ่มพอดี
                         left: '0',
                         zIndex: '1000' // ให้ dropdown อยู่ด้านบน
                       }}>
