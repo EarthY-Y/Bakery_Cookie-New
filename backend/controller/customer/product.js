@@ -1,8 +1,6 @@
 import db from "../../config/dataBase.js"
 
 export const getProductCustomer = async (req, res) => {
-    console.log("getProduct");
-    
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT p.product_id, p.price, p.quantity, p.product_name, pp.productpic_name FROM product p"+

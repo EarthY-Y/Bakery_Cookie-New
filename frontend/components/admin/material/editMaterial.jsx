@@ -96,21 +96,27 @@ const EditMaterial = () => {
 
   useEffect(() => {
     // ตรวจสอบให้แน่ใจว่า Quantities และ Costes มีค่า และ Quantities ไม่เป็น 0
-    if ( Costes !== materialMyId.cost && (NewQuantity !== 0 && null && undefined)) {
+    //ราคาไม่เท่า เเละ ปริมาณเปลี่ยน
+    if ( Costes != materialMyId.cost && NewQuantity != 0 ) {
       console.log(parseFloat(Costes) , materialMyId.cost ,parseFloat(NewQuantity) , materialMyId.quantity);
-      
-      const costPerQuantity = (parseFloat(Costes) + materialMyId.cost) / (parseFloat(NewQuantity) + materialMyId.quantity );
+      const costPerQuantity = (parseFloat(Costes) + materialMyId.cost) / TotalQuantity;
       setNewCostesPerQuantities(costPerQuantity.toFixed(4)); // ปัดเป็นทศนิยม 2 ตำแหน่ง //!อาจจะต้องหา lib มาช่วยคำนวน
     }
-    else if ( Costes !== materialMyId.cost ) {
+    //ราคาเปลี่ยน เเต่ว่า ปริมาณเท่าเดิม
+    else if ( Costes != materialMyId.cost || TotalQuantity == materialMyId.quantity ) {
       console.log(parseFloat(Costes) , parseFloat(Quantities));
-      
       const costPerQuantity = parseFloat(Costes) / parseFloat(Quantities)
       setNewCostesPerQuantities(costPerQuantity.toFixed(4));
-    } else {
+    }
+    //ปริมาณเปลี่ยน เเต่ ราคาเท่าเดิม
+    else if ( NewQuantity != materialMyId.quantity && Costes == materialMyId.cost) {
+      const costPerQuantity = materialMyId.cost / parseFloat(TotalQuantity)
+      setNewCostesPerQuantities(costPerQuantity.toFixed(4));
+    }
+    else {
       setNewCostesPerQuantities(CostesPerQuantities);
     }
-  }, [Costes]); 
+  }, [TotalQuantity , Costes, NewQuantity]); 
 
   return (
     <div className="container mt-5">
@@ -123,15 +129,7 @@ const EditMaterial = () => {
           <div className="mb-3 text-center">
             <div
               className="position-relative"
-              style={{
-                margin: '2%',
-                width: '100px',
-                height: '100px',
-                border: '1px dashed #ccc',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
+              style={{margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}
             >
               {Picture ? (
                 // ถ้ามี Picture จะสร้าง URL สำหรับแสดงรูปที่ดึงจากฐานข้อมูลหรือรูปที่อัพโหลดใหม่
@@ -232,7 +230,7 @@ const EditMaterial = () => {
               <input
                 type="number"
                 className="form-control"
-                placeholder="ต้นทุนวัตถุดิบ"
+                placeholder={CostesPerQuantities}
                 value={NewCostesPerQuantities}
                 onChange={(e) => setCost(e.target.value)}
                 readOnly
