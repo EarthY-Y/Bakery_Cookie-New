@@ -60,6 +60,28 @@ export const listProductByIdService = async(id) => {
   }
 }
 
+export const editProductService = async(fromData, id) => { 
+  console.log(fromData);
+  try {
+
+    const authToken = localStorage.getItem('token')
+    console.log(authToken);
+    const res = await axios.patch(API_URL + '/product/edit/'+id, fromData,
+        {
+            headers: {
+                'authorization': `Bearer ${authToken}`,
+                 'Content-Type': 'multipart/form-data'
+            }
+        }
+    );
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.error("Error createProductService:", error);
+    throw error; // ส่ง error ออกไปให้ component จัดการ
+  }
+}
+
 export const deleteProductByIdService = async(id) => {
   try {
     console.log(id);

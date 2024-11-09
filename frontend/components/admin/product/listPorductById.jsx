@@ -10,7 +10,6 @@ const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 const listMaterialById = () => {
   const {id} = useParams();
   const [ productMyId, setproductMyId] = useState([])
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getlistMaterialById = async()=> {
@@ -29,6 +28,18 @@ const listMaterialById = () => {
     }
     getlistMaterialById()
   },[])
+
+  const calculateTotalCost = () => {
+    return productMyId.reduce((totalCost, item) => {
+      const amount = parseFloat(item.amount || 0); // จำนวนของวัตถุดิบ
+      const costPerQuantity = parseFloat(item.cost_per_quantity || 0); // ต้นทุนต่อหน่วย
+  
+      if (!isNaN(amount) && !isNaN(costPerQuantity)) {
+        return totalCost + amount * costPerQuantity;
+      }
+      return totalCost;
+    }, 0);
+  };
 
   return (
     <div className="container mt-5 p-4 border rounded shadow-sm bg-light">
@@ -82,7 +93,7 @@ const listMaterialById = () => {
 
         <div className="mb-3">
             <label className="form-label fw-bold">ต้นทุนวัตถุดิบ</label>
-            <p className="border p-2 rounded bg-white">{productMyId[0]?.cost}</p>
+            <p className="border p-2 rounded bg-white">{calculateTotalCost()}</p>
         </div>
 
         <div className="mb-3 row">

@@ -1,39 +1,15 @@
 import React, { useContext,useEffect, useState} from 'react';
 import { Link,useNavigate } from 'react-router-dom';
-import { FormContextMaterialProduct } from '../../../API/productService';
 import { listMaterialService } from '../../../API/materialService';
 import { createProductService } from '../../../API/productService';
 
 const CreateProduct = () => {
-  const { formData, setFormData } = useContext(FormContextMaterialProduct);
+  const [formData, setFormData] = useState({})
   const [listMaterials, setListMaterials] = useState([]);
 
   const navigate = useNavigate();
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    
-    if (name === 'file' && files.length > 0) {
-      // ตรวจสอบว่าเป็น input file และมีการเลือกไฟล์
-      const file = files[0]; // เอาไฟล์แรกที่ถูกเลือก
-      setFormData(prev => ({ ...prev, [name]: file })); // เก็บไฟล์ใน formData
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value })); // สำหรับ input อื่นๆ
-    }
-  };
-  useEffect(() => {
-    const getMaterial = async () => {
-        try {
-            const response = await listMaterialService();
-            console.log(response.data);
-            
-            setListMaterials(response.data);
-        } catch (error) {
-            console.error("Error fetching materials:", error);
-        }
-    };
-    getMaterial();
-  }, []);
-    // ฟังก์ชันสำหรับคำนวณต้นทุนรวม
+
+  // ฟังก์ชันสำหรับคำนวณต้นทุนรวม
   const calculateTotalCost = () => {
     return (formData.ingredients || []).reduce((totalCost, ingredient) => {
       const material = listMaterials.find((mat) => mat.material_id === ingredient.material_id);
@@ -52,6 +28,29 @@ const CreateProduct = () => {
           [event.target.name]: event.target.value
       };
       setFormData(prev => ({ ...prev, ingredients: values })); // อัปเดต formData
+  };
+
+  const handleReset = () => {
+    setFormData({
+      product_name: '',
+      quantity: '',
+      price: '',
+      description: '',
+      file: null,
+      ingredients: [],
+    });
+  };
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    
+    if (name === 'file' && files.length > 0) {
+      // ตรวจสอบว่าเป็น input file และมีการเลือกไฟล์
+      const file = files[0]; // เอาไฟล์แรกที่ถูกเลือก
+      setFormData(prev => ({ ...prev, [name]: file })); // เก็บไฟล์ใน formData
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value })); // สำหรับ input อื่นๆ
+    }
   };
 
   const handleAddRow = () => {
@@ -76,6 +75,20 @@ const CreateProduct = () => {
           console.log(error); // แสดงข้อผิดพลาด
       }
   };
+
+  useEffect(() => {
+    const getMaterial = async () => {
+        try {
+            const response = await listMaterialService();
+            console.log(response.data);
+            
+            setListMaterials(response.data);
+        } catch (error) {
+            console.error("Error fetching materials:", error);
+        }
+    };
+    getMaterial();
+  }, []);
 
   return (
     <form onSubmit={handleSubmitProductMaterial}>
@@ -187,8 +200,9 @@ const CreateProduct = () => {
                 name='costPerQuantity'
                 className="form-control" 
                 placeholder="ต้นทุนสินค้า" 
-                value={formData.calculateTotalCost = calculateTotalCost() } 
-                onChange={handleChange} 
+                // value={formData.calculateTotalCost = calculateTotalCost() } 
+                // onChange={handleChange} 
+                value={calculateTotalCost()}
                 readOnly
               />
             </div>
@@ -221,7 +235,7 @@ const CreateProduct = () => {
           </div>
 
           <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
-            <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
+            <button type="button" className="btn btn-secondary me-5" onClick={() => {handleReset()}} style={{ width: '100px', height: '40px' }}>ล้าง</button>
             <button type="submit" className="btn btn-primary"> เพิ่มสินค้า </button>
           </div>
         </div>

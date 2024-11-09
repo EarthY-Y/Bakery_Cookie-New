@@ -15,7 +15,7 @@ router.use(express.json());
 
 router.get('/admin/product',verifyAdminMid, getProduct);
 router.get('/admin/product/:id',verifyAdminMid, getProductById);
-router.post('/admin/product/create',verifyAdminMid, uploadSingle,(req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
+router.post('/admin/product/create',verifyAdminMid, uploadSingle,(req, res) => {
     // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
     console.log(req.body);
     
@@ -24,9 +24,15 @@ router.post('/admin/product/create',verifyAdminMid, uploadSingle,(req, res) => {
     }
     console.log("its req.body product-Route",req.body);
     
-    createProduct(req, res); // เรียกใช้ createMaterial พร้อม req และ res
+    createProduct(req, res);
 });
-router.patch('/admin/product/:id',verifyAdminMid, updateProduct);
+router.patch('/admin/product/edit/:id',verifyAdminMid, uploadSingle, (req, res) => { 
+    // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
+    if (!req.file && !req.body.productpic_name) {
+        return res.status(400).send({ message: 'No file uploaded!' });
+    }
+    updateProduct(req, res);
+});
 router.delete('/admin/product/delete/:id',verifyAdminMid, deleteProduct);
 
 export default router

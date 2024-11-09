@@ -46,6 +46,8 @@ const EditMaterial = () => {
     event.preventDefault();
     try {
       const updatedData = {};
+      const formData = new FormData();
+      
       if (MaterialName !== materialMyId.material_name) updatedData.material_name = MaterialName;
       if (TotalQuantity !== materialMyId.quantity) updatedData.quantity = TotalQuantity;
       if (Costes !== materialMyId.cost) updatedData.cost = Costes;
@@ -61,8 +63,7 @@ const EditMaterial = () => {
         alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
         return;
       }
-  
-      const formData = new FormData();
+
       for (const key in updatedData) {
         formData.append(key, updatedData[key]);
       }
@@ -105,9 +106,9 @@ const EditMaterial = () => {
       console.log(parseFloat(Costes) , parseFloat(Quantities));
       
       const costPerQuantity = parseFloat(Costes) / parseFloat(Quantities)
-      setNewCostesPerQuantities(costPerQuantity.toFixed(4)); // ปัดเป็นทศนิยม 2 ตำแหน่ง //!อาจจะต้องหา lib มาช่วยคำนวน
+      setNewCostesPerQuantities(costPerQuantity.toFixed(4));
     } else {
-      setNewCostesPerQuantities(CostesPerQuantities); // ตั้งค่าให้ว่างถ้ายังไม่มีข้อมูล
+      setNewCostesPerQuantities(CostesPerQuantities);
     }
   }, [Costes]); 
 

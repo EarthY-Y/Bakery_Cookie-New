@@ -5,6 +5,7 @@ import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
+import EditPorductById from '../page/admin-page/product-page/EditProduct-page'
 import ListMaterial from '../page/admin-page/material-page/listMaterial-page'
 import ListMaterialById from '../page/admin-page/material-page/listByIdMaterial-page';
 import EditMaterial from '../page/admin-page/material-page/editMaterial-page';
@@ -123,7 +124,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "edit/:id",
-                element: <ListPorductById />,
+                element: <EditPorductById />,
               },
             ],
           },
