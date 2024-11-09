@@ -1,7 +1,7 @@
 import React, { useContext,useEffect, useState} from 'react';
 import { Link,useNavigate } from 'react-router-dom';
-import { listMaterialService } from '../../../API/materialService';
-import { createProductService } from '../../../API/productService';
+import { listMaterialService } from '../../../API/admin/materialService';
+import { createProductService } from '../../../API/admin/productService';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({})

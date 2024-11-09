@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
-import { listProductByIdService } from '../../../API/productService';
+import { listProductByIdService } from '../../../API/admin/productService';
 import { formatDate } from '../../datetime';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE

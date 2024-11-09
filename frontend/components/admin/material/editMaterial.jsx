@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { updateMaterialService, listMaterialByIdService } from '../../../API/materialService';
+import { updateMaterialService, listMaterialByIdService } from '../../../API/admin/materialService';
 import { Link, useParams } from 'react-router-dom';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE

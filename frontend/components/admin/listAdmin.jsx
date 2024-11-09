@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { listAdminService } from '../../API/adminService';
+import { listAdminService } from '../../API/admin/adminService';
 
 const ListAdmin = () => {
   const [posts, setPosts] = useState([]);

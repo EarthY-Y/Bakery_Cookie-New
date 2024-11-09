@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../datetime';
 import { Table, Button } from 'react-bootstrap';
-import { listProductService, deleteProductByIdService } from '../../../API/productService';
+import { listProductService, deleteProductByIdService } from '../../../API/admin/productService';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const listProduct = () => {

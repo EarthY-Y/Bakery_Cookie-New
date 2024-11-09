@@ -1,8 +1,8 @@
 import React, { useContext,useEffect, useState} from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
-import { listProductByIdService } from '../../../API/productService';
-import { listMaterialService } from '../../../API/materialService';
-import { editProductService } from '../../../API/productService';
+import { listProductByIdService } from '../../../API/admin/productService';
+import { listMaterialService } from '../../../API/admin/materialService';
+import { editProductService } from '../../../API/admin/productService';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 

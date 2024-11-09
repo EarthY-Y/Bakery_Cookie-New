@@ -13,7 +13,6 @@ export const passToken = (token) => {
             authToken = token.split(' ')[1]
             //เข้าถึง JWT ด้วยรหัสที่ตั้งไว้
             const userJWT = jwt.verify(authToken, secretKey) //ถ้า verify ไม่ผ่านจะ validate ยังไงให้รู้ว่า token เป็นของปลอมหรือไม่ตรง
-            console.log('passAuth userJWT',userJWT)
             return userJWT
             
         }

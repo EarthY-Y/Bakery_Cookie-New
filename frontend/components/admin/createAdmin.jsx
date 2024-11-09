@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { createAdminService } from '../../API/adminService';
+import { createAdminService } from '../../API/admin/adminService';
 
 const createAdmin = () => {
   const [firstname, setF_name] = useState("");

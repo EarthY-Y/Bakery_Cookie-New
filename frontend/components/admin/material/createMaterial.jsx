@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { createMaterialService } from '../../../API/materialService';
+import { createMaterialService } from '../../../API/admin/materialService';
 import { Link } from 'react-router-dom';
 
 const createMaterial = () => {

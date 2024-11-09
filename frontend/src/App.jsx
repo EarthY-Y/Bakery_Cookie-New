@@ -22,7 +22,7 @@ import GuestHome from '../page/customer-page/home/guestHome-page'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
 import { FormProviderSignUpService } from '../API/signUpService'
-import { FormProviderProductService } from '../API/productService'
+import { FormProviderProductService } from '../API/admin/productService'
 
 import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 const router = createBrowserRouter([

@@ -10,7 +10,8 @@ import materialRounte from "./routes/admin/material-Route.js";
 import adminRoute from "./routes/admin/admin-Route.js";
 import authRoute from "./routes/auth-Route.js"
 import provinceAmphureTambon from "./routes/addressRoute.js"
-import productPoute from "./routes/admin/product-Route.js"
+import productRoute from "./routes/admin/product-Route.js"
+import productCustomerRoute from "./routes/customer/product-Route.js"
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -31,14 +32,6 @@ app.use(express.json({ //convert object to json object
 
 
 app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ่าน backend
-
-app.use((err, req, res, next) => {
-  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    console.error('Bad JSON:', err.message);
-    return res.status(400).send({ message: "Bad JSON format" });
-  }
-  next();
-});
 
 //กำหนดต้นทางหรือ origin ที่จะเข้ามาใช้ API ของเรา
 app.use(cors({
@@ -67,7 +60,8 @@ app.use('/picture', express.static(path.join(__dirname, 'picture')));
 app.use(customerRoute);
 app.use(orderRounte);
 app.use(materialRounte);
-app.use(productPoute);
+app.use(productRoute);
 app.use(authRoute);
 app.use(adminRoute);
+app.use(productCustomerRoute);
 app.use(provinceAmphureTambon);
