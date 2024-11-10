@@ -21,15 +21,10 @@ export const getProductCustomer = async (req, res) => {
 
 export const getProductById = async (req, res) => {
     const id = req.params.id
-    console.log("get by id ",id);
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.product_name, p.quantity, p.price, p.description, p.create_by, p.update_by, p.create_at, p.updated_at, "+
-                     "pp.productpic_name, pm.amount, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
-                     "INNER JOIN admin a ON a.admin_id = p.create_by "+ 
-                     "INNER JOIN productpicture pp ON pp.product_id = p.product_id "+
-                     "INNER JOIN product_material pm ON pm.product_id = p.product_id "+
-                     "INNER JOIN material m ON m.material_id = pm.material_id WHERE p.product_id = ?",
+            db.query("SELECT p.product_name, p.price, p.description, p.quantity, pp.productpic_name  FROM product p "+ 
+                     "INNER JOIN productpicture pp ON pp.product_id = p.product_id",
                      [id], 
                     (err, result) => { 
                 if (err) return reject(err)

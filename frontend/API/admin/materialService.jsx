@@ -19,7 +19,7 @@ export const createMaterialService = async(formData) => {
         console.log(res);
         return res;
       } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error createMaterialService:", error);
         throw error; // ส่ง error ออกไปให้ component จัดการ
       }
 }
@@ -37,7 +37,7 @@ export const listMaterialService = async() => {
         ); 
         return response
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error listMaterialService:", error);
     }
 }
 
@@ -56,7 +56,7 @@ export const listMaterialByIdService = async(id) => {
         ); 
         return response
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error listMaterialByIdService:", error);
     }
 }
 
@@ -74,7 +74,7 @@ export const updateMaterialService = async(formData,id) => {
     console.log(res);
     return res;
   } catch (error) {
-    console.error("Error during login:", error);
+    console.error("Error updateMaterialService:", error);
     throw error; // ส่ง error ออกไปให้ component จัดการ
   }
 }
@@ -95,6 +95,6 @@ export const deleteMaterialByIdService = async(id) => {
         ); 
         return response
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error deleteMaterialByIdService:", error);
     }
 }

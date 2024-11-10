@@ -15,6 +15,15 @@ export const login = async (userName, passWord) => {
   }
 };
 
+export const logout = async (userName, passWord) => {
+  try {
+    removeToken()
+  } catch (error) {
+    console.error("Error logout:", error);
+    throw error; // ส่ง error ออกไปให้ component จัดการ
+  }
+};
+
 //authRouth
 export const ProtectedRouteAdmin = () => {
   const [loading, setLoading] = useState(true);

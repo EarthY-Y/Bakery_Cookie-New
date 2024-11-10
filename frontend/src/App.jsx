@@ -23,8 +23,9 @@ import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
 import { FormProviderSignUpService } from '../API/signUpService'
 import { FormProviderProductService } from '../API/admin/productService'
-
 import CreateProduct from '../page/admin-page/product-page/createProduct-page'
+import DetailPorductById from '../page/customer-page/product/detailPorductById-page';
+
 const router = createBrowserRouter([
   {
     path: "",
@@ -156,6 +157,10 @@ const router = createBrowserRouter([
                 element: <Home />,
               },
             ],
+          },
+          {
+            path: "/product/:id",
+            element: <DetailPorductById />,
           },
         ],
       }

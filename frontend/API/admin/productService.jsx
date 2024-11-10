@@ -38,7 +38,7 @@ export const listProductService = async() => {
       //console.log(response);
       return response
     }catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error listProductService:", error);
     }
 }
 
@@ -56,7 +56,7 @@ export const listProductByIdService = async(id) => {
     //console.log(response);
     return response
   }catch (error) {
-    console.error("Error during login:", error);
+    console.error("Error listProductByIdService:", error);
   }
 }
 
@@ -97,7 +97,7 @@ export const deleteProductByIdService = async(id) => {
     //console.log(response);
     return response
   }catch (error) {
-    console.error("Error during login:", error);
+    console.error("Error deleteProductByIdService:", error);
   }
 }
 

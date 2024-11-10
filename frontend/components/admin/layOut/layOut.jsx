@@ -16,7 +16,7 @@ const layOutComponent = ({children}) => {
       <div className="d-flex">
         {/* Sidebar ที่ไม่เลื่อนตาม */}
         <div
-          className="d-flex flex-column col-2 min-vh-100"
+          className="d-flex flex-column col-2 min-vh-100 shadow "
           style={{
             position: 'fixed',
             left: 0,

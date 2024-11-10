@@ -1,6 +1,6 @@
 import express from "express";
 import {Login,
-        logOut
+        logOutCustomer
 } from "../controller/login.js"
 import { verifyAdmin } from "../middleware/authAdmin.js";
 import { verifyCustomer } from "../middleware/authUser.js";
@@ -9,7 +9,7 @@ const router = express.Router();
 router.use(express.json());
 
 router.post('/login', Login);
-router.delete('/logOut', logOut);
+router.delete('/logOut', logOutCustomer);
 router.get('/verifyAdmin', verifyAdmin);
 router.get('/verifyCustomer', verifyCustomer);
 

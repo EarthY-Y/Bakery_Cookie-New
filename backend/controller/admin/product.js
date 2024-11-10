@@ -27,7 +27,6 @@ export const getProduct = async (req, res) => {
 
 export const getProductById = async (req, res) => {
     const id = req.params.id
-    console.log("get by id ",id);
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT p.product_id, p.product_name, p.quantity, p.price, p.description, p.create_by, p.update_by, p.create_at, p.updated_at, "+
@@ -340,7 +339,6 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
 
 export const deleteProduct = async (req, res) => {
     const id = req.params.id
-    console.log("get by id ",id);
     try {
         // เริ่มต้น transaction
         await new Promise((resolve, reject) => {

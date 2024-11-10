@@ -4,8 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { FaArrowRight } from 'react-icons/fa';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { logout } from '../../../../API/authService';
 
 function Navbar() {
+
+  const handleLogout = () => {
+    logout()
+  }
+
   return (
     <div> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
       {/* Navbar ส่วนบน */}
@@ -64,14 +70,14 @@ function Navbar() {
                       aria-labelledby="profileDropdown"
                       style={{
                         position: 'absolute', // ทำให้ dropdown เมนูเป็นตำแหน่งที่กำหนดเอง
-                        top: '75%', // อยู่ใต้ปุ่มพอดี
+                        top: '65%', // อยู่ใต้ปุ่มพอดี
                         left: '0',
                         zIndex: '1000' // ให้ dropdown อยู่ด้านบน
                       }}>
                       <li><Link className="dropdown-item" to="/profile">โปรไฟล์ของฉัน</Link></li>
                       <li><Link className="dropdown-item" to="/settings">การตั้งค่า</Link></li>
                       <li><hr className="dropdown-divider" /></li>
-                      <li><Link className="dropdown-item" to="/logout">ออกจากระบบ</Link></li>
+                      <li><button type='botton' className="dropdown-item btn" onClick={(e) => handleLogout()}>ออกจากระบบ</button></li>
                     </ul>
                   </li>
                   {/* <li className="nav-item">

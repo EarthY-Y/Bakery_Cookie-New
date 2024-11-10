@@ -24,8 +24,7 @@ export const getMaterial = async (req, res) => {
 
 export const getMaterialById = async (req, res) => {
     const id = req.params.id
-    console.log("get by id ",id);
-    
+
     try {
         const result = await new Promise((resolve, reject) => {
             db.query("SELECT m.material_id, m.material_name, m.quantity, m.cost, m.cost_per_quantity, m.materialpic_name, m.create_by, m.create_at, a.userName FROM material m INNER JOIN admin a ON a.admin_id = m.create_by WHERE material_id = ?", [id], 

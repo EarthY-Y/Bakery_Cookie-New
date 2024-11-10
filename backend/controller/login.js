@@ -52,6 +52,6 @@ export const Login = async (req, res) =>{
     }
 }
 
-export const logOut = (req, res) =>{
+export const logOutCustomer = (req, res) =>{
     
 }

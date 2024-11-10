@@ -19,7 +19,7 @@ export const createAdminService = async(fromData) => {
         console.log(res);
         return res;
       } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error createAdminService:", error);
         throw error; // ส่ง error ออกไปให้ component จัดการ
       }
 }
@@ -38,6 +38,6 @@ export const listAdminService = async() => {
         console.log(response);
         return response
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error listAdminService:", error);
     }
 }

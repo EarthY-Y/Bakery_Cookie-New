@@ -16,11 +16,11 @@ export const listProductService = async() => {
       console.log(response);
       return response
     }catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error listProductService:", error);
     }
 }
 
-export const listProductByIdService = async(id) => {
+export const detailProductByIdService = async(id) => {
   try {
     const authToken = localStorage.getItem('token')
     console.log(authToken);
@@ -34,6 +34,6 @@ export const listProductByIdService = async(id) => {
     //console.log(response);
     return response
   }catch (error) {
-    console.error("Error during login:", error);
+    console.error("Error listProductByIdService:", error);
   }
 }

@@ -11,7 +11,7 @@ export const createCustomer = async(fromData) => {
     return response 
 
   } catch (error) {
-    console.log("Error during login:", error);
+    console.log("Error signUp:", error);
     return error
   }
 }
