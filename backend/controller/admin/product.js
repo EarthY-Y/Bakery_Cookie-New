@@ -7,7 +7,7 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getProduct = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.price, p.quantity, p.product_name, pp.productpic_name, SUM(m.cost_per_quantity * pm.amount) AS cost FROM product p"+
+            db.query("SELECT p.product_id, p.selling_price_per_quantity, p.quantity_per_time, p.product_name, pp.productpic_name, SUM(m.cost_per_quantity * pm.amount) AS cost FROM product p"+
                     " LEFT JOIN productpicture pp ON p.product_id = pp.product_id" +
                     " LEFT JOIN product_material pm ON p.product_id = pm.product_id" + 
                     " LEFT JOIN material m ON pm.material_id = m.material_id" +
@@ -29,7 +29,7 @@ export const getProductById = async (req, res) => {
     const id = req.params.id
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.product_name, p.quantity, p.price, p.description, p.create_by, p.update_by, p.create_at, p.updated_at, "+
+            db.query("SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.description, p.create_by, p.update_by, p.create_at, p.updated_at, "+
                      "pp.productpic_name, pm.amount, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
                      "INNER JOIN admin a ON a.admin_id = p.create_by "+ 
                      "INNER JOIN productpicture pp ON pp.product_id = p.product_id "+
@@ -58,7 +58,7 @@ export const createProduct = async (req, res) => {
 
         const productResult = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product (product_id, product_name, quantity, price, description, create_by) VALUES (?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
+                "INSERT INTO product (product_id, product_name, quantity_per_time, selling_price_per_quantity, description, create_by) VALUES (?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
                 [id, product_name, quantity, price, description, token.admin_id],
                 (err, result) => {
                     if (err) return reject(err);
@@ -152,7 +152,7 @@ export const updateProduct = async (req, res) => {
         const token = await passToken(authHeader);
         const { id } = req.params;
 
-        const { product_name, quantity, price, description, ingredients, productpic_name, deletedIngredients, updatedIngredients } = req.body;
+        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, updatedIngredients } = req.body;
 
         // 1. อัปเดตข้อมูลในตาราง product
         let updateQuery = "UPDATE product SET  ";
@@ -163,14 +163,14 @@ export const updateProduct = async (req, res) => {
             updateValues.push(product_name);
         }
 
-        if (quantity) {
-            updateQuery += "quantity = ?, ";
-            updateValues.push(quantity);
+        if (quantity_per_time) {
+            updateQuery += "quantity_per_time = ?, ";
+            updateValues.push(quantity_per_time);
         }
 
-        if (price) {
-            updateQuery += "price = ?, ";
-            updateValues.push(price);
+        if (selling_price_per_quantity) {
+            updateQuery += "selling_price_per_quantity = ?, ";
+            updateValues.push(selling_price_per_quantity);
         }
 
         if (description) {
@@ -182,7 +182,7 @@ export const updateProduct = async (req, res) => {
         updateQuery += " WHERE product_id = ?";
         updateValues.push(id);
 
-        if (product_name || quantity || price ) {
+        if (product_name || selling_price_per_quantity || quantity_per_time ) {
             await new Promise((resolve, reject) => {
                 db.query(updateQuery, updateValues, (err, result) => {
                     if (err) return reject(err);

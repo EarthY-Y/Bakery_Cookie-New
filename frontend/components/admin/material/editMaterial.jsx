@@ -100,18 +100,18 @@ const EditMaterial = () => {
     if ( Costes != materialMyId.cost && NewQuantity != 0 ) {
       console.log(parseFloat(Costes) , materialMyId.cost ,parseFloat(NewQuantity) , materialMyId.quantity);
       const costPerQuantity = (parseFloat(Costes) + materialMyId.cost) / TotalQuantity;
-      setNewCostesPerQuantities(costPerQuantity.toFixed(4)); // ปัดเป็นทศนิยม 2 ตำแหน่ง //!อาจจะต้องหา lib มาช่วยคำนวน
+      setNewCostesPerQuantities(costPerQuantity); // ปัดเป็นทศนิยม 2 ตำแหน่ง //!อาจจะต้องหา lib มาช่วยคำนวน
     }
     //ราคาเปลี่ยน เเต่ว่า ปริมาณเท่าเดิม
     else if ( Costes != materialMyId.cost || TotalQuantity == materialMyId.quantity ) {
       console.log(parseFloat(Costes) , parseFloat(Quantities));
       const costPerQuantity = parseFloat(Costes) / parseFloat(Quantities)
-      setNewCostesPerQuantities(costPerQuantity.toFixed(4));
+      setNewCostesPerQuantities(costPerQuantity);
     }
     //ปริมาณเปลี่ยน เเต่ ราคาเท่าเดิม
     else if ( NewQuantity != materialMyId.quantity && Costes == materialMyId.cost) {
       const costPerQuantity = materialMyId.cost / parseFloat(TotalQuantity)
-      setNewCostesPerQuantities(costPerQuantity.toFixed(4));
+      setNewCostesPerQuantities(costPerQuantity);
     }
     else {
       setNewCostesPerQuantities(CostesPerQuantities);

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
 import { resolve } from "path";
+import {createCart} from "./product.js"
 
 //ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
@@ -58,12 +59,11 @@ export const createCustomer = async (req, res) => {
                 }
             )
         })
+
+        await createCart(id)
         console.log(response);
-        res.status(201).json({
-            status: "success",
-            message: "User created successfully"
-          });
-    
+        res.status(201).json({status: "success",message: "User created successfully"});
+        
     } catch (error) {
         console.error("Error creating customer:", error);
         res.status(400).json({ message: "Error creating customer", error: error.message });

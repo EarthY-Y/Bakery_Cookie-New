@@ -7,7 +7,7 @@ export const createProductService = async(fromData) => {
     try {
 
       const authToken = localStorage.getItem('token')
-      console.log(authToken);
+      ;
       const res = await axios.post(API_URL + '/product/create', fromData,
           {
               headers: {
@@ -27,7 +27,7 @@ export const listProductService = async() => {
     try {
       console.log(API_URL);
       const authToken = localStorage.getItem('token')
-      console.log(authToken);
+      ;
       const response = await axios.get(API_URL + "/product", 
         {
           headers: {
@@ -45,7 +45,7 @@ export const listProductService = async() => {
 export const listProductByIdService = async(id) => {
   try {
     const authToken = localStorage.getItem('token')
-    console.log(authToken);
+    ;
     const response = await axios.get(API_URL + "/product/"+id, 
       {
         headers: {
@@ -65,7 +65,7 @@ export const editProductService = async(fromData, id) => {
   try {
 
     const authToken = localStorage.getItem('token')
-    console.log(authToken);
+    ;
     const res = await axios.patch(API_URL + '/product/edit/'+id, fromData,
         {
             headers: {
@@ -86,7 +86,7 @@ export const deleteProductByIdService = async(id) => {
   try {
     console.log(id);
     const authToken = localStorage.getItem('token')
-    console.log(authToken);
+    ;
     const response = await axios.delete(API_URL + "/product/delete/"+id, 
       {
         headers: {

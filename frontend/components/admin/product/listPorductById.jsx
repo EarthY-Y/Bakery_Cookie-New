@@ -69,11 +69,6 @@ const listMaterialById = () => {
             <p className="border p-2 rounded bg-white">{productMyId[0]?.product_name}</p>
         </div>
 
-        <div className="mb-3">
-            <label className="form-label fw-bold">ปริมาณ</label>
-            <p className="border p-2 rounded bg-white">{productMyId[0]?.quantity}</p>
-        </div>
-
         {productMyId.map((product, index) => (
           <div key={index} className="border p-3 rounded mb-4 bg-light">
             <div className="mb-3 row">
@@ -94,6 +89,16 @@ const listMaterialById = () => {
         <div className="mb-3">
             <label className="form-label fw-bold">ต้นทุนวัตถุดิบ</label>
             <p className="border p-2 rounded bg-white">{calculateTotalCost()}</p>
+        </div>
+
+        <div className="mb-3">
+            <label className="form-label fw-bold">ปริมาณที่ทำ/ครั้ง</label>
+            <p className="border p-2 rounded bg-white">{productMyId[0]?.quantity_per_time}</p>
+        </div>
+
+        <div className="mb-3">
+            <label className="form-label fw-bold">ราคาขาย/ชิ้น</label>
+            <p className="border p-2 rounded bg-white">{productMyId[0]?.selling_price_per_quantity}</p>
         </div>
 
         <div className="mb-3 row">

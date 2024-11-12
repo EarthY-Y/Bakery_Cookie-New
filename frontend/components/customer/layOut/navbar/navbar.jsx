@@ -1,17 +1,58 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link, NavLink } from "react-router-dom"
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { FaArrowRight } from 'react-icons/fa';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { getCartService, getPorductCartService } from '../../../../API/customer/productService';
 import { logout } from '../../../../API/authService';
 
 function Navbar() {
-
+  const [productCart, setproductCart] = useState([])
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [cartId, setCartId] = useState(0);
   const handleLogout = () => {
     logout()
   }
 
+  useEffect(() => {
+    const getCart = async()=> {
+      try {
+        const response = await getCartService()
+        if(!response.data){
+          throw new Error("ไม่มีข้อมูล")
+        }
+        setCartId(response.data[0].cartId)
+      }
+      
+      catch (error) {
+        alert(error)
+      }
+    }
+    getCart()
+  },[])
+
+  useEffect(() => {
+    const getCart = async()=> {
+      try {
+        const response = await getPorductCartService()
+        if(!response.data){
+          throw new Error("ไม่มีข้อมูล")
+        }
+        setproductCart(response.data)
+      }
+      
+      catch (error) {
+        alert(error)
+      }
+    }
+    getCart()
+  },[])
+
+  const calculateTotalPrice = () => {
+    const total = productCart.reduce((sum, item) => sum + item.selling_price_per_quantity * item.quantity, 0); 
+    setTotalPrice(total); // อัปเดตราคารวม
+  };
+
+  useEffect(() => {
+    calculateTotalPrice(); // คำนวณราคาทันทีเมื่อรายการสินค้าเปลี่ยน
+  }, [productCart, totalPrice]);
   return (
     <div> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
       {/* Navbar ส่วนบน */}
@@ -29,11 +70,8 @@ function Navbar() {
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                  {/* <li className="nav-item">
-                    <Link className="nav-link active text-light" aria-current="page" to="/Login">เข้าสู่ระบบ</Link>
-                  </li> */}
                   <li className="nav-item">
-                    <Link className="nav-link active text-light" to="#">฿ 0.00</Link>
+                    <Link className="nav-link active text-light" to={`/cart/${cartId}`}>฿ {totalPrice}</Link>
                   </li>
                   <li className="nav-item">
                     <i className="bi bi-basket3 fs-3 text-light"></i>
@@ -105,7 +143,7 @@ function Navbar() {
           style={{ width: '150px' }}
         />
         <nav className="container text-center col-5 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: '#C40C0C' }}>
-          <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
+          <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
 
           {/* Dropdown menu สำหรับหมวดหมู่ */}
           <div className="dropdown d-inline">

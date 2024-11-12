@@ -11,6 +11,8 @@ const EditProduct = () => {
   const [originalData, setOriginalData] = useState({});
   const [listMaterials, setListMaterials] = useState([]);
   const [deletedIngredients, setDeletedIngredients] = useState([])
+  const [pricePreQuantity, setpricePreQuantity] = useState(0);
+  const [totalPrice, settotalPrice] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -150,17 +152,19 @@ const EditProduct = () => {
           throw new Error("ไม่มีข้อมูล");
         }
 
-        const productData = response.data[0]; // Assuming the first object contains product details
+        const productData = response.data[0]; 
+        setListMaterials(response.data)
+        //ข้อมูลส่วนประกิบของสินค้า
         const ingredients = response.data.map(item => ({
           material_id: item.material_id || '',
           quantity: item.amount || '',
-          cost_per_quantity: item.cost_per_quantity || 0, // Include cost info if needed
+          cost_per_quantity: item.cost_per_quantity || 0, 
         }));
-  
+        //ข้อมูลสินค้า
         const initialData = {
           product_name: productData.product_name || '',
-          quantity: productData.quantity || '',
-          price: productData.price || '',
+          quantity_per_time: productData.quantity_per_time || '',
+          selling_price_per_quantity: productData.selling_price_per_quantity || '',
           description: productData.description || '',
           file: productData.productpic_name || '',
           ingredients,
@@ -175,21 +179,23 @@ const EditProduct = () => {
   
     getlistMaterialById();
   }, []);
+
+  useEffect(() => {
+    if ((formData.ingredients || []).length > 0 && formData.quantity_per_time) {
+        const totalCost = calculateTotalCost();
+        const costPerQuantity =  totalCost / parseFloat(formData.quantity_per_time || 1); // หลีกเลี่ยงการหารด้วย 0
+        setpricePreQuantity(costPerQuantity);
+    }
+  }, [formData.ingredients, formData.quantity_per_time]);
+
   
   useEffect(() => {
-    const getMaterial = async () => {
-        try {
-            const response = await listMaterialService();
-            console.log(response.data);
-            
-            setListMaterials(response.data);
-        } catch (error) {
-            console.error("Error fetching materials:", error);
-        }
-    };
-    getMaterial();
-  }, []);
-
+    if (formData.selling_price_per_quantity && formData.quantity_per_time) {
+        const costPerQuantity =  formData.selling_price_per_quantity * parseFloat(formData.quantity_per_time);
+        settotalPrice(costPerQuantity);
+    }
+  }, [formData.selling_price_per_quantity, formData.quantity_per_time]);
+  
   return (
     <form onSubmit={handleSubmit}>
       <div className="container mt-5">
@@ -250,19 +256,7 @@ const EditProduct = () => {
               />
             </div>
           </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวน</label>
-            <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='quantity'
-                className="form-control" 
-                placeholder="จำนวน" 
-                value={formData.quantity || ''} 
-                onChange={handleChange} 
-              />
-            </div>
-          </div>
+          
           {(formData.ingredients || []).map((ingredient, index) => (
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
               <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
@@ -319,17 +313,56 @@ const EditProduct = () => {
               />
             </div>
           </div>
-
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ราคาสินค้า</label>
+            <label className="col-sm-2 col-form-label">จำนวนที่ทำ/ครั้ง</label>
+            <div className="row col-sm-5">
+              <input 
+                type="text" 
+                name='quantity_per_time'
+                className="form-control" 
+                placeholder="จำนวน" 
+                value={formData.quantity_per_time || ''} 
+                onChange={handleChange} 
+              />
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
+            <div className="row col-sm-5">
+              <input 
+                type="text" 
+                name='quantity'
+                className="form-control" 
+                placeholder="จำนวน" 
+                value={pricePreQuantity}  
+                readOnly
+              />
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
+            <div className="row col-sm-5">
+              <input 
+                type="text" 
+                name='selling_price_per_quantity'
+                className="form-control" 
+                placeholder="ราคาสินค้า" 
+                value={formData.selling_price_per_quantity || ''} 
+                onChange={handleChange} 
+              />
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
             <div className="row col-sm-5">
               <input 
                 type="text" 
                 name='price'
                 className="form-control" 
                 placeholder="ราคาสินค้า" 
-                value={formData.price || ''} 
+                value={totalPrice} 
                 onChange={handleChange} 
+                readOnly
               />
             </div>
           </div>

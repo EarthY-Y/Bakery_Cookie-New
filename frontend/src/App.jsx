@@ -25,6 +25,7 @@ import { FormProviderSignUpService } from '../API/signUpService'
 import { FormProviderProductService } from '../API/admin/productService'
 import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 import DetailPorductById from '../page/customer-page/product/detailPorductById-page';
+import Cart from '../page/customer-page/cart-page/cartProduct-page';
 
 const router = createBrowserRouter([
   {
@@ -161,6 +162,15 @@ const router = createBrowserRouter([
           {
             path: "/product/:id",
             element: <DetailPorductById />,
+          },
+          {
+            path: "/cart/:id",
+            children: [
+              {
+                path: "",
+                element: <Cart />,
+              },
+            ],
           },
         ],
       }
