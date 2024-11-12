@@ -1,52 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import { getPorductCartService, deletePorductCartService } from '../../../API/customer/productService';
+import React, { useEffect, useState} from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { getPorductCartService,deletePorductCartService } from '../../../API/customer/productService';
 import { formatDate } from '../../datetime';
-import { Link } from 'react-router-dom';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE;
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
-const CartProduct = () => {
-  const [productCart, setProductCart] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);  // สถานะสำหรับเก็บราคาทั้งหมด
+const cartProduct = () => {
+  const {id} = useParams();
+  const [productCart, setProductCart] = useState([])
   const formatPrice = (price) => `฿${price.toLocaleString()}`;
+  const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
-  
+
   useEffect(() => {
-    const getCart = async () => {
+    const getCart = async()=> {
       try {
-        const response = await getPorductCartService();
-        if (!response.data) {
-          throw new Error('ไม่มีข้อมูล');
+        const response = await getPorductCartService()
+        if(!response.data){
+          throw new Error("ไม่มีข้อมูล")
         }
         console.log(response.data);
-        setProductCart(response.data);
-      } catch (error) {
-        alert(error);
+        setProductCart(response.data)
       }
-    };
-    getCart();
-  }, []);
-
-  // คำนวณราคาทั้งหมด
-  useEffect(() => {
-    const total = productCart.reduce((acc, item) => acc + item.selling_price_per_quantity * item.quantity, 0);
-    setTotalPrice(total);
-  }, [productCart]);
+      catch (error) {
+        alert(error)
+      }
+    }
+    getCart()
+  },[])
 
   const addAmount = (cart_product_id) => {
     const updatedCart = productCart.map((item) => {
       if (item.cart_product_id === cart_product_id) {
-        return { ...item, quantity: item.quantity + 1 };
+        return { ...item, quantity: item.quantity + 1 }; // เพิ่มจำนวนสินค้า
       }
-      return item;
+      return item; // ไม่เปลี่ยนแปลงสินค้าชิ้นอื่น
     });
     setProductCart(updatedCart);
   };
-
+  
   const inputAmount = (value, cart_product_id) => {
     const updatedCart = productCart.map((item) => {
-      if (item.cart_product_id === cart_product_id && item.quantity > 1) {
-        return { ...item, quantity: value };
+      if (item.cart_product_id === cart_product_id) {
+        const newValue = Math.max(Number(value), 1); // ตรวจสอบให้ค่าต่ำสุดคือ 1 ใช้ parseInt(value) ก้็ได้เพื่อเเปลงค่าให้มี dataType เดียวกัน
+        return { ...item, quantity: newValue };
       }
       return item;
     });
@@ -56,9 +55,9 @@ const CartProduct = () => {
   const minusAmount = (cart_product_id) => {
     const updatedCart = productCart.map((item) => {
       if (item.cart_product_id === cart_product_id && item.quantity > 1) {
-        return { ...item, quantity: item.quantity - 1 };
+        return { ...item, quantity: item.quantity - 1 }; // ลดจำนวนสินค้า
       }
-      return item;
+      return item; // ไม่เปลี่ยนแปลงสินค้าชิ้นอื่น
     });
     setProductCart(updatedCart);
   };
@@ -66,18 +65,27 @@ const CartProduct = () => {
   const handleDeleteProductCart = (id) => {
     deletePorductCartService(id)
       .then(() => {
-        setProductCart(prevProductCart => prevProductCart.filter(productCart => productCart.cart_product_id !== id));
+        // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
+        setProductCart(prevProductCart => prevProductCart.filter(productCart => productCart.cart_product_id !== id))
       })
-      .catch(err => console.log(err));
-  };
+      .catch(err => console.log(err))
+  }
 
-  return (
+  // คำนวณราคาทั้งหมด
+  useEffect(() => {
+    const total = productCart.reduce((acc, item) => acc + item.selling_price_per_quantity * item.quantity, 0);
+    setTotalPrice(total);
+  }, [productCart]);
+
+  return (    
     <div className="container my-5">
       <h3 className="mb-4">ตะกร้าสินค้าของคุณ</h3>
       <table className="table table-bordered">
         <thead className="thead-light">
           <tr>
-            <th><input type="checkbox" /></th>
+            <th>
+              <input type="checkbox" />
+            </th>
             <th>สินค้า</th>
             <th>ราคาต่อชุด</th>
             <th>จำนวน</th>
@@ -88,8 +96,10 @@ const CartProduct = () => {
         <tbody>
           {productCart.length > 0 ? (
             productCart.map((item) => (
-              <tr key={item.cart_product_id}>
-                <td><input type="checkbox" /></td>
+              <tr key={item.cart_product_id }>
+                <td>
+                  <input type="checkbox" />
+                </td>
                 <td>
                   <div className="d-flex align-items-center">
                     <img
@@ -149,4 +159,4 @@ const CartProduct = () => {
   );
 };
 
-export default CartProduct;
+export default cartProduct;
