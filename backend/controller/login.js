@@ -35,7 +35,7 @@ export const Login = async (req, res) =>{
             if (!match) {
                 return res.status(400).json({ message: "Wrong Password" });
             }
-            const token = jwt.sign({ admin_id: user.admin_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ admin_id: user.admin_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
             return res.status(200).json({ message: "login complete", token: token, role: "admin" });
         } else { 
             const user = results[0];
@@ -43,7 +43,7 @@ export const Login = async (req, res) =>{
             if (!match) {
                 return res.status(400).json({ message: "Wrong Password" });
             }
-            const token = jwt.sign({ customerId: user.customer_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ customerId: user.customer_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
             return res.status(200).json({ message: "login complete", token: token, role: "user" });
         }
     } catch (error) {

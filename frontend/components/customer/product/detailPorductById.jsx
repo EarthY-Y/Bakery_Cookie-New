@@ -79,7 +79,7 @@ const detailPorductById = () => {
         <div className="col-md-6 text-center">
           {productById.productpic_name ? (
             <img
-              src={`${API_URL_PICTURE}/${productById.productpic_name}`}
+              src={ API_URL_PICTURE + productById.productpic_name }
               alt={productById.product_name}
               className="img-fluid rounded shadow-sm"
             />

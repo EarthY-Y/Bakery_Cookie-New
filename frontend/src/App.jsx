@@ -26,6 +26,8 @@ import { FormProviderProductService } from '../API/admin/productService'
 import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 import DetailPorductById from '../page/customer-page/product/detailPorductById-page';
 import Cart from '../page/customer-page/cart-page/cartProduct-page';
+import Payment from '../page/customer-page/cart-page/payment-page';
+import CreateAddress from '../page/customer-page/profile-page/createAddress-page';
 
 const router = createBrowserRouter([
   {
@@ -169,6 +171,19 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: <Cart />,
+              },
+            ],
+          },
+          {
+            path: "/payment/:id",
+            element: <Payment />,
+          },
+          {
+            path: "/create/address",
+            children: [
+              {
+                path: "",
+                element: <CreateAddress />,
               },
             ],
           },

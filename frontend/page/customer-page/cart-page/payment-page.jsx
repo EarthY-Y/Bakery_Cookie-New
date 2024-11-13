@@ -1,13 +1,13 @@
 import React from 'react'
 import LayOut from '../../../components/customer/layOut/layOut'
-import Cart from '../../../components/customer/cart/cartProduct'
+import Payment from '../../../components/customer/cart/payment'
 
-const cart = () => {
+const payment = () => {
   return (
     <LayOut>
-      <Cart />
+      <Payment />
     </LayOut>
   )
 }
 
-export default cart
+export default payment

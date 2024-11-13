@@ -1,5 +1,6 @@
 import express from "express";
-import {getProvice,
+import {
+    getProvice,
     getAmphure,
     getTambon
 } from "../controller/address.js"
@@ -8,8 +9,8 @@ import { verifyCustomerMid } from "../middleware/authUser.js";
 const router = express.Router();
 router.use(express.json());
 
-router.get('/getProvice', getProvice);
-router.get('/amphure/:provinceId', getAmphure)
-router.get('/tambon/:amphureId', getTambon)
+router.get('/customers/get/provice', getProvice);
+router.get('/customers/amphure/:provinceId', getAmphure)
+router.get('/customers/tambon/:amphureId', getTambon)
 
 export default router

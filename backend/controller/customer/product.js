@@ -26,7 +26,7 @@ export const getProductById = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT p.product_name, p.selling_price_per_quantity, p.description, pp.productpic_name  FROM product p "+ 
-                     "INNER JOIN productpicture pp ON pp.product_id = p.product_id",
+                     "INNER JOIN productpicture pp ON pp.product_id = p.product_id WHERE p.product_id = ? ",
                      [id], 
                     (err, result) => { 
                 if (err) return reject(err)

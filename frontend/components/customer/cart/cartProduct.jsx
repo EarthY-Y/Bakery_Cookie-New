@@ -167,8 +167,8 @@ const cartProduct = () => {
           <strong>ราคารวม: {formatPrice(totalPrice)}</strong>
         </div>
         <div>
-          <button className="btn btn-success text-light" disabled={isPaymentDisabled}>
-            <Link to=""></Link> ชำระเงิน
+          <button className="btn btn-success " disabled={isPaymentDisabled}>
+            <Link className="text-light" to={`/payment/`+id}>ชำระเงิน</Link> 
           </button>
         </div>
       </div>

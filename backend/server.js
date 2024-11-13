@@ -12,6 +12,8 @@ import authRoute from "./routes/auth-Route.js"
 import provinceAmphureTambon from "./routes/addressRoute.js"
 import productRoute from "./routes/admin/product-Route.js"
 import productCustomerRoute from "./routes/customer/product-Route.js"
+import paymentRoute from "./routes/customer/payment-Route.js"
+import AddressRoute from "./routes/addressRoute.js"
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -63,5 +65,7 @@ app.use(materialRounte);
 app.use(productRoute);
 app.use(authRoute);
 app.use(adminRoute);
+app.use(paymentRoute)
+app.use(AddressRoute)
 app.use(productCustomerRoute);
 app.use(provinceAmphureTambon);
