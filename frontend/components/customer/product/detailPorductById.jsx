@@ -62,8 +62,9 @@ const detailPorductById = () => {
 
   const handleSubmitProductMaterial = async (event) => {
     event.preventDefault();
+
     try {
-        const res = await createCartService(id, CartId.cartId, productById.price, quantity);
+        const res = await createCartService(id, CartId.cartId, productById.selling_price_per_quantity, quantity);
         console.log(res);
         // navigate('/product');
     } catch (error) {

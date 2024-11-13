@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
-import { getPorductCartService,deletePorductCartService } from '../../../API/customer/productService';
+import { getPorductCartService,deletePorductCartService, upadateCartService } from '../../../API/customer/productService';
 import { formatDate } from '../../datetime';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
@@ -34,6 +34,7 @@ const cartProduct = () => {
   const addAmount = (cart_product_id) => {
     const updatedCart = productCart.map((item) => {
       if (item.cart_product_id === cart_product_id) {
+        handleUpdateCartProduct(cart_product_id, "add", 1)
         return { ...item, quantity: item.quantity + 1 }; // เพิ่มจำนวนสินค้า
       }
       return item; // ไม่เปลี่ยนแปลงสินค้าชิ้นอื่น
@@ -45,6 +46,7 @@ const cartProduct = () => {
     const updatedCart = productCart.map((item) => {
       if (item.cart_product_id === cart_product_id) {
         const newValue = Math.max(Number(value), 1); // ตรวจสอบให้ค่าต่ำสุดคือ 1 ใช้ parseInt(value) ก้็ได้เพื่อเเปลงค่าให้มี dataType เดียวกัน
+        handleUpdateCartProduct(cart_product_id, "input" , newValue)
         return { ...item, quantity: newValue };
       }
       return item;
@@ -55,6 +57,7 @@ const cartProduct = () => {
   const minusAmount = (cart_product_id) => {
     const updatedCart = productCart.map((item) => {
       if (item.cart_product_id === cart_product_id && item.quantity > 1) {
+        handleUpdateCartProduct(cart_product_id, "minus", 1)
         return { ...item, quantity: item.quantity - 1 }; // ลดจำนวนสินค้า
       }
       return item; // ไม่เปลี่ยนแปลงสินค้าชิ้นอื่น
@@ -76,6 +79,20 @@ const cartProduct = () => {
     const total = productCart.reduce((acc, item) => acc + item.selling_price_per_quantity * item.quantity, 0);
     setTotalPrice(total);
   }, [productCart]);
+
+  const handleUpdateCartProduct = async(cart_product_id, status, value) => {
+      try {
+        console.log("handleUpdateCartProduct",cart_product_id, status);
+        
+        const response = await upadateCartService(cart_product_id, status, value)
+        if(!response.data){
+          throw new Error("ไม่มีข้อมูล")
+        }
+      }
+      catch (error) {
+        alert(error)
+      }
+  }
 
   return (    
     <div className="container my-5">
@@ -150,9 +167,9 @@ const cartProduct = () => {
           <strong>ราคารวม: {formatPrice(totalPrice)}</strong>
         </div>
         <div>
-          <Link className="btn btn-success text-light" disabled={isPaymentDisabled}>
-            ชำระเงิน
-          </Link>
+          <button className="btn btn-success text-light" disabled={isPaymentDisabled}>
+            <Link to=""></Link> ชำระเงิน
+          </button>
         </div>
       </div>
     </div>

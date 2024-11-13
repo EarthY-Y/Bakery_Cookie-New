@@ -95,10 +95,10 @@ export const getCart = async (req, res) => {
 
 export const createPorductCart = async (req, res) => {
     try {
-        // console.log("req.body = ", req.body);
+        console.log("req.body = ", req.body);
         const id  = uuidv4();
-        const {productId, cartId, price, quantity} = req.body
-        console.log(productId, cartId, price, quantity);
+        const {productId, cartId, selling_price_per_quantity, quantity} = req.body
+        console.log(productId, cartId, selling_price_per_quantity, quantity);
         const resultsFindProductCart = await new Promise((resolve, reject)=> {
             db.query("SELECT cart_product_id, quantity FROM cart_product WHERE cartId = ? AND product_id = ?", [cartId, productId],
                     (err, result) => { 
@@ -111,7 +111,7 @@ export const createPorductCart = async (req, res) => {
             // console.log("resultsCreateProductCart");
             const resultsCreateProductCart = await new Promise((resolve, reject)=> {
                 db.query("INSERT INTO cart_product (cart_product_id, product_id, cartId, quantity, price)  VALUES (?, ?, ?, ?, ?)",
-                    [id, productId, cartId, quantity, price],
+                    [id, productId, cartId, quantity, selling_price_per_quantity],
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)
@@ -125,7 +125,7 @@ export const createPorductCart = async (req, res) => {
 
             const quantityInt = parseInt(quantity)
             const resultsUpdateProductCart = await new Promise((resolve, reject)=> {
-                db.query("UPDATE cart_product SET quantity = quantity + ?, price = ? WHERE cart_product_id = ?", [quantity, price, cartProductId],
+                db.query("UPDATE cart_product SET quantity = quantity + ?, price = ? WHERE cart_product_id = ?", [quantity, selling_price_per_quantity, cartProductId],
                         (err, result) => {  
                         if (err) return reject(err)
                         resolve(result)
@@ -136,6 +136,48 @@ export const createPorductCart = async (req, res) => {
             throw new Error("query createPorductCart error")
         }
         
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error: error.message });
+    }
+}
+
+export const updatePorductCart = async (req, res) => {
+    try {
+        console.log("req.body = ", req.body);
+        const {cart_product_id, status, value} = req.body
+        if(status === "add"){
+            console.log("add");
+            const resultsUpdateProductCart = await new Promise((resolve, reject)=> {
+                db.query("UPDATE cart_product SET quantity = quantity + ? WHERE cart_product_id = ?", [value,cart_product_id],
+                        (err, result) => {  
+                        if (err) return reject(err)
+                        resolve(result)
+                    })
+            })
+            return res.status(200).json(resultsUpdateProductCart);
+        }else if(status === "minus"){
+            console.log("minus");
+            const resultsUpdateProductCart = await new Promise((resolve, reject)=> {
+                db.query("UPDATE cart_product SET quantity = quantity - ? WHERE cart_product_id = ?", [value,cart_product_id],
+                        (err, result) => {  
+                        if (err) return reject(err)
+                        resolve(result)
+                    })
+            })
+            return res.status(200).json(resultsUpdateProductCart);
+        }else if(status === "input"){
+            console.log("input");
+            const resultsUpdateProductCart = await new Promise((resolve, reject)=> {
+                db.query("UPDATE cart_product SET quantity = ? WHERE cart_product_id = ?", [value,cart_product_id],
+                        (err, result) => {  
+                        if (err) return reject(err)
+                        resolve(result)
+                    })
+            })
+            return res.status(200).json(resultsUpdateProductCart);
+        }
+
     } catch (error) {
         console.error("Error get product:", error);
         res.status(400).json({ message: "Error get product", error: error.message });

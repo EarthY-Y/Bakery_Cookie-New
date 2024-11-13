@@ -56,7 +56,7 @@ export const detailProductByIdService = async(id) => {
 export const createCartService = async(productId, cartId, price, quantity) => {
   try {
     const authToken = localStorage.getItem('token')
-    const response = await axios.post(API_URL + "/create/cart/porduct", {productId: productId, cartId : cartId, price : price, quantity : quantity},
+    const response = await axios.post(API_URL + "/create/cart/porduct", {productId: productId, cartId: cartId, selling_price_per_quantity: price, quantity: quantity},
       {
         headers: {
           'authorization': `Bearer ${authToken}`
@@ -83,6 +83,23 @@ export const getPorductCartService = async() => {
     return response
   }catch (error) {
     console.error("Error listProductService:", error);
+  }
+}
+
+export const upadateCartService = async(cart_product_id, status, value) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.patch(API_URL + "/update/product", {cart_product_id: cart_product_id, status: status, value:value},
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    ); 
+    //console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error listProductByIdService:", error);
   }
 }
 
