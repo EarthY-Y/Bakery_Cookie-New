@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listMaterialService, deleteMaterialByIdService } from '../../../API/admin/materialService'
-import { formatDate } from '../../datetime'
+import { formatDate } from '../../untils/frommatters/datetime'
 import { Table, Button } from 'react-bootstrap'
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import { formatDate } from '../../datetime';
+import { formatDate } from '../../untils/frommatters/datetime';
 import { Table, Button } from 'react-bootstrap';
 import { listProductService, deleteProductByIdService } from '../../../API/admin/productService';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE

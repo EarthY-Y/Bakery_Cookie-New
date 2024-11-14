@@ -1,16 +1,15 @@
 import React, { useEffect, useState} from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { getPorductCartService,deletePorductCartService, upadateCartService } from '../../../API/customer/productService';
-import { formatDate } from '../../datetime';
+import { formatDate } from '../../untils/frommatters/datetime';
+import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
   const {id} = useParams();
   const [productCart, setProductCart] = useState([])
-  const formatPrice = (price) => `฿${price.toLocaleString()}`;
   const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
 
@@ -127,7 +126,7 @@ const cartProduct = () => {
                     <span>ชื่อสินค้า {item.product_name}</span>
                   </div>
                 </td>
-                <td>{formatPrice(item.selling_price_per_quantity)}</td>
+                <td>{numberGrouping(item.selling_price_per_quantity)}</td>
                 <td>
                   <div className="d-flex align-items-center">
                     <button className="btn btn-outline-secondary" onClick={() => minusAmount(item.cart_product_id)}>-</button>
@@ -147,7 +146,7 @@ const cartProduct = () => {
                     <button className="btn btn-outline-secondary" onClick={() => addAmount(item.cart_product_id)}>+</button>
                   </div>
                 </td>
-                <td>{formatPrice(item.selling_price_per_quantity * item.quantity)}</td>
+                <td>{numberGrouping(item.selling_price_per_quantity * item.quantity)}</td>
                 <td>
                   <button className="btn btn-danger" onClick={() => handleDeleteProductCart(item.cart_product_id)}>ลบ</button>
                 </td>
@@ -164,7 +163,7 @@ const cartProduct = () => {
       </table>
       <div className="d-flex justify-content-between">
         <div>
-          <strong>ราคารวม: {formatPrice(totalPrice)}</strong>
+          <strong>ราคารวม: {numberGrouping(totalPrice)}</strong>
         </div>
         <div>
           <button className="btn btn-success " disabled={isPaymentDisabled}>

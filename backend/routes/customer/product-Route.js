@@ -14,7 +14,7 @@ import { verifyCustomerMid } from "../../middleware/authUser.js"
 const router = express.Router();
 router.use(express.json());
 
-router.get('/customers/product',verifyCustomerMid, getProductCustomer);
+router.get('/customers/get/product',verifyCustomerMid, getProductCustomer); //ตั้งว่า /product ไม่ได้เพราะว่าไปซ้ำกับฝั่ง admin ต้องระวังเรื่องการตั้ง Route ซ้ำ
 router.get('/customers/product/:id',verifyCustomerMid, getProductById);
 router.get('/customers/get/cart',verifyCustomerMid, getCart);
 router.post('/customers/create/cart/porduct',verifyCustomerMid, createPorductCart);

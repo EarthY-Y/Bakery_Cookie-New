@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { listProductByIdService } from '../../../API/admin/productService';
-import { formatDate } from '../../datetime';
+import { formatDate } from '../../untils/frommatters/datetime';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
