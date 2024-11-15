@@ -18,7 +18,7 @@ export const getMaterial = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get material", error);
-        return res.status(400).json({ message: "Error get material", error: error.message });
+        return res.status(400).json({ message: "Error get material", error });
     }
 }
 
@@ -68,7 +68,7 @@ export const createMaterial = async (req, res) => {
         return res.status(200).json({ message: "Material created successfully", results });
     } catch (error) {
         console.error("Error creating material:", error);
-        return res.status(400).json({ message: "Error creating material", error: error.message });
+        return res.status(400).json({ message: "Error creating material", error });
     }
 }
 
@@ -138,7 +138,7 @@ export const updateMaterial = async (req, res) => {
         res.status(200).json({ message: 'Material updated successfully' });
     } catch (error) {
         console.error("Error get customer by id:", error);
-        return res.status(400).json({ message: "Error get province", error: error.message });
+        return res.status(400).json({ message: "Error get province", error});
     }
   };
   

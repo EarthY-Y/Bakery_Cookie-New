@@ -17,7 +17,7 @@ export const getCustomer = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get customer:", error);
-        res.status(400).json({ message: "Error get customer", error: error.message });
+        res.status(400).json({ message: "Error get customer", error});
     }
 }
 
@@ -34,7 +34,7 @@ export const getCustomerById = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get customer by id:", error);
-        return res.status(400).json({ message: "Error get customer by id", error: error.message });
+        return res.status(400).json({ message: "Error get customer by id", error });
     }
 }
 
@@ -66,7 +66,7 @@ export const createCustomer = async (req, res) => {
         
     } catch (error) {
         console.error("Error creating customer:", error);
-        res.status(400).json({ message: "Error creating customer", error: error.message });
+        res.status(400).json({ message: "Error creating customer", error });
     }
 }
 
@@ -100,6 +100,6 @@ export const createAddress = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error });
     }
 }

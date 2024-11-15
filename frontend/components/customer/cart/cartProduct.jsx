@@ -106,7 +106,7 @@ const cartProduct = () => {
             <th>ราคาต่อชุด</th>
             <th>จำนวน</th>
             <th>ราคารวม</th>
-            <th>แอคชัน</th>
+            <th>ลบสินค้า</th>
           </tr>
         </thead>
         <tbody>

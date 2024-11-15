@@ -107,8 +107,8 @@ const detailPorductById = () => {
             }}
             value={quantity}
             onChange={(e) => {
-              const newValue = Number(e.target.value);
-              if (newValue > 0) setQuantity(newValue); // อัปเดตเฉพาะค่าที่มากกว่า 0
+              const newValue = Math.max(Number(e.target.value), 1)
+              setQuantity(newValue)
             }}
           />
           <button onClick={handleIncreaseQuantity} className="btn"><h2 className="bi bi-patch-plus-fill"></h2></button>
