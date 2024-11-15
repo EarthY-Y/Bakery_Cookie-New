@@ -36,7 +36,7 @@ function Sidebaradmin() {
             <Accordion.Header>การสั่งซื้อ</Accordion.Header>
             <Accordion.Body style={{ backgroundColor: '#f8f9fa' }}>
               <Nav.Item>
-                <Nav.Link to="#" style={{ color: 'Black' }}>รายการการสั่งซื้อ</Nav.Link>
+                <Nav.Link as={Link} to="/orderslist" style={{ color: 'Black' }}>รายการการสั่งซื้อ</Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link to="#" style={{ color: 'Black' }}>ประวัติการสั่งซื้อ</Nav.Link>

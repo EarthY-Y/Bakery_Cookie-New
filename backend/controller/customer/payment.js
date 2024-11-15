@@ -1,7 +1,7 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import { passToken } from "../../middleware/passAuth.js";
-import { createCart } from "./product.js";
+import {createCart} from "./product.js"
 
 export const validateCustomerAddress = async (req, res) => {
     try {
@@ -76,7 +76,7 @@ export const createOrders = async (req, res) => {
         console.log(cartItemId);
         
         const results = await new Promise((resolve, reject)=> {
-            db.query("INSERT INTO orders (orders_id, customer_id, cartId, quantity, price, status) VALUES (?, ?, ?, ?, ?, ?)",[orderId, authToken.customerId, cartItemId, totalQuantity, totalprice, "wait for approve"],
+            db.query("INSERT INTO orders (orders_id, customer_id, cartId, quantity, price, status) VALUES (?, ?, ?, ?, ?, ?)",[orderId, authToken.customerId, cartItemId, totalQuantity, totalprice, "wait for stament"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -105,4 +105,63 @@ const updateStatusCartProduct = async (cartItemId) => {
     })
     // console.log("results",results);
     // return res.status(200).json(results);
+}
+
+export const getPaymentOrders = async (req, res) => {
+    try {
+        const id = req.params.id
+        console.log("id",id);
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        const resultsFindOrders = await new Promise((resolve, reject)=> {          
+            db.query("SELECT o.orders_id, o.quantity, o.price FROM orders o"+
+                    " INNER JOIN cart c ON o.cartId = c.cartId"+
+                    " INNER JOIN cart_product cp ON c.cartId = cp.cartId"+
+                    " INNER JOIN product p ON p.product_id = cp.product_id"+
+                    " WHERE o.customer_id = ? AND o.status = ? AND o.cartId = ?"+
+                    " GROUP BY orders_id;", 
+                    [authToken.customerId ,'wait for stament', id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log(resultsFindOrders);
+        
+        res.status(200).json(resultsFindOrders)
+    }catch(error){
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error});
+    }
+}
+
+export const updatePaymentOrder = async (req, res) => {
+    try {
+        console.log("updatePaymentOrder");
+        
+        const id = req.params.id
+        const statement_picture = req.file.filename;
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ message: "User not found" });
+        }
+        console.log(id, statement_picture);
+        
+        const results = await new Promise((resolve, reject)=> {
+            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, 'check out', authToken.customerId, id],
+                    (err, result) => { 
+                        if (err) return reject(err)
+                        resolve(result)
+                    })
+        })
+        res.status(200).json(results)
+    }catch(error){
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error});
+    }
 }

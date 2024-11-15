@@ -7,8 +7,7 @@ const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 export const createMaterialService = async(formData) => { 
     console.log(formData);
     try {
-        const authToken = localStorage.getItem('token')
-        ;
+        const authToken = localStorage.getItem('token');
         const res = await axios.post(API_URL + '/material/create', formData,
             {
                 headers: {

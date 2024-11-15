@@ -99,9 +99,6 @@ const cartProduct = () => {
       <table className="table table-bordered">
         <thead className="thead-light">
           <tr>
-            <th>
-              <input type="checkbox" />
-            </th>
             <th>สินค้า</th>
             <th>ราคาต่อชุด</th>
             <th>จำนวน</th>
@@ -113,9 +110,6 @@ const cartProduct = () => {
           {productCart.length > 0 ? (
             productCart.map((item) => (
               <tr key={item.cart_product_id }>
-                <td>
-                  <input type="checkbox" />
-                </td>
                 <td>
                   <div className="d-flex align-items-center">
                     <img
@@ -167,7 +161,7 @@ const cartProduct = () => {
         </div>
         <div>
           <button className="btn btn-success " disabled={isPaymentDisabled}>
-            <Link className="text-light" to={`/payment/`+id}>ชำระเงิน</Link> 
+            <Link className="text-light" to={`/orders/`+id}>สั่งซื้อ</Link> 
           </button>
         </div>
       </div>

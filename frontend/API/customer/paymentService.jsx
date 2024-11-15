@@ -40,7 +40,6 @@ export const getAddressCustomer = async() => {
 export const createOrder = async(productCart, totalPrice, totalQuantity) => {
   try {
     const authToken = localStorage.getItem('token')
-  
     const response = await axios.post(API_URL + "/create/order",{productCart: productCart, totalprice: totalPrice, totalQuantity: totalQuantity},
       {
         headers: {
@@ -52,5 +51,38 @@ export const createOrder = async(productCart, totalPrice, totalQuantity) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+  }
+}
+
+export const getOrdersService = async(id) => {
+  try {
+    console.log(id);
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/orderscart/payment/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    return response
+  }catch (error) {
+    console.error("Error listProductService:", error);
+  }
+}
+
+export const updatePaymentOrder = async(formData, id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.patch(API_URL + "/update/orders/payment/"+id, formData, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    return response
+  }catch (error) {
+    console.error("Error listProductService:", error);
   }
 }

@@ -5,7 +5,7 @@ import session from "express-session";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
 import customerRoute from "./routes/customer/customer-Route.js";
-import orderRounte from "./routes/customer/order-Route.js";
+import orderRounte from "./routes/admin/order-Route.js";
 import materialRounte from "./routes/admin/material-Route.js";
 import adminRoute from "./routes/admin/admin-Route.js";
 import authRoute from "./routes/auth-Route.js"

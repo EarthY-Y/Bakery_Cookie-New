@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_Port
 
 export const createCustomer = async(fromData) => {
   try {
-    const response  = await axios.post( API_URL + '/customer/create', fromData)
+    const response  = await axios.post( API_URL + '/customers/create', fromData)
     console.log(response );
     return response 
 

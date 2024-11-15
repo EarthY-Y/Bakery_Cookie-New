@@ -1,16 +1,17 @@
 import React, { useEffect, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { validateAddressCustomer, getAddressCustomer, createOrder } from '../../../API/customer/paymentService';
-import { getPorductCartService} from '../../../API/customer/productService';
+import { useNavigate, useParams } from 'react-router-dom';
+import { validateAddressCustomer, getAddressCustomer, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
+  const id = useParams().id //เพราะว่ามันส่งมาจาก navigate ของหน้า orders เลยมาเป็น object ทำให้เกิดปัญหากับหลังบ้านเลยต้อง .id
   const [address, setAddress] = useState([])
-  const [productCart, setProductCart] = useState([])
+  const [productOrder, setOrders] = useState([])
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); 
   const [totalPrice, setTotalPrice] = useState(0); 
-  const [totalQuantity, setTotalQuantity] = useState(0); 
+  const [Picture, setPicture] = useState(null);
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -51,12 +52,13 @@ const cartProduct = () => {
   useEffect(() => {
     const getCart = async()=> {
       try {
-        const response = await getPorductCartService()
-        if(!response.data || response.data.length === 0){
-          throw new Error("ไม่มีข้อมูล")
-        }
+        const response = await getOrdersService(id)
+        // if(!response.data || response.data.length === 0){
+        //   throw new Error("ไม่มีข้อมูล")
+        // }
         console.log(response.data);
-        setProductCart(response.data)
+        setOrders(response.data[0])
+        setTotalPriceProduct(response.data[0].price)
       }
       catch (error) {
         alert(error)
@@ -66,33 +68,25 @@ const cartProduct = () => {
     getCart()
   },[])
   
-  useEffect(() => {
-    const total = productCart.reduce((acc, item) => acc + item.quantity, 0);
-    setTotalQuantity(total);
-  }, [productCart]);
-
-  // คำนวณราคาสินค้า
-  useEffect(() => {
-    const total = productCart.reduce((acc, item) => acc + item.selling_price_per_quantity * item.quantity, 0);
-    setTotalPriceProduct(total);
-  }, [productCart]);
   // 
   useEffect(() => {
     const total = totalPriceProduct + 52 /* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
     setTotalPrice(total);
-  }, [totalPriceProduct]);
+  }, [productOrder]);
 
   const handleSubmmit = async(event) => {
     event.preventDefault();
     try {
+      const formData = new FormData();  
+      formData.append('file', Picture);
       console.log();
-      const response = await createOrder(productCart, totalPrice, totalQuantity)
+      const response = await updatePaymentOrder(formData, id )
+      console.log(response);
       if(response.data){
         navigate("/home")
       }else {
         throw new Error("เกิดข้อผิดพลาดบ้างอย่าง")
       }
-      
     } catch (error) {
       console.log(error);
       alert(error)
@@ -113,67 +107,37 @@ const cartProduct = () => {
               <b>{address.houesNo} ตำบล{address.tambon_nameTH} อำเภอ{address.amphure_nameTH} จังหวัด{address.province_nameTH} {address.zip_code}</b>
             </div>
           </div>
-          
         </div>
-        <table className="table table-bordered mt-3 rounded">
-          <thead className="thead-light">
-            <tr>
-              <th>รายการสินค้าที่สั่งซื้อ</th>
-              <th>ราคาต่อชุด</th>
-              <th>จำนวน</th>
-              <th>ราคารวม</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productCart.length > 0 ? (
-              productCart.map((item) => (
-                <tr key={item.cart_product_id }>
-                  <td>
-                    <div className="d-flex align-items-center">
-                      <img
-                        src={`${API_URL_PICTURE}/${item.productpic_name}`}
-                        alt="Product"
-                        style={{ width: '150px', height: '100px', marginRight: '10px' }}
-                      />
-                      <span>ชื่อสินค้า {item.product_name}</span>
-                    </div>
-                  </td>
-                  <td>{numberGrouping(item.selling_price_per_quantity)}</td>
-                  <td>
-                    <div className="d-flex align-items-center">
-                        <p>{item.quantity}</p>
-                    </div>
-                  </td>
-                  <td>{numberGrouping(item.selling_price_per_quantity * item.quantity)}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="text-center">
-                  ไม่มีสินค้าในตะกร้า
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div className="d-flex justify-content-between bg-light p-3 rounded">
+        <div className=" bg-light mt-3 p-3 rounded text-center">
+          <div className='d-flex justify-content-between'>
             <div>
-              <h3>ช่องทางการชำระเงิน</h3>
-              <div>
-                <h5>ธนาคารกรุงไทย เลขที่บัญชี: <strong>000-000-000-0</strong> </h5> 
+                <h3>ช่องทางการชำระเงิน</h3>
+                <div>
+                  <h5>ธนาคารกรุงไทย เลขที่บัญชี: <strong>000-000-000-0</strong> </h5> 
+                </div>
+              </div>
+              
+              <div className='me-5'>
+                <div className='mb-3'>
+                  <strong className="text-uppercase">ราคารวมสินค้า: {numberGrouping(totalPriceProduct)}</strong> <br />
+                  <strong className="text-uppercase">ราคาส่ง: {numberGrouping(52)}</strong> <br />
+                  <strong className="text-uppercase text-danger">ราคารวม: {numberGrouping(totalPrice)}</strong> <br />
+                </div>
               </div>
             </div>
-            
-            <div className='me-5'>
-              <div className='mb-3'>
-                <strong className="text-uppercase">ราคารวมสินค้า: {numberGrouping(totalPriceProduct)}</strong> <br />
-                <strong className="text-uppercase">ราคาส่ง: {numberGrouping(52)}</strong> <br />
-                <strong className="text-uppercase text-danger">ราคารวม: {numberGrouping(totalPrice)}</strong> <br />
-              </div>
-              <button type='submit' className="btn btn-success btn-lg">ชำระเงิน</button>
+            <div className="position-relative " style={{ margin: '2%', width: '300px', height: '300px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              {Picture ? (
+                <img src={URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+              ) : (
+                <span>เพิ่มรูปวัตถุดิบ</span>
+              )}
+              <input type="file" className="position-absolute top-0 start-0 w-100 h-100" style={{ opacity: 0, cursor: 'pointer' }} onChange={(e) => setPicture(e.target.files[0])} />
+            </div>
+            <div>
+              <button type='submit' className="btn btn-success btn-lg" disabled={!Picture}>ชำระเงิน</button>
             </div>
           </div>
-      </div>
+        </div>
     </form>
   );
 };
