@@ -111,7 +111,7 @@ const CreateProduct = () => {
   return (
     <form onSubmit={handleSubmitProductMaterial}>
       <div className="container mt-5">
-        <Link className="btn btn-light text-black mb-4" to="/product">
+        <Link className="btn btn-light text-dark mb-4" to="/product">
           <i className="bi bi-arrow-left"></i>ย้อนกลับ
         </Link>
         <div className="mb-4 card col-md-12 px-40 card-body">
@@ -193,7 +193,7 @@ const CreateProduct = () => {
                 </div>
             </div>
           ))}
-          <div className="mb-3 d-md-flex justify-content-center">
+          <div className="mb-3 d-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
           
@@ -278,9 +278,9 @@ const CreateProduct = () => {
             </div>
           </div>
 
-          <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
-            <button type="button" className="btn btn-secondary me-5" onClick={() => {handleReset()}} style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button type="submit" className="btn btn-primary"> เพิ่มสินค้า </button>
+          <div className="d-flex justify-content-center gap-3 my-4">
+            <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => {handleReset()}} style={{ width: '100px', height: '40px' }}>ล้าง</button>
+            <button type="submit" className="btn btn-primary mt-3 px-4 ms-5"> เพิ่มสินค้า </button>
           </div>
         </div>
       </div>

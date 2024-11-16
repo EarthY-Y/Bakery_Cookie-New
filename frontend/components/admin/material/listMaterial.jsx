@@ -35,13 +35,13 @@ const ListMaterial = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>วัตถุดิบ</h2>
-        <Link to="/material/create" className="btn btn-outline-warning text-black">
+        <Link to="/material/create" className="btn btn-outline-warning text-dark">
           เพิ่มวัตถุดิบ
         </Link>
       </div>
 
       <p>จำนวน {materials.length} รายการ</p>
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive="sm">
         <thead>
           <tr>
             <th className="text-center align-middle" style={{ width: '15%' }}>รูปภาพ</th>
@@ -58,15 +58,15 @@ const ListMaterial = () => {
         <tbody>
           {materials.map((material) => (
             <tr key={material.material_id}>
-              <td><img src={API_URL_PICTURE + material.materialpic_name} height={75} width={120} alt={material.material_name} /></td>
+              <td><img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
               <td>{material.material_name}</td>
               <td>{material.quantity} กรัม</td>
               <td>{material.cost} บาท</td>
               <td>{material.cost_per_quantity} บาท</td>
               <td>{formatDate(material.create_at)}</td>
-              <td><Link to={`view/${material.material_id}`} className="btn btn-outline-warning text-black">View</Link></td>
-              <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-black"><i className="bi bi-pencil"></i></Link></td>
-              <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-outline-warning btn-danger text-black"><i className="bi bi-trash"></i></button></td>
+              <td><Link to={`view/${material.material_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto">View</Link></td>
+              <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
+              <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-outline-warning btn-danger text-dark d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
             </tr>
           ))}
         </tbody>

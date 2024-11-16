@@ -36,13 +36,13 @@ const listProduct = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>สินค้าหน้าร้าน</h2>
-        <Link to="/product/create" className="btn btn-outline-warning text-black">
+        <Link to="/product/create" className="btn btn-outline-warning text-dark">
          เพิ่มสินค้า
         </Link>
       </div>
 
       <p>จำนวน {products.length} รายการ</p>
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive="sm">
         <thead>
           <tr>
             <th className="text-center align-middle" style={{width: '20%' }}>รูปภาพ</th>
@@ -60,15 +60,15 @@ const listProduct = () => {
           
            {products.map((products, index) => (
               <tr key={index}>
-                <td><img src={API_URL_PICTURE + products.productpic_name} height={75} width={120} className='text-center'/></td>
+                <td><img src={API_URL_PICTURE + products.productpic_name} className="img-fluid text-center" style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                 <td>{products.product_name}</td>
                 <td>{products.cost}</td>
                 <td>{products.selling_price_per_quantity}</td>
                 <td>{products.quantity_per_time}</td>
                 {/* <td>{formatDate(products.create_at)}</td> */}
-                <td><Link to={`view/${products.product_id}`} className="btn btn-outline-warning text-black">View</Link></td>
-                <td><Link to={`edit/${products.product_id}`} className="btn btn-outline-warning text-black">Edit</Link></td>
-                <td><button onClick={() => handleDelete(products.product_id)} className="btn btn-outline-warning btn-danger text-black">Delete</button></td>
+                <td><Link to={`view/${products.product_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto">View</Link></td>
+                <td><Link to={`edit/${products.product_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto">Edit</Link></td>
+                <td><button onClick={() => handleDelete(products.product_id)} className="btn btn-outline-warning btn-danger text-dark d-grid mx-auto">Delete</button></td>
             </tr>
           ) )}
         </tbody>

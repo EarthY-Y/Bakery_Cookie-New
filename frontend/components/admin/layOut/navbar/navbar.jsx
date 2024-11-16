@@ -12,7 +12,7 @@ function Navbaradmin() {
   }
 
   return (
-    <Navbar expand="lg" style={{ backgroundColor: '#347928', height: '50px' }}>
+    <Navbar expand="lg" style={{ backgroundColor: '#347928', height: '65px' }}>
       <Container fluid className="d-flex justify-content-between align-items-center">
         
         {/* โลโก้ */}

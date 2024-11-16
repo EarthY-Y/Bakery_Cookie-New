@@ -42,7 +42,7 @@ const createMaterial = () => {
 
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-black mb-4" to="/material">
+      <Link className="btn btn-light text-dark mb-4" to="/material">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 card-body">
@@ -109,10 +109,9 @@ const createMaterial = () => {
             onChange={(e) => setPicture(e.target.files[0])}
           />
         </div> */}
-
-          <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
-            <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}>เพิ่ม</button>
+          <div className="d-flex justify-content-center gap-3 my-4">
+            <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
+            <button className="btn btn-primary mt-3 px-4 ms-5" type="submit">เพิ่ม</button>
           </div>
         </form>
       </div>

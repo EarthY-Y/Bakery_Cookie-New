@@ -199,7 +199,7 @@ const EditProduct = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="container mt-5">
-        <Link className="btn btn-light text-black mb-4" to="/product">
+        <Link className="btn btn-light text-dark mb-4" to="/product">
           <i className="bi bi-arrow-left"></i>ย้อนกลับ
         </Link>
         <div className="mb-4 card col-md-12 px-40 card-body">
@@ -379,9 +379,9 @@ const EditProduct = () => {
             </div>
           </div>
 
-          <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
-            <button type="button" className="btn btn-secondary me-5" onClick={() => {handleReset()}} style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button type="submit" className="btn btn-primary"> บันทึกข้อมูล </button>
+          <div className="d-flex justify-content-center gap-3 my-4">
+            <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => {handleReset()}}>ล้าง</button>
+            <button type="submit" className="btn btn-primary mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
           </div>
         </div>
       </div>

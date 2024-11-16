@@ -33,7 +33,7 @@ const listMaterialById = () => {
 
   return (
     <div className="container mt-5 p-4 ">
-      <Link to="/material" className="btn btn-light text-black mb-4">
+      <Link to="/material" className="btn btn-light text-dark mb-4">
               <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
