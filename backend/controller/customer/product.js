@@ -17,7 +17,7 @@ export const getProductCustomer = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error });
     }
 }
 
@@ -36,7 +36,7 @@ export const getProductById = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error });
     }
 }
 
@@ -45,7 +45,7 @@ export const createCart = async (id) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("INSERT INTO cart (cartId ,customer_id, status) VALUES(?, ?, ?)",
-                     [cartId, id, "active"], 
+                     [cartId, id, "cart-พร้อมใช้งาน"], 
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)
@@ -53,7 +53,6 @@ export const createCart = async (id) => {
         })
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
     }
 }
 
@@ -65,7 +64,7 @@ export const getCart = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'active' LIMIT 1;",
+            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
                      [authToken.customerId], 
                     (err, result) => { 
                         if (err) return reject(err)
@@ -77,7 +76,7 @@ export const getCart = async (req, res) => {
             
             await createCart(authToken.customerId)
             const resultsCreateProduct = await new Promise((resolve, reject)=> {
-                db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'active' LIMIT 1;",
+                db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
                          [authToken.customerId], 
                         (err, result) => { 
                             if (err) return reject(err)
@@ -89,7 +88,7 @@ export const getCart = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error });
     }
 }
 
@@ -138,7 +137,7 @@ export const createPorductCart = async (req, res) => {
         
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error });
     }
 }
 
@@ -180,7 +179,7 @@ export const updatePorductCart = async (req, res) => {
 
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error });
     }
 }
 
@@ -193,7 +192,7 @@ export const getPorductCart = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'active' LIMIT 1;",
+            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
                      [authToken.customerId], 
                     (err, result) => { 
                         if (err) return reject(err)
@@ -215,7 +214,7 @@ export const getPorductCart = async (req, res) => {
         res.status(200).json(resultsFindProductCart)
     }catch(error){
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error});
     }
 }
 
@@ -234,6 +233,6 @@ export const deleteProductCart = async (req, res) => {
         res.status(200).json(results)
     } catch (error) {
         console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error: error.message });
+        res.status(400).json({ message: "Error get product", error});
     }
 }

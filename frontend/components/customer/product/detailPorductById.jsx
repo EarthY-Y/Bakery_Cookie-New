@@ -1,7 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService, createCartService, getCartService } from '../../../API/customer/productService';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
@@ -12,7 +11,8 @@ const detailPorductById = () => {
   const [CartId, setCartId] = useState()
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate()
-
+  console.log(id);
+  
   const handleIncreaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
@@ -107,8 +107,8 @@ const detailPorductById = () => {
             }}
             value={quantity}
             onChange={(e) => {
-              const newValue = Number(e.target.value);
-              if (newValue > 0) setQuantity(newValue); // อัปเดตเฉพาะค่าที่มากกว่า 0
+              const newValue = Math.max(Number(e.target.value), 1)
+              setQuantity(newValue)
             }}
           />
           <button onClick={handleIncreaseQuantity} className="btn"><h2 className="bi bi-patch-plus-fill"></h2></button>

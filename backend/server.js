@@ -5,7 +5,7 @@ import session from "express-session";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
 import customerRoute from "./routes/customer/customer-Route.js";
-import orderRounte from "./routes/customer/order-Route.js";
+import orderRounte from "./routes/admin/order-Route.js";
 import materialRounte from "./routes/admin/material-Route.js";
 import adminRoute from "./routes/admin/admin-Route.js";
 import authRoute from "./routes/auth-Route.js"
@@ -14,6 +14,7 @@ import productRoute from "./routes/admin/product-Route.js"
 import productCustomerRoute from "./routes/customer/product-Route.js"
 import paymentRoute from "./routes/customer/payment-Route.js"
 import AddressRoute from "./routes/addressRoute.js"
+import StatusRoute from "./routes/admin/status-Route.js"
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -67,5 +68,6 @@ app.use(authRoute);
 app.use(adminRoute);
 app.use(paymentRoute)
 app.use(AddressRoute)
+app.use(StatusRoute)
 app.use(productCustomerRoute);
 app.use(provinceAmphureTambon);

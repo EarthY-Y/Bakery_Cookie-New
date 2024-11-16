@@ -31,7 +31,7 @@ export const getProvice = async(req, res) => {
         return res.status(200).json(response);
     } catch (error) {
         console.error("Error get customer by id:", error);
-        return res.status(400).json({ message: "Error get province", error: error.message });
+        return res.status(400).json({ message: "Error get province", error});
     }
 }
 

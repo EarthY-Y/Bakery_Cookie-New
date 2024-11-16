@@ -28,6 +28,13 @@ import DetailPorductById from '../page/customer-page/product/detailPorductById-p
 import Cart from '../page/customer-page/cart-page/cartProduct-page';
 import Payment from '../page/customer-page/cart-page/payment-page';
 import CreateAddress from '../page/customer-page/profile-page/createAddress-page';
+import LisetOrder from '../page/admin-page/order-page/listOrders-page'
+import Orders from '../page/customer-page/cart-page/orders-page';
+import OrderById from '../page/admin-page/order-page/ordersBtId-page';
+import Status from '../page/admin-page/order-page/status/status-page';
+import CreateStatus from '../page/admin-page/order-page/status/createStatus-page'
+import EditCratStatus from '../page/admin-page/order-page/status/editCartStatus-page'
+import EditOrderStatus from '../page/admin-page/order-page/status/editOrderStatus-page'
 
 const router = createBrowserRouter([
   {
@@ -145,6 +152,40 @@ const router = createBrowserRouter([
               },
             ],
           },
+          {
+            path: "/orderslist",
+            children: [
+              {
+                path: "",
+                element: <LisetOrder />,
+              },
+              {
+                path: "view/detail/order/:id",
+                element: <OrderById />,
+              },
+            ],
+          },
+          {
+            path: "/status",
+            children: [
+              {
+                path: "",
+                element: <Status />,
+              },
+              {
+                path: "create",
+                element: <CreateStatus/>
+              },
+              {
+                path: "edit/cart/:id",
+                element: <EditCratStatus/>
+              },
+              {
+                path: "edit/order/:id",
+                element: <EditOrderStatus/>
+              },
+            ],
+          },
         ],
       },
     
@@ -173,6 +214,10 @@ const router = createBrowserRouter([
                 element: <Cart />,
               },
             ],
+          },
+          {
+            path: "/orders/:id",
+            element: <Orders />,
           },
           {
             path: "/payment/:id",
