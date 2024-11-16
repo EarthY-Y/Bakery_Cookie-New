@@ -76,7 +76,7 @@ export const createOrders = async (req, res) => {
         console.log(cartItemId);
         
         const results = await new Promise((resolve, reject)=> {
-            db.query("INSERT INTO orders (orders_id, customer_id, cartId, quantity, price, status) VALUES (?, ?, ?, ?, ?, ?)",[orderId, authToken.customerId, cartItemId, totalQuantity, totalprice, "wait for stament"],
+            db.query("INSERT INTO orders (orders_id, customer_id, cartId, quantity, price, status) VALUES (?, ?, ?, ?, ?, ?)",[orderId, authToken.customerId, cartItemId, totalQuantity, totalprice, "order-รอชำระเงิน"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -96,16 +96,19 @@ export const createOrders = async (req, res) => {
 }
 
 const updateStatusCartProduct = async (cartItemId) => {
-    const results = await new Promise((resolve, reject)=> {
-        db.query("UPDATE cart SET status = ? WHERE cartId = ?",["check out",cartItemId],
-                (err, result) => { 
-            if (err) return reject(err)
-            resolve(result)
-        })
-    })
-    // console.log("results",results);
+    const results = await new Promise((resolve, reject) => {
+        db.query(
+            "UPDATE cart SET status = ? WHERE cartId = ?",
+            ["cart-ทำรายการแล้ว", cartItemId],
+            (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            }
+        );
+    });
+
     // return res.status(200).json(results);
-}
+};
 
 export const getPaymentOrders = async (req, res) => {
     try {
@@ -124,7 +127,7 @@ export const getPaymentOrders = async (req, res) => {
                     " INNER JOIN product p ON p.product_id = cp.product_id"+
                     " WHERE o.customer_id = ? AND o.status = ? AND o.cartId = ?"+
                     " GROUP BY orders_id;", 
-                    [authToken.customerId ,'wait for stament', id],
+                    [authToken.customerId ,'order-รอชำระเงิน', id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -152,8 +155,8 @@ export const updatePaymentOrder = async (req, res) => {
         }
         console.log(id, statement_picture);
         
-        const results = await new Promise((resolve, reject)=> {
-            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, 'check out', authToken.customerId, id],
+        const results = await new Promise((resolve, reject)=> { //WHERE customer_id = ? and cartId = ? อาจจะเกิด cart_id ซ้ำกันได้อนาคตต้องเเก้ไปใช้ orders_id
+            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, 'order-ชำระเงินเเล้ว', authToken.customerId, id],
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)

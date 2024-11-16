@@ -44,6 +44,17 @@ function Sidebaradmin() {
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+
+        <Accordion defaultActiveKey="1">
+          <Accordion.Item eventKey="1" style={{ border: 'none' }}>
+            <Accordion.Header>อื่นๆ</Accordion.Header>
+            <Accordion.Body style={{ backgroundColor: '#f8f9fa' }}>
+              <Nav.Item>
+                <Nav.Link as={Link} to="/status" style={{ color: 'Black' }}>สถานะ</Nav.Link>
+              </Nav.Item>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
       </Nav>
     </div>
     

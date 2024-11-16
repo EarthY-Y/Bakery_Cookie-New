@@ -119,7 +119,7 @@ const CreateProduct = () => {
           
           <div className="mb-3 text-center">
             <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-              {formData.file ? (
+              {formData.file ? ( /* เป็นรูปเเบบการเขียน if-eles ที่เรียกว่า Ternary Operator ใช้กับใน JSX เเต่ถ้าต้องการนำกลับมาใช้ได้ต้องเขียนเป็น renderStatus*/
                 <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <span>เพิ่มรูปสินค้า</span>

@@ -45,7 +45,7 @@ export const createCart = async (id) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("INSERT INTO cart (cartId ,customer_id, status) VALUES(?, ?, ?)",
-                     [cartId, id, "active"], 
+                     [cartId, id, "cart-พร้อมใช้งาน"], 
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)
@@ -64,7 +64,7 @@ export const getCart = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'active' LIMIT 1;",
+            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
                      [authToken.customerId], 
                     (err, result) => { 
                         if (err) return reject(err)
@@ -76,7 +76,7 @@ export const getCart = async (req, res) => {
             
             await createCart(authToken.customerId)
             const resultsCreateProduct = await new Promise((resolve, reject)=> {
-                db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'active' LIMIT 1;",
+                db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
                          [authToken.customerId], 
                         (err, result) => { 
                             if (err) return reject(err)
@@ -192,7 +192,7 @@ export const getPorductCart = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'active' LIMIT 1;",
+            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
                      [authToken.customerId], 
                     (err, result) => { 
                         if (err) return reject(err)
