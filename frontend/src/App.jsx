@@ -25,6 +25,11 @@ import { FormProviderSignUpService } from '../API/signUpService'
 import { FormProviderProductService } from '../API/admin/productService'
 import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 import DetailPorductById from '../page/customer-page/product/detailPorductById-page';
+import Cart from '../page/customer-page/cart-page/cartProduct-page';
+import Payment from '../page/customer-page/cart-page/payment-page';
+import CreateAddress from '../page/customer-page/profile-page/createAddress-page';
+import LisetOrder from '../page/admin-page/order-page/listOrders-page'
+import Orders from '../page/customer-page/cart-page/orders-page';
 
 const router = createBrowserRouter([
   {
@@ -142,6 +147,15 @@ const router = createBrowserRouter([
               },
             ],
           },
+          {
+            path: "/orderslist",
+            children: [
+              {
+                path: "",
+                element: <LisetOrder />,
+              },
+            ],
+          },
         ],
       },
     
@@ -161,6 +175,32 @@ const router = createBrowserRouter([
           {
             path: "/product/:id",
             element: <DetailPorductById />,
+          },
+          {
+            path: "/cart/:id",
+            children: [
+              {
+                path: "",
+                element: <Cart />,
+              },
+            ],
+          },
+          {
+            path: "/orders/:id",
+            element: <Orders />,
+          },
+          {
+            path: "/payment/:id",
+            element: <Payment />,
+          },
+          {
+            path: "/create/address",
+            children: [
+              {
+                path: "",
+                element: <CreateAddress />,
+              },
+            ],
           },
         ],
       }

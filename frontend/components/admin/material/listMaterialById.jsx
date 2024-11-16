@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createMaterialService } from '../../../API/admin/materialService';
 import { Link, useParams } from 'react-router-dom';
 import { listMaterialByIdService } from '../../../API/admin/materialService';
-import { formatDate } from '../../datetime';
+import { formatDate } from '../../untils/frommatters/datetime';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 

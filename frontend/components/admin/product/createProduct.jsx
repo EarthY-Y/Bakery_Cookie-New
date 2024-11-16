@@ -4,8 +4,10 @@ import { listMaterialService } from '../../../API/admin/materialService';
 import { createProductService } from '../../../API/admin/productService';
 
 const CreateProduct = () => {
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({}) //
   const [listMaterials, setListMaterials] = useState([]);
+  const [pricePreQuantity, setpricePreQuantity] = useState(0);
+  const [totalPrice, settotalPrice] = useState(0);
 
   const navigate = useNavigate();
 
@@ -21,6 +23,7 @@ const CreateProduct = () => {
       return totalCost;
     }, 0);
   };
+
   const handleInputChange = (index, event) => {
       const values = [...(formData.ingredients || [])]; // ใช้ค่าที่เก็บอยู่ใน formData
       values[index] = {
@@ -64,24 +67,27 @@ const CreateProduct = () => {
       setFormData(prev => ({ ...prev, ingredients: values })); // อัปเดต formData
   };
 
-  const handleSubmitProductMaterial = async (event) => {
-      event.preventDefault();
-      console.log(formData); // Log formData for debugging
-      try {
-          const res = await createProductService(formData);
-          console.log(res);
-          navigate('/product');
-      } catch (error) {
-          console.log(error); // แสดงข้อผิดพลาด
-      }
-  };
+  useEffect(() => {
+    if ((formData.ingredients || []).length > 0 && formData.quantity) {
+        const totalCost = calculateTotalCost();
+        const costPerQuantity =  totalCost / parseFloat(formData.quantity || 1); // หลีกเลี่ยงการหารด้วย 0
+        setpricePreQuantity(costPerQuantity);
+    }
+  }, [formData.ingredients, formData.quantity]);
+
+  
+  useEffect(() => {
+    if (formData.price && formData.quantity) {
+        const costPerQuantity =  formData.price * parseFloat(formData.quantity);
+        settotalPrice(costPerQuantity);
+    }
+  }, [formData.price, formData.quantity]);
 
   useEffect(() => {
     const getMaterial = async () => {
         try {
             const response = await listMaterialService();
             console.log(response.data);
-            
             setListMaterials(response.data);
         } catch (error) {
             console.error("Error fetching materials:", error);
@@ -90,6 +96,18 @@ const CreateProduct = () => {
     getMaterial();
   }, []);
 
+  const handleSubmitProductMaterial = async (event) => {
+    event.preventDefault();
+    console.log(formData); // Log formData for debugging
+    try {
+        const res = await createProductService(formData);
+        console.log(res);
+        navigate('/product');
+    } catch (error) {
+        console.log(error); // แสดงข้อผิดพลาด
+    }
+};
+
   return (
     <form onSubmit={handleSubmitProductMaterial}>
       <div className="container mt-5">
@@ -97,7 +115,7 @@ const CreateProduct = () => {
           <i className="bi bi-arrow-left"></i>ย้อนกลับ
         </Link>
         <div className="mb-4 card col-md-12 px-40 card-body">
-          <h>เพิ่มสินค้า</h>
+          <h4>เพิ่มสินค้า</h4>
           
           <div className="mb-3 text-center">
             <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -136,19 +154,6 @@ const CreateProduct = () => {
                 /* formData.product_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
                 เเล้วไม่ได้ set ค่า เหมือนในหน้า signUp*/
-                onChange={handleChange} 
-              />
-            </div>
-          </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวน</label>
-            <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='quantity'
-                className="form-control" 
-                placeholder="จำนวน" 
-                value={formData.quantity || ''} 
                 onChange={handleChange} 
               />
             </div>
@@ -207,9 +212,34 @@ const CreateProduct = () => {
               />
             </div>
           </div>
-
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ราคาสินค้า</label>
+            <label className="col-sm-2 col-form-label">จำนวนที่ทำต่อครั้ง</label>
+            <div className="row col-sm-5">
+              <input 
+                type="text" 
+                name='quantity'
+                className="form-control" 
+                placeholder="จำนวน" 
+                value={formData.quantity || ''} 
+                onChange={handleChange} 
+              />
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
+            <div className="row col-sm-5">
+              <input 
+                type="text" 
+                name='quantity'
+                className="form-control" 
+                placeholder="จำนวน" 
+                value={pricePreQuantity}  
+                readOnly
+              />
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
             <div className="row col-sm-5">
               <input 
                 type="text" 
@@ -218,6 +248,20 @@ const CreateProduct = () => {
                 placeholder="ราคาสินค้า" 
                 value={formData.price || ''} 
                 onChange={handleChange} 
+              />
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
+            <div className="row col-sm-5">
+              <input 
+                type="text" 
+                name='price'
+                className="form-control" 
+                placeholder="ราคาสินค้า" 
+                value={totalPrice} 
+                onChange={handleChange} 
+                readOnly
               />
             </div>
           </div>

@@ -31,14 +31,13 @@ export const getProvice = async(req, res) => {
         return res.status(200).json(response);
     } catch (error) {
         console.error("Error get customer by id:", error);
-        return res.status(400).json({ message: "Error get province", error: error.message });
+        return res.status(400).json({ message: "Error get province", error});
     }
 }
 
 export const getAmphure = async(req, res) => {
     try {
         const provinceId = req.params.provinceId;
-        console.log(provinceId);
         const response = await new Promise((resolve, reject) => {
             db.query("SELECT amphure_id,amphure_nameTH FROM amphure WHERE province_id = ?",[provinceId],  (err, results) => {
                     if (err) return reject(err);
@@ -58,8 +57,6 @@ export const getAmphure = async(req, res) => {
 export const getTambon = async(req, res) => {
     try {
         const amphureId = req.params.amphureId;
-        console.log();
-        
         const response = await new Promise((resolve, reject) => {
             db.query("SELECT tambon_id,tambon_nameTH, zip_code FROM tambon WHERE amphure_id = ? ",[amphureId],  (err, results) => {
                     if (err) return reject(err);

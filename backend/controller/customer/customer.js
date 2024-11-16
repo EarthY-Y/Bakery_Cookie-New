@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
 import { resolve } from "path";
+import {createCart} from "./product.js"
 
 //ส่งออก Function getCustomer ด้วย export
 export const getCustomer = async (req, res) => {
@@ -16,7 +17,7 @@ export const getCustomer = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get customer:", error);
-        res.status(400).json({ message: "Error get customer", error: error.message });
+        res.status(400).json({ message: "Error get customer", error});
     }
 }
 
@@ -33,7 +34,7 @@ export const getCustomerById = async (req, res) => {
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get customer by id:", error);
-        return res.status(400).json({ message: "Error get customer by id", error: error.message });
+        return res.status(400).json({ message: "Error get customer by id", error });
     }
 }
 
@@ -58,15 +59,14 @@ export const createCustomer = async (req, res) => {
                 }
             )
         })
+
+        await createCart(id)
         console.log(response);
-        res.status(201).json({
-            status: "success",
-            message: "User created successfully"
-          });
-    
+        res.status(201).json({status: "success",message: "User created successfully"});
+        
     } catch (error) {
         console.error("Error creating customer:", error);
-        res.status(400).json({ message: "Error creating customer", error: error.message });
+        res.status(400).json({ message: "Error creating customer", error });
     }
 }
 
@@ -78,3 +78,28 @@ export const deleteCustomer = (req, res) => {
     
 }
 
+export const createAddress = async (req, res) => {
+    try {
+        const id = uuidv4()
+        const {tambonsId, amphuresId, provincesId, houseNo, postCode} = req.body
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ message: "User not found" });
+        }
+        const results = await new Promise((resolve, reject)=> {
+            db.query("INSERT INTO address (addressId, customer_id, houesNo, province_id, amphure_id, tambon_id, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    [id, authToken.customerId, houseNo, provincesId, amphuresId, tambonsId, postCode ],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import { formatDate } from '../../datetime';
+import { formatDate } from '../../untils/frommatters/datetime';
 import { Table, Button } from 'react-bootstrap';
 import { listProductService, deleteProductByIdService } from '../../../API/admin/productService';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
@@ -48,8 +48,8 @@ const listProduct = () => {
             <th className="text-center align-middle" style={{width: '20%' }}>รูปภาพ</th>
             <th className="text-center align-middle" style={{width: '30%' }}>ชื่อสินค้า</th>
             <th className="text-center align-middle" style={{width: '10%' }}>ต้นทุน</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>ราคาขาย</th>
-            <th className="text-center align-middle" style={{width: '10%' }}>จำนวน</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>ราคาขาย/ชิ้น</th>
+            <th className="text-center align-middle" style={{width: '10%' }}>จำนวนที่ทำ/ครั้ง</th>
             <th className="text-center align-middle" style={{width: '5%' }}>ดู</th>
             <th className="text-center align-middle" style={{width: '5%' }}>แก้ไข</th>
             <th className="text-center align-middle" style={{width: '5%' }}>ลบ</th>
@@ -63,8 +63,8 @@ const listProduct = () => {
                 <td><img src={API_URL_PICTURE + products.productpic_name} height={75} width={120} className='text-center'/></td>
                 <td>{products.product_name}</td>
                 <td>{products.cost}</td>
-                <td>{products.price}</td>
-                <td>{products.quantity}</td>
+                <td>{products.selling_price_per_quantity}</td>
+                <td>{products.quantity_per_time}</td>
                 {/* <td>{formatDate(products.create_at)}</td> */}
                 <td><Link to={`view/${products.product_id}`} className="btn btn-outline-warning text-black">View</Link></td>
                 <td><Link to={`edit/${products.product_id}`} className="btn btn-outline-warning text-black">Edit</Link></td>

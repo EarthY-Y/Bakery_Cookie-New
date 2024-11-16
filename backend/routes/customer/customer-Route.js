@@ -4,7 +4,8 @@ import {
     getCustomerById, 
     createCustomer, 
     updateCustomer, 
-    deleteCustomer
+    deleteCustomer,
+    createAddress
 } from "../../controller/customer/customer.js"
 import { verifyCustomerMid } from "../../middleware/authUser.js"
 
@@ -12,11 +13,11 @@ import { verifyCustomerMid } from "../../middleware/authUser.js"
 const router = express.Router();
 router.use(express.json());
 
-router.get('/customer',verifyCustomerMid, getCustomer);
-router.get('/customer/:id',verifyCustomerMid, getCustomerById);
-router.post('/customer/create', createCustomer);
-router.patch('/customer/:id',verifyCustomerMid, updateCustomer);
-router.delete('/customer/:id',verifyCustomerMid, deleteCustomer);
+router.get('/customers/get',verifyCustomerMid, getCustomer);
+router.get('/customers/:id',verifyCustomerMid, getCustomerById);
+router.post('/customers/create', createCustomer);
+router.patch('/customers/:id',verifyCustomerMid, updateCustomer);
+router.delete('/customers/:id',verifyCustomerMid, deleteCustomer);
 
-
+router.post('/customers/create/address',verifyCustomerMid, createAddress);
 export default router

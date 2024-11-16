@@ -17,7 +17,7 @@ export const getAdmin = async (req, res) => {
 
     } catch (error) {
         console.error("Error get admin:", error);
-        res.status(400).json({ message: "Error get admin", error: error.message });
+        res.status(400).json({ message: "Error get admin", error });
     }
 }
 
@@ -38,7 +38,7 @@ export const getAdminById = async (req, res) => {
             
     } catch (error) {
         console.error("Error get admin by id", error);
-        res.status(400).json({ message: "Error get admin by id", error: error.message });
+        res.status(400).json({ message: "Error get admin by id", error});
     }
 }
 
@@ -66,7 +66,7 @@ export const createAdmin = async (req, res) => {
             
     } catch (error) {
         console.error("Error creating admin:", error);
-        return res.status(400).json({ message: "Error creating admin", error: error.message });
+        return res.status(400).json({ message: "Error creating admin", error });
     }
 }
 

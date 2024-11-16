@@ -1,12 +1,13 @@
 import React from 'react'
 import LayOut from '../../../components/customer/layOut/layOut'
-import Home from '../../../components/customer/home/home'
-const home = () => {
+import Orders from '../../../components/customer/cart/orders'
+
+const orders = () => {
   return (
     <LayOut>
-      <Home />
+      <Orders />
     </LayOut>
   )
 }
 
-export default home
+export default orders
