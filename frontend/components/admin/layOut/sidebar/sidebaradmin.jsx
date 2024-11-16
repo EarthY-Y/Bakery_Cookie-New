@@ -1,52 +1,104 @@
-import React from 'react';
-import { Accordion, Nav } from 'react-bootstrap';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Sidebaradmin() {
+  const [show, setShow] = useState(false);
+  const toggleOffcanvas = () => {
+    setShow(!show);
+  };
+
   return (
-    <div className="d-flex flex-column p-3 bg-light" style={{ height: '1000px'}}>
-      <Nav className="flex-column">
-        <Nav.Item>
-          <Nav.Link as={Link} to="/dashboard" style={{ color: 'Black' }}>สถิติ</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link to="#" style={{ color: 'Black' }}>ประเภทสินค้า</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link as={Link} to="/product" style={{ color: 'Black' }}>สินค้าหน้าร้าน</Nav.Link>
-        </Nav.Item>
-        <Accordion defaultActiveKey="0">
-          <Accordion.Item eventKey="0" style={{ border: 'none'}}>
-            <Accordion.Header>คลังวัตถุดิบ</Accordion.Header>
-            <Accordion.Body style={{ backgroundColor: '#f8f9fa' }}>
-              <Nav.Item>
-                <Nav.Link as={Link} to="/material" style={{ color: 'Black' }}>วัตถุดิบ</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link as={Link} to="/material" style={{ color: 'Black' }}>บรรจุภัณฑ์</Nav.Link>
-              </Nav.Item>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-        {/* <Nav.Item>
-          <Nav.Link to="#" style={{ color: 'Black' }}>บรรจุภัณฑ์</Nav.Link>
-        </Nav.Item> */}
-        <Accordion defaultActiveKey="1">
-          <Accordion.Item eventKey="1" style={{ border: 'none' }}>
-            <Accordion.Header>การสั่งซื้อ</Accordion.Header>
-            <Accordion.Body style={{ backgroundColor: '#f8f9fa' }}>
-              <Nav.Item>
-                <Nav.Link to="#" style={{ color: 'Black' }}>รายการการสั่งซื้อ</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link to="#" style={{ color: 'Black' }}>ประวัติการสั่งซื้อ</Nav.Link>
-              </Nav.Item>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-      </Nav>
+    <div>
+      {/* Navbar สำหรับหน้าจอเล็ก */}
+      <nav className="navbar navbar-light bg-light mb-3 d-md-none p-1">
+        <button className="navbar-toggler" type="button" aria-label="Toggle navigation" onClick={toggleOffcanvas}>
+          <span className="navbar-toggler-icon"></span>
+        </button>
+      </nav>
+
+      {/* Sidebar สำหรับหน้าจอใหญ่ */}
+      <div className="d-none d-md-block bg-light p-3" style={{ width: '250px', height: '100vh', position: 'fixed' }}>
+        <nav className="nav flex-column">
+          <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
+          <Link className="nav-link text-dark" to="#">ประเภทสินค้า</Link>
+          <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>
+
+          {/* Accordion: คลังวัตถุดิบ */}
+          <div className="accordion" id="accordionExample">
+            <div className="accordion-item border-0">
+              <h2 className="accordion-header">
+                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMaterials" aria-expanded="true" aria-controls="collapseMaterials">คลังวัตถุดิบ</button>
+              </h2>
+              <div id="collapseMaterials" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div className="accordion-body">
+                  <Link className="nav-link text-dark" to="/material">วัตถุดิบ</Link>
+                  <Link className="nav-link text-dark" to="#">บรรจุภัณฑ์</Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Accordion: การสั่งซื้อ */}
+          <div className="accordion" id="accordionOrders">
+            <div className="accordion-item border-0">
+              <h2 className="accordion-header">
+                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">การสั่งซื้อ</button>
+              </h2>
+              <div id="collapseOrders" className="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                <div className="accordion-body">
+                  <Link className="nav-link text-dark" to="#">รายการการสั่งซื้อ</Link>
+                  <Link className="nav-link text-dark" to="#">ประวัติการสั่งซื้อ</Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      {/* Offcanvas สำหรับหน้าจอเล็ก */}
+      <div className={`offcanvas offcanvas-start ${show ? 'show' : ''}`} tabIndex="-1" id="offcanvasSidebar" style={{width: '60vw'}}>
+        <div className="offcanvas-header">
+          <button type="button" className="btn-close" aria-label="Close" onClick={() => setShow(false)}></button>
+        </div>
+        <div className="offcanvas-body">
+          <nav className="nav flex-column">
+            <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
+            <Link className="nav-link text-dark" to="#">ประเภทสินค้า</Link>
+            <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>
+
+            {/* Accordion: คลังวัตถุดิบ */}
+            <div className="accordion" id="accordionExampleMobile">
+              <div className="accordion-item border-0">
+                <h2 className="accordion-header">
+                  <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMaterialsMobile" aria-expanded="true" aria-controls="collapseMaterialsMobile">คลังวัตถุดิบ</button>
+                </h2>
+                <div id="collapseMaterialsMobile" className="accordion-collapse collapse" data-bs-parent="#accordionExampleMobile">
+                  <div className="accordion-body">
+                    <Link className="nav-link text-dark" to="/material">วัตถุดิบ</Link>
+                    <Link className="nav-link text-dark" to="#">บรรจุภัณฑ์</Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Accordion: การสั่งซื้อ */}
+            <div className="accordion" id="accordionOrdersMobile">
+              <div className="accordion-item border-0">
+                <h2 className="accordion-header">
+                  <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrdersMobile" aria-expanded="false" aria-controls="collapseOrdersMobile">การสั่งซื้อ</button>
+                </h2>
+                <div id="collapseOrdersMobile" className="accordion-collapse collapse" data-bs-parent="#accordionOrdersMobile">
+                  <div className="accordion-body">
+                    <Link className="nav-link text-dark" to="#">รายการการสั่งซื้อ</Link>
+                    <Link className="nav-link text-dark" to="#">ประวัติการสั่งซื้อ</Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
     </div>
-    
   );
 }
 
