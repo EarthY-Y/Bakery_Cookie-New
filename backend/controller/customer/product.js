@@ -43,9 +43,19 @@ export const getProductById = async (req, res) => {
 export const createCart = async (id) => {
     const cartId = uuidv4();
     try {
+        const resultsFindStatusActive = await new Promise((resolve, reject)=> {
+            db.query("SELECT status_cart_id FROM status_cart WHERE status_name LIKE ?",
+                     ["พร้อมใช้งาน"], 
+                    (err, result) => { 
+                        if (err) return reject(err)
+                        resolve(result)
+                    })
+        })
+
+        const statusCartId = resultsFindStatusActive[0].status_cart_id
         const results = await new Promise((resolve, reject)=> {
             db.query("INSERT INTO cart (cartId ,customer_id, status) VALUES(?, ?, ?)",
-                     [cartId, id, "cart-พร้อมใช้งาน"], 
+                     [cartId, id, statusCartId], 
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)
@@ -64,7 +74,8 @@ export const getCart = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
+            db.query("SELECT cartId FROM cart c" + 
+                    " INNER JOIN status_cart sc ON sc.status_cart_id = c.status WHERE c.customer_id = ? AND sc.status_name = 'พร้อมใช้งาน' LIMIT 1;",
                      [authToken.customerId], 
                     (err, result) => { 
                         if (err) return reject(err)
@@ -76,7 +87,8 @@ export const getCart = async (req, res) => {
             
             await createCart(authToken.customerId)
             const resultsCreateProduct = await new Promise((resolve, reject)=> {
-                db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
+                db.query("SELECT cartId FROM cart c" + 
+                        " INNER JOIN status_cart sc ON sc.status_cart_id = c.status WHERE c.customer_id = ? AND sc.status_name = 'พร้อมใช้งาน' LIMIT 1;",
                          [authToken.customerId], 
                         (err, result) => { 
                             if (err) return reject(err)
@@ -192,10 +204,10 @@ export const getPorductCart = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT cartId FROM cart WHERE customer_id = ? AND status = 'cart-พร้อมใช้งาน' LIMIT 1;",
+            db.query("SELECT cartId FROM cart c" +
+                    " INNER JOIN status_cart sc ON sc.status_cart_id = c.status WHERE c.customer_id = ? AND sc.status_name = 'พร้อมใช้งาน' LIMIT 1;",
                      [authToken.customerId], 
                     (err, result) => { 
-                        if (err) return reject(err)
                         resolve(result)
                     })
         })
@@ -207,10 +219,11 @@ export const getPorductCart = async (req, res) => {
                     " INNER JOIN product p ON cp.product_id = p.product_id "+
                     " INNER JOIN productpicture pp ON pp.product_id = p.product_id WHERE cp.cartId = ?", [getCartId],
                     (err, result) => { 
-                if (err) return reject(err)
                 resolve(result)
             })
         })
+        console.log(resultsFindProductCart[0]);
+        
         res.status(200).json(resultsFindProductCart)
     }catch(error){
         console.error("Error get product:", error);

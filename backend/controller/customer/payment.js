@@ -11,7 +11,7 @@ export const validateCustomerAddress = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT addressId FROM address where customer_id = ?;",[authToken.customerId],
+            db.query("SELECT addressId FROM address where created_by = ?;",[authToken.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -34,10 +34,10 @@ export const getCustomerAddress = async (req, res) => {
         }
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT a.houesNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
-                    " INNER JOIN customer c ON c.customer_id = a.customer_id"+
+                    " INNER JOIN customer c ON c.customer_id = a.created_by"+
                     " INNER JOIN province p ON p.province_id = a.province_id"+
                     " INNER JOIN amphure ap ON ap.amphure_id = a.amphure_id"+
-                    " INNER JOIN tambon t ON t.tambon_id = a.tambon_id  where a.customer_id = ?;",[authToken.customerId],
+                    " INNER JOIN tambon t ON t.tambon_id = a.tambon_id  where a.created_by = ?;",[authToken.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -75,8 +75,19 @@ export const createOrders = async (req, res) => {
         const cartItemId = req.body.productCart[0]?.cartId;
         console.log(cartItemId);
         
+        const resultsFindStatusOrder = await new Promise((resolve, reject)=> {
+            db.query("SELECT status_order_id FROM status_order WHERE status_name LIKE ? ",["รอ%"],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+
+        const statusOrderId = resultsFindStatusOrder[0].status_order_id
+        console.log(statusOrderId);
+        
         const results = await new Promise((resolve, reject)=> {
-            db.query("INSERT INTO orders (orders_id, customer_id, cartId, quantity, price, status) VALUES (?, ?, ?, ?, ?, ?)",[orderId, authToken.customerId, cartItemId, totalQuantity, totalprice, "order-รอชำระเงิน"],
+            db.query("INSERT INTO orders (orders_id, customer_id, cartId, quantity, price, status) VALUES (?, ?, ?, ?, ?, ?)",[orderId, authToken.customerId, cartItemId, totalQuantity, totalprice, statusOrderId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -96,10 +107,21 @@ export const createOrders = async (req, res) => {
 }
 
 const updateStatusCartProduct = async (cartItemId) => {
+    const resultsFindstatusCart = await new Promise((resolve, reject) => {
+        db.query(
+            "SELECT status_cart_id FROM Status_cart WHERE status_name LIKE ?",
+            ["ทำรายการ%"],
+            (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            }
+        );
+    });
+    const statusCart = resultsFindstatusCart[0].status_cart_id
     const results = await new Promise((resolve, reject) => {
         db.query(
             "UPDATE cart SET status = ? WHERE cartId = ?",
-            ["cart-ทำรายการแล้ว", cartItemId],
+            [statusCart, cartItemId],
             (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
@@ -123,11 +145,12 @@ export const getPaymentOrders = async (req, res) => {
         const resultsFindOrders = await new Promise((resolve, reject)=> {          
             db.query("SELECT o.orders_id, o.quantity, o.price FROM orders o"+
                     " INNER JOIN cart c ON o.cartId = c.cartId"+
+                    " INNER JOIN status_order so ON so.status_order_id = o.status"+
                     " INNER JOIN cart_product cp ON c.cartId = cp.cartId"+
                     " INNER JOIN product p ON p.product_id = cp.product_id"+
-                    " WHERE o.customer_id = ? AND o.status = ? AND o.cartId = ?"+
+                    " WHERE o.customer_id = ? AND so.status_name LIKE ? AND o.cartId = ?"+
                     " GROUP BY orders_id;", 
-                    [authToken.customerId ,'order-รอชำระเงิน', id],
+                    [authToken.customerId ,'รอ%', id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -154,9 +177,16 @@ export const updatePaymentOrder = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         console.log(id, statement_picture);
-        
+        const resultsFindStatusOrder = await new Promise((resolve, reject)=> {
+            db.query("SELECT status_order_id FROM status_order WHERE status_name LIKE ?", ["ชำระ%"],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        const statusOrderId = resultsFindStatusOrder[0].status_order_id
         const results = await new Promise((resolve, reject)=> { //WHERE customer_id = ? and cartId = ? อาจจะเกิด cart_id ซ้ำกันได้อนาคตต้องเเก้ไปใช้ orders_id
-            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, 'order-ชำระเงินเเล้ว', authToken.customerId, id],
+            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, statusOrderId, authToken.customerId, id],
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)

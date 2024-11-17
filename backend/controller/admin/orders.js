@@ -6,7 +6,7 @@ export const getOrderslistWaitStatement = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT * FROM orders o INNER JOIN status_order so ON so.status_order_id = o.status"+
-                " WHERE status = ?", ["order-รอชำระเงิน"],
+                " WHERE so.status_name LIKE ?", ["รอ%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -24,7 +24,7 @@ export const getOrderslistCheckOut = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT * FROM orders o INNER JOIN status_order so ON so.status_order_id = o.status"+
-                " WHERE status != ?", ["order-รอชำระเงิน"],
+                " WHERE so.status_name != ?", ["รอการชำระเงิน"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

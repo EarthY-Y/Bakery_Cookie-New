@@ -80,7 +80,7 @@ const orderById = () => {
           </div>
           <div className="mb-3 col-4">
             <label className="form-label fw-bold">สถานะ</label>
-            {/* {orderById[0]?.status === "order-รอชำระเงิน" ? (
+            {/* {orderById[0]?.status === "รอการชำระเงิน" ? (
               // แสดงข้อความธรรมดา
               <p className="border p-2 rounded bg-white">{orderById[0]?.status}</p>
             ) : (
@@ -167,7 +167,7 @@ const orderById = () => {
         </div>
         <div className="mb-3">
             <label className="form-label fw-bold">รับออร์เดอร์โดย</label>
-            <p className="border p-2 rounded bg-white">{orderById[0]?.updated_by}</p>
+            <p className="border p-2 rounded bg-white">{orderById[0]?.updated_by || "ยังไม่มีคนรับออร์เดอร์"}</p>
         </div>
 
         </div>

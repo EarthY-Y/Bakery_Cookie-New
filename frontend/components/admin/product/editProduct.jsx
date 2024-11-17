@@ -141,7 +141,7 @@ const EditProduct = () => {
     }
   };
   
-
+  //ค้นหา วัตถุดิบที่ใช้กับสินค้าตัวนี้เพื่อเอาไป map กับ list materail เพื่อให้เลือกโชว์ใน select box
   useEffect(() => {
     const getlistMaterialById = async () => {
       try {
@@ -153,7 +153,6 @@ const EditProduct = () => {
         }
 
         const productData = response.data[0]; 
-        setListMaterials(response.data)
         //ข้อมูลส่วนประกิบของสินค้า
         const ingredients = response.data.map(item => ({
           material_id: item.material_id || '',
@@ -178,6 +177,19 @@ const EditProduct = () => {
     };
   
     getlistMaterialById();
+  }, []);
+
+  useEffect(() => {
+    const getMaterial = async () => {
+        try {
+            const response = await listMaterialService();
+            console.log(response.data);
+            setListMaterials(response.data);
+        } catch (error) {
+            console.error("Error fetching materials:", error);
+        }
+    };
+    getMaterial();
   }, []);
 
   useEffect(() => {

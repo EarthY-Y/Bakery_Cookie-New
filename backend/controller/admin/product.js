@@ -126,11 +126,11 @@ const createProductMaterial = async (req, id, tokenId) => {
             throw new Error("Ingredients is not an array");
         }
 
-        const ingredientValues = ingredients.map(item => [id, item.material_id, item.quantity, tokenId]);
+        const ingredientValues = ingredients.map(item => [uuidv4(), id, item.material_id, item.quantity, tokenId]);
 
         const results = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product_material (product_id, material_id, amount, created_by) VALUES ?",
+                "INSERT INTO product_material (product_material_Id,product_id, material_id, amount, created_by) VALUES ?",
                 [ingredientValues],
                 (err, result) => {
                     if (err) return reject(err);
@@ -300,7 +300,7 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
         // 2. ตรวจสอบว่า updatedIngredients ถูกส่งมาหรือไม่
         if (updatedIngredients) {
             // ตรวจสอบและแปลงเป็นอาร์เรย์หากเป็นสตริง
-            console.log("updatedIngredients", updatedIngredients);
+            // console.log("updatedIngredients", updatedIngredients);
             
             if (typeof updatedIngredients === 'string') {
                 updatedIngredients = JSON.parse(updatedIngredients);
