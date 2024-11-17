@@ -13,7 +13,7 @@ const layOutComponent = ({children}) => {
       </div>
 
       {/* โครงสร้างหลักของหน้า */}
-      <div className="row d-flex min-vh-100">
+      <div className="d-flex min-vh-100">
         {/* Sidebar ที่ไม่เลื่อนตาม */}
         <div className="d-lg-block d-none"style={{  position: 'fixed',  left: 0,  height: '100vh',  zIndex: 1000,}}>
           <Sidebaradmin />
