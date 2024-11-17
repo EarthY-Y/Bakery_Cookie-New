@@ -108,7 +108,7 @@ const listMaterialById = () => {
           </div>
           <div className='col-6'>
             <label className="form-label fw-bold ">เวลา</label>
-            <p className="border p-2 rounded bg-white">{formatDate(productMyId[0]?.create_at)}</p>
+            <p className="border p-2 rounded bg-white">{formatDate(productMyId[0]?.created_at)}</p>
           </div>
         </div>
 

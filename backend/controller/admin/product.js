@@ -29,9 +29,9 @@ export const getProductById = async (req, res) => {
     const id = req.params.id
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.description, p.create_by, p.update_by, p.create_at, p.updated_at, "+
+            db.query("SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.description, p.created_by, p.updated_by, p.created_at, p.updated_at, "+
                      "pp.productpic_name, pm.amount, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
-                     "INNER JOIN admin a ON a.admin_id = p.create_by "+ 
+                     "INNER JOIN admin a ON a.admin_id = p.created_by "+ 
                      "INNER JOIN productpicture pp ON pp.product_id = p.product_id "+
                      "INNER JOIN product_material pm ON pm.product_id = p.product_id "+
                      "INNER JOIN material m ON m.material_id = pm.material_id WHERE p.product_id = ?",
@@ -58,7 +58,7 @@ export const createProduct = async (req, res) => {
 
         const productResult = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product (product_id, product_name, quantity_per_time, selling_price_per_quantity, description, create_by) VALUES (?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
+                "INSERT INTO product (product_id, product_name, quantity_per_time, selling_price_per_quantity, description, created_by) VALUES (?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
                 [id, product_name, quantity, price, description, token.admin_id],
                 (err, result) => {
                     if (err) return reject(err);
@@ -93,7 +93,7 @@ const createProductPicture = async (req, id, tokenId) => {
 
         const results = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO productpicture (productpic_id, product_id, productpic_name, productpic_type, create_by) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO productpicture (productpic_id, product_id, productpic_name, productpic_type, created_by) VALUES (?, ?, ?, ?, ?)",
                 [idPicture, id, productPictureName, materialPictureType, tokenId],
                 (err, result) => {
                     if (err) return reject(err);
@@ -130,7 +130,7 @@ const createProductMaterial = async (req, id, tokenId) => {
 
         const results = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product_material (product_id, material_id, amount, create_by) VALUES ?",
+                "INSERT INTO product_material (product_id, material_id, amount, created_by) VALUES ?",
                 [ingredientValues],
                 (err, result) => {
                     if (err) return reject(err);
@@ -216,7 +216,7 @@ const updateProductPicture = async (req, productId, tokenId) => {
         let updateValues = [];
 
         if (req.file) {
-            updateQuery += "productpic_name = ?, productpic_type = ?, update_by = ? ";
+            updateQuery += "productpic_name = ?, productpic_type = ?, updated_by = ? ";
             updateValues.push(req.file.filename, req.file.mimetype, tokenId);
         }
 
@@ -286,7 +286,7 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
             if (ingredientValues.length > 0) {
                 await new Promise((resolve, reject) => {
                     db.query(
-                        "INSERT INTO product_material (product_id, material_id, amount, update_by) VALUES ? ON DUPLICATE KEY UPDATE amount = VALUES(amount), update_by = VALUES(update_by)",
+                        "INSERT INTO product_material (product_id, material_id, amount, updated_by) VALUES ? ON DUPLICATE KEY UPDATE amount = VALUES(amount), updated_by = VALUES(updated_by)",
                         [ingredientValues],
                         (err, result) => {
                             if (err) return reject(err);
@@ -316,7 +316,7 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
                     if (item.quantity !== null) {
                         await new Promise((resolve, reject) => {
                             db.query(
-                                "UPDATE product_material SET amount = ?, update_by = ? WHERE product_id = ? AND material_id = ?",
+                                "UPDATE product_material SET amount = ?, updated_by = ? WHERE product_id = ? AND material_id = ?",
                                 [item.quantity, tokenId, productId, item.material_id],
                                 (err, result) => {
                                     if (err) return reject(err);

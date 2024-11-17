@@ -146,7 +146,7 @@ const orderById = () => {
         <div className="mb-3 row">
           <div className='col-6'>
             <label className="form-label fw-bold ">วันที่สั่ง</label>
-            <p className="border p-2 rounded bg-white">{formatDate(orderById[0]?.create_at)}</p>
+            <p className="border p-2 rounded bg-white">{formatDate(orderById[0]?.created_at)}</p>
           </div>
           <div className='col-6'>
             <label className="form-label fw-bold ">วันที่ชำระเงิน</label>

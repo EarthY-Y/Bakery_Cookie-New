@@ -65,7 +65,7 @@ const listProduct = () => {
                 <td>{products.cost}</td>
                 <td>{products.selling_price_per_quantity}</td>
                 <td>{products.quantity_per_time}</td>
-                {/* <td>{formatDate(products.create_at)}</td> */}
+                {/* <td>{formatDate(products.created_at)}</td> */}
                 <td><Link to={`view/${products.product_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto">View</Link></td>
                 <td><Link to={`edit/${products.product_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto">Edit</Link></td>
                 <td><button onClick={() => handleDelete(products.product_id)} className="btn btn-outline-warning btn-danger text-dark d-grid mx-auto">Delete</button></td>

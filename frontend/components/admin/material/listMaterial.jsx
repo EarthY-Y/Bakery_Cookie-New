@@ -63,7 +63,7 @@ const ListMaterial = () => {
               <td>{material.quantity} กรัม</td>
               <td>{material.cost} บาท</td>
               <td>{material.cost_per_quantity} บาท</td>
-              <td>{formatDate(material.create_at)}</td>
+              <td>{formatDate(material.created_at)}</td>
               <td><Link to={`view/${material.material_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto">View</Link></td>
               <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
               <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-outline-warning btn-danger text-dark d-grid mx-auto"><i className="bi bi-trash"></i></button></td>

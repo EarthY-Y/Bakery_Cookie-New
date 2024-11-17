@@ -85,8 +85,8 @@ const ListOrders = () => {
               <td>{order.status_name}</td>
               <td>{formatDate(order.created_at)}</td>
               <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
-              <td className="text-center">{order.create_by}</td>
-              <td>{order.update_by}</td>
+              <td className="text-center">{order.created_by}</td>
+              <td>{order.updated_by}</td>
               <td className="text-center">
                 <Link to={`edit/order/${order.status_order_id}`} className="btn btn-outline-warning text-black">edit</Link>
               </td>
@@ -136,8 +136,8 @@ const ListOrders = () => {
               <td>{order.status_name}</td>
               <td>{formatDate(order.created_at)}</td>
               <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
-              <td>{order.create_by}</td>
-              <td className="text-center">{order.update_by}</td>
+              <td>{order.created_by}</td>
+              <td className="text-center">{order.updated_by}</td>
               <td className="text-center">
                 <Link to={`edit/cart/${order.status_cart_id}`} className="btn btn-outline-warning text-black">Edit</Link>
               </td>

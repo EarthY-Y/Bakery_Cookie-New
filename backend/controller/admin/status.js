@@ -14,7 +14,7 @@ export const createStatus = async (req, res) => {
             console.log("create cart");
             
             const results = await new Promise((resolve, reject)=> {
-                db.query("INSERT INTO status_cart (status_cart_id, status_name, create_by ) VALUES(?, ?, ?)", [id, statusName, token.admin_id],
+                db.query("INSERT INTO status_cart (status_cart_id, status_name, created_by ) VALUES(?, ?, ?)", [id, statusName, token.admin_id],
                         (err, result) => { 
                     if (err) return reject(err)
                     resolve(result)
@@ -28,7 +28,7 @@ export const createStatus = async (req, res) => {
             console.log("create order");
             
             const results = await new Promise((resolve, reject)=> {
-                db.query("INSERT INTO status_order (status_order_id, status_name, create_by ) VALUES(?, ?, ?)", [id, statusName, token.admin_id],
+                db.query("INSERT INTO status_order (status_order_id, status_name, created_by ) VALUES(?, ?, ?)", [id, statusName, token.admin_id],
                         (err, result) => { 
                     if (err) return reject(err)
                     resolve(result)
@@ -86,7 +86,7 @@ export const updateStatusOrderName = async (req, res) => {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader);
         const results = await new Promise((resolve, reject)=> {
-            db.query("UPDATE status_order SET status_name = ?, update_by = ? WHERE status_order_id = ?", [statusName, token.admin_id, id],
+            db.query("UPDATE status_order SET status_name = ?, updated_by = ? WHERE status_order_id = ?", [statusName, token.admin_id, id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -108,7 +108,7 @@ export const updateStatusCratName = async (req, res) => {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader);
         const results = await new Promise((resolve, reject)=> {
-            db.query("UPDATE status_cart SET status_name = ?, update_by = ? WHERE status_cart_id = ?", [statusName, token.admin_id, id], 
+            db.query("UPDATE status_cart SET status_name = ?, updated_by = ? WHERE status_cart_id = ?", [statusName, token.admin_id, id], 
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

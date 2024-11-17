@@ -7,7 +7,7 @@ import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 export const getMaterial = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT material_id, material_name, quantity, cost, cost_per_quantity, materialpic_name, materialpic_type, create_at, update_at FROM material", 
+            db.query("SELECT material_id, material_name, quantity, cost, cost_per_quantity, materialpic_name, materialpic_type, created_at, updated_at FROM material", 
                 (err, result) => {
                     if(err) return reject(err)
                     resolve(result)
@@ -27,7 +27,7 @@ export const getMaterialById = async (req, res) => {
 
     try {
         const result = await new Promise((resolve, reject) => {
-            db.query("SELECT m.material_id, m.material_name, m.quantity, m.cost, m.cost_per_quantity, m.materialpic_name, m.create_by, m.create_at, a.userName FROM material m INNER JOIN admin a ON a.admin_id = m.create_by WHERE material_id = ?", [id], 
+            db.query("SELECT m.material_id, m.material_name, m.quantity, m.cost, m.cost_per_quantity, m.materialpic_name, m.created_by, m.created_at, a.userName FROM material m INNER JOIN admin a ON a.admin_id = m.created_by WHERE material_id = ?", [id], 
                 (err, result) => {
                     if(err) return reject(err)
                     resolve(result)
@@ -55,7 +55,7 @@ export const createMaterial = async (req, res) => {
             return res.status(400).send({ message: "Material picture is required." });
         }
         const results = await new Promise((resolve, reject) => {
-            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, cost_per_quantity, materialpic_type, status, create_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, cost_per_quantity, materialpic_type, status, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [id, material_name, quantity, cost, materialPictureName, costesperquantities, materialPictureType, 'active', token.admin_id],
                 (err, result, fields) => {
                     if (err) {
@@ -106,7 +106,7 @@ export const updateMaterial = async (req, res) => {
         const authHeader = req.headers['authorization']
         const token = await passToken(authHeader)
         if(token) {
-            fields.push('update_by = ?');
+            fields.push('updated_by = ?');
             values.push(token.admin_id);
         }else{
             throw new Error("ไม่มี token")

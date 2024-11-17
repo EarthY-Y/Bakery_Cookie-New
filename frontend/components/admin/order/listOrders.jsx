@@ -82,7 +82,7 @@ const ListOrders = () => {
               <td>{order.orders_id}</td>
               <td>{order.quantity} ชิ้น</td>
               <td>{order.price} บาท</td>
-              <td>{formatDate(order.create_at)}</td>
+              <td>{formatDate(order.created_at)}</td>
               <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
               <td className="text-center">{order.status_name}</td>
               <td className="text-center">
@@ -133,7 +133,7 @@ const ListOrders = () => {
               <td>{order.orders_id}</td>
               <td>{order.quantity} ชิ้น</td>
               <td>{order.price} บาท</td>
-              <td>{formatDate(order.create_at)}</td>
+              <td>{formatDate(order.created_at)}</td>
               <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
               <td className="text-center">{order.status_name}</td>
               <td className="text-center">
