@@ -20,7 +20,7 @@ function Sidebaradmin() {
       <div className="d-none d-lg-block bg-light p-3 col-2 min-vh-100 shadow" style={{height: '100vh', position: 'fixed' }}>
         <nav className="nav flex-column navbar-expand-lg">
           <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
-          <Link className="nav-link text-dark" to="#">ประเภทสินค้า</Link>
+          <Link className="nav-link text-dark" to="/category">ประเภทสินค้า</Link>
           <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>
 
           {/* Accordion: คลังวัตถุดิบ */}
@@ -76,7 +76,7 @@ function Sidebaradmin() {
         <div className="offcanvas-body">
           <nav className="nav flex-column">
             <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
-            <Link className="nav-link text-dark" to="#">ประเภทสินค้า</Link>
+            <Link className="nav-link text-dark" to="/category">ประเภทสินค้า</Link>
             <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>
 
             {/* Accordion: คลังวัตถุดิบ */}

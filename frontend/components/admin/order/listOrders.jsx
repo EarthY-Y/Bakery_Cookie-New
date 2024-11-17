@@ -63,7 +63,7 @@ const ListOrders = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>รายการสั่งซื้อ</h2>
       </div>
-
+      <h4>รอการชำระเงิน</h4>
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
@@ -114,7 +114,7 @@ const ListOrders = () => {
           </li>
         </ul>
       </nav>
-
+      <h4>พร้อมดำเนินการ</h4>
       <table className="table table-striped table-bordered">
         <thead>
           <tr>

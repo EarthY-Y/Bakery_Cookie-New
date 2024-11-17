@@ -63,9 +63,10 @@ const ListOrders = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>รายการสั่งซื้อ</h2>
         <Link to="create" className="btn btn-outline-warning text-black">
-          เพิ่มวัตถุดิบ
+          เพิ่มสถานะ
         </Link>
       </div>
+      <h4>คำสั่งซื้อ</h4>
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
@@ -116,7 +117,7 @@ const ListOrders = () => {
           </li>
         </ul>
       </nav>
-
+      <h4>ตะกร้าสินค้า</h4>
       <table className="table table-striped table-bordered">
         <thead>
           <tr>

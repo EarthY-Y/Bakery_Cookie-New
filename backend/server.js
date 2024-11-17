@@ -15,6 +15,7 @@ import productCustomerRoute from "./routes/customer/product-Route.js"
 import paymentRoute from "./routes/customer/payment-Route.js"
 import AddressRoute from "./routes/addressRoute.js"
 import StatusRoute from "./routes/admin/status-Route.js"
+import CategoryRoute from "./routes/admin/category-Route.js"
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -60,14 +61,15 @@ app.listen(process.env.APP_PORT, () => {
 })
 app.use('/picture', express.static(path.join(__dirname, 'picture')));
 //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
-app.use(customerRoute);
-app.use(orderRounte);
-app.use(materialRounte);
-app.use(productRoute);
-app.use(authRoute);
-app.use(adminRoute);
+app.use(customerRoute)
+app.use(orderRounte)
+app.use(materialRounte)
+app.use(productRoute)
+app.use(authRoute)
+app.use(adminRoute)
 app.use(paymentRoute)
 app.use(AddressRoute)
 app.use(StatusRoute)
+app.use(CategoryRoute)
 app.use(productCustomerRoute);
 app.use(provinceAmphureTambon);

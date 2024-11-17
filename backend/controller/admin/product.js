@@ -280,13 +280,13 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
             }
 
             // 3. อัปเดตข้อมูลใน product_material
-            const ingredientValues = ingredients.filter(item => item.quantity !== null).map(item => [productId, item.material_id, item.quantity, tokenId]);
+            const ingredientValues = ingredients.filter(item => item.quantity !== null).map(item => [uuidv4(), productId, item.material_id, item.quantity, tokenId]);
 
             // อัปเดตหรือเพิ่มข้อมูลที่ไม่ได้ถูกลบ
             if (ingredientValues.length > 0) {
                 await new Promise((resolve, reject) => {
                     db.query(
-                        "INSERT INTO product_material (product_id, material_id, amount, updated_by) VALUES ? ON DUPLICATE KEY UPDATE amount = VALUES(amount), updated_by = VALUES(updated_by)",
+                        "INSERT INTO product_material (product_material_Id, product_id, material_id, amount, updated_by) VALUES ? ON DUPLICATE KEY UPDATE amount = VALUES(amount), updated_by = VALUES(updated_by)",
                         [ingredientValues],
                         (err, result) => {
                             if (err) return reject(err);

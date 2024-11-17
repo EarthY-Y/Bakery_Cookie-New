@@ -3,8 +3,16 @@ import React from 'react'
 import Navbar from './navbar/navbar'
 import Footer from '../layOut/footer/footer'
 import Sidebaradmin from './sidebar/sidebaradmin'
+import { useState, useEffect } from 'react';
 
 const layOutComponent = ({children}) => {
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 992);
+
+  useEffect(() => {
+    const handleResize = () => setIsLargeScreen(window.innerWidth >= 992);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   return (
     <React.Fragment>
       {/* Navbar ที่จะเลื่อนตามด้านบน */}
@@ -20,12 +28,7 @@ const layOutComponent = ({children}) => {
         </div>  
 
         {/* Main content ที่จะเลื่อนตามปกติ */}
-        <div className="col-10 offset-2 d-none d-lg-block min-vh-100">
-          <main>{children}</main>
-        </div>
-
-        {/* Main content ที่จะเลื่อนตามปกติ */}
-        <div className="col-12 d-lg-none min-vh-100">
+        <div className={`min-vh-100 ${window.innerWidth >= 992 ? 'col-10 offset-2 d-lg-block' : 'col-12 d-lg-none'}`}>
           <main>{children}</main>
         </div>
       </div>

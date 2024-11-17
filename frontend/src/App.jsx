@@ -35,6 +35,8 @@ import Status from '../page/admin-page/order-page/status/status-page';
 import CreateStatus from '../page/admin-page/order-page/status/createStatus-page'
 import EditCratStatus from '../page/admin-page/order-page/status/editCartStatus-page'
 import EditOrderStatus from '../page/admin-page/order-page/status/editOrderStatus-page'
+import Categoey from '../page/admin-page/category/listCategory-page';
+import CreateCategory from '../page/admin-page/category/createCategory-page'
 
 const router = createBrowserRouter([
   {
@@ -95,7 +97,28 @@ const router = createBrowserRouter([
                 element: <CreateMaterial />,
               },
               {
-                path: "edit/:id", // ลบ '/' หน้า path
+                path: "edit/:id",
+                element: <EditMaterial />,
+              },
+            ],
+          },
+          {
+            path: "/category",
+            children: [
+              {
+                path: "",
+                element: <Categoey />,
+              },
+              {
+                path: "view/:id",
+                element: <ListMaterialById />,
+              },
+              {
+                path: "create",
+                element: <CreateCategory />,
+              },
+              {
+                path: "edit/:id",
                 element: <EditMaterial />,
               },
             ],
