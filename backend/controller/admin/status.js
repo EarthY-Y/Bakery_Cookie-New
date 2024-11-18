@@ -47,7 +47,10 @@ export const createStatus = async (req, res) => {
 export const getStatusOrder = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT * FROM status_order",
+            //so.* ก็จริงเเต่สุดท้ายข้อมูลของ created_by,updated_by จะโดนอันใหม่ทับไป 
+            db.query("SELECT so.*, a_created.username as created_by, a_updated.username as updated_by FROM status_order so"+
+                    " LEFT JOIN admin a_created ON a_created.admin_id = so.created_by"+
+                    " LEFT JOIN admin a_updated ON a_updated.admin_id = so.updated_by",
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -64,7 +67,9 @@ export const getStatusOrder = async (req, res) => {
 export const getStatusCart = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT * FROM status_cart ",
+            db.query("SELECT sc.*, a_created.username as created_by, a_updated.username as updated_by FROM status_cart sc"+
+                " LEFT JOIN admin a_created ON a_created.admin_id = sc.created_by"+
+                " LEFT JOIN admin a_updated ON a_updated.admin_id = sc.updated_by",
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

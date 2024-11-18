@@ -37,6 +37,8 @@ import EditCratStatus from '../page/admin-page/order-page/status/editCartStatus-
 import EditOrderStatus from '../page/admin-page/order-page/status/editOrderStatus-page'
 import Categoey from '../page/admin-page/category/listCategory-page';
 import CreateCategory from '../page/admin-page/category/createCategory-page'
+import EditCategory from '../page/admin-page/category/editCategory-page';
+import CategoryById from '../page/admin-page/category/categoryById-page'
 
 const router = createBrowserRouter([
   {
@@ -111,7 +113,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "view/:id",
-                element: <ListMaterialById />,
+                element: <CategoryById />,
               },
               {
                 path: "create",
@@ -119,7 +121,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "edit/:id",
-                element: <EditMaterial />,
+                element: <EditCategory />,
               },
             ],
           },
