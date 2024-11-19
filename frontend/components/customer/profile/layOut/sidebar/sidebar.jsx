@@ -8,7 +8,7 @@ function Sidebar() {
         <div className="card-body">
           <nav className="nav flex-column navbar-expand-lg">
             <Link className="nav-link text-dark" to="/profile">บัญชีของฉัน</Link>
-            <Link className="nav-link text-dark" to="">ข้อมูลที่อยู่</Link>
+            <Link className="nav-link text-dark" to="/profile/customer/address">ข้อมูลที่อยู่</Link>
             <Link className="nav-link text-dark" to="">ติดตามคำสั่งซื้อ</Link>
             <Link className="nav-link text-dark" to="">ประวัติการสั่งซื้อ</Link>
           </nav>

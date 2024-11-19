@@ -11,14 +11,14 @@ const layOutComponent = ({ children }) => {
         {/* Navbar */}
         <Navbar />
         
-        <div className="container d-flex" style={{ minHeight: '100vh' }}>
+        <div className="container d-flex mb-5" style={{ minHeight: '80vh'}}>
           {/* Sidebar */}
           <div style={{ width: '250px' }}>
             <Sidebar />
           </div>
           
           {/* Main Content */}
-          <main className="flex-grow-1 p-3">
+          <main className="flex-grow-1 p-3 ms-2 bg-white">
             {children}
           </main>
         </div>

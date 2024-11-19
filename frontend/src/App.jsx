@@ -40,6 +40,7 @@ import CreateCategory from '../page/admin-page/category/createCategory-page'
 import EditCategory from '../page/admin-page/category/editCategory-page';
 import CategoryById from '../page/admin-page/category/categoryById-page'
 import Profile from '../page/customer-page/profile-page/profile-page';
+import ListAddress from '../page/customer-page/profile-page/listAddress-page'
 
 const router = createBrowserRouter([
   {
@@ -264,6 +265,10 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: <Profile />,
+              },
+              {
+                path: "customer/address",
+                element: <ListAddress />,
               },
             ],
           },
