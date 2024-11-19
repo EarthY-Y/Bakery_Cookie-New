@@ -28,7 +28,7 @@ const upload = multer({
         cb(null, true);
     },
     limits: {
-        fileSize: 5 * 1024 * 1024 // จำกัดขนาดไฟล์ 5MB
+        fileSize: 1 * 1024 * 1024 // จำกัดขนาดไฟล์ 5MB
     }
 });
 
