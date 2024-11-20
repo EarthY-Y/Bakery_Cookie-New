@@ -35,13 +35,15 @@ const listAddressCustomer = () => {
             >
             <div>
                 <h5>{address.name}</h5>
-                <p className="mb-1">{address.houesNo}</p>
+                <p className="mb-1">{address.houseNo}</p>
                 <p className="mb-1">{address.tambon_nameTH}, {address.amphure_nameTH}, {address.province_nameTH}, {address.zip_code}</p>
                 <p className="mb-0">{address.zipCode}</p>
             </div>
             <div className="d-flex flex-row">
                 <div className='p-2 bd-highlight '>
-                    <button className="btn btn-primary mb-2">แก้ไข</button>
+                    <button className="btn btn-primary mb-2">
+                      <Link to={`edit/${address.addressId}`} className='text-white'>แก้ไข</Link>
+                    </button>
                 </div>
                 <div className='p-2 bd-highlight '>
                     <button className="btn btn-danger mb-2">ลบ</button>

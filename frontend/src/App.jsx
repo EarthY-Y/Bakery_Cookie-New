@@ -41,7 +41,7 @@ import EditCategory from '../page/admin-page/category/editCategory-page';
 import CategoryById from '../page/admin-page/category/categoryById-page'
 import Profile from '../page/customer-page/profile-page/profile-page';
 import ListAddress from '../page/customer-page/profile-page/listAddress-page'
-
+import EditAddress from '../page/customer-page/profile-page/editAddress-page'
 const router = createBrowserRouter([
   {
     path: "",
@@ -269,6 +269,10 @@ const router = createBrowserRouter([
               {
                 path: "customer/address",
                 element: <ListAddress />,
+              },
+              {
+                path: "customer/address/edit/:id",
+                element: <EditAddress />,
               },
             ],
           },

@@ -33,7 +33,7 @@ export const getCustomerAddress = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT a.houesNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
+            db.query("SELECT a.houseNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
                     " INNER JOIN customer c ON c.customer_id = a.created_by"+
                     " INNER JOIN province p ON p.province_id = a.province_id"+
                     " INNER JOIN amphure ap ON ap.amphure_id = a.amphure_id"+

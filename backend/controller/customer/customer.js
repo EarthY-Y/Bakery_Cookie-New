@@ -144,7 +144,7 @@ export const createAddress = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("INSERT INTO address (addressId, created_by, houesNo, province_id, amphure_id, tambon_id, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            db.query("INSERT INTO address (addressId, created_by, houseNo, province_id, amphure_id, tambon_id, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     [id, authToken.customerId, houseNo, provincesId, amphuresId, tambonsId, postCode ],
                     (err, result) => { 
                 if (err) return reject(err)
