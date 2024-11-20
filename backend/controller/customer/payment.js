@@ -105,7 +105,7 @@ export const createOrders = async (req, res) => {
         res.status(400).json({ message: "Error get product", error });
     }
 }
-
+//เปลี่ยนสถานะ สินค้าที่อยู่ใน ตะกร้าสินค้า
 const updateStatusCartProduct = async (cartItemId) => {
     const resultsFindstatusCart = await new Promise((resolve, reject) => {
         db.query(
@@ -192,7 +192,23 @@ export const updatePaymentOrder = async (req, res) => {
                         resolve(result)
                     })
         })
-        res.status(200).json(results)
+        const resultsFindOrderById = await new Promise((resolve, reject)=> {
+            db.query("SELECT orders_id FROM orders WHERE customer_id = ? and cartId = ?", [authToken.customerId, id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        const orderId = resultsFindOrderById[0].orders_id
+        console.log("orderId",orderId);
+        const resultsInsertHistory = await new Promise((resolve, reject)=> {
+            db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), orderId, statusOrderId, authToken.customerId],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        res.status(200).json(resultsInsertHistory)
     }catch(error){
         console.error("Error get product:", error);
         res.status(400).json({ message: "Error get product", error});

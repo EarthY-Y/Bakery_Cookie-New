@@ -5,7 +5,7 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getOrderslistWaitStatement = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT * FROM orders o INNER JOIN status_order so ON so.status_order_id = o.status"+
+            db.query("SELECT o.cartId, o.orders_id, o.quantity, o.price, so.status_name, o.created_at, o.updated_at FROM orders o INNER JOIN status_order so ON so.status_order_id = o.status"+
                 " WHERE so.status_name LIKE ?", ["รอ%"],
                     (err, result) => { 
                 if (err) return reject(err)
@@ -26,7 +26,7 @@ export const getOrderslistCheckOut = async (req, res) => {
             db.query("SELECT  o.orders_id, o.quantity, o.price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
                 " INNER JOIN status_order so ON so.status_order_id = o.status"+
                 " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
-                " WHERE so.status_name NOT LIKE ?", ["รอชำ%"],
+                " WHERE so.status_name NOT LIKE ?", ["รอ%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -70,7 +70,7 @@ export const updateStatusOrder = async (req, res) => {
         const id = req.params.id
         const {status} = req.body
         const results = await new Promise((resolve, reject)=> {
-            db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
+            db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, id, token.admin_id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
