@@ -79,10 +79,16 @@ const detailPorductById = () => {
         <div className="col-md-6 text-center">
           {productById.productpic_name ? (
             <img
-              src={ API_URL_PICTURE + productById.productpic_name }
-              alt={productById.product_name}
-              className="img-fluid rounded shadow-sm"
-            />
+            src={ API_URL_PICTURE + productById.productpic_name }
+            alt={productById.product_name}
+            className="img-fluid rounded shadow-sm"
+            style={{
+              width: '100%', // ปรับขนาดให้เหมาะสมกับ container
+              maxWidth: '400px', // ล็อคขนาดสูงสุด
+              height: 'auto', // ให้ภาพคงสัดส่วน
+              objectFit: 'cover', // ให้รูปภาพดูสมส่วน
+            }}
+          />
           ) : (
             <div className="bg-light border rounded p-5 d-flex align-items-center justify-content-center text-secondary">
               No Image Available
@@ -92,7 +98,6 @@ const detailPorductById = () => {
       {/* Product Info */}
       <div className="col-md-6">
         <h1 className="fw-bold">{productById.product_name}</h1>
-        <p className="text-muted">{productById.description}</p>
         <h3 className="text-danger fw-bold">{`฿${productById.selling_price_per_quantity}`}
           <button onClick={handleDecreaseQuantity} className="btn ms-3 "><h2 className="bi bi-patch-minus-fill"></h2></button>
           <input
@@ -113,11 +118,46 @@ const detailPorductById = () => {
           />
           <button onClick={handleIncreaseQuantity} className="btn"><h2 className="bi bi-patch-plus-fill"></h2></button>
         </h3> 
-          <button onClick={(e) => handleSubmitProductMaterial(e)} className="btn btn-success ms-3 me-3">เพิ่มไปยังตะกร้า</button>
-          <button className="btn btn-primary me-3" style={{ padding: '10px 20px', cursor: 'pointer' }}>
-            กลับไปหน้าก่อนหน้า
+        <div
+          className="d-flex gap-3 mt-3" // ใช้ Flexbox เพื่อจัดปุ่มในแถวเดียวกัน
+          style={{
+            flexWrap: 'nowrap', // ป้องกันปุ่มล่นไปแถวถัดไป
+            alignItems: 'center', // จัดให้อยู่ตรงกลางในแนวตั้ง (optional)
+          }}>
+          <button
+            onClick={(e) => handleSubmitProductMaterial(e)}
+            className="btn btn-success"
+            style={{
+              padding: '10px 20px',
+              width: '160px', // ความกว้างคงที่
+              textAlign: 'center',
+              whiteSpace: 'nowrap',
+            }}>
+            เพิ่มไปยังตะกร้า
           </button>
 
+          <button
+            className="btn btn-primary me-3"
+            style={{
+              padding: '10px 20px',
+              width: '160px', // ความกว้างคงที่
+              display: 'flex', // ใช้ Flexbox
+              alignItems: 'center', // จัดข้อความตรงกลางแนวตั้ง
+              justifyContent: 'center', // จัดข้อความตรงกลางแนวนอน
+              textAlign: 'center', // จัดข้อความตรงกลางในปุ่ม
+              whiteSpace: 'nowrap', // ป้องกันข้อความขึ้นบรรทัดใหม่
+              cursor: 'pointer',
+            }}>
+            กลับไปหน้าก่อนหน้า
+          </button>
+        </div>
+        {/* Section ใหม่สำหรับรายละเอียดสินค้า */}
+        <div className="row mt-5">
+          <div className="col-12">
+            <h2 className="fw-bold mb-4">รายละเอียดสินค้า</h2>
+            <p className="text-muted">{productById.description}</p>
+          </div>
+        </div>
         </div>
       </div>
     </div>
