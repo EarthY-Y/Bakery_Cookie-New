@@ -176,6 +176,13 @@ export const updateStatusOrder = async (req, res) => {
                 resolve(result)
             })
         })
+        const resultsInsertHistory = await new Promise((resolve, reject)=> {
+            db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), id, status, token.admin_id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {

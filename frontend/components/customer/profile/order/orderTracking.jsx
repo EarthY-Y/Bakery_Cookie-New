@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getlistOrdersWaitPayment, getlistOrdersprocess } from '../../../../API/customer/orderTrackingService';
+import { getlistOrdersWaitPayment, getlistOrdersprocess, cancelOrder } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
+import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
+import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 
 const OrderTracking = () => {
   const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
@@ -9,6 +11,9 @@ const OrderTracking = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCheckOut, setCurrentPageCheckOut] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [orderId, setOrderId] = useState("");
 
   useEffect(() => {
     const getOrders = async () => {
@@ -36,11 +41,10 @@ const OrderTracking = () => {
     getOrders();
   }, []);
 
-
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrders = orderWaitStatement.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itemsPerPage; //sum 10
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage; //sum 0
+  const currentOrders = orderWaitStatement.slice(indexOfFirstItem, indexOfLastItem);//slice เลือกข้อมูลที่อยู่ระหว่าง 2 ตัวนี้คือ 0,10 
 
   const totalPages = Math.ceil(orderWaitStatement.length / itemsPerPage);
 
@@ -58,42 +62,39 @@ const OrderTracking = () => {
     setCurrentPageCheckOut(pageNumber);
   };
 
+  const handleCancelOrder = async(reason) => {
+    console.log("เหตุผลในการยกเลิก:", reason, orderId);
+    const response = await cancelOrder(orderId, reason)
+    if(response){
+      setShowCancelModal(false)
+    }
+  };
+
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>รายการสั่งซื้อ</h2>
       </div>
       <h4>รอการชำระเงิน</h4>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ราคารวม</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ชำระเงิน</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>รายละเอียด</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentOrders.map((order) => (
-            <tr key={order.orders_id}>
-              <td>{order.orders_id}</td>
-              <td>{order.quantity} ชิ้น</td>
-              <td>{order.price} บาท</td>
-              <td>{formatDate(order.created_at)}</td>
-              <td className="text-center">{order.status_name}</td>
-              <td className="text-center">
-                <Link to={`/payment/${order.cartId}`} className="btn btn-outline-warning text-black">pay</Link>
-              </td>
-              <td className="text-center">
-                <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        {currentOrders.map((order) => (
+          <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
+            <div className="card border-secondary">
+              <div className="card-header d-flex justify-content-between">
+                <span>รหัสคำสั่งซื้อ: {order.orders_id}</span>
+                <span className="badge bg-warning text-dark">{order.status_name}</span>
+              </div>
+              <div className="card-body">
+                <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
+                <p className="card-text">ราคารวม: {numberGrouping(order.price)} บาท</p>
+                <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+              </div>
+              <div className="card-footer d-flex justify-content-between">
+                <Link  to={`/payment/${order.cartId}`}  className="btn btn-primary"> ชำระเงิน</Link>
+                <Link  to={`view/detail/${order.orders_id}`}  className="btn btn-secondary">  รายละเอียด</Link>
+              </div>
+            </div>
+          </div>
+        ))}
 
       <nav>
         <ul className="pagination justify-content-end"> 
@@ -117,34 +118,27 @@ const OrderTracking = () => {
         </ul>
       </nav>
       <h4>พร้อมดำเนินการ</h4>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ราคารวม</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>รายละเอียด</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentOrdersCheckOut.map((order) => (
-            <tr key={order.orders_id}>
-              <td>{order.orders_id}</td>
-              <td>{order.quantity} ชิ้น</td>
-              <td>{order.price} บาท</td>
-              <td>{formatDate(order.created_at)}</td>
-              <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
-              <td className="text-center">{order.status_name}</td>
-              <td className="text-center">
-                <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {currentOrdersCheckOut.map((order) => (
+          <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
+            <div className="card border-secondary">
+              <div className="card-header d-flex justify-content-between">
+                <span>รหัสคำสั่งซื้อ: {order.orders_id}</span>
+                <span className="badge bg-warning text-dark">{order.status_name}</span>
+              </div>
+              <div className="card-body">
+                <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
+                <p className="card-text">ราคารวม: {numberGrouping(order.price)} บาท</p>
+                <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+                <p className="card-text">วันที่ชำระเงิน: {formatDate(order.updated_at)}</p>
+              </div>
+              <div className="card-footer d-flex justify-content-between">
+              {/* //!ถ้าใน Onclick มีการทำงานมากกว่า 2 ต้องใส่ {} คลุมการทำงานนั้น */}
+                <button className="btn btn-danger" onClick={() => {setShowCancelModal(true); setOrderId(order.orders_id)}}> ยกเลิกคำสั่งซื้อ</button> 
+                <Link  to={`view/detail/${order.orders_id}`}  className="btn btn-secondary">  รายละเอียด</Link>
+              </div>
+            </div>
+          </div>
+        ))}
 
       <nav>
         <ul className="pagination justify-content-end"> 
@@ -167,6 +161,12 @@ const OrderTracking = () => {
           </li>
         </ul>
       </nav>
+      <CancelOrderModal
+        showModal={showCancelModal}
+        handleClose={() => setShowCancelModal(false)}
+        handleCancelOrder={handleCancelOrder} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
+      />
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

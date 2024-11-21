@@ -79,6 +79,7 @@ const cartProduct = () => {
     try {
       const formData = new FormData();  
       formData.append('file', Picture);
+      formData.append('totalPrice', totalPrice);
       console.log();
       const response = await updatePaymentOrder(formData, id )
       console.log(response);

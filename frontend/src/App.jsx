@@ -43,6 +43,7 @@ import Profile from '../page/customer-page/profile-page/profile-page';
 import ListAddress from '../page/customer-page/profile-page/listAddress-page'
 import EditAddress from '../page/customer-page/profile-page/editAddress-page'
 import OrderTracking from '../page/customer-page/profile-page/orderTracking-page'
+import OrderTrackingDetail from '../page/customer-page/profile-page/orderTrackingDetail-page';
 
 const router = createBrowserRouter([
   {
@@ -288,10 +289,10 @@ const router = createBrowserRouter([
                     path: "",
                     element: <OrderTracking />,
                   },
-                  // {
-                  //   path: "edit/:id",
-                  //   element: <EditAddress />,
-                  // },
+                  {
+                    path: "view/detail/:id",
+                    element: <OrderTrackingDetail />,
+                  },
                 ]
               },
             ],

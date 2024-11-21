@@ -171,12 +171,16 @@ export const updatePaymentOrder = async (req, res) => {
         
         const id = req.params.id
         const statement_picture = req.file.filename;
+        console.log(req.body);  
+        const {totalPrice} = req.body
+        console.log(totalPrice);
+        
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
         const authToken = await passToken(authHeader)
         if(!authToken){
             return res.status(404).json({ message: "User not found" });
         }
-        console.log(id, statement_picture);
+        console.log(id, statement_picture,req.body);
         const resultsFindStatusOrder = await new Promise((resolve, reject)=> {
             db.query("SELECT status_order_id FROM status_order WHERE status_name LIKE ?", ["ชำระ%"],
                     (err, result) => { 
@@ -186,7 +190,7 @@ export const updatePaymentOrder = async (req, res) => {
         })
         const statusOrderId = resultsFindStatusOrder[0].status_order_id
         const results = await new Promise((resolve, reject)=> { //WHERE customer_id = ? and cartId = ? อาจจะเกิด cart_id ซ้ำกันได้อนาคตต้องเเก้ไปใช้ orders_id
-            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, statusOrderId, authToken.customerId, id],
+            db.query("UPDATE orders SET price = ?, statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [totalPrice, statement_picture, statusOrderId, authToken.customerId, id],
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)
