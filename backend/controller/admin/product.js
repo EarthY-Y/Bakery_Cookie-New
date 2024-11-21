@@ -182,7 +182,7 @@ export const updateProduct = async (req, res) => {
         updateQuery += " WHERE product_id = ?";
         updateValues.push(id);
 
-        if (product_name || selling_price_per_quantity || quantity_per_time ) {
+        if (product_name || quantity_per_time || selling_price_per_quantity  || description || quantity_per_time ) {
             await new Promise((resolve, reject) => {
                 db.query(updateQuery, updateValues, (err, result) => {
                     if (err) return reject(err);
