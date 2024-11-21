@@ -222,7 +222,6 @@ export const getPorductCart = async (req, res) => {
                 resolve(result)
             })
         })
-        console.log(resultsFindProductCart[0]);
         
         res.status(200).json(resultsFindProductCart)
     }catch(error){

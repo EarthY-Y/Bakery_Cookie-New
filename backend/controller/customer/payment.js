@@ -33,7 +33,7 @@ export const getCustomerAddress = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT a.houesNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
+            db.query("SELECT a.houseNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
                     " INNER JOIN customer c ON c.customer_id = a.created_by"+
                     " INNER JOIN province p ON p.province_id = a.province_id"+
                     " INNER JOIN amphure ap ON ap.amphure_id = a.amphure_id"+
@@ -105,7 +105,7 @@ export const createOrders = async (req, res) => {
         res.status(400).json({ message: "Error get product", error });
     }
 }
-
+//เปลี่ยนสถานะ สินค้าที่อยู่ใน ตะกร้าสินค้า
 const updateStatusCartProduct = async (cartItemId) => {
     const resultsFindstatusCart = await new Promise((resolve, reject) => {
         db.query(
@@ -192,7 +192,23 @@ export const updatePaymentOrder = async (req, res) => {
                         resolve(result)
                     })
         })
-        res.status(200).json(results)
+        const resultsFindOrderById = await new Promise((resolve, reject)=> {
+            db.query("SELECT orders_id FROM orders WHERE customer_id = ? and cartId = ?", [authToken.customerId, id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        const orderId = resultsFindOrderById[0].orders_id
+        console.log("orderId",orderId);
+        const resultsInsertHistory = await new Promise((resolve, reject)=> {
+            db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), orderId, statusOrderId, authToken.customerId],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        res.status(200).json(resultsInsertHistory)
     }catch(error){
         console.error("Error get product:", error);
         res.status(400).json({ message: "Error get product", error});

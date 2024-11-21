@@ -23,10 +23,10 @@ export const getCustomer = async (req, res) => {
 
 export const getCustomerById = async (req, res) => {
     try {
-        const id = req.params.id
-        console.log(id);
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        const authToken = await passToken(authHeader)
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT * FROM customer WHERE customer_id = ?",[id], (err, result) => {
+            db.query("SELECT * FROM customer WHERE customer_id = ?",[authToken.customerId], (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
             })
@@ -70,11 +70,67 @@ export const createCustomer = async (req, res) => {
     }
 }
 
-export const updateCustomer = (req, res) => {
+//เป็นวิธีที่ช้ามากกกกกกก
+export const updateCustomer = async (req, res) => {
+    try {
+        const id = req.params.id
+        const authHeader = req.headers['authorization']
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ message: "User not found" });
+        }
+        const formData = req.body; 
+        let customerPic = null;
+        console.log(authToken.customerId, formData);
     
+        if (req.file) {
+            customerPic = req.file.filename; 
+            console.log(customerPic);  
+        }
+        // Dynamic SQL - สร้าง Query เฉพาะฟิลด์ที่มีการเปลี่ยนแปลง
+        let query = 'UPDATE customer SET ';
+        const fields = [];
+        const values = [];
+    
+        // Loop เพิ่มฟิลด์ที่มีการเปลี่ยนแปลง ทุกครั้งที่มีการอัปเดตจะมีข้อมูลรูปเสมอเพราะต้องส่งมาให้ multer หรือใช้ในการผ่านเงื่อนไข
+        for (const [key, value] of Object.entries(formData)) {
+          if (value) {
+            fields.push(`${key} = ?`);
+            values.push(value);
+          }
+        }
+        
+        // เพิ่มไฟล์ที่อัปโหลด (ถ้ามี)
+        if (customerPic) {
+          fields.push('customerpic = ?');
+          values.push(customerPic);
+        }
+
+        query += fields.join(', ');
+        query += ' WHERE customer_id = ?';
+        values.push(id);
+
+        // Debug Query
+        console.log('Generated Query:', query);
+        
+        // เรียกใช้ Query กับฐานข้อมูล
+        const results = await new Promise((resolve, reject) => {
+            db.query(query, values, 
+                (err, result, fields) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        })
+        res.status(200).json({ message: 'info updated successfully', results});
+    } catch (error) {
+        console.error("Error get customer by id:", error);
+        return res.status(400).json({ message: "error updated info", error});
+    }
 }
 
-export const deleteCustomer = (req, res) => {
+export const deleteCustomer = async (req, res) => {
     
 }
 
@@ -88,7 +144,7 @@ export const createAddress = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("INSERT INTO address (addressId, created_by, houesNo, province_id, amphure_id, tambon_id, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            db.query("INSERT INTO address (addressId, created_by, houseNo, province_id, amphure_id, tambon_id, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     [id, authToken.customerId, houseNo, provincesId, amphuresId, tambonsId, postCode ],
                     (err, result) => { 
                 if (err) return reject(err)

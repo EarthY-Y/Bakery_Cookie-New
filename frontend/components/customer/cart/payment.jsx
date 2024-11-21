@@ -104,7 +104,7 @@ const cartProduct = () => {
               <b>{address.f_name} {address.l_name} 0{address.phone_number}</b>
             </div>
             <div className='col-8'>
-              <b>{address.houesNo} ตำบล{address.tambon_nameTH} อำเภอ{address.amphure_nameTH} จังหวัด{address.province_nameTH} {address.zip_code}</b>
+              <b>{address.houseNo} ตำบล{address.tambon_nameTH} อำเภอ{address.amphure_nameTH} จังหวัด{address.province_nameTH} {address.zip_code}</b>
             </div>
           </div>
         </div>
