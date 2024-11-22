@@ -12,7 +12,6 @@ const profile = () => {
   const [customerLName, setCustomerLName] = useState("")
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("")
   // const [customerName, setCustomerName] = useState("")
-
   useState(()=>{
     const getInfoCustomer = async() => {
       const response = await getDeatialCustomer()
@@ -40,7 +39,7 @@ const profile = () => {
     if (Picture instanceof File) {
       updatedData.file = Picture;
     } else if (typeof Picture === 'string') {
-      updatedData.file = Picture;
+      updatedData.customerpic = Picture;
     }
 
     if (Object.keys(updatedData).length === 0) {

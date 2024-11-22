@@ -26,6 +26,6 @@ router.patch('/customers/edit/profile/:id',verifyCustomerMid, uploadSingle, (req
     updateCustomer(req, res); // เรียกใช้ createMaterial พร้อม req และ res
 });
 router.delete('/customers/delete/profile:id',verifyCustomerMid, deleteCustomer);
-
 router.post('/customers/create/address',verifyCustomerMid, createAddress);
+
 export default router

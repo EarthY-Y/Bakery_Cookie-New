@@ -27,8 +27,8 @@ export const getOrderslistCheckOut = async (req, res) => {
             db.query("SELECT  o.orders_id, o.quantity, o.price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
                 " INNER JOIN status_order so ON so.status_order_id = o.status"+
                 " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
-                " WHERE so.status_name NOT LIKE ?"+
-                " GROUP BY orders_id;", ["รอ%"],
+                " WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?"+
+                " GROUP BY orders_id;", ["รอ%", "ยกเลิก%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

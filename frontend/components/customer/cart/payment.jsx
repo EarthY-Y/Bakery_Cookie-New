@@ -61,8 +61,7 @@ const cartProduct = () => {
         setTotalPriceProduct(response.data[0].price)
       }
       catch (error) {
-        alert(error)
-        navigate("/home")
+        navigate("/home") //ถ้าลูกค้า จ่ายเงินเเล้วจะถูกดีดไปหน้า home
       }
     }
     getCart()
@@ -81,7 +80,7 @@ const cartProduct = () => {
       formData.append('file', Picture);
       formData.append('totalPrice', totalPrice);
       console.log();
-      const response = await updatePaymentOrder(formData, id )
+      const response = await updatePaymentOrder(formData, id)
       console.log(response);
       if(response.data){
         navigate("/home")
