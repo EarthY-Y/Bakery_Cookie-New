@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { validateAddressCustomer, getAddressCustomer, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
+import { goBackOrHome } from '../../untils/fucntion/backFuction';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
@@ -61,8 +62,7 @@ const cartProduct = () => {
         setTotalPriceProduct(response.data[0].price)
       }
       catch (error) {
-        alert(error)
-        navigate("/home")
+        navigate("/home") //ถ้าลูกค้า จ่ายเงินเเล้วจะถูกดีดไปหน้า home
       }
     }
     getCart()
@@ -79,8 +79,9 @@ const cartProduct = () => {
     try {
       const formData = new FormData();  
       formData.append('file', Picture);
+      formData.append('totalPrice', totalPrice);
       console.log();
-      const response = await updatePaymentOrder(formData, id )
+      const response = await updatePaymentOrder(formData, id)
       console.log(response);
       if(response.data){
         navigate("/home")
@@ -92,52 +93,68 @@ const cartProduct = () => {
       alert(error)
     }
   }
-
-  return (    
-    <form onSubmit={handleSubmmit}>
-      <div className="container my-5">
-        <h1 className="mb-4">ชำระเงิน</h1>
-        <div className='bg-light p-3 rounded'>
-          <h3>ที่อยู่ที่ใช้ในการจัดส่ง</h3>
-          <div className='row'>
-            <div className='col-4'>
-              <b>{address.f_name} {address.l_name} 0{address.phone_number}</b>
+  
+  return (
+    <form className="container my-5" onSubmit={handleSubmmit}>
+      <div className="row bg-light p-3 border rounded mb-4">
+        <h2 className="mb-2 text-center">ชำระเงิน</h2>
+        <hr className="my-4 border-secondary" />
+        <h3>ที่อยู่ที่ใช้ในการจัดส่ง</h3>
+        <p>
+          <strong>
+            {address.f_name} {address.l_name} | โทร: 0{address.phone_number}
+          </strong>
+          <br />
+          {address.houesNo} ตำบล {address.tambon_nameTH} อำเภอ {address.amphure_nameTH} จังหวัด {address.province_nameTH} {address.zip_code}
+        </p>
+      </div>
+      <div className="row flex-column align-items-center p-3 border rounded bg-light mt-3">
+        <div className="col-12 col-md-6 text-center justify-content-center p-3">
+          <div>
+            <h3>ช่องทางการชำระเงิน</h3>
+            <div>
+              <h5>ธนาคารกรุงไทย เลขที่บัญชี: <strong>000-000-000-0</strong></h5>
             </div>
-            <div className='col-8'>
-              <b>{address.houseNo} ตำบล{address.tambon_nameTH} อำเภอ{address.amphure_nameTH} จังหวัด{address.province_nameTH} {address.zip_code}</b>
+          </div>
+          <div className="d-flex justify-content-center mt-4">
+            <div className="w-100 p-4 border rounded bg-white">
+              <div className="mb-3">
+                <div className="d-flex justify-content-between">
+                  <strong className="text-uppercase">ราคารวมสินค้า</strong>
+                  <span>{numberGrouping(totalPriceProduct)} ฿</span>
+                </div>
+                <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
+                <div className="d-flex justify-content-between">
+                  <strong className="text-uppercase">ราคาส่ง</strong>
+                  <span>{numberGrouping(52)} ฿</span>
+                </div>
+                <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
+                <div className="d-flex justify-content-between">
+                  <strong className="text-uppercase text-danger">ราคารวม</strong>
+                  <span className="text-danger">{numberGrouping(totalPrice)} ฿</span>
+                </div>
+                <hr className="my-4" style={{ borderTop: '2px dashed red' }} />
+              </div>
             </div>
           </div>
         </div>
-        <div className=" bg-light mt-3 p-3 rounded text-center">
-          <div className='d-flex justify-content-between'>
-            <div>
-                <h3>ช่องทางการชำระเงิน</h3>
-                <div>
-                  <h5>ธนาคารกรุงไทย เลขที่บัญชี: <strong>000-000-000-0</strong> </h5> 
-                </div>
-              </div>
-              
-              <div className='me-5'>
-                <div className='mb-3'>
-                  <strong className="text-uppercase">ราคารวมสินค้า: {numberGrouping(totalPriceProduct)}</strong> <br />
-                  <strong className="text-uppercase">ราคาส่ง: {numberGrouping(52)}</strong> <br />
-                  <strong className="text-uppercase text-danger">ราคารวม: {numberGrouping(totalPrice)}</strong> <br />
-                </div>
-              </div>
-            </div>
-            <div className="position-relative " style={{ margin: '2%', width: '300px', height: '300px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-              {Picture ? (
-                <img src={URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
-              ) : (
-                <span>เพิ่มรูปวัตถุดิบ</span>
-              )}
-              <input type="file" className="position-absolute top-0 start-0 w-100 h-100" style={{ opacity: 0, cursor: 'pointer' }} onChange={(e) => setPicture(e.target.files[0])} />
-            </div>
-            <div>
-              <button type='submit' className="btn btn-success btn-lg" disabled={!Picture}>ชำระเงิน</button>
-            </div>
-          </div>
+        <div className="position-relative mb-4 bg-white" style={{ margin: '2%', width: '300px', height: '300px', border: '1px dashed #ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {Picture ? (
+            <img src={URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : (
+            <span>เพิ่มรูปยืนยันการโอนเงิน</span>
+          )}
+          <input 
+            type="file" 
+            className="position-absolute top-0 start-0 w-100 h-100" 
+            style={{ opacity: 0, cursor: 'pointer' }} 
+            onChange={(e) => setPicture(e.target.files[0])} 
+          />
         </div>
+        <div className="d-flex flex-column flex-md-row justify-content-end align-items-center mt-4">
+          <button type='submit' className="btn btn-success btn-lg" disabled={!Picture}>ชำระเงิน</button>
+        </div>
+      </div>
     </form>
   );
 };

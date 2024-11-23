@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { getPorductCartService,deletePorductCartService, upadateCartService } from '../../../API/customer/productService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import { goBackOrHome } from '../../untils/fucntion/backFuction';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
   const {id} = useParams();
+  const navigate = useNavigate()
   const [productCart, setProductCart] = useState([])
   const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
@@ -20,7 +22,6 @@ const cartProduct = () => {
         if(!response.data){
           throw new Error("ไม่มีข้อมูล")
         }
-        console.log(response.data);
         setProductCart(response.data)
       }
       catch (error) {
@@ -30,45 +31,30 @@ const cartProduct = () => {
     getCart()
   },[])
 
-  const addAmount = (cart_product_id) => {
-    const updatedCart = productCart.map((item) => {
-      if (item.cart_product_id === cart_product_id) {
-        handleUpdateCartProduct(cart_product_id, "add", 1)
-        return { ...item, quantity: item.quantity + 1 }; // เพิ่มจำนวนสินค้า
-      }
-      return item; // ไม่เปลี่ยนแปลงสินค้าชิ้นอื่น
-    });
-    setProductCart(updatedCart);
-  };
-  
-  const inputAmount = (value, cart_product_id) => {
-    const updatedCart = productCart.map((item) => {
-      if (item.cart_product_id === cart_product_id) {
-        const newValue = Math.max(Number(value), 1); // ตรวจสอบให้ค่าต่ำสุดคือ 1 ใช้ parseInt(value) ก้็ได้เพื่อเเปลงค่าให้มี dataType เดียวกัน
-        handleUpdateCartProduct(cart_product_id, "input" , newValue)
-        return { ...item, quantity: newValue };
-      }
-      return item;
-    });
-    setProductCart(updatedCart);
+  const handleUpdateCartProduct = async (cart_product_id, status, value) => {
+    try {
+      const response = await upadateCartService(cart_product_id, status, value);
+      if (!response.data) throw new Error('ไม่มีข้อมูล');
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
-  const minusAmount = (cart_product_id) => {
-    const updatedCart = productCart.map((item) => {
-      if (item.cart_product_id === cart_product_id && item.quantity > 1) {
-        handleUpdateCartProduct(cart_product_id, "minus", 1)
-        return { ...item, quantity: item.quantity - 1 }; // ลดจำนวนสินค้า
-      }
-      return item; // ไม่เปลี่ยนแปลงสินค้าชิ้นอื่น
-    });
-    setProductCart(updatedCart);
+  const handleQuantityChange = (cart_product_id, change) => {
+    setProductCart((prevCart) =>
+      prevCart.map((item) =>
+        item.cart_product_id === cart_product_id
+          ? { ...item, quantity: Math.max(item.quantity + change, 1) }
+          : item
+      )
+    );
+    handleUpdateCartProduct(cart_product_id, change > 0 ? 'add' : 'minus', 1);
   };
 
   const handleDeleteProductCart = (id) => {
     deletePorductCartService(id)
       .then(() => {
-        // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
-        setProductCart(prevProductCart => prevProductCart.filter(productCart => productCart.cart_product_id !== id))
+        setProductCart((prev) => prev.filter((item) => item.cart_product_id !== id));
       })
       .catch(err => console.log(err))
   }
@@ -79,91 +65,71 @@ const cartProduct = () => {
     setTotalPrice(total);
   }, [productCart]);
 
-  const handleUpdateCartProduct = async(cart_product_id, status, value) => {
-      try {
-        console.log("handleUpdateCartProduct",cart_product_id, status);
-        
-        const response = await upadateCartService(cart_product_id, status, value)
-        if(!response.data){
-          throw new Error("ไม่มีข้อมูล")
-        }
-      }
-      catch (error) {
-        alert(error)
-      }
-  }
-
-  return (    
+  return (
     <div className="container my-5">
-      <h3 className="mb-4">ตะกร้าสินค้าของคุณ</h3>
-      <table className="table table-bordered">
-        <thead className="thead-light">
-          <tr>
-            <th>สินค้า</th>
-            <th>ราคาต่อชุด</th>
-            <th>จำนวน</th>
-            <th>ราคารวม</th>
-            <th>ลบสินค้า</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productCart.length > 0 ? (
-            productCart.map((item) => (
-              <tr key={item.cart_product_id }>
-                <td>
-                  <div className="d-flex align-items-center">
-                    <img
-                      src={`${API_URL_PICTURE}/${item.productpic_name}`}
-                      alt="Product"
-                      style={{ width: '150px', height: '100px', marginRight: '10px' }}
-                    />
-                    <span>ชื่อสินค้า {item.product_name}</span>
-                  </div>
-                </td>
-                <td>{numberGrouping(item.selling_price_per_quantity)}</td>
-                <td>
-                  <div className="d-flex align-items-center">
-                    <button className="btn btn-outline-secondary" onClick={() => minusAmount(item.cart_product_id)}>-</button>
-                    <input
-                      type="number"
-                      className="form-control d-inline text-center"
-                      style={{
-                        width: '70px',
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        borderRadius: '5px',
-                        display: 'inline-block',
-                      }}
-                      value={item.quantity}
-                      onChange={(e) => inputAmount(e.target.value, item.cart_product_id)}
-                    />
-                    <button className="btn btn-outline-secondary" onClick={() => addAmount(item.cart_product_id)}>+</button>
-                  </div>
-                </td>
-                <td>{numberGrouping(item.selling_price_per_quantity * item.quantity)}</td>
-                <td>
-                  <button className="btn btn-danger" onClick={() => handleDeleteProductCart(item.cart_product_id)}>ลบ</button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                ไม่มีสินค้าในตะกร้า
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-      <div className="d-flex justify-content-between">
-        <div>
-          <strong>ราคารวม: {numberGrouping(totalPrice)}</strong>
-        </div>
-        <div>
-          <button className="btn btn-success " disabled={isPaymentDisabled}>
-            <Link className="text-light" to={`/orders/`+id}>สั่งซื้อ</Link> 
-          </button>
-        </div>
+      <div className="row bg-light p-3 border rounded mb-0 fw-bold">
+        <h2 className="mb-2 text-center">ตะกร้าสินค้าของคุณ</h2>
+        <hr className="my-4 border-secondary"/>
+        <div className="col-12 col-md-8 d-none d-md-block text-secondary">สินค้า</div>
+        <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">ราคาต่อชุด</div>
+        <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">จำนวน</div>
+        <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">ราคารวม</div>
+        <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">ลบสินค้า</div>
+      </div>
+      <div className="cart-table">
+        {productCart.length > 0 ? (
+          productCart.map((item) => (
+            <div className="row align-items-center p-3 border-bottom rounded bg-white" key={item.cart_product_id}>
+              <div className="col-12 col-md-8 d-flex align-items-center">
+                <img
+                  src={`${API_URL_PICTURE}/${item.productpic_name}`}
+                  alt={item.product_name}
+                  className="img-fluid rounded"
+                  style={{ width: '120px', height: '80px' }}
+                />
+                <span className="ms-3">{item.product_name}</span>
+              </div>
+              <div className="col-4 col-md-1 text-center">
+                <span className="text-secondary d-block d-md-none">ราคาต่อชุด</span>
+                <strong>{numberGrouping(item.selling_price_per_quantity)} ฿</strong>
+              </div>
+              <div className="input-group-sm col-3 col-md-1 text-center cart-item-quantity d-flex align-items-center justify-content-center">
+                <button className="btn btn-sm btn-outline-secondary" onClick={() => handleQuantityChange(item.cart_product_id, -1)}>-</button>
+                <input
+                  type="number"
+                  className="form-control text-center"
+                  value={item.quantity}
+                  style={{ width: '60px' }}
+                  onChange={(e) =>
+                    handleUpdateCartProduct(
+                      item.cart_product_id,
+                      'input',
+                      Math.max(Number(e.target.value), 1)
+                    )
+                  }
+                />
+                <button className="btn btn-sm btn-outline-secondary" onClick={() => handleQuantityChange(item.cart_product_id, 1)}>+</button>
+              </div>
+              <div className="col-3 col-md-1 text-center">
+                <span className="text-secondary d-block d-md-none">ราคารวม</span>
+                <strong>{numberGrouping(item.selling_price_per_quantity * item.quantity)} ฿</strong>
+              </div>
+              <div className="col-1 col-md-1 text-center">
+                <button className="btn btn-danger btn-sm" onClick={() => handleDeleteProductCart(item.cart_product_id)}>ลบ</button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="row bg-white p-3 justify-content-center align-items-center">ไม่มีสินค้าในตะกร้า</p>
+        )}
+      </div>
+      <div className="row bg-light p-3 border rounded text-end fw-bold">
+        <h4>ราคารวม: {numberGrouping(totalPrice)} ฿</h4>
+      </div>
+      <div className="d-flex flex-column flex-md-row justify-content-end align-items-center mt-4">
+        <button className="btn btn-success btn-lg" disabled={isPaymentDisabled}>
+          <Link className="text-light" to={`/orders/${id}`}>สั่งซื้อ</Link>
+        </button>
       </div>
     </div>
   );

@@ -6,7 +6,8 @@ export const getOrderslistWaitStatement = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT * FROM orders o INNER JOIN status_order so ON so.status_order_id = o.status"+
-                " WHERE so.status_name LIKE ?", ["รอ%"],
+                " WHERE so.status_name LIKE ?"+
+                " GROUP BY orders_id;", ["รอ%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -26,7 +27,8 @@ export const getOrderslistCheckOut = async (req, res) => {
             db.query("SELECT  o.orders_id, o.quantity, o.price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
                 " INNER JOIN status_order so ON so.status_order_id = o.status"+
                 " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
-                " WHERE so.status_name NOT LIKE ?", ["รอชำ%"],
+                " WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?"+
+                " GROUP BY orders_id;", ["รอ%", "ยกเลิก%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -63,23 +65,30 @@ export const getOrdersById = async (req, res) => {
     }
 }
 
-export const updateStatusOrder = async (req, res) => {
-    try {
-        const authHeader = req.headers['authorization'];
-        const token = await passToken(authHeader);
-        const id = req.params.id
-        const {status} = req.body
-        const results = await new Promise((resolve, reject)=> {
-            db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
-                    (err, result) => { 
-                if (err) return reject(err)
-                resolve(result)
-            })
-        })
-        // console.log("results",results);
-        return res.status(200).json(results);
-    } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
-    }
-}
+// export const updateStatusOrder = async (req, res) => {
+//     try {
+//         const authHeader = req.headers['authorization'];
+//         const token = await passToken(authHeader);
+//         const id = req.params.id
+//         const {status} = req.body
+//         const results = await new Promise((resolve, reject)=> {
+//             db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
+//                     (err, result) => { 
+//                 if (err) return reject(err)
+//                 resolve(result)
+//             })
+//         })
+//         const resultsInsertHistory = await new Promise((resolve, reject)=> {
+//             db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), id, status, authToken.admin_id],
+//                     (err, result) => { 
+//                 if (err) return reject(err)
+//                 resolve(result)
+//             })
+//         })
+//         console.log("results",results);
+//         return res.status(200).json(results);
+//     } catch (error) {
+//         console.error("Error get product:", error);
+//         res.status(400).json({ message: "Error get product", error });
+//     }
+// }

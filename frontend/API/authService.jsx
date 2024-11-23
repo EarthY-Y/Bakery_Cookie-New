@@ -14,8 +14,18 @@ export const login = async (userName, passWord) => {
     throw error; // ส่ง error ออกไปให้ component จัดการ
   }
 };
+export const loginAdmin = async (userName, passWord) => {
+  try {
+    const res = await axios.post(API_URL+'/login/admin', { userName, passWord });
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error; // ส่ง error ออกไปให้ component จัดการ
+  }
+};
 
-export const logout = async (userName, passWord) => {
+export const logout = async () => {
   try {
     removeToken()
   } catch (error) {

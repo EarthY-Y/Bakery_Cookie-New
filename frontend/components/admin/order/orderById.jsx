@@ -86,7 +86,7 @@ const orderById = () => {
             ) : (
               // แสดง select box
               <select className="form-select" value={orderById[0]?.status} onChange={(e) => handleInputChange(e.target.value)}>
-                  <option disabled>Select Material</option>
+                  <option disabled>Select status</option>
                   {statusOrders.map((statusOrder) => (
                       <option key={statusOrder.status_order_id} value={statusOrder.status_order_id}>
                           {statusOrder.status_name}
@@ -95,7 +95,7 @@ const orderById = () => {
               </select>
             )} */}
             <select className="form-select" value={status || orderById[0]?.status} onChange={(e) => handleInputChange(e.target.value)}>
-              <option disabled>Select Material</option>
+              <option disabled>Select status</option>
               {statusOrders.map((statusOrder) => (
                   <option key={statusOrder.status_order_id} value={statusOrder.status_order_id}>
                       {statusOrder.status_name}

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from
 import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
+import LoginAdmin from '../page/login-page/loginAdmin-page';
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
 import EditPorductById from '../page/admin-page/product-page/EditProduct-page'
@@ -43,6 +44,8 @@ import Profile from '../page/customer-page/profile-page/profile-page';
 import ListAddress from '../page/customer-page/profile-page/listAddress-page'
 import EditAddress from '../page/customer-page/profile-page/editAddress-page'
 import OrderTracking from '../page/customer-page/profile-page/orderTracking-page'
+import OrderTrackingDetail from '../page/customer-page/profile-page/orderTrackingDetail-page';
+import HistoryOrder from '../page/customer-page/profile-page/historyOrder-page';
 
 const router = createBrowserRouter([
   {
@@ -56,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/login/admin",
+        element: <LoginAdmin />,
       },
       {
         path: "/signup",
@@ -288,10 +295,23 @@ const router = createBrowserRouter([
                     path: "",
                     element: <OrderTracking />,
                   },
-                  // {
-                  //   path: "edit/:id",
-                  //   element: <EditAddress />,
-                  // },
+                  {
+                    path: "view/detail/:id",
+                    element: <OrderTrackingDetail />,
+                  },
+                ]
+              },
+              {
+                path: "orderHistory",
+                children: [
+                  {
+                    path: "",
+                    element: <HistoryOrder />,
+                  },
+                  {
+                    path: "view/detail/:id",
+                    element: <OrderTrackingDetail />,
+                  },
                 ]
               },
             ],

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { validateAddressCustomer, getAddressCustomer, createOrder } from '../../../API/customer/paymentService';
 import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
+import { goBackOrHome } from '../../untils/fucntion/backFuction';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
@@ -101,66 +102,60 @@ const cartProduct = () => {
     }
   }
 
-  return (    
-    <form onSubmit={handleSubmmit}>
-      <div className="container my-5">
-        <h1 className="mb-4">ชำระเงิน</h1>
-        <div className='bg-light p-3 rounded'>
-          <h3>ที่อยู่ที่ใช้ในการจัดส่ง</h3>
-          <div className='row'>
-            <div className='col-4'>
-              <b>{address.f_name} {address.l_name} 0{address.phone_number}</b>
+  return (
+    <form className="container my-5" onSubmit={handleSubmmit}>
+      <div className="row bg-light p-3 border rounded mb-4">
+        <h2 className="mb-2 text-center">ชำระเงิน</h2>
+        <hr className="my-4 border-secondary"/>
+        <h3>ที่อยู่ที่ใช้ในการจัดส่ง</h3>
+        <p>
+          <strong>
+            {address.f_name} {address.l_name} | โทร: 0{address.phone_number}
+          </strong>
+          <br />
+          {address.houesNo} ตำบล {address.tambon_nameTH} อำเภอ {address.amphure_nameTH} จังหวัด {address.province_nameTH} {address.zip_code}
+        </p>
+      </div>
+      <div className="row bg-light p-3 border rounded fw-bold">
+        <div className="col-12 col-md-6 d-none d-md-block text-secondary">รายการสินค้าที่สั่งซื้อ</div>
+        <div className="col-4 col-md-2 text-center d-none d-md-block text-secondary">ราคาต่อชุด</div>
+        <div className="col-4 col-md-2 text-center d-none d-md-block text-secondary">จำนวน</div>
+        <div className="col-4 col-md-2 text-center d-none d-md-block text-secondary">ราคารวม</div>
+      </div>
+      {productCart.length > 0 ? (
+        productCart.map((item) => (
+          <div className="row align-items-center p-3 border-bottom rounded bg-white" key={item.cart_product_id}>
+            <div className="col-12 col-md-6 d-flex align-items-center">
+              <img
+                src={`${API_URL_PICTURE}/${item.productpic_name}`}
+                alt={item.product_name}
+                className="img-fluid rounded"
+                style={{ width: '120px', height: '80px' }}
+              />
+              <span className="ms-3">{item.product_name}</span>
             </div>
-            <div className='col-8'>
-              <b>{address.houseNo} ตำบล{address.tambon_nameTH} อำเภอ{address.amphure_nameTH} จังหวัด{address.province_nameTH} {address.zip_code}</b>
+            <div className="col-4 col-md-2 text-center">
+              <span className="text-secondary d-block d-md-none">ราคาต่อชุด</span>
+              <div>{numberGrouping(item.selling_price_per_quantity)} ฿</div>
+            </div>
+            <div className="col-4 col-md-2 text-center">
+              <span className="text-secondary d-block d-md-none">จำนวน</span>
+              <div>{item.quantity}</div>
+            </div>
+            <div className="col-4 col-md-2 text-center">
+              <span className="text-secondary d-block d-md-none">ราคารวม</span>
+              <div>{numberGrouping(item.selling_price_per_quantity * item.quantity)} ฿</div>
             </div>
           </div>
-          
-        </div>
-        <table className="table table-bordered mt-3 rounded">
-          <thead className="thead-light">
-            <tr>
-              <th>รายการสินค้าที่สั่งซื้อ</th>
-              <th>ราคาต่อชุด</th>
-              <th>จำนวน</th>
-              <th>ราคารวม</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productCart.length > 0 ? (
-              productCart.map((item) => (
-                <tr key={item.cart_product_id }>
-                  <td>
-                    <div className="d-flex align-items-center">
-                      <img
-                        src={`${API_URL_PICTURE}/${item.productpic_name}`}
-                        alt="Product"
-                        style={{ width: '150px', height: '100px', marginRight: '10px' }}
-                      />
-                      <span>ชื่อสินค้า {item.product_name}</span>
-                    </div>
-                  </td>
-                  <td>{numberGrouping(item.selling_price_per_quantity)}</td>
-                  <td>
-                    <div className="d-flex align-items-center">
-                        <p>{item.quantity}</p>
-                    </div>
-                  </td>
-                  <td>{numberGrouping(item.selling_price_per_quantity * item.quantity)}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="text-center">
-                  ไม่มีสินค้าในตะกร้า
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div className="text-end">
-          <button type='submit' className="btn btn-success btn-lg">ชำระเงิน</button>
-        </div>
+        ))
+      ) : (
+        <p className="row bg-white p-3 justify-content-center align-items-center">ไม่มีสินค้าในตะกร้า</p>
+      )}
+      <div className="row bg-light p-3 border rounded text-end fw-bold">
+        <h4>ยอดรวมทั้งหมด: {numberGrouping(totalPrice)} ฿</h4>
+      </div>
+      <div className="d-flex flex-column flex-md-row justify-content-end align-items-center mt-4">
+        <button type='submit' className="btn btn-success btn-lg">ชำระเงิน</button>
       </div>
     </form>
   );
