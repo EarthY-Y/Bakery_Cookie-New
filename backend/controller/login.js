@@ -54,8 +54,8 @@ export const LoginAdmin = async (req, res) =>{
         if (!match) {
             return res.status(400).json({ message: "Wrong Password" });
         }
-        const token = jwt.sign({ admin_id: user.admin_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-        return res.status(200).json({ message: "login complete", token: token, role: "admin" });
+        const tokenAdmin = jwt.sign({ admin_id: user.admin_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        return res.status(200).json({ message: "login complete", tokenAdmin: tokenAdmin, role: "admin" });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Database error" });

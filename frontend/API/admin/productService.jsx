@@ -6,7 +6,7 @@ export const createProductService = async(fromData) => {
     console.log(fromData);
     try {
 
-      const authToken = localStorage.getItem('token')
+      const authToken = localStorage.getItem('tokenAdmin')
       ;
       const res = await axios.post(API_URL + '/product/create', fromData,
           {
@@ -26,7 +26,7 @@ export const createProductService = async(fromData) => {
 export const listProductService = async() => {
     try {
       console.log(API_URL);
-      const authToken = localStorage.getItem('token')
+      const authToken = localStorage.getItem('tokenAdmin')
       ;
       const response = await axios.get(API_URL + "/product", 
         {
@@ -44,7 +44,7 @@ export const listProductService = async() => {
 
 export const listProductByIdService = async(id) => {
   try {
-    const authToken = localStorage.getItem('token')
+    const authToken = localStorage.getItem('tokenAdmin')
     ;
     const response = await axios.get(API_URL + "/product/"+id, 
       {
@@ -64,7 +64,7 @@ export const editProductService = async(fromData, id) => {
   console.log(fromData);
   try {
 
-    const authToken = localStorage.getItem('token')
+    const authToken = localStorage.getItem('tokenAdmin')
     ;
     const res = await axios.patch(API_URL + '/product/edit/'+id, fromData,
         {
@@ -85,7 +85,7 @@ export const editProductService = async(fromData, id) => {
 export const deleteProductByIdService = async(id) => {
   try {
     console.log(id);
-    const authToken = localStorage.getItem('token')
+    const authToken = localStorage.getItem('tokenAdmin')
     ;
     const response = await axios.delete(API_URL + "/product/delete/"+id, 
       {

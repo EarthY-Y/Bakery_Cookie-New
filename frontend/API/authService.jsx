@@ -38,10 +38,9 @@ export const logout = async () => {
 export const ProtectedRouteAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('tokenAdmin');
   useEffect(() => {
     const verifyToken = async () => {
-      const token = localStorage.getItem('token');
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);

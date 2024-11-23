@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 export const createMaterialService = async(formData) => { 
     console.log(formData);
     try {
-        const authToken = localStorage.getItem('token');
+        const authToken = localStorage.getItem('tokenAdmin');
         const res = await axios.post(API_URL + '/material/create', formData,
             {
                 headers: {
@@ -25,7 +25,7 @@ export const createMaterialService = async(formData) => {
 export const listMaterialService = async() => {
     try {
 
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         ;
         const response = await axios.get(API_URL + "/material", 
           {
@@ -44,7 +44,7 @@ export const listMaterialByIdService = async(id) => {
     try {
         console.log(id);
         
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         ;
         const response = await axios.get(API_URL + "/material/"+id, 
           {
@@ -61,7 +61,7 @@ export const listMaterialByIdService = async(id) => {
 
 export const updateMaterialService = async(formData,id) => {
   try {
-    const authToken = localStorage.getItem('token')
+    const authToken = localStorage.getItem('tokenAdmin')
     ;
     const res = await axios.patch(API_URL + '/material/update/'+id, formData,
       {
@@ -83,7 +83,7 @@ export const deleteMaterialByIdService = async(id) => {
     try {
         console.log(id);
         
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         ;
         const response = await axios.delete(API_URL + "/material/delete/"+id, 
           {

@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 
 export const getListCategoryService = async() => {
     try {
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         const response = await axios.get(API_URL + "/get/list/category", 
           {
             headers: {
@@ -22,7 +22,7 @@ export const getListCategoryService = async() => {
 
 export const getListProductPictureService = async() => {
     try {
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         const response = await axios.get(API_URL + "/get/product/picture", 
           {
             headers: {
@@ -38,7 +38,7 @@ export const getListProductPictureService = async() => {
 
 export const getCategoryByIdService = async(id) => {
   try {
-      const authToken = localStorage.getItem('token')
+      const authToken = localStorage.getItem('tokenAdmin')
       const response = await axios.get(API_URL + "/get/category/"+id, 
         {
           headers: {
@@ -55,7 +55,7 @@ export const getCategoryByIdService = async(id) => {
 export const createCategoryService = async(categoryName, selectedProducts) => {
     try {
         console.log(selectedProducts, categoryName);        
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         const response = await axios.post(API_URL + "/create/category",{categoryName:categoryName,selectedProducts:selectedProducts},
           {
             headers: {
@@ -71,7 +71,7 @@ export const createCategoryService = async(categoryName, selectedProducts) => {
 
 export const updateCategoryProductService = async(id, changesCategoryProduct) => {
   try {     
-      const authToken = localStorage.getItem('token')
+      const authToken = localStorage.getItem('tokenAdmin')
       const response = await axios.patch(API_URL + "/edit/category/"+id,{changesCategoryProduct:changesCategoryProduct},
         {
           headers: {
