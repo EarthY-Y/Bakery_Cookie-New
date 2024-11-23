@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { validateAddressCustomer, getAddressCustomer, createOrder } from '../../../API/customer/paymentService';
 import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
+import { goBackOrHome } from '../../untils/fucntion/backFuction';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
@@ -103,9 +104,6 @@ const cartProduct = () => {
 
   return (
     <form className="container my-5" onSubmit={handleSubmmit}>
-      <button className="btn btn-light btn btn-outline-secondary border rounded px-4 py-2" onClick={() => navigate(-1)} style={{position: 'absolute', top: '100px', left: '10px'}}>
-        <i className="bi bi-arrow-left" ></i> ย้อนกลับ
-      </button>
       <div className="row bg-light p-3 border rounded mb-4">
         <h2 className="mb-2 text-center">ชำระเงิน</h2>
         <hr className="my-4 border-secondary"/>

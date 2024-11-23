@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { getPorductCartService,deletePorductCartService, upadateCartService } from '../../../API/customer/productService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import { goBackOrHome } from '../../untils/fucntion/backFuction';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
   const {id} = useParams();
+  const navigate = useNavigate()
   const [productCart, setProductCart] = useState([])
   const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
@@ -65,9 +67,6 @@ const cartProduct = () => {
 
   return (
     <div className="container my-5">
-      <button className="btn btn-light btn btn-outline-secondary border rounded px-4 py-2" onClick={() => window.history.back()} style={{position: 'absolute', top: '100px', left: '10px'}}>
-        <i className="bi bi-arrow-left" ></i> ย้อนกลับ
-      </button>
       <div className="row bg-light p-3 border rounded mb-0 fw-bold">
         <h2 className="mb-2 text-center">ตะกร้าสินค้าของคุณ</h2>
         <hr className="my-4 border-secondary"/>
