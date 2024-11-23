@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../../API/authService';
+import { loginAdmin } from '../../../API/authService';
 import { Modal } from '../../error/errorPopup';
 const Login = () => {
   const [userName, setuserName] = useState("");
@@ -11,17 +11,16 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await login(userName, passWord); 
+      const res = await loginAdmin(userName, passWord); 
       console.log(res.data);
       localStorage.setItem('token', res.data.token);
       const userRole = res.data.role;
-      if (userRole === 'user') {
-        navigate("/home");
-      } else {
-        navigate("");
+      if (userRole === 'admin') {
+        navigate("/dashboard");
       }
     } catch (err) {
       setError(err);
+      navigate("");
     }
   };
 

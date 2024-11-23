@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from
 import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
+import LoginAdmin from '../page/login-page/loginAdmin-page';
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
 import EditPorductById from '../page/admin-page/product-page/EditProduct-page'
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/login/admin",
+        element: <LoginAdmin />,
       },
       {
         path: "/signup",
