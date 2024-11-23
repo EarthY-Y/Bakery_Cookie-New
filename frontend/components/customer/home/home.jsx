@@ -32,12 +32,7 @@ const Home = () => {
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
         </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#productCarousel"
-          data-bs-slide="next"
-        >
+        <button className="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Next</span>
         </button>
@@ -48,31 +43,12 @@ const Home = () => {
       <div className="container">
     <div className="row g-4 justify-content-center">
       {products.map((product) => (
-        <div 
-            key={product.product_id} 
-            className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center"
-            style={{ cursor: "pointer" }}
-          >
-            <Link 
-              to={`/product/${product.product_id}`} 
-              className="card shadow-sm" 
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                width: "100%",
-                maxWidth: "300px", // จำกัดความกว้างของ card
-                minHeight: "350px", // ล็อคความสูงของ card ให้เท่ากัน
-              }}
-            >
-              <img 
-                src={API_URL_PICTURE + product.productpic_name} 
-                className="card-img-top" 
-                alt={product.product_name} 
-                style={{ 
-                  height: "200px", 
-                  objectFit: "cover" 
-                }} 
-              />
+        <div key={product.product_id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center" style={{ cursor: "pointer" }}>
+            <Link to={`/product/${product.product_id}`} className="card shadow-sm" 
+              style={{ textDecoration: "none",color: "inherit",width: "100%",maxWidth: "300px", // จำกัดความกว้างของ 
+                cardminHeight: "350px", // ล็อคความสูงของ card ให้เท่ากัน
+              }}>
+              <img src={API_URL_PICTURE + product.productpic_name} className="card-img-top" alt={product.product_name} style={{ height: "200px", objectFit: "cover" }}/>
               <div className="card-body d-flex flex-column justify-content-between">
                 <h5 className="card-title">{product.product_name}</h5>
                 <p className="card-text">ราคา: {product.selling_price_per_quantity} บาท</p>
