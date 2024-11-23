@@ -45,26 +45,30 @@ const categoey = () => {
       <table className="table table-striped table-bordered">
         <thead>
           <tr>
-            <th className="text-center align-middle" style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ราคารวม</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สถานะ</th>
+            <th className="text-center align-middle" style={{ width: '15%' }}>ประเภท</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>จำนวนสินค้า</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สร้าง</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่เเก้ไข</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>สร้างโดย</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไขโดย</th>
+            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไข</th>
             <th className="text-center align-middle" style={{ width: '10%' }}>รายละเอียด</th>
           </tr>
         </thead>
         <tbody>
-          {currentOrders.map((order) => (
-            <tr key={order.orders_id}>
-              <td>{order.orders_id}</td>
-              <td>{order.quantity} ชิ้น</td>
-              <td>{order.price} บาท</td>
-              <td>{formatDate(order.created_at)}</td>
-              <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
-              <td className="text-center">{order.status_name}</td>
+          {currentOrders.map((category) => (
+            <tr key={category.category_id}>
+              <td>{category.category_name}</td>
+              <td>{category.amountCategoryProduct} ชิ้น</td>
+              <td>{formatDate(category.created_at)}</td>
+              <td>{formatDate(category.updated_at)}</td>
+              <td className="text-center">{category.created_by}</td>
+              <td className="text-center">{category.updated_by}</td>
               <td className="text-center">
-                <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
+                <Link to={`view/${category.category_id}`} className="btn btn-outline-warning text-black">view</Link>
+              </td>
+              <td className="text-center">
+                <Link to={`edit/${category.category_id}`} className="btn btn-outline-warning text-black">edit</Link>
               </td>
             </tr>
           ))}

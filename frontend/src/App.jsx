@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from
 import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
+import LoginAdmin from '../page/login-page/loginAdmin-page';
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
 import EditPorductById from '../page/admin-page/product-page/EditProduct-page'
@@ -37,6 +38,14 @@ import EditCratStatus from '../page/admin-page/order-page/status/editCartStatus-
 import EditOrderStatus from '../page/admin-page/order-page/status/editOrderStatus-page'
 import Categoey from '../page/admin-page/category/listCategory-page';
 import CreateCategory from '../page/admin-page/category/createCategory-page'
+import EditCategory from '../page/admin-page/category/editCategory-page';
+import CategoryById from '../page/admin-page/category/categoryById-page'
+import Profile from '../page/customer-page/profile-page/profile-page';
+import ListAddress from '../page/customer-page/profile-page/listAddress-page'
+import EditAddress from '../page/customer-page/profile-page/editAddress-page'
+import OrderTracking from '../page/customer-page/profile-page/orderTracking-page'
+import OrderTrackingDetail from '../page/customer-page/profile-page/orderTrackingDetail-page';
+import HistoryOrder from '../page/customer-page/profile-page/historyOrder-page';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +59,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/login/admin",
+        element: <LoginAdmin />,
       },
       {
         path: "/signup",
@@ -111,7 +124,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "view/:id",
-                element: <ListMaterialById />,
+                element: <CategoryById />,
               },
               {
                 path: "create",
@@ -119,7 +132,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "edit/:id",
-                element: <EditMaterial />,
+                element: <EditCategory />,
               },
             ],
           },
@@ -252,6 +265,54 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: <CreateAddress />,
+              },
+            ],
+          },
+          {
+            path: "/profile",
+            children: [
+              {
+                path: "",
+                element: <Profile />,
+              },
+              {
+                path: "customer/address",
+                children: [
+                  {
+                    path: "",
+                    element: <ListAddress />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditAddress />,
+                  },
+                ],
+              },
+              {
+                path: "orderTracking",
+                children: [
+                  {
+                    path: "",
+                    element: <OrderTracking />,
+                  },
+                  {
+                    path: "view/detail/:id",
+                    element: <OrderTrackingDetail />,
+                  },
+                ]
+              },
+              {
+                path: "orderHistory",
+                children: [
+                  {
+                    path: "",
+                    element: <HistoryOrder />,
+                  },
+                  {
+                    path: "view/detail/:id",
+                    element: <OrderTrackingDetail />,
+                  },
+                ]
               },
             ],
           },

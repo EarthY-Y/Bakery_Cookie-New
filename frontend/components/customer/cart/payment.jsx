@@ -5,7 +5,7 @@ import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
-  const id = useParams().id //เพราะว่ามันส่งมาจาก navigate ของหน้า orders เลยมาเป็น object ทำให้เกิดปัญหากับหลังบ้านเลยต้อง .id
+  const id = useParams().id //เพราะว่ามันส่งมาจาก navigate ของหน้า orders เลยมาเป็น object ทำให้เกิดปัญหากับหลังบ้านเลยต้อง .id ในกรณีที่ไม่ใส่ {id}
   const [address, setAddress] = useState([])
   const [productOrder, setOrders] = useState([])
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); 
@@ -61,8 +61,7 @@ const cartProduct = () => {
         setTotalPriceProduct(response.data[0].price)
       }
       catch (error) {
-        alert(error)
-        navigate("/home")
+        navigate("/home") //ถ้าลูกค้า จ่ายเงินเเล้วจะถูกดีดไปหน้า home
       }
     }
     getCart()
@@ -79,8 +78,9 @@ const cartProduct = () => {
     try {
       const formData = new FormData();  
       formData.append('file', Picture);
+      formData.append('totalPrice', totalPrice);
       console.log();
-      const response = await updatePaymentOrder(formData, id )
+      const response = await updatePaymentOrder(formData, id)
       console.log(response);
       if(response.data){
         navigate("/home")
@@ -92,7 +92,7 @@ const cartProduct = () => {
       alert(error)
     }
   }
-
+  
   return (
     <form className="container my-5" onSubmit={handleSubmmit}>
       <button className="btn btn-light btn btn-outline-secondary border rounded px-4 py-2" onClick={() => navigate(-1)} style={{position: 'absolute', top: '100px', left: '10px'}}>

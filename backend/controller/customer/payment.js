@@ -33,7 +33,7 @@ export const getCustomerAddress = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT a.houesNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
+            db.query("SELECT a.houseNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
                     " INNER JOIN customer c ON c.customer_id = a.created_by"+
                     " INNER JOIN province p ON p.province_id = a.province_id"+
                     " INNER JOIN amphure ap ON ap.amphure_id = a.amphure_id"+
@@ -105,7 +105,7 @@ export const createOrders = async (req, res) => {
         res.status(400).json({ message: "Error get product", error });
     }
 }
-
+//เปลี่ยนสถานะ สินค้าที่อยู่ใน ตะกร้าสินค้า
 const updateStatusCartProduct = async (cartItemId) => {
     const resultsFindstatusCart = await new Promise((resolve, reject) => {
         db.query(
@@ -171,12 +171,16 @@ export const updatePaymentOrder = async (req, res) => {
         
         const id = req.params.id
         const statement_picture = req.file.filename;
+        console.log(req.body);  
+        const {totalPrice} = req.body
+        console.log(totalPrice);
+        
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
         const authToken = await passToken(authHeader)
         if(!authToken){
             return res.status(404).json({ message: "User not found" });
         }
-        console.log(id, statement_picture);
+        console.log(id, statement_picture,req.body);
         const resultsFindStatusOrder = await new Promise((resolve, reject)=> {
             db.query("SELECT status_order_id FROM status_order WHERE status_name LIKE ?", ["ชำระ%"],
                     (err, result) => { 
@@ -186,13 +190,29 @@ export const updatePaymentOrder = async (req, res) => {
         })
         const statusOrderId = resultsFindStatusOrder[0].status_order_id
         const results = await new Promise((resolve, reject)=> { //WHERE customer_id = ? and cartId = ? อาจจะเกิด cart_id ซ้ำกันได้อนาคตต้องเเก้ไปใช้ orders_id
-            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, statusOrderId, authToken.customerId, id],
+            db.query("UPDATE orders SET price = ?, statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [totalPrice, statement_picture, statusOrderId, authToken.customerId, id],
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)
                     })
         })
-        res.status(200).json(results)
+        const resultsFindOrderById = await new Promise((resolve, reject)=> {
+            db.query("SELECT orders_id FROM orders WHERE customer_id = ? and cartId = ?", [authToken.customerId, id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        const orderId = resultsFindOrderById[0].orders_id
+        console.log("orderId",orderId);
+        const resultsInsertHistory = await new Promise((resolve, reject)=> {
+            db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), orderId, statusOrderId, authToken.customerId],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        res.status(200).json(resultsInsertHistory)
     }catch(error){
         console.error("Error get product:", error);
         res.status(400).json({ message: "Error get product", error});

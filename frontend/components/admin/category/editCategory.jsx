@@ -1,37 +1,44 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { createCategoryService, getListProductPictureService } from '../../../API/admin/categoryService';
+import { useNavigate, useParams } from 'react-router-dom';
+import { updateCategoryProductService, getListProductPictureService, getCategoryByIdService } from '../../../API/admin/categoryService';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../untils/frommatters/datetime';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const createCategory = () => {
+  const {id} = useParams()
   const [categoryName, setCategoryName] = useState("");
   const [listProduct, setListProduct] = useState([]);
+  const [listCategoryProduct, setListCategoryProduct] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const selectedProductsMap = selectedProducts.map(productId => {
-        // หาข้อมูลของสินค้าโดยใช้ productId
-        const product = listProduct.find(item => item.product_id === productId);
-        return {
-          product_id: product.product_id,
-          // product_name: product.product_name
-        }
-      })
-      console.log(categoryName,selectedProductsMap);      
-      const res = await createCategoryService(categoryName,selectedProductsMap);
-      navigate('/category');
-      console.log(res);
-    } catch (err) {
-      console.log(err);
+    const initialSelected = listCategoryProduct.map((item) => item.product_id);
+    const addedProducts = selectedProducts.filter((id) => !initialSelected.includes(id));
+    const removedProducts = initialSelected.filter((id) => !selectedProducts.includes(id));
+    const isNameChanged = categoryName !== listCategoryProduct[0]?.category_name;
+    const hasChanges = isNameChanged || addedProducts.length > 0 || removedProducts.length > 0;
+    if (!hasChanges) {
+      console.log("ไม่มีการเปลี่ยนแปลง ไม่จำเป็นต้องส่งข้อมูล");
+      return;
     }
-  }
-
+    try {
+      const changes = {
+        ...(isNameChanged && { category_name: categoryName }),
+        added: addedProducts.map((id) => ({ product_id: id })),
+        removed: removedProducts.map((id) => ({ product_id: id })),
+      };
+      console.log('การเปลี่ยนแปลง:', changes);
+      const res = await updateCategoryProductService(id, changes);
+      navigate('/category');
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  };
+  
   useEffect(() => {
     const getlistProduct = async() => {
       try {
@@ -43,6 +50,22 @@ const createCategory = () => {
       }
     }
     getlistProduct()
+  },[])
+
+  useEffect(() => {
+    const getCategoryById = async() => {
+      try {
+        const response = await getCategoryByIdService(id)
+        console.log(response.data);
+        setListCategoryProduct(response.data)
+        setCategoryName(response.data[0]?.category_name || '')
+        const initialSelected = response.data.map((item) => item.product_id); //map เอาเเค่ product_id
+        setSelectedProducts(initialSelected);
+      } catch (error) {
+        
+      }
+    }
+    getCategoryById()
   },[])
   
   return (
@@ -84,6 +107,7 @@ const createCategory = () => {
                                   : [...prev, productId]
                           );
                         }}
+                        checked={selectedProducts.includes(product.product_id)} //ตรวยสอบค่า ถ้ามี id นี้จะ check
                       /></td>
                     <td><img src={API_URL_PICTURE + product.productpic_name } className="img-fluid" alt={product.product_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                     <td>{product.product_name}</td>

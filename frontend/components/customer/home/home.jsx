@@ -42,19 +42,46 @@ const Home = () => {
           <span className="visually-hidden">Next</span>
         </button>
       </div>
-      <div className='row'>
-        {products.map((product) => ( //(product, index) ถ้าใช้เเบบนี้จะเกิด Each child in a list should have a unique 'key' prop"
-          <div key={product.product_id} className="col-3 " style={{ cursor: "pointer" }}>
-            <Link to={`/product/${product.product_id}`} className='card m-2' style={{ textDecoration: "none", color: "inherit" }}>
-              <img src={API_URL_PICTURE + product.productpic_name} className="card-img-top" alt={product.product_name} style={{ height: "200px", objectFit: "cover" }} />
-              <div className="">
-                <h5 className="card-title mt-3 ms-3">{product.product_name}</h5>
-                <p className="card-text mb-3 ms-3">ราคา: {product.selling_price_per_quantity} บาท</p>
+
+      <h2 className="text-center my-4" style={{ fontWeight: "bold" }}>สินค้าทั้งหมด</h2>
+
+      <div className="container">
+    <div className="row g-4 justify-content-center">
+      {products.map((product) => (
+        <div 
+            key={product.product_id} 
+            className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center"
+            style={{ cursor: "pointer" }}
+          >
+            <Link 
+              to={`/product/${product.product_id}`} 
+              className="card shadow-sm" 
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                width: "100%",
+                maxWidth: "300px", // จำกัดความกว้างของ card
+                minHeight: "350px", // ล็อคความสูงของ card ให้เท่ากัน
+              }}
+            >
+              <img 
+                src={API_URL_PICTURE + product.productpic_name} 
+                className="card-img-top" 
+                alt={product.product_name} 
+                style={{ 
+                  height: "200px", 
+                  objectFit: "cover" 
+                }} 
+              />
+              <div className="card-body d-flex flex-column justify-content-between">
+                <h5 className="card-title">{product.product_name}</h5>
+                <p className="card-text">ราคา: {product.selling_price_per_quantity} บาท</p>
               </div>
             </Link>
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };
