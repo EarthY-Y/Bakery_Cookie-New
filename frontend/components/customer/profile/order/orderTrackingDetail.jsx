@@ -81,7 +81,14 @@ const OrderTracking = () => {
       <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
-      <h3 className="mb-4">สถานะคำสั่งซื้อ</h3>
+      <div className='d-flex justify-content-between align-items-center'>
+        <div>
+          <h3 className="mb-4">สถานะคำสั่งซื้อ</h3>
+        </div>
+        <div>
+          <span >รหัสคำสั่งซื้อ: {ordersDetail.orders_id}</span>
+        </div>
+      </div>
       <div className="card">
         <div className="card-body">
           <div className="progress-container d-flex justify-content-between align-items-center">
@@ -148,34 +155,33 @@ const OrderTracking = () => {
           color: #6c757d;
         }
       `}</style>
-      {ordersProduct.map((order) => (
-        <div key={order.product_name} className="col-md-12 mb-4 mt-3">
-          <div className="card border-secondary">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <span>รหัสคำสั่งซื้อ: {ordersDetail.orders_id}</span>
-              <span className="badge bg-warning text-dark">{order.status_name}</span>
-            </div>
-            <div className="card-body">
-              <div className="row align-items-center">
-                <div className="col-md-2">
-                  <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
-                </div>
-                <div className="col-md-6">
-                  <p className="mb-0"><strong>ชื่อสินค้า:</strong> {order.product_name}</p>
-                  <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
-                </div>
-                <div className="col-md-4 text-end">
-                  <p className="mb-0"><strong>ราคารวม:</strong> {numberGrouping(order.productCartPrice*order.productCartQuantity)} บาท</p>
+      <div className="card mt-5">
+        {ordersProduct.map((order) => (
+          <div key={order.product_name} className="col-md-12">
+            <div className="border-secondary">
+              <div className="card-header d-flex justify-content-between align-items-center">
+                <p className="mb-0"><strong>ชื่อสินค้า:</strong> {order.product_name}</p>
+              </div>
+              <div className="card-body">
+                <div className="row align-items-center">
+                  <div className="col-md-2">
+                    <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
+                  </div>
+                  <div className="col-md-6">
+                    <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
+                  </div>
+                  <div className="col-md-4 text-end">
+                    <p className="mb-0"><strong>ราคารวม:</strong> {numberGrouping(order.productCartPrice*order.productCartQuantity)} บาท</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="card-footer d-flex justify-content-between">
-              {/* <Link to={`/payment/${order.cartId}`} className="btn btn-primary btn-sm">ชำระเงิน</Link>
-              <Link to={`view/detail/${order.orders_id}`} className="btn btn-secondary btn-sm">รายละเอียด</Link> */}
-            </div>
           </div>
+        ))}
+        <div className="card-footer d-flex justify-content-end">
+          <p className="mb-0"><strong>ราคารวม:</strong> {numberGrouping(ordersDetail.price || 0)} บาท</p>
         </div>
-      ))}
+      </div>
       <div className="card-footer d-flex justify-content-between">
         <Link  to={`/payment/${ordersDetail.cartId}`}  className="btn btn-primary" style={{ display: showBtnPay ? 'block' : 'none' }}> ชำระเงิน</Link>
       </div>

@@ -35,6 +35,40 @@ export const getlistOrdersprocess = async() => {
   }
 }
 
+export const getlistOrdersCancel = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/orders/list/cancel", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+  }
+}
+
+export const getlistOrdersFinish = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/orders/list/finish", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+  }
+}
+
 export const orderDetailById = async(id) => {
   try {
     const authToken = localStorage.getItem('token')

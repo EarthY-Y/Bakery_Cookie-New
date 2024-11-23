@@ -44,6 +44,7 @@ import ListAddress from '../page/customer-page/profile-page/listAddress-page'
 import EditAddress from '../page/customer-page/profile-page/editAddress-page'
 import OrderTracking from '../page/customer-page/profile-page/orderTracking-page'
 import OrderTrackingDetail from '../page/customer-page/profile-page/orderTrackingDetail-page';
+import HistoryOrder from '../page/customer-page/profile-page/historyOrder-page';
 
 const router = createBrowserRouter([
   {
@@ -288,6 +289,19 @@ const router = createBrowserRouter([
                   {
                     path: "",
                     element: <OrderTracking />,
+                  },
+                  {
+                    path: "view/detail/:id",
+                    element: <OrderTrackingDetail />,
+                  },
+                ]
+              },
+              {
+                path: "orderHistory",
+                children: [
+                  {
+                    path: "",
+                    element: <HistoryOrder />,
                   },
                   {
                     path: "view/detail/:id",

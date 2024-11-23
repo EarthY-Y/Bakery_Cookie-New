@@ -27,8 +27,48 @@ export const getOrderslistCheckOut = async (req, res) => {
             db.query("SELECT  o.orders_id, o.quantity, o.price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
                 " INNER JOIN status_order so ON so.status_order_id = o.status"+
                 " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
-                " WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?"+
-                " GROUP BY o.orders_id", ["รอ%","ยกเลิก%"],
+                " WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?"+
+                " GROUP BY o.orders_id", ["รอ%","ยกเลิก%", "จัดส่ง%"],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}
+export const getOrderslistCancel = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query("SELECT  o.orders_id, o.quantity, o.price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
+                " INNER JOIN status_order so ON so.status_order_id = o.status"+
+                " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
+                " WHERE so.status_name LIKE ?"+
+                " GROUP BY o.orders_id", ["ยกเลิก%"],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}
+export const getOrderslistFinish = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query("SELECT  o.orders_id, o.quantity, o.price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
+                " INNER JOIN status_order so ON so.status_order_id = o.status"+
+                " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
+                " WHERE so.status_name LIKE ?" +
+                " GROUP BY o.orders_id", ["%สำเร็จ"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

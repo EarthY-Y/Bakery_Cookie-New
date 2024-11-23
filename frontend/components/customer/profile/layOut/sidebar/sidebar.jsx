@@ -10,7 +10,7 @@ function Sidebar() {
             <Link className="nav-link text-dark" to="/profile">บัญชีของฉัน</Link>
             <Link className="nav-link text-dark" to="/profile/customer/address">ข้อมูลที่อยู่</Link>
             <Link className="nav-link text-dark" to="/profile/orderTracking">ติดตามคำสั่งซื้อ</Link>
-            <Link className="nav-link text-dark" to="">ประวัติการสั่งซื้อ</Link>
+            <Link className="nav-link text-dark" to="/profile/orderHistory">ประวัติการสั่งซื้อ</Link>
           </nav>
         </div>
       </div>
