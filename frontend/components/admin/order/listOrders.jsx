@@ -83,7 +83,7 @@ const ListOrders = () => {
               <td>{order.quantity} ชิ้น</td>
               <td>{order.price} บาท</td>
               <td>{formatDate(order.created_at)}</td>
-              <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
+              <td>{`รอชำระเงิน`}</td>
               <td className="text-center">{order.status_name}</td>
               <td className="text-center">
                 <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-outline-warning text-black">View</Link>

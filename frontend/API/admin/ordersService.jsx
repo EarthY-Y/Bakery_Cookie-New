@@ -69,6 +69,23 @@ export const getOrderByIdService = async(id) => {
   }
 }
 
+export const getOrderHistoryByIdService = async(id) => {
+  try {
+
+    const authToken = localStorage.getItem('tokenAdmin');
+    const response = await axios.get(API_URL + "/view/detail/order/history/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    ); 
+    return response
+  } catch (error) {
+    console.error("Error listMaterialService:", error);
+  }
+}
+
 export const getStatusOrderService = async() => {
   try {
     const authToken = localStorage.getItem('tokenAdmin');
@@ -165,11 +182,11 @@ export const updateStatusOrderServiceById = async(id,statusName) => {
   }
 }
 
-export const updateStatusOrderService = async(value ,id) => {
+export const updateStatusOrderService = async(value ,id, skip) => {
   try {
 
     const authToken = localStorage.getItem('tokenAdmin')
-    const response = await axios.patch(API_URL + "/update/status/"+id, {status:value}, 
+    const response = await axios.patch(API_URL + "/update/status/"+id, {status:value, skip:skip}, 
       {
         headers: {
           'authorization': `Bearer ${authToken}`
@@ -178,6 +195,6 @@ export const updateStatusOrderService = async(value ,id) => {
     ); 
     return response
   } catch (error) {
-    console.error("Error listMaterialService:", error);
+    throw error;
   }
 }

@@ -168,7 +168,21 @@ export const updateStatusOrder = async (req, res) => {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader);
         const id = req.params.id
-        const {status} = req.body
+        const {status, skip} = req.body
+        if(!skip){ //ถ้าหน้าส่ง skip มาก็จะไม่ตรวจสอบ duplicate
+            const resultsDupilcateHistory = await new Promise((resolve, reject)=> {
+                db.query("SELECT history_id FROM order_status_history WHERE orders_id = ? AND status_order_id = ? AND changed_by = ?",[id, status, token.admin_id],
+                        (err, result) => { 
+                    if (err) return reject(err)
+                    resolve(result)
+                })
+            })
+            console.log(resultsDupilcateHistory);
+            
+            if(resultsDupilcateHistory){
+                return res.status(400).json({ message: "เคยใช้สถานะนี้เเล้ว"})
+            }
+        }
         const results = await new Promise((resolve, reject)=> {
             db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
                     (err, result) => { 

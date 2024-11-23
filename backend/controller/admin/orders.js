@@ -65,6 +65,29 @@ export const getOrdersById = async (req, res) => {
     }
 }
 
+export const getOrdersHistoryById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject)=> {
+            db.query("SELECT o.orders_id, so.status_name, COALESCE(a.userName, c.username) AS username, osh.change_time FROM  order_status_history osh"+ //COALESCE เลือกเอาอันที่ไม่เป็น Null
+                    " INNER JOIN orders o ON osh.orders_id = o.orders_id"+
+                    " INNER JOIN status_order so ON osh.status_order_id = so.status_order_id"+
+                    " LEFT JOIN Admin a ON a.admin_id = osh.changed_by"+
+                    " LEFT JOIN customer c ON c.customer_id = osh.changed_by"+
+                    " WHERE o.orders_id = ?"+
+                    " ORDER BY osh.change_time DESC", [id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}
 // export const updateStatusOrder = async (req, res) => {
 //     try {
 //         const authHeader = req.headers['authorization'];

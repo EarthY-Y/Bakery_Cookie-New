@@ -94,7 +94,7 @@ export const getOrdersTrackingById = async (req, res) => {
                     " INNER JOIN product p ON p.product_id = cp.product_id"+
                     " INNER JOIN productpicture pp ON pp.product_id = p.product_id"+
                     " WHERE orders_id = ? "+
-                    " GROUP BY orders_id;",[id],
+                    " GROUP BY o.orders_id;",[id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
