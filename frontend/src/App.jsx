@@ -36,16 +36,24 @@ import Status from '../page/admin-page/order-page/status/status-page';
 import CreateStatus from '../page/admin-page/order-page/status/createStatus-page'
 import EditCratStatus from '../page/admin-page/order-page/status/editCartStatus-page'
 import EditOrderStatus from '../page/admin-page/order-page/status/editOrderStatus-page'
-import Categoey from '../page/admin-page/category/listCategory-page';
-import CreateCategory from '../page/admin-page/category/createCategory-page'
-import EditCategory from '../page/admin-page/category/editCategory-page';
-import CategoryById from '../page/admin-page/category/categoryById-page'
+import Categoey from '../page/admin-page/category/categoryProduct/listCategory-page';
+import CreateCategory from '../page/admin-page/category/categoryProduct/createCategory-page'
+import EditCategory from '../page/admin-page/category/categoryProduct/editCategory-page';
+import CategoryById from '../page/admin-page/category/categoryProduct/categoryById-page'
+import ListCategoryPackage from '../page/admin-page/category/categoryPackge/listCategoryPackage-page';
+import CreateCategoryPackage from '../page/admin-page/category/categoryPackge/createCategoryPackage-page'
+import EditCategoryPackage from '../page/admin-page/category/categoryPackge/editCategoryPackage-page';
+import CategoryByIdPackage from '../page/admin-page/category/categoryPackge/categoryPackgeById-page'
 import Profile from '../page/customer-page/profile-page/profile-page';
 import ListAddress from '../page/customer-page/profile-page/listAddress-page'
 import EditAddress from '../page/customer-page/profile-page/editAddress-page'
 import OrderTracking from '../page/customer-page/profile-page/orderTracking-page'
 import OrderTrackingDetail from '../page/customer-page/profile-page/orderTrackingDetail-page';
 import HistoryOrder from '../page/customer-page/profile-page/historyOrder-page';
+import CreatePackage from '../page/admin-page/package-page/createPackage-page';
+import ListPackage from '../page/admin-page/package-page/listPackage-page';
+import PackageById from '../page/admin-page/package-page/listPackageById-page';
+import EditPackageById from '../page/admin-page/package-page/editPackage-page';
 
 const router = createBrowserRouter([
   {
@@ -116,23 +124,50 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/category",
+            path: "category",
             children: [
               {
-                path: "",
-                element: <Categoey />,
+                path: "prduct",
+                children: [
+                  {
+                    path: "",
+                    element: <Categoey />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <CategoryById />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateCategory />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditCategory />,
+                  },
+                ],
               },
+              
               {
-                path: "view/:id",
-                element: <CategoryById />,
-              },
-              {
-                path: "create",
-                element: <CreateCategory />,
-              },
-              {
-                path: "edit/:id",
-                element: <EditCategory />,
+                path: "package",
+                children: [
+                  {
+                    path: "",
+                    element: <ListCategoryPackage />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <CategoryByIdPackage />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateCategoryPackage />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditCategoryPackage />,
+                  },
+                ],
               },
             ],
           },
@@ -172,6 +207,27 @@ const router = createBrowserRouter([
               {
                 path: "edit/:id",
                 element: <EditPorductById />,
+              },
+            ],
+          },
+          {
+            path: "/package",
+            children: [
+              {
+                path: "",
+                element: <ListPackage />,
+              },
+              {
+                path: "view/:id",
+                element: <PackageById />,
+              },
+              {
+                path: "create", // ลบ '/' หน้า path
+                element: <CreatePackage/>
+              },
+              {
+                path: "edit/:id",
+                element: <EditPackageById />,
               },
             ],
           },

@@ -1,22 +1,25 @@
 import React, { useContext,useEffect, useState} from 'react';
+import Select from 'react-select';
 import { Link,useNavigate } from 'react-router-dom';
 import { listMaterialService } from '../../../API/admin/materialService';
-import { createProductService } from '../../../API/admin/productService';
+import { createProductService, listProductPackageService } from '../../../API/admin/productService';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({}) //
   const [listMaterials, setListMaterials] = useState([]);
+  const [listPackage, setListPackage] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedPackages, setSelectedPackages] = useState([]);
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
-  const [totalPrice, settotalPrice] = useState(0);
-
+  const [totalCost, setTotalCost] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
   // ฟังก์ชันสำหรับคำนวณต้นทุนรวม
-  const calculateTotalCost = () => {
+  const calculateCostMaterial = () => {
     return (formData.ingredients || []).reduce((totalCost, ingredient) => {
       const material = listMaterials.find((mat) => mat.material_id === ingredient.material_id);
       const quantity = parseFloat(ingredient.quantity || 0);
-
       if (material && !isNaN(quantity)) {
         return totalCost + material.cost_per_quantity * quantity;
       }
@@ -33,6 +36,20 @@ const CreateProduct = () => {
       setFormData(prev => ({ ...prev, ingredients: values })); // อัปเดต formData
   };
 
+  const handlePackageChange = (index, option) => {
+    const values = [...(formData.packaging || [])];
+    const selectedPackage = listPackage.find((packages) => packages.package_id === option.value);
+    if (selectedPackage) {
+        values[index] = {
+            package_id: selectedPackage.package_id,
+            package_name: selectedPackage.package_name,
+            cost_per_quantity: selectedPackage.cost_per_quantity,
+            //quantity: values[index]?.quantity || 0, // คงค่า quantity เดิมไว้
+        };
+        setFormData((prev) => ({ ...prev, packaging: values }));
+    }
+  };
+
   const handleReset = () => {
     setFormData({
       product_name: '',
@@ -41,6 +58,7 @@ const CreateProduct = () => {
       description: '',
       file: null,
       ingredients: [],
+      packaging: [],
     });
   };
 
@@ -67,19 +85,32 @@ const CreateProduct = () => {
       setFormData(prev => ({ ...prev, ingredients: values })); // อัปเดต formData
   };
 
+  const handlePackageAddRow = () => {
+    const newIngredients = [...(formData.packaging || []), { material_id: '', quantity: '' }];
+    setFormData(prev => ({ ...prev, packaging: newIngredients })); // อัปเดต formData
+};
+
+const handlePackageRemoveRow = (index) => {
+    const values = [...(formData.packaging || [])];
+    values.splice(index, 1);
+    setFormData(prev => ({ ...prev, packaging: values })); // อัปเดต formData
+};
+  //หาต้นทุนต่อชิ้น
   useEffect(() => {
+    const totalCost = calculateCostMaterial();
     if ((formData.ingredients || []).length > 0 && formData.quantity) {
-        const totalCost = calculateTotalCost();
         const costPerQuantity =  totalCost / parseFloat(formData.quantity || 1); // หลีกเลี่ยงการหารด้วย 0
-        setpricePreQuantity(costPerQuantity);
+        setpricePreQuantity(costPerQuantity.toFixed(3));
     }
-  }, [formData.ingredients, formData.quantity]);
+    const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
+    setTotalCost(hiddenCosts.toFixed(3))
+  }, [formData.ingredients, formData.quantity, selectedPackages]);
 
   
   useEffect(() => {
     if (formData.price && formData.quantity) {
-        const costPerQuantity =  formData.price * parseFloat(formData.quantity);
-        settotalPrice(costPerQuantity);
+        const costPerQuantity =  (formData.price || 0) * parseFloat(formData.quantity);
+        setTotalPrice((costPerQuantity.toFixed(2) || 0));
     }
   }, [formData.price, formData.quantity]);
 
@@ -96,17 +127,52 @@ const CreateProduct = () => {
     getMaterial();
   }, []);
 
+  useEffect(() => {
+    const getPackage = async () => {
+        try {
+            const response = await listProductPackageService();
+            console.log(response.data);
+            setListPackage(response.data);
+        } catch (error) {
+            console.error("Error fetching materials:", error);
+        }
+    };
+    getPackage();
+  }, []);
+
+  const options = listPackage.map((packages) => ({
+    value: packages.package_id,
+    label: packages.package_name
+  }));
+
   const handleSubmitProductMaterial = async (event) => {
     event.preventDefault();
     console.log(formData); // Log formData for debugging
     try {
         const res = await createProductService(formData);
         console.log(res);
-        navigate('/product');
+        // navigate(-1);
     } catch (error) {
         console.log(error); // แสดงข้อผิดพลาด
     }
-};
+  };
+  const handleChangePackage = (option) => {
+    setSelectedOption(option);
+    // ใช้ option ที่ส่งเข้ามาในฟังก์ชันเพื่อค้นหา cost_per_quantity 
+    const costFind = listPackage.find(item => item.package_id === option.value); //value = package_id 
+    if (costFind) {
+      const costPerQuantity = {
+        package_id : costFind.package_id,
+        package_name: costFind.package_name,
+        cost_per_quantity: costFind.cost_per_quantity,
+      };
+      console.log("Cost per quantity:", costPerQuantity);
+      setSelectedPackages(costPerQuantity)
+    } else {
+      console.log("Package not found");
+    }
+  };
+  
 
   return (
     <form onSubmit={handleSubmitProductMaterial}>
@@ -124,33 +190,14 @@ const CreateProduct = () => {
               ) : (
                 <span>เพิ่มรูปสินค้า</span>
               )}
-              <input 
-                type="file" 
-                name="file"
-                className="position-absolute top-0 start-0" 
-                style={{
-                  opacity: 0,
-                  width: '100px', // ขนาดของ input จะไม่ครอบคลุม div ทั้งหมด
-                  height: '100px',
-                  cursor: 'pointer'
-                }}
-                onChange={handleChange} 
-              />
+              <input type="file" name="file"className="position-absolute top-0 start-0" style={{opacity: 0,width: '100px',height: '100px',cursor: 'pointer'}}onChange={handleChange} />
             </div>
-
             {formData.file && <p>ไฟล์ที่เลือก: {formData.file.name}</p>}
           </div>
-
-
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='product_name'
-                className="form-control" 
-                placeholder="ชื่อสินค้า" 
-                value={formData.product_name || ''} 
+              <input type="text" name='product_name'className="form-control" placeholder="ชื่อสินค้า" value={formData.product_name || ''} 
                 /* formData.product_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
                 เเล้วไม่ได้ set ค่า เหมือนในหน้า signUp*/
@@ -160,109 +207,90 @@ const CreateProduct = () => {
           </div>
           {(formData.ingredients || []).map((ingredient, index) => (
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
-                <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
-                <div className="col-sm-3">
-                    <select //ไม่ควรใช้ defaultValue="" เพราะว่าด้านล่างมี value="" อยู่เเล้วไม่งั้นเดี๋ยวเกิด error: elect elements must be either controlled or uncontrolled 
-                        className="form-select"
-                        name="material_id"
-                        value={ingredient.material_id}
-                        onChange={(event) => handleInputChange(index, event)}
-                        required
-                    >
-                        <option value="" disabled>Select Material</option>
-                        {listMaterials.map((listMaterial) => (
-                            <option key={listMaterial.material_id} value={listMaterial.material_id}>
-                                {listMaterial.material_name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="col-sm-2">
-                    <input
-                        type="number"
-                        name="quantity"
-                        placeholder="ปริมาณ"
-                        className="form-control" 
-                        value={ingredient.quantity}
-                        onChange={(event) => handleInputChange(index, event)}
-                        required
-                    />
-                </div>
-                <div className="col-sm-1">
-                    <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}>ลบ</button>
-                </div>
+              <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
+              <div className="col-sm-3">
+                  <select //ไม่ควรใช้ defaultValue="" เพราะว่าด้านล่างมี value="" อยู่เเล้วไม่งั้นเดี๋ยวเกิด error: elect elements must be either controlled or uncontrolled 
+                    className="form-select"
+                    name="material_id"
+                    value={ingredient.material_id}
+                    onChange={(event) => handleInputChange(index, event)}
+                    required
+                  >
+                    <option value="" disabled>Select Material</option>
+                    {listMaterials.map((listMaterial) => (
+                        <option key={listMaterial.material_id} value={listMaterial.material_id}>
+                            {listMaterial.material_name}
+                        </option>
+                    ))}
+                  </select>
+              </div>
+              <div className="col-sm-2">
+                  <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, event)} required/>
+              </div>
+              <div className="col-sm-1">
+                  <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}>ลบ</button>
+              </div>
             </div>
           ))}
           <div className="mb-3 d-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
-          
+          {(formData.packaging || []).map((packaging, index) => (
+            <div key={index} className="row mb-3 justify-content-center">
+              <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
+              <div className="col-sm-5">
+                <Select
+                  options={options}
+                  value={options.find((option) => option.value === packaging.package_id) || null}
+                  onChange={(option) => handlePackageChange(index, option)}
+                  isSearchable={true}
+                  placeholder="เลือกบรรจุภัณฑ์"
+                />
+              </div>
+              <div className="col-sm-1">
+                  <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}>ลบ</button>
+              </div>
+            </div>
+          ))}
+
+          <div className="mb-3 d-flex justify-content-center">
+              <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มบรรจุภัณฑ์</button>
+          </div>
+
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ต้นทุนสินค้า</label>
+            <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='costPerQuantity'
-                className="form-control" 
-                placeholder="ต้นทุนสินค้า" 
-                // value={formData.calculateTotalCost = calculateTotalCost() } 
-                // onChange={handleChange} 
-                value={calculateTotalCost()}
-                readOnly
-              />
+              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateCostMaterial()} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">จำนวนที่ทำต่อครั้ง</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='quantity'
-                className="form-control" 
-                placeholder="จำนวน" 
-                value={formData.quantity || ''} 
-                onChange={handleChange} 
-              />
+              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={formData.quantity || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='quantity'
-                className="form-control" 
-                placeholder="จำนวน" 
-                value={pricePreQuantity}  
-                readOnly
-              />
+              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity} readOnly/>
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนรวม</label>
+            <div className="row col-sm-5">
+              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='price'
-                className="form-control" 
-                placeholder="ราคาสินค้า" 
-                value={formData.price || ''} 
-                onChange={handleChange} 
-              />
+              <input type="text" name='price'className="form-control" placeholder="ราคาสินค้า" value={formData.price || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='price'
-                className="form-control" 
-                placeholder="ราคาสินค้า" 
-                value={totalPrice} 
-                onChange={handleChange} 
-                readOnly
-              />
+              <input type="text" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice} onChange={handleChange} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">

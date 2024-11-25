@@ -1,31 +1,16 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updateCategoryProductService, getListProductPictureService, getCategoryByIdService } from '../../../API/admin/categoryService';
+import { updateCategoryProductService, getListProductPictureService, getCategoryByIdService } from '../../../../API/admin/categoryService';
 import { Link } from 'react-router-dom';
-import { formatDate } from '../../untils/frommatters/datetime';
+import { formatDate } from '../../../untils/frommatters/datetime';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
-const createCategory = () => {
+const CategoryById = () => {
   const {id} = useParams()
   const [categoryName, setCategoryName] = useState("");
-  const [listProduct, setListProduct] = useState([]);
   const [listCategoryProduct, setListCategoryProduct] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    const getlistProduct = async() => {
-      try {
-        const response = await getListProductPictureService()
-        console.log(response.data);
-        setListProduct(response.data)
-      } catch (error) {
-        
-      }
-    }
-    getlistProduct()
-  },[])
 
   useEffect(() => {
     const getCategoryById = async() => {
@@ -35,7 +20,6 @@ const createCategory = () => {
         setListCategoryProduct(response.data)
         setCategoryName(response.data[0]?.category_name || '')
         const initialSelected = response.data.map((item) => item.product_id); //map เอาเเค่ product_id
-        setSelectedProducts(initialSelected);
       } catch (error) {
         
       }
@@ -45,9 +29,9 @@ const createCategory = () => {
   
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-black mb-4" to="/category">
+      <button className="btn btn-light text-black mb-4" onClick={() => {navigate(-1)}}>
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
+      </button>
       <div className="mb-4 card col-md-12 px-40 card-body bg-light shadow">
         <h4></h4>
         <div className="mb-4 ">
@@ -78,7 +62,7 @@ const createCategory = () => {
         <div className="row mb-4 ">
           <div className='col-6'>
             <b className="col-form-label">สร้างโดย</b>
-            <input type="text" className="form-control" value={listCategoryProduct[0]?.craeted_by}readOnly/>
+            <input type="text" className="form-control" value={listCategoryProduct[0]?.created_by}readOnly/>
           </div>
           <div className='col-6'>
             <b className="col-form-label">วันเวลาที่สร้าง</b>
@@ -104,4 +88,4 @@ const createCategory = () => {
   );
 };
 
-export default createCategory;
+export default CategoryById;

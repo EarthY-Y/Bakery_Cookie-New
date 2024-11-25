@@ -1,6 +1,7 @@
 import React, { useContext,useEffect, useState} from 'react';
+import Select from 'react-select';
 import { Link,useNavigate,useParams } from 'react-router-dom';
-import { listProductByIdService } from '../../../API/admin/productService';
+import { listProductByIdService, listProductPackageByIdService, listProductPackageService } from '../../../API/admin/productService';
 import { listMaterialService } from '../../../API/admin/materialService';
 import { editProductService } from '../../../API/admin/productService';
 
@@ -10,7 +11,9 @@ const EditProduct = () => {
   const [formData, setFormData] = useState({});
   const [originalData, setOriginalData] = useState({});
   const [listMaterials, setListMaterials] = useState([]);
+  const [packageById, setPackageById] = useState([]);
   const [deletedIngredients, setDeletedIngredients] = useState([])
+  const [deletedPackage, setDeletedPackage] = useState([])
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
   const [totalPrice, settotalPrice] = useState(0);
   const { id } = useParams();
@@ -60,36 +63,140 @@ const EditProduct = () => {
     // เก็บ ingredient ที่ถูกลบ
     setDeletedIngredients((prevDeleted) => [...prevDeleted, deletedIngredient]);
   };
+  //ต้องทำเเยกเพราะว่ามีเรื่อง ไอดีเข้ามาเกี่ยวถ้าไม่ทำเเยกก็ต้องใช้เงื่อนไขในการเเยกใน Function นั้นๆ
+  const handlePackageChange = (index, option) => {
+    const values = [...(formData.packaging || [])];
+    const selectedPackage = packageById.find((packages) => packages.package_id === option.value);
+    if (selectedPackage) {
+        values[index] = {
+            package_id: selectedPackage.package_id,
+            package_name: selectedPackage.package_name,
+            cost_per_quantity: selectedPackage.cost_per_quantity,
+            //quantity: values[index]?.quantity || 0, // คงค่า quantity เดิมไว้
+        };
+        setFormData((prev) => ({ ...prev, packaging: values }));
+    }
+  };
+
+  const handlePackageAddRow = () => {
+    const newIngredients = [...(formData.packaging || []), { package_id: '' }];
+    setFormData((prev) => ({ ...prev, packaging: newIngredients }));
+  };
+
+  const handlePackageRemoveRow = (index) => {
+    const values = [...(formData.packaging || [])];
+    const deletedIngredient = values[index]; // เก็บข้อมูลวัตถุดิบที่ถูกลบ
+    values.splice(index, 1);
+    setFormData((prev) => ({ ...prev, packaging: values }));
+  
+    // เก็บ ingredient ที่ถูกลบ
+    setDeletedPackage((prevDeleted) => [...prevDeleted, deletedIngredient]);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     const updatedData = {};
+
+    const originalIngredients = originalData.ingredients || [];
+    const updatedIngredients = [];
+    const newIngredients = [];
     const deletedIngredientsCopy = [...deletedIngredients]; // ทำสำเนาของ deletedIngredients
+
+    const updatedDataPackage = [];
+    const deletedPackageCopy = [...deletedPackage];
+    const newPackage = [];
+    const originalPackage = originalData.packaging || [];
+    
   
     for (const key in formData) {
-      if (key === 'ingredients') {
-        const updatedIngredients = [];
-        const newIngredients = [];
-        const originalIngredients = originalData.ingredients || [];
+      if (key === 'ingredients' || key === 'packaging') {
   
         formData.ingredients.forEach((ingredient, index) => {
           const originalIng = originalIngredients[index] || {};
   
           // ตรวจสอบว่ามี ingredient นี้ใน originalData หรือไม่
-          if (!ingredient.material_id || parseFloat(ingredient.quantity) === 0) {
-            deletedIngredientsCopy.push(ingredient); // เก็บ ingredient ที่ถูกลบ
-          } if (ingredient.material_id === originalIng.material_id && parseFloat(ingredient.quantity) !== parseFloat(originalIng.quantity)) {
-            updatedIngredients.push(ingredient); // เก็บ ingredient ที่มีการแก้ไข
-          } if(ingredient.material_id !== originalIng.material_id ){
-            newIngredients.push(ingredient);
-            updatedData.ingredients = newIngredients;
+          // เช็ค ingredient ที่ถูกลบ
+
+          if (!ingredient.material_id && originalIng.material_id) {
+            const isDuplicate = deletedIngredientsCopy.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              deletedIngredientsCopy.push(ingredient); // ไม่มี material_id หรือ quantity เป็น 0
+            }
           }
+          if (parseFloat(ingredient.quantity) !==  parseFloat(originalIng.quantity) && originalIng.material_id) {
+            const isDuplicate = deletedIngredientsCopy.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              deletedIngredientsCopy.push(ingredient); // ไม่มี material_id หรือ quantity เป็น 0
+            }
+          }
+
+          // เช็ค ingredient ที่มีการแก้ไข
+          // else if (originalIng && parseFloat(ingredient.quantity) !== parseFloat(originalIng.quantity)) {
+          //   const isDuplicate = updatedIngredients.some(ing => ing.material_id === ingredient.material_id);
+          //   if (!isDuplicate) {
+          //     updatedIngredients.push(ingredient); // มี material_id ตรงกัน แต่ quantity เปลี่ยน
+          //   }
+          // }
+
+          // เช็ค ingredient ที่เพิ่มเข้ามา
+          if (originalIng.material_id !== ingredient.material_id) {
+            const isDuplicate = newIngredients.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              newIngredients.push(ingredient);
+              updatedData.ingredients = newIngredients;
+            }
+          }
+
+          if (parseFloat(ingredient.quantity) !==  parseFloat(originalIng.quantity)) {
+            const isDuplicate = newIngredients.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              newIngredients.push(ingredient);
+              updatedData.ingredients = newIngredients;
+            }
+          }
+
+        });
+
+        formData.packaging.forEach((packages, index) => {
+          const originalpck = originalPackage[index] || {}; // ดึงข้อมูล originalPackage
+          // ตรวจสอบการลบ
+          if (!packages.package_id && originalpck.package_id || packages.package_id !== originalpck.package_id  ) {
+            // ถ้าไม่มี package_id ใน formData แต่มีใน originalData
+            const isDuplicate = deletedPackageCopy.some(pkg => pkg.package_id === originalpck.package_id);
+            if (!isDuplicate) {
+              deletedPackageCopy.push(originalpck); // ถือว่าเป็นการลบ
+            }
+          }
+
+          // ตรวจสอบการแก้ไข
+          // if (packages.package_id && (!originalpck.package_id || packages.package_id !== originalpck.package_id)) {
+              // ถ้ามี package_id และไม่ตรงกัน หรือ original ไม่มี package_id
+          //   const isDuplicate = updatedDataPackage.some(pkg => pkg.package_id === packages.package_id);
+          //   if (!isDuplicate) {
+          //     updatedDataPackage.push(packages); // ถือว่าเป็นการแก้ไข
+          //   }
+          // }
+
+          // ตรวจสอบการเพิ่ม
+          if (packages.package_id && !originalpck.package_id) {
+            // ตรวจสอบว่า package_id ซ้ำใน newPackage หรือไม่
+            const isDuplicate = newPackage.some(pkg => pkg.package_id === packages.package_id);
+            if (!isDuplicate) {
+              newPackage.push(packages); // ถ้าไม่ซ้ำก็เพิ่มเข้าไป
+              updatedData.packages = newPackage;
+            }
+          }
+          
         });
   
         // ถ้ามีการอัปเดต ingredient, ใช้ updatedIngredient แทน ingredients
         if (updatedIngredients.length > 0) {
           updatedData.updatedIngredients = updatedIngredients;
+        }
+
+        if (updatedDataPackage.length > 0) {
+          updatedData.updatedDataPackage = updatedDataPackage;
         }
 
       } else if (key === 'file') {
@@ -109,12 +216,20 @@ const EditProduct = () => {
     }
   
     const formDataToSend = new FormData();
+    //loop เพื่อเเปลงค่าจาก object ให้เป็น json ผ่าน key ที่สร้าง
     for (const key in updatedData) {
       if (key === 'updatedIngredients') {
         // ส่งข้อมูลที่มีการแก้ไขใน updatedIngredients
         formDataToSend.append(key, JSON.stringify(updatedData[key]));
       }
       else if (key === 'ingredients') {
+        // ส่งข้อมูลที่มีการแก้ไขใน updatedIngredients
+        formDataToSend.append(key, JSON.stringify(updatedData[key]));
+      }      if (key === 'updatedDataPackage') {
+        // ส่งข้อมูลที่มีการแก้ไขใน updatedIngredients
+        formDataToSend.append(key, JSON.stringify(updatedData[key]));
+      }
+      else if (key === 'packages') {
         // ส่งข้อมูลที่มีการแก้ไขใน updatedIngredients
         formDataToSend.append(key, JSON.stringify(updatedData[key]));
       } else {
@@ -126,19 +241,23 @@ const EditProduct = () => {
     if (deletedIngredientsCopy.length > 0) {
       formDataToSend.append('deletedIngredients', JSON.stringify(deletedIngredientsCopy));
     }
+
+    if (deletedPackageCopy.length > 0) {
+      formDataToSend.append('deletedPackage', JSON.stringify(deletedPackageCopy));
+    }
   
     // ตรวจสอบข้อมูลที่ส่ง
     for (let pair of formDataToSend.entries()) {
       console.log(`${pair[0]}: ${pair[1]}`);
     }
   
-    try {
-      const res = await editProductService(formDataToSend, id);
-      console.log('Response:', res);
-      navigate('/product');
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    // try {
+    //   const res = await editProductService(formDataToSend, id);
+    //   console.log('Response:', res);
+    //   navigate('/product');
+    // } catch (error) {
+    //   console.error('Error:', error);
+    // }
   };
   
   //ค้นหา วัตถุดิบที่ใช้กับสินค้าตัวนี้เพื่อเอาไป map กับ list materail เพื่อให้เลือกโชว์ใน select box
@@ -153,7 +272,7 @@ const EditProduct = () => {
         }
 
         const productData = response.data[0]; 
-        //ข้อมูลส่วนประกิบของสินค้า
+        //ข้อมูลส่วนประกอบของสินค้า
         const ingredients = response.data.map(item => ({
           material_id: item.material_id || '',
           quantity: item.amount || '',
@@ -191,6 +310,51 @@ const EditProduct = () => {
     };
     getMaterial();
   }, []);
+
+  useEffect(() => {
+    const getMaterial = async () => {
+        try {
+            const response = await listProductPackageService();
+            console.log(response.data);
+            setPackageById(response.data)
+        } catch (error) {
+            console.error("Error fetching materials:", error);
+        }
+    };
+    getMaterial();
+  }, []);
+
+  useEffect(() => {
+    const getListProductPackageByIdService = async () => {
+      try {
+          const response = await listProductPackageByIdService(id);
+          console.log(response.data);
+          const packageProduct = response.data.map(item => ({
+              package_product_id: item.package_product_id || '',
+              package_name: item.package_name || '', 
+          }));
+          // เพิ่มข้อมูล package เข้าไปใน formData เป็นการเพิ่มข้อมูลต่อจากข้อมูลก่อนหน้า
+          setFormData(prev => ({
+              ...prev,
+              packaging: packageProduct
+          }));
+
+          // เพิ่มข้อมูล package เข้าไปใน originalData
+          setOriginalData(prev => ({
+              ...prev,
+              packaging: packageProduct
+          }));
+      } catch (error) {
+          console.error("Error fetching packages:", error);
+      }
+    }
+    getListProductPackageByIdService();
+  }, []);
+
+  const options = packageById.map((packages) => ({
+    value: packages.package_id,
+    label: packages.package_name
+  }));
 
   useEffect(() => {
     if ((formData.ingredients || []).length > 0 && formData.quantity_per_time) {
@@ -236,18 +400,7 @@ const EditProduct = () => {
               ) : (
                 <span>เพิ่มรูปสินค้า</span>
               )}
-              <input
-                type="file"
-                name="file"
-                className="position-absolute top-0 start-0"
-                style={{
-                  opacity: 0,
-                  width: '100px',
-                  height: '100px',
-                  cursor: 'pointer',
-                }}
-                onChange={handleChange}
-              />
+              <input type="file" name="file" className="position-absolute top-0 start-0" style={{opacity: 0,width: '100px',height: '100px',cursor: 'pointer', }} onChange={handleChange}/>
             </div>
             {formData.file && <p>ไฟล์ที่เลือก: {formData.file.name}</p>}
           </div>
@@ -273,13 +426,7 @@ const EditProduct = () => {
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
               <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
               <div className="col-sm-3">
-                <select
-                  className="form-select"
-                  name="material_id"
-                  value={ingredient.material_id}
-                  onChange={(event) => handleInputChange(index, event)}
-                  required
-                >
+                <select className="form-select" name="material_id" value={ingredient.material_id} onChange={(event) => handleInputChange(index, event)} required>
                   <option value="" disabled>Select Material</option>
                   {listMaterials.map((listMaterial) => (
                     <option key={listMaterial.material_id} value={listMaterial.material_id}>
@@ -289,15 +436,7 @@ const EditProduct = () => {
                 </select>
               </div>
               <div className="col-sm-2">
-                <input
-                  type="number"
-                  name="quantity"
-                  placeholder="ปริมาณ"
-                  className="form-control"
-                  value={ingredient.quantity}
-                  onChange={(event) => handleInputChange(index, event)}
-                  required
-                />
+                <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, event)} required/>
               </div>
               <div className="col-sm-1">
                 <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}>ลบ</button>
@@ -305,9 +444,29 @@ const EditProduct = () => {
             </div>
           ))}
 
-
           <div className="mb-3 d-md-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
+          </div>
+          {(formData.packaging || []).map((packaging, index) => (
+            <div key={index} className="row mb-3 justify-content-center">
+              <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
+              <div className="col-sm-5">
+                <Select
+                  options={options}
+                  value={options.find((option) => option.label === packaging.package_name) ||  packaging.package_name}
+                  onChange={(option) => handlePackageChange(index, option)}
+                  isSearchable={true}
+                  placeholder="เลือกบรรจุภัณฑ์"
+                />
+              </div>
+              <div className="col-sm-1">
+                  <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}>ลบ</button>
+              </div>
+            </div>
+          ))}
+
+          <div className="mb-3 d-md-flex justify-content-center">
+              <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
           
           <div className="row mb-3 justify-content-center">

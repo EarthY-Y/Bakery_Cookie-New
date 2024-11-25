@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
 
-
 export const getProduct = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
@@ -48,6 +47,48 @@ export const getProductById = async (req, res) => {
     }
 }
 
+export const getProductPackageById = async (req, res) => {
+    const id = req.params.id
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query("SELECT pp.package_product_id, pck.package_name FROM product p"+ 
+                    " LEFT JOIN package_product pp ON pp.product_id = p.product_id"+
+                    " LEFT JOIN package pck ON pck.package_id = pp.package_id"+
+                    " WHERE p.product_id = ?",
+                     [id], 
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("getProductPackageById", results);
+        
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error});
+    }
+}
+
+export const getPackages = async (req, res) => {
+    console.log("getPackage");
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query("SELECT package_id, package_name, cost_per_quantity FROM package",
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log(results);
+        
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error});
+    }
+}
+
 export const createProduct = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
@@ -70,7 +111,7 @@ export const createProduct = async (req, res) => {
         if (productResult) {
             await createProductPicture(req, id, token.admin_id);
             await createProductMaterial(req, id, token.admin_id);
-
+            await createProductPackage(req, id, token.admin_id);
             return res.status(200).json({ message: "Product created successfully", productResult });
         }
     } catch (error) {
@@ -146,13 +187,46 @@ const createProductMaterial = async (req, id, tokenId) => {
     }
 };
 
+const createProductPackage = async (req, id, tokenId) => {
+    try {
+        let packaging = req.body.packaging;
+
+        // ตรวจสอบและแปลงเป็นอาร์เรย์หากเป็นสตริง
+        if (typeof packaging === 'string') {
+            packaging = JSON.parse(packaging);
+        }
+
+        if (!Array.isArray(packaging)) {
+            throw new Error("Ingredients is not an array");
+        }
+
+        const ingredientValues = packaging.map(item => [uuidv4(), id, item.package_id, tokenId]);
+
+        const results = await new Promise((resolve, reject) => {
+            db.query(
+                "INSERT INTO package_product (package_product_Id, product_id, package_id, created_by) VALUES ?",
+                [ingredientValues],
+                (err, result) => {
+                    if (err) return reject(err);
+                    resolve(result);
+                }
+            );
+        });
+
+        return results;
+    } catch (error) {
+        console.error("Error creating product materials:", error);
+        throw error;
+    }
+};
+
 export const updateProduct = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader);
         const { id } = req.params;
 
-        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, updatedIngredients } = req.body;
+        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, deletedPackage, updatedIngredients } = req.body;
 
         // 1. อัปเดตข้อมูลในตาราง product
         let updateQuery = "UPDATE product SET  ";
@@ -367,6 +441,13 @@ export const deleteProduct = async (req, res) => {
         // ลบจาก product
         await new Promise((resolve, reject) => {
             db.query('DELETE FROM product WHERE product_id = ?', [id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+
+        await new Promise((resolve, reject) => {
+            db.query('DELETE FROM package_product WHERE product_id = ?', [id], (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
             });

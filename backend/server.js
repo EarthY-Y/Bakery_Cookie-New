@@ -16,8 +16,10 @@ import paymentRoute from "./routes/customer/payment-Route.js"
 import AddressRoute from "./routes/addressRoute.js"
 import StatusRoute from "./routes/admin/status-Route.js"
 import CategoryRoute from "./routes/admin/category-Route.js"
+import CategoryPackageRoute from "./routes/admin/categoryPackage-Route.js"
 import AddressCustomerRoute from "./routes/customer/addressCustomer-Route.js"
 import OrderTrackingRoute from './routes/customer/orderTracking-Route.js';
+import PackageRoute from './routes/admin/package-Route.js'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -67,12 +69,14 @@ app.use(customerRoute)
 app.use(orderRounte)
 app.use(materialRounte)
 app.use(productRoute)
+app.use(PackageRoute)
 app.use(authRoute)
 app.use(adminRoute)
 app.use(paymentRoute)
 app.use(AddressRoute)
 app.use(StatusRoute)
 app.use(CategoryRoute)
+app.use(CategoryPackageRoute);
 app.use(OrderTrackingRoute);
 app.use(productCustomerRoute);
 app.use(provinceAmphureTambon);

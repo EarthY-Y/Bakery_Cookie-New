@@ -20,9 +20,20 @@ function Sidebaradmin() {
       <div className="d-none d-lg-block bg-light p-3 col-2 min-vh-100 shadow" style={{height: '100vh', position: 'fixed' }}>
         <nav className="nav flex-column navbar-expand-lg">
           <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
-          <Link className="nav-link text-dark" to="/category">ประเภทสินค้า</Link>
           <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>
-
+          <div className="accordion mt-2 shadow-sm" id="accordionExample">
+            <div className="accordion-item border-0">
+              <h2 className="accordion-header">
+                <button className="accordion-button collapsed explan" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">ประเภท</button>
+              </h2>
+              <div id="collapseCategory" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div className="accordion-body">
+                  <Link className="nav-link text-dark" to="/category/prduct">ประเภทสินค้า</Link>
+                  <Link className="nav-link text-dark" to="/category/package">ประเภทบรรจุภัณฑ์</Link>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Accordion: คลังวัตถุดิบ */}
           <div className="accordion mt-2 shadow-sm" id="accordionExample">
             <div className="accordion-item border-0">
@@ -32,7 +43,7 @@ function Sidebaradmin() {
               <div id="collapseMaterials" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div className="accordion-body">
                   <Link className="nav-link text-dark" to="/material">วัตถุดิบ</Link>
-                  <Link className="nav-link text-dark" to="#">บรรจุภัณฑ์</Link>
+                  <Link className="nav-link text-dark" to="/package">บรรจุภัณฑ์</Link>
                 </div>
               </div>
             </div>
@@ -76,8 +87,20 @@ function Sidebaradmin() {
         <div className="offcanvas-body">
           <nav className="nav flex-column">
             <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
-            <Link className="nav-link text-dark" to="/category">ประเภทสินค้า</Link>
             <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>
+            <div className="accordion mt-2 shadow-sm" id="accordionExample">
+            <div className="accordion-item border-0">
+              <h2 className="accordion-header">
+                <button className="accordion-button collapsed explan" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">ประเภท</button>
+              </h2>
+              <div id="collapseCategory" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div className="accordion-body">
+                  <Link className="nav-link text-dark" to="/category/prduct">ประเภทสินค้า</Link>
+                  <Link className="nav-link text-dark" to="/category/package">ประเภทบรรจุภัณฑ์</Link>
+                </div>
+              </div>
+            </div>
+          </div>
 
             {/* Accordion: คลังวัตถุดิบ */}
             <div className="accordion" id="accordionExampleMobile">

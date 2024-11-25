@@ -14,7 +14,7 @@ export const getMaterial = async (req, res) => {
                 }
             )
         })
-        console.log('results material ', results)
+        // console.log('results material ', results)
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get material", error);

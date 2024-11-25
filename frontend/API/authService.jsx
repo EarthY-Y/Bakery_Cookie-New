@@ -46,7 +46,7 @@ export const ProtectedRouteAdmin = () => {
         setLoading(false);
         return;
       }
-      autoRemoveToken(token)
+      autoRemoveTokenAdmin(token)
       try {
         console.log("Verifying token...");
         const resAdmin = await axios.get(API_URL+'/verifyAdmin', {
@@ -77,7 +77,7 @@ export const ProtectedRouteAdmin = () => {
   }
 
   if (!token || !isAdmin) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login/admin" />;
   }
 
   return <Outlet />;//จะเเสดง Route ลูกที่ Function นี้ครอบไว้ใน App.jsx
@@ -159,5 +159,32 @@ function autoRemoveToken(token) {
   } catch (error) {
     console.error("Invalid token format:", error); // จัดการกับกรณี token ผิดรูปแบบ
     removeToken(); // ลบ token เพื่อบังคับให้ผู้ใช้ล็อกอินใหม่
+  }
+}
+
+function removeTokenAdmin() {
+  localStorage.removeItem('tokenAdmin');
+  console.log('Token has been removed. Please log in again.');
+  location.reload(); 
+}
+function autoRemoveTokenAdmin(token) {
+  if (!token) return;
+
+  try {
+    const tokenParts = JSON.parse(atob(token.split('.')[1])); // Decode token โดยไม่ต้องใช้กุญเเจที่เราตั้งได้เลย
+    const now = Math.floor(Date.now() / 1000); // เวลาปัจจุบันเป็น Unix timestamp
+    const timeUntilExpiration = (tokenParts.exp - now) * 1000; // เวลาที่เหลือในหน่วยมิลลิวินาที
+
+    if (timeUntilExpiration > 0) {
+        setTimeout(() => { // ตั้งเวลาให้ตรงตามเวลาที่เหลือก่อน token จะหมด
+          removeTokenAdmin(); 
+            alert('Token has expired. Please log in again.');
+        }, timeUntilExpiration);
+    } else {
+        removeToken(); // หาก token หมดอายุแล้วให้ลบทันที
+    }
+  } catch (error) {
+    console.error("Invalid token format:", error); // จัดการกับกรณี token ผิดรูปแบบ
+    removeTokenAdmin(); // ลบ token เพื่อบังคับให้ผู้ใช้ล็อกอินใหม่
   }
 }
