@@ -95,7 +95,7 @@ export const createProduct = async (req, res) => {
         const token = await passToken(authHeader);
         const id = uuidv4();
         
-        const { product_name, quantity, price, description } = req.body;
+        const { product_name, quantity, price, description, packaging, ingredients } = req.body;
 
         const productResult = await new Promise((resolve, reject) => {
             db.query(
@@ -110,8 +110,12 @@ export const createProduct = async (req, res) => {
 
         if (productResult) {
             await createProductPicture(req, id, token.admin_id);
-            await createProductMaterial(req, id, token.admin_id);
-            await createProductPackage(req, id, token.admin_id);
+            if (ingredients) {
+                await createProductMaterial(req, id, token.admin_id);
+            }
+            if (packaging) {
+                await createProductPackage(req, id, token.admin_id);
+            }
             return res.status(200).json({ message: "Product created successfully", productResult });
         }
     } catch (error) {
@@ -226,7 +230,7 @@ export const updateProduct = async (req, res) => {
         const token = await passToken(authHeader);
         const { id } = req.params;
 
-        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, deletedPackage, updatedIngredients } = req.body;
+        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, deletedPackage, packages, updatedIngredients } = req.body;
 
         // 1. อัปเดตข้อมูลในตาราง product
         let updateQuery = "UPDATE product SET  ";
@@ -265,14 +269,15 @@ export const updateProduct = async (req, res) => {
             });
         }
 
-        // 2. อัปเดตข้อมูลในตาราง productpicture (อัปโหลดไฟล์ใหม่หรือเปลี่ยนชื่อไฟล์)
         if (req.file) {
             await updateProductPicture(req, id, token.admin_id);
         }
 
-        // 3. อัปเดตข้อมูลในตาราง product_material (อัปเดต ingredients)
         if (deletedIngredients || ingredients || updatedIngredients) {
             await updateProductMaterial(req, id, ingredients, deletedIngredients, updatedIngredients, token.admin_id);
+        }
+        if (deletedPackage || packages ) {
+            await updateProductPackage(req, id, packages, deletedPackage, token.admin_id);
         }
 
         return res.status(200).json({ message: "Product updated successfully" });
@@ -340,7 +345,7 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
             console.log("No deleted ingredients or invalid format.");
         }
 
-        // 2. ตรวจสอบว่า ingredients ถูกส่งมาหรือไม่
+        //ตรวจสอบว่า ingredients ถูกส่งมาหรือไม่
         if (ingredients) {
             console.log("ingredients", ingredients);
             
@@ -353,14 +358,14 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
                 throw new Error("Ingredients is not an array");
             }
 
-            // 3. อัปเดตข้อมูลใน product_material
+            //อัปเดตข้อมูลใน product_material
             const ingredientValues = ingredients.filter(item => item.quantity !== null).map(item => [uuidv4(), productId, item.material_id, item.quantity, tokenId]);
 
-            // อัปเดตหรือเพิ่มข้อมูลที่ไม่ได้ถูกลบ
+            //อัปเดตหรือเพิ่มข้อมูลที่ไม่ได้ถูกลบ
             if (ingredientValues.length > 0) {
                 await new Promise((resolve, reject) => {
-                    db.query(
-                        "INSERT INTO product_material (product_material_Id, product_id, material_id, amount, updated_by) VALUES ? ON DUPLICATE KEY UPDATE amount = VALUES(amount), updated_by = VALUES(updated_by)",
+                    db.query("INSERT INTO product_material (product_material_Id, product_id, material_id, amount, updated_by)"+
+                        " VALUES ? ON DUPLICATE KEY UPDATE amount = VALUES(amount), updated_by = VALUES(updated_by)", //ถ้ามีของที่ซ้ำกันให้เป็นการอัปเดตเเค่จำนวนเเละคนอัปเดต
                         [ingredientValues],
                         (err, result) => {
                             if (err) return reject(err);
@@ -371,38 +376,73 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
             }
         }
 
-        // 2. ตรวจสอบว่า updatedIngredients ถูกส่งมาหรือไม่
-        if (updatedIngredients) {
-            // ตรวจสอบและแปลงเป็นอาร์เรย์หากเป็นสตริง
-            // console.log("updatedIngredients", updatedIngredients);
+        return { message: "Product materials updated successfully" };
+    } catch (error) {
+        console.error("Error updating product materials:", error);
+        throw error;
+    }
+};
+
+const updateProductPackage = async (req, productId, packages, deletedPackage, tokenId) => {
+    try {
+        console.log("im here updateProductPackage",packages,deletedPackage);
+
+        if (typeof deletedPackage === 'string') {
+            deletedPackage = JSON.parse(deletedPackage);  // แปลงสตริงเป็นอาร์เรย์
+        }
+        
+        console.log("deletedPackage after parsing:", deletedPackage);
+        // ตรวจสอบว่ามีการส่ง deletedPackage มาและเป็นอาร์เรย์
+        if (deletedPackage && Array.isArray(deletedPackage) && deletedPackage.length > 0) {
+            console.log("Deleting materials:", deletedPackage);
+            const deletedPackageId = deletedPackage.map(item => item.package_product_id); 
+        
+            if (deletedPackageId.length > 0) {
+                await new Promise((resolve, reject) => {
+                    db.query(
+                        "DELETE FROM package_product WHERE product_id = ? AND package_product_id IN (?)", //ที่ต้องใช้ IN เพราะว่า Data เป็น Array เเละ = ไม่รองรับการลบเเบบหลายเเถวเเต่ IN รองรับ
+                        [productId, deletedPackageId],
+                        (err, result) => {
+                            if (err) return reject(err);
+                            resolve(result);
+                        }
+                    );
+                });
+            }
+        } else {
+            console.log("No deleted packages or invalid format.");
+        }
+
+        //ตรวจสอบว่า packages ถูกส่งมาหรือไม่
+        if (packages) {
+            console.log("packages", packages);
             
-            if (typeof updatedIngredients === 'string') {
-                updatedIngredients = JSON.parse(updatedIngredients);
+            // ตรวจสอบและแปลงเป็นอาร์เรย์หากเป็นสตริง
+            if (typeof packages === 'string') {
+                packages = JSON.parse(packages);
             }
 
-            if (!Array.isArray(updatedIngredients)) {
+            if (!Array.isArray(packages)) {
                 throw new Error("Ingredients is not an array");
             }
 
-            // 3. อัปเดตข้อมูลใน product_material
-            if (Array.isArray(updatedIngredients) && updatedIngredients.length > 0) {
-                for (const item of updatedIngredients) {
-                    if (item.quantity !== null) {
-                        await new Promise((resolve, reject) => {
-                            db.query(
-                                "UPDATE product_material SET amount = ?, updated_by = ? WHERE product_id = ? AND material_id = ?",
-                                [item.quantity, tokenId, productId, item.material_id],
-                                (err, result) => {
-                                    if (err) return reject(err);
-                                    resolve(result);
-                                }
-                            );
-                        });
-                    }
-                }
+            //อัปเดตข้อมูลใน product_material
+            const ingredientValues = packages.filter(item => item.quantity !== null).map(item => [uuidv4(), productId, item.package_id, tokenId]);
+
+            //อัปเดตหรือเพิ่มข้อมูลที่ไม่ได้ถูกลบ
+            if (ingredientValues.length > 0) {
+                await new Promise((resolve, reject) => {
+                    db.query(
+                        "INSERT INTO package_product (package_product_Id, product_id, package_id, updated_by) VALUES ?",
+                        [ingredientValues],
+                        (err, result) => {
+                            if (err) return reject(err);
+                            resolve(result);
+                        }
+                    );
+                });
             }
         }
-
         return { message: "Product materials updated successfully" };
     } catch (error) {
         console.error("Error updating product materials:", error);

@@ -80,21 +80,41 @@ const CreateProduct = () => {
   };
 
   const handleRemoveRow = (index) => {
-      const values = [...(formData.ingredients || [])];
+    const values = [...(formData.ingredients || [])];
+    if (values.length > 1) { // ป้องกันการลบเมื่อมีแค่แถวเดียว
       values.splice(index, 1);
-      setFormData(prev => ({ ...prev, ingredients: values })); // อัปเดต formData
+      setFormData(prev => ({ ...prev, ingredients: values }));
+    }
   };
 
   const handlePackageAddRow = () => {
     const newIngredients = [...(formData.packaging || []), { material_id: '', quantity: '' }];
     setFormData(prev => ({ ...prev, packaging: newIngredients })); // อัปเดต formData
-};
+  };
 
-const handlePackageRemoveRow = (index) => {
+  const handlePackageRemoveRow = (index) => {
     const values = [...(formData.packaging || [])];
-    values.splice(index, 1);
-    setFormData(prev => ({ ...prev, packaging: values })); // อัปเดต formData
-};
+    if (values.length > 1) { // ป้องกันการลบเมื่อมีแค่แถวเดียว
+      values.splice(index, 1);
+      setFormData(prev => ({ ...prev, packaging: values }));
+    }
+  };
+
+  //Render component มาเเล้วเเสดง form เลย
+  useEffect(() => {
+    if (!formData.ingredients || formData.ingredients.length === 0) {
+      setFormData(prev => ({
+        ...prev,
+        ingredients: [{ material_id: '', quantity: '' }]
+      }));
+    }
+    if (!formData.packaging || formData.packaging.length === 0) {
+      setFormData(prev => ({
+        ...prev,
+        packaging: [{ package_id: '', quantity: '' }]
+      }));
+    }
+  }, []);
   //หาต้นทุนต่อชิ้น
   useEffect(() => {
     const totalCost = calculateCostMaterial();
@@ -105,7 +125,6 @@ const handlePackageRemoveRow = (index) => {
     const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
     setTotalCost(hiddenCosts.toFixed(3))
   }, [formData.ingredients, formData.quantity, selectedPackages]);
-
   
   useEffect(() => {
     if (formData.price && formData.quantity) {
@@ -151,28 +170,11 @@ const handlePackageRemoveRow = (index) => {
     try {
         const res = await createProductService(formData);
         console.log(res);
-        // navigate(-1);
+        navigate(-1);
     } catch (error) {
         console.log(error); // แสดงข้อผิดพลาด
     }
   };
-  const handleChangePackage = (option) => {
-    setSelectedOption(option);
-    // ใช้ option ที่ส่งเข้ามาในฟังก์ชันเพื่อค้นหา cost_per_quantity 
-    const costFind = listPackage.find(item => item.package_id === option.value); //value = package_id 
-    if (costFind) {
-      const costPerQuantity = {
-        package_id : costFind.package_id,
-        package_name: costFind.package_name,
-        cost_per_quantity: costFind.cost_per_quantity,
-      };
-      console.log("Cost per quantity:", costPerQuantity);
-      setSelectedPackages(costPerQuantity)
-    } else {
-      console.log("Package not found");
-    }
-  };
-  
 
   return (
     <form onSubmit={handleSubmitProductMaterial}>
