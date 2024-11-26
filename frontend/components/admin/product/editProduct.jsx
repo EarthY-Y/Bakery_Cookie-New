@@ -106,33 +106,34 @@ const EditProduct = () => {
   //ต้องทำเเยกเพราะว่ามีเรื่อง ไอดีเข้ามาเกี่ยวถ้าไม่ทำเเยกก็ต้องใช้เงื่อนไขในการเเยกใน Function นั้นๆ
   const handlePackageChange = (index, option) => {
     const values = [...(formData.packaging || [])];
-    const selectedPackage = packageById.find((packages) => packages.package_id === option.value);
+    const selectedPackage = packageById.find((pkg) => pkg.package_id === option.value);
+    
     if (selectedPackage) {
-        values[index] = {
-            package_id: selectedPackage.package_id,
-            package_name: selectedPackage.package_name,
-            cost_per_quantity: selectedPackage.cost_per_quantity,
-            //quantity: values[index]?.quantity || 0, // คงค่า quantity เดิมไว้
-        };
-        setFormData((prev) => ({ ...prev, packaging: values }));
+      values[index] = {
+        ...selectedPackage,
+        quantity: values[index]?.quantity || 0 // คงค่า quantity เดิมไว้
+      };
+      setFormData((prev) => ({ ...prev, packaging: values }));
     }
   };
 
   const handlePackageAddRow = () => {
-    const newIngredients = [...(formData.packaging || []), { package_id: '' }];
-    setFormData((prev) => ({ ...prev, packaging: newIngredients }));
+    const newPackaging = [
+      ...(formData.packaging || []),
+      { tempId: `temp-${Date.now()}`, package_id: '', package_name: '', cost_per_quantity: '', quantity: '' }
+    ];
+    setFormData((prev) => ({ ...prev, packaging: newPackaging }));
   };
 
   const handlePackageRemoveRow = (index) => {
     const values = [...(formData.packaging || [])];
-    const deletedIngredient = values[index]; // เก็บข้อมูลวัตถุดิบที่ถูกลบ
-    values.splice(index, 1);
-    
-    if (values.length > 0) { 
-      setFormData((prev) => ({ ...prev, packaging: values }));
-      setDeletedPackage((prevDeleted) => [...prevDeleted, deletedIngredient]);
-    }
+    const deletedPackage = values.splice(index, 1)[0]; // ลบแถวออก
+  
+    setFormData((prev) => ({ ...prev, packaging: values }));
+    setDeletedPackage((prevDeleted) => [...prevDeleted, deletedPackage]);
+
   };
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -311,7 +312,7 @@ const EditProduct = () => {
   }, []);
 
   useEffect(() => {
-    const getMaterial = async () => {
+    const listProductPackage = async () => {
         try {
             const response = await listProductPackageService();
             console.log(response.data);
@@ -320,7 +321,7 @@ const EditProduct = () => {
             console.error("Error fetching materials:", error);
         }
     };
-    getMaterial();
+    listProductPackage();
   }, []);
 
   useEffect(() => {
@@ -434,7 +435,7 @@ const EditProduct = () => {
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
           {(formData.packaging || []).map((packaging, index) => (
-            <div key={index} className="row mb-3 justify-content-center">
+            <div key={packaging.tempId || packaging.package_id || index}  className="row mb-3 justify-content-center">
               <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
               <div className="col-sm-5">
                 <Select

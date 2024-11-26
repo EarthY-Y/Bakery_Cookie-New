@@ -51,7 +51,7 @@ export const getProductPackageById = async (req, res) => {
     const id = req.params.id
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT pp.package_product_id, pck.package_name FROM product p"+ 
+            db.query("SELECT pp.package_product_id, pp.package_id, pck.package_name FROM product p"+ 
                     " LEFT JOIN package_product pp ON pp.product_id = p.product_id"+
                     " LEFT JOIN package pck ON pck.package_id = pp.package_id"+
                     " WHERE p.product_id = ?",

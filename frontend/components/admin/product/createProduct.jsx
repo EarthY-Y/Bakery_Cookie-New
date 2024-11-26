@@ -8,8 +8,6 @@ const CreateProduct = () => {
   const [formData, setFormData] = useState({}) //
   const [listMaterials, setListMaterials] = useState([]);
   const [listPackage, setListPackage] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedPackages, setSelectedPackages] = useState([]);
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -88,7 +86,7 @@ const CreateProduct = () => {
   };
 
   const handlePackageAddRow = () => {
-    const newIngredients = [...(formData.packaging || []), { material_id: '', quantity: '' }];
+    const newIngredients = [...(formData.packaging || []), { package_id: '', package_name: '' }];
     setFormData(prev => ({ ...prev, packaging: newIngredients })); // อัปเดต formData
   };
 
@@ -111,7 +109,7 @@ const CreateProduct = () => {
     if (!formData.packaging || formData.packaging.length === 0) {
       setFormData(prev => ({
         ...prev,
-        packaging: [{ package_id: '', quantity: '' }]
+        packaging: [{ package_id: '', package_name: '' }]
       }));
     }
   }, []);
@@ -124,7 +122,7 @@ const CreateProduct = () => {
     }
     const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
     setTotalCost(hiddenCosts.toFixed(3))
-  }, [formData.ingredients, formData.quantity, selectedPackages]);
+  }, [formData.ingredients, formData.quantity]);
   
   useEffect(() => {
     if (formData.price && formData.quantity) {
