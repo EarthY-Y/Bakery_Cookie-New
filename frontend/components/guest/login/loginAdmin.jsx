@@ -13,7 +13,7 @@ const Login = () => {
     try {
       const res = await loginAdmin(userName, passWord); 
       console.log(res.data);
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('tokenAdmin', res.data.tokenAdmin);
       const userRole = res.data.role;
       if (userRole === 'admin') {
         navigate("/dashboard");

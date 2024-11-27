@@ -1,20 +1,24 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
-import { getOrderByIdService,getStatusOrderService, updateStatusOrderService } from '../../../API/admin/ordersService';
+import { getOrderByIdService, getStatusOrderService, updateStatusOrderService, getOrderHistoryByIdService } from '../../../API/admin/ordersService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const orderById = () => {
   const {id} = useParams();
   const [orderById, setOrderById] = useState([])
+  const [orderHistoryById, setOrderHistoryById] = useState([])
   const [statusOrders, setStatusOrder] = useState([])
   const [status, setStatus] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getlistMaterialById = async()=> {
+    const getOrderById = async()=> {
       try {
         const response = await getOrderByIdService(id)
         console.log(response);
@@ -28,11 +32,29 @@ const orderById = () => {
         alert(error)
       }
     }
-    getlistMaterialById()
+    getOrderById()
   },[])
 
   useEffect(() => {
-    const getlistMaterialById = async()=> {
+    const getOrderHistoryById = async()=> {
+      try {
+        const response = await getOrderHistoryByIdService(id)
+        console.log(response);
+        if(!response.data){
+          throw new Error("ไม่มีข้อมูล")
+        }
+        setOrderHistoryById(response.data)
+      }
+      
+      catch (error) {
+        alert(error)
+      }
+    }
+    getOrderHistoryById()
+  },[showCancelModal])
+
+  useEffect(() => {
+    const getStatusOrderById = async()=> {
       try {
         const response = await getStatusOrderService()
         console.log(response);
@@ -46,7 +68,7 @@ const orderById = () => {
         alert(error)
       }
     }
-    getlistMaterialById()
+    getStatusOrderById()
   },[])
 
   
@@ -62,10 +84,22 @@ const orderById = () => {
       console.log(response);
       
     } catch (error) {
-      
+      console.log(error);
+      if(error.response.data.message){
+        setErrorMsg(error.response.data.message)
+        setShowCancelModal(true)
+      }
     }
   }
-    
+  const handleConfirm = async() => {
+    try {
+      const response = await updateStatusOrderService(status, id, 'skip')
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container mt-5 p-4 ">
@@ -166,11 +200,31 @@ const orderById = () => {
           </div>
         </div>
         <div className="mb-3">
-            <label className="form-label fw-bold">รับออร์เดอร์โดย</label>
-            <p className="border p-2 rounded bg-white">{orderById[0]?.updated_by || "ยังไม่มีคนรับออร์เดอร์"}</p>
+          {orderHistoryById.map((order, index) => (
+            <div key={index} className="row p-2">
+              <div className='col-4'>
+                <label className="form-label fw-bold">วันที่ดำเนินการ</label>
+                <p className="border p-2 rounded bg-white">{formatDate(order.change_time ) || "ยังไม่มีคนรับออร์เดอร์"}</p>
+              </div>
+              <div className='col-4'>
+                <label className="form-label fw-bold">สถานะที่ดำเนินการ</label>
+                <p className="border p-2 rounded bg-white">{order.status_name || "ยังไม่มีคนรับออร์เดอร์"}</p>
+              </div>
+              <div className='col-4'>
+                <label className="form-label fw-bold">ชื่อผู้ดำเนินการ</label>
+                <p className="border p-2 rounded bg-white">{order.username || "ยังไม่มีคนรับออร์เดอร์"}</p>
+              </div>
+            </div>
+          ))}
         </div>
-
-        </div>
+      </div>
+      <ConfirmPopUpModal
+        showModal={showCancelModal}
+        handleClose={() => setShowCancelModal(false)}
+        handleConfirm={handleConfirm}
+        text={errorMsg + ' ต้องการยืนยันใช้สถานะซ้ำไหม'}
+      />
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
 
   );

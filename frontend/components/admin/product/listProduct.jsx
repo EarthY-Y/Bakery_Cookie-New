@@ -62,7 +62,7 @@ const listProduct = () => {
               <tr key={index}>
                 <td><img src={API_URL_PICTURE + products.productpic_name} className="img-fluid text-center" style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                 <td>{products.product_name}</td>
-                <td>{products.cost}</td>
+                <td>{products.cost.toFixed(3)}</td>
                 <td>{products.selling_price_per_quantity}</td>
                 <td>{products.quantity_per_time}</td>
                 {/* <td>{formatDate(products.created_at)}</td> */}

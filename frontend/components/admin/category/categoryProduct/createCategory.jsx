@@ -1,9 +1,9 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { createCategoryService, getListProductPictureService } from '../../../API/admin/categoryService';
+import { createCategoryService, getListProductPictureService } from '../../../../API/admin/categoryService';
 import { Link } from 'react-router-dom';
-import { formatDate } from '../../untils/frommatters/datetime';
+import { formatDate } from '../../../untils/frommatters/datetime';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const createCategory = () => {
@@ -25,7 +25,7 @@ const createCategory = () => {
       })
       console.log(categoryName,selectedProductsMap);      
       const res = await createCategoryService(categoryName,selectedProductsMap);
-      navigate('/category');
+      navigate(-1);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -47,9 +47,9 @@ const createCategory = () => {
   
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-black mb-4" to="/category">
+      <button className="btn btn-light text-black mb-4" onClick={() => {navigate(-1)}}>
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
+      </button>
       <div className="mb-4 card col-md-12 px-40 card-body">
         <h4>เพิ่มสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">

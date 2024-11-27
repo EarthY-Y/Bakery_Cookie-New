@@ -1,12 +1,12 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { updateCategoryProductService, getListProductPictureService, getCategoryByIdService } from '../../../API/admin/categoryService';
+import { updateCategoryProductService, getListProductPictureService, getCategoryByIdService } from '../../../../API/admin/categoryService';
 import { Link } from 'react-router-dom';
-import { formatDate } from '../../untils/frommatters/datetime';
+import { formatDate } from '../../../untils/frommatters/datetime';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
-const createCategory = () => {
+const EditCategory = () => {
   const {id} = useParams()
   const [categoryName, setCategoryName] = useState("");
   const [listProduct, setListProduct] = useState([]);
@@ -33,7 +33,7 @@ const createCategory = () => {
       };
       console.log('การเปลี่ยนแปลง:', changes);
       const res = await updateCategoryProductService(id, changes);
-      navigate('/category');
+      navigate(-1);
     } catch (err) {
       console.error('Error:', err);
     }
@@ -70,9 +70,9 @@ const createCategory = () => {
   
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-black mb-4" to="/category">
+      <button className="btn btn-light text-black mb-4" onClick={() => {navigate(-1)}}>
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
+      </button>
       <div className="mb-4 card col-md-12 px-40 card-body">
         <h4>เพิ่มสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -121,7 +121,7 @@ const createCategory = () => {
           </div>
           <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
             <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}>เพิ่ม</button>
+            <button className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}>บันทึก</button>
           </div>
         </form>
       </div>
@@ -129,4 +129,4 @@ const createCategory = () => {
   );
 };
 
-export default createCategory;
+export default EditCategory;

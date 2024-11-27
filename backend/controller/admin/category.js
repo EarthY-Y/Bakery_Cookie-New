@@ -11,7 +11,7 @@ export const getListCategory = async (req, res) => {
                     " LEFT JOIN admin a_created ON a_created.admin_id = c.created_by"+
                     " LEFT JOIN admin a_updated ON a_updated.admin_id = c.updated_by"+
                     " LEFT JOIN category_product cp ON cp.category_id = c.category_id"+
-                    " GROUP BY c.category_id, c.category_name, c.created_at, c.updated_at, a_created.userName, a_updated.userName",
+                    " GROUP BY c.category_id, c.category_name",
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -30,7 +30,7 @@ export const getCategoryById = async (req, res) => {
         console.log(id);
         
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT c.*, cp.category_product_id, p.product_id, p.product_name, pp.productpic_name, a_created.username as craeted_by, a_updated.username as updated_by FROM category c"+
+            db.query("SELECT c.*, cp.category_product_id, p.product_id, p.product_name, pp.productpic_name, a_created.username as created_by, a_updated.username as updated_by FROM category c"+
                     " LEFT JOIN category_product cp ON cp.category_id = c.category_id"+
                     " LEFT JOIN product p ON p.product_id = cp.product_id"+
                     " LEFT JOIN productpicture pp ON pp.product_id = p.product_id"+

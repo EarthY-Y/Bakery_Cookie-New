@@ -1,6 +1,7 @@
 import React, { useContext,useEffect, useState} from 'react';
+import Select from 'react-select';
 import { Link,useNavigate,useParams } from 'react-router-dom';
-import { listProductByIdService } from '../../../API/admin/productService';
+import { listProductByIdService, listProductPackageByIdService, listProductPackageService } from '../../../API/admin/productService';
 import { listMaterialService } from '../../../API/admin/materialService';
 import { editProductService } from '../../../API/admin/productService';
 
@@ -10,9 +11,12 @@ const EditProduct = () => {
   const [formData, setFormData] = useState({});
   const [originalData, setOriginalData] = useState({});
   const [listMaterials, setListMaterials] = useState([]);
+  const [packageById, setPackageById] = useState([]);
   const [deletedIngredients, setDeletedIngredients] = useState([])
+  const [deletedPackage, setDeletedPackage] = useState([])
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
-  const [totalPrice, settotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -39,57 +43,172 @@ const EditProduct = () => {
 
   const handleInputChange = (index, event) => {
     const values = [...(formData.ingredients || [])];
-    values[index] = {
-      ...values[index],
+    const oldIngredient = values[index];
+  
+    // สร้าง ingredient ใหม่
+    const updatedIngredient = {
+      ...oldIngredient,
       [event.target.name]: event.target.value,
     };
+  
+    // ถ้ามีการเปลี่ยน material_id
+    if (event.target.name === 'material_id' && oldIngredient.material_id !== event.target.value) {
+      // สร้าง tempId ใหม่
+      updatedIngredient.tempId = `temp-${Date.now()}`;
+  
+      // เก็บ oldIngredient เข้า deletedIngredients ถ้ามี material_id เดิม
+      if (oldIngredient.material_id) {
+        setDeletedIngredients((prevDeleted) => {
+          const isDuplicate = prevDeleted.some(
+            item => item.material_id === oldIngredient.material_id
+          );
+          return isDuplicate ? prevDeleted : [...prevDeleted, oldIngredient];
+        });
+      }
+    }
+  
+    // แทนที่ค่าเดิมด้วย ingredient ใหม่
+    values[index] = updatedIngredient;
+  
+    // อัปเดต state
     setFormData((prev) => ({ ...prev, ingredients: values }));
   };
 
   const handleAddRow = () => {
-    const newIngredients = [...(formData.ingredients || []), { material_id: '', quantity: '' }];
+    const newIngredients = [
+      ...(formData.ingredients || []),
+      { tempId: `temp-${Date.now()}`, material_id: '', quantity: '' }
+    ];
     setFormData((prev) => ({ ...prev, ingredients: newIngredients }));
   };
-
+  
   const handleRemoveRow = (index) => {
     const values = [...(formData.ingredients || [])];
-    const deletedIngredient = values[index]; // เก็บข้อมูลวัตถุดิบที่ถูกลบ
-    values.splice(index, 1);
-    setFormData((prev) => ({ ...prev, ingredients: values }));
+    const deletedIngredient = values[index];
   
-    // เก็บ ingredient ที่ถูกลบ
-    setDeletedIngredients((prevDeleted) => [...prevDeleted, deletedIngredient]);
+    // ตรวจสอบว่าเป็นแถวที่เพิ่มใหม่หรือไม่ โดยดูจาก tempId
+    if (deletedIngredient.tempId) {
+      // ลบแถวที่มี tempId
+      values.splice(index, 1);
+      if (values.length > 0) { 
+        setFormData((prev) => ({ ...prev, ingredients: values }));
+      }
+    } else if (deletedIngredient.material_id) {
+      // ถ้าเป็นรายการที่มี material_id ก็เก็บข้อมูลไปใน deletedIngredients
+      values.splice(index, 1);
+      if (values.length > 0) { 
+        setFormData((prev) => ({ ...prev, ingredients: values }));
+        setDeletedIngredients((prevDeleted) => [...prevDeleted, deletedIngredient]);
+      }
+    }
   };
+  
+  //ต้องทำเเยกเพราะว่ามีเรื่อง ไอดีเข้ามาเกี่ยวถ้าไม่ทำเเยกก็ต้องใช้เงื่อนไขในการเเยกใน Function นั้นๆ
+  const handlePackageChange = (index, option) => {
+    const values = [...(formData.packaging || [])];
+    const selectedPackage = packageById.find((pkg) => pkg.package_id === option.value);
+    
+    if (selectedPackage) {
+      values[index] = {
+        ...selectedPackage,
+        quantity: values[index]?.quantity || 0 // คงค่า quantity เดิมไว้
+      };
+      setFormData((prev) => ({ ...prev, packaging: values }));
+    }
+  };
+
+  const handlePackageAddRow = () => {
+    const newPackaging = [
+      ...(formData.packaging || []),
+      { tempId: `temp-${Date.now()}`, package_id: '', package_name: '', cost_per_quantity: '', quantity: '' }
+    ];
+    setFormData((prev) => ({ ...prev, packaging: newPackaging }));
+  };
+
+  const handlePackageRemoveRow = (index) => {
+    const values = [...(formData.packaging || [])];
+    const deletedPackage = values.splice(index, 1)[0]; // ลบแถวออก
+  
+    setFormData((prev) => ({ ...prev, packaging: values }));
+    setDeletedPackage((prevDeleted) => [...prevDeleted, deletedPackage]);
+
+  };
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     const updatedData = {};
+
+    const originalIngredients = originalData.ingredients || [];
+    const updatedIngredients = [];
+    const newIngredients = [];
     const deletedIngredientsCopy = [...deletedIngredients]; // ทำสำเนาของ deletedIngredients
-  
+
+    const updatedDataPackage = [];
+    const deletedPackageCopy = [...deletedPackage];
+    const newPackage = [];
+    const originalPackage = originalData.packaging || [];
+    
     for (const key in formData) {
-      if (key === 'ingredients') {
-        const updatedIngredients = [];
-        const newIngredients = [];
-        const originalIngredients = originalData.ingredients || [];
+      if (key === 'ingredients' || key === 'packaging') {
   
         formData.ingredients.forEach((ingredient, index) => {
           const originalIng = originalIngredients[index] || {};
-  
-          // ตรวจสอบว่ามี ingredient นี้ใน originalData หรือไม่
-          if (!ingredient.material_id || parseFloat(ingredient.quantity) === 0) {
-            deletedIngredientsCopy.push(ingredient); // เก็บ ingredient ที่ถูกลบ
-          } if (ingredient.material_id === originalIng.material_id && parseFloat(ingredient.quantity) !== parseFloat(originalIng.quantity)) {
-            updatedIngredients.push(ingredient); // เก็บ ingredient ที่มีการแก้ไข
-          } if(ingredient.material_id !== originalIng.material_id ){
-            newIngredients.push(ingredient);
-            updatedData.ingredients = newIngredients;
+          if (!ingredient.material_id && originalIng.material_id) {
+            const isDuplicate = deletedIngredientsCopy.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              deletedIngredientsCopy.push(ingredient); // บันทึก ingredients ที่ถูกลบ
+            }
+          }
+          if (parseFloat(ingredient.quantity) !== parseFloat(originalIng.quantity) && originalIng.material_id) {
+            const isDuplicate = deletedIngredientsCopy.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              deletedIngredientsCopy.push(ingredient); // บันทึก ingredients ที่มีการเปลี่ยนแปลง
+            }
+          }
+          if (originalIng.material_id !== ingredient.material_id) {
+            const isDuplicate = newIngredients.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              newIngredients.push(ingredient);
+              updatedData.ingredients = newIngredients;
+            }
+          }
+          if (parseFloat(ingredient.quantity) !== parseFloat(originalIng.quantity)) {
+            const isDuplicate = newIngredients.some(ing => ing.material_id === ingredient.material_id);
+            if (!isDuplicate) {
+              newIngredients.push(ingredient);
+              updatedData.ingredients = newIngredients;
+            }
+          }
+        });
+
+        formData.packaging.forEach((packages, index) => {
+          const originalpck = originalPackage[index] || {}; // ดึงข้อมูล originalPackage
+          // ตรวจสอบการลบ
+          if (!packages.package_id && originalpck.package_id || packages.package_id !== originalpck.package_id  ) {
+            const isDuplicate = deletedPackageCopy.some(pkg => pkg.package_id === originalpck.package_id);// ถ้าไม่มี package_id ใน formData แต่มีใน originalData
+            if (!isDuplicate) {
+              deletedPackageCopy.push(originalpck); // ถือว่าเป็นการลบ
+            } //อนาคตอาจจะต้องเพิ่ม else เเละ logic การเเจ้งเตือน
+          }
+          // ตรวจสอบการเพิ่ม
+          if (packages.package_id && !originalpck.package_id) {
+            const isDuplicate = newPackage.some(pkg => pkg.package_id === packages.package_id);
+            if (!isDuplicate) {
+              newPackage.push(packages); // ถ้าไม่ซ้ำก็เพิ่มเข้าไป
+              updatedData.packages = newPackage;
+            }
           }
         });
   
         // ถ้ามีการอัปเดต ingredient, ใช้ updatedIngredient แทน ingredients
         if (updatedIngredients.length > 0) {
           updatedData.updatedIngredients = updatedIngredients;
+        }
+
+        if (updatedDataPackage.length > 0) {
+          updatedData.updatedDataPackage = updatedDataPackage;
         }
 
       } else if (key === 'file') {
@@ -109,22 +228,22 @@ const EditProduct = () => {
     }
   
     const formDataToSend = new FormData();
+    //loop เพื่อเเปลงค่าจาก object ให้เป็น json ผ่าน key ที่สร้าง
     for (const key in updatedData) {
-      if (key === 'updatedIngredients') {
-        // ส่งข้อมูลที่มีการแก้ไขใน updatedIngredients
-        formDataToSend.append(key, JSON.stringify(updatedData[key]));
-      }
-      else if (key === 'ingredients') {
-        // ส่งข้อมูลที่มีการแก้ไขใน updatedIngredients
+      if (key === 'ingredients' || key === 'packages') {
         formDataToSend.append(key, JSON.stringify(updatedData[key]));
       } else {
-        formDataToSend.append(key, updatedData[key]);
+        formDataToSend.append(key, JSON.stringify(updatedData[key]));
       }
     }
   
     // ส่งข้อมูลที่ถูกลบ
     if (deletedIngredientsCopy.length > 0) {
       formDataToSend.append('deletedIngredients', JSON.stringify(deletedIngredientsCopy));
+    }
+
+    if (deletedPackageCopy.length > 0) {
+      formDataToSend.append('deletedPackage', JSON.stringify(deletedPackageCopy));
     }
   
     // ตรวจสอบข้อมูลที่ส่ง
@@ -135,7 +254,7 @@ const EditProduct = () => {
     try {
       const res = await editProductService(formDataToSend, id);
       console.log('Response:', res);
-      navigate('/product');
+      navigate(-1);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -147,17 +266,17 @@ const EditProduct = () => {
       try {
         const response = await listProductByIdService(id);
         console.log(response);
-  
         if (!response.data) {
           throw new Error("ไม่มีข้อมูล");
         }
 
         const productData = response.data[0]; 
-        //ข้อมูลส่วนประกิบของสินค้า
+        //ข้อมูลส่วนประกอบของสินค้า
         const ingredients = response.data.map(item => ({
           material_id: item.material_id || '',
           quantity: item.amount || '',
           cost_per_quantity: item.cost_per_quantity || 0, 
+          material_name: item.material_name || '',
         }));
         //ข้อมูลสินค้า
         const initialData = {
@@ -193,18 +312,66 @@ const EditProduct = () => {
   }, []);
 
   useEffect(() => {
-    if ((formData.ingredients || []).length > 0 && formData.quantity_per_time) {
-        const totalCost = calculateTotalCost();
-        const costPerQuantity =  totalCost / parseFloat(formData.quantity_per_time || 1); // หลีกเลี่ยงการหารด้วย 0
-        setpricePreQuantity(costPerQuantity);
+    const listProductPackage = async () => {
+        try {
+            const response = await listProductPackageService();
+            console.log(response.data);
+            setPackageById(response.data)
+        } catch (error) {
+            console.error("Error fetching materials:", error);
+        }
+    };
+    listProductPackage();
+  }, []);
+
+  useEffect(() => {
+    const getListProductPackageByIdService = async () => {
+      try {
+          const response = await listProductPackageByIdService(id);
+          console.log(response.data);
+          const packageProduct = response.data.map(item => ({
+              package_product_id: item.package_product_id || '',
+              package_name: item.package_name || '', 
+          }));
+          // เพิ่มข้อมูล package เข้าไปใน formData เป็นการเพิ่มข้อมูลต่อจากข้อมูลก่อนหน้า
+          setFormData(prev => ({
+              ...prev,
+              packaging: packageProduct
+          }));
+
+          // เพิ่มข้อมูล package เข้าไปใน originalData
+          setOriginalData(prev => ({
+              ...prev,
+              packaging: packageProduct
+          }));
+      } catch (error) {
+          console.error("Error fetching packages:", error);
+      }
     }
-  }, [formData.ingredients, formData.quantity_per_time]);
+    getListProductPackageByIdService();
+  }, []);
+
+  const options = packageById.map((packages) => ({
+    value: packages.package_id,
+    label: packages.package_name
+  }));
+  //หาต้นทุนต่อชิ้น
+  useEffect(() => {
+    const totalCost = calculateTotalCost();
+    if (formData.ingredients) {
+      console.log(totalCost);
+      const costPerQuantity =  parseFloat(totalCost) / parseFloat(formData.quantity_per_time || 1); // หลีกเลี่ยงการหารด้วย 0
+      setpricePreQuantity(costPerQuantity.toFixed(3));
+    }
+    const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
+    setTotalCost(hiddenCosts.toFixed(3))
+  }, [formData.ingredients, formData.quantity]);
 
   
   useEffect(() => {
     if (formData.selling_price_per_quantity && formData.quantity_per_time) {
-        const costPerQuantity =  formData.selling_price_per_quantity * parseFloat(formData.quantity_per_time);
-        settotalPrice(costPerQuantity);
+      const costPerQuantity =  formData.selling_price_per_quantity * parseFloat(formData.quantity_per_time);
+      setTotalPrice(costPerQuantity);
     }
   }, [formData.selling_price_per_quantity, formData.quantity_per_time]);
   
@@ -220,34 +387,12 @@ const EditProduct = () => {
           <div className="mb-3 text-center">
             <div style={{width: '100px',height: '100px',border: '1px dashed #ccc',position: 'relative',display: 'inline-flex',alignItems: 'center',justifyContent: 'center'}}>
               {formData.file ? (typeof formData.file === 'string' ? 
-                  (
-                    <img
-                      src={`${API_URL_PICTURE}${formData.file}`}
-                      alt="Preview"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  ) : (
-                    <img
-                      src={URL.createObjectURL(formData.file)}
-                      alt="Preview"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  )
+                  ( <img src={`${API_URL_PICTURE}${formData.file}`} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />) 
+                  : ( <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />)
               ) : (
                 <span>เพิ่มรูปสินค้า</span>
               )}
-              <input
-                type="file"
-                name="file"
-                className="position-absolute top-0 start-0"
-                style={{
-                  opacity: 0,
-                  width: '100px',
-                  height: '100px',
-                  cursor: 'pointer',
-                }}
-                onChange={handleChange}
-              />
+              <input type="file" name="file" className="position-absolute top-0 start-0" style={{opacity: 0,width: '100px',height: '100px',cursor: 'pointer', }} onChange={handleChange}/>
             </div>
             {formData.file && <p>ไฟล์ที่เลือก: {formData.file.name}</p>}
           </div>
@@ -255,12 +400,7 @@ const EditProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='product_name'
-                className="form-control" 
-                placeholder="ชื่อสินค้า" 
-                value={formData.product_name || ''} 
+              <input type="text" name='product_name'className="form-control" placeholder="ชื่อสินค้า" value={formData.product_name || ''} 
                 /* formData.product_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
                 เเล้วไม่ได้ set ค่า เหมือนในหน้า signUp*/
@@ -273,13 +413,7 @@ const EditProduct = () => {
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
               <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
               <div className="col-sm-3">
-                <select
-                  className="form-select"
-                  name="material_id"
-                  value={ingredient.material_id}
-                  onChange={(event) => handleInputChange(index, event)}
-                  required
-                >
+                <select className="form-select" name="material_id" value={ingredient.material_id} onChange={(event) => handleInputChange(index, event)} required>
                   <option value="" disabled>Select Material</option>
                   {listMaterials.map((listMaterial) => (
                     <option key={listMaterial.material_id} value={listMaterial.material_id}>
@@ -289,15 +423,7 @@ const EditProduct = () => {
                 </select>
               </div>
               <div className="col-sm-2">
-                <input
-                  type="number"
-                  name="quantity"
-                  placeholder="ปริมาณ"
-                  className="form-control"
-                  value={ingredient.quantity}
-                  onChange={(event) => handleInputChange(index, event)}
-                  required
-                />
+                <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, event)} required/>
               </div>
               <div className="col-sm-1">
                 <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}>ลบ</button>
@@ -305,11 +431,30 @@ const EditProduct = () => {
             </div>
           ))}
 
-
           <div className="mb-3 d-md-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
-          
+          {(formData.packaging || []).map((packaging, index) => (
+            <div key={packaging.tempId || packaging.package_id || index}  className="row mb-3 justify-content-center">
+              <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
+              <div className="col-sm-5">
+                <Select
+                  options={options}
+                  value={options.find((option) => option.label === packaging.package_name) ||  packaging.package_name}
+                  onChange={(option) => handlePackageChange(index, option)}
+                  isSearchable={true}
+                  placeholder="เลือกบรรจุภัณฑ์"
+                />
+              </div>
+              <div className="col-sm-1">
+                  <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}>ลบ</button>
+              </div>
+            </div>
+          ))}
+
+          <div className="mb-3 d-md-flex justify-content-center">
+              <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มวัตถุดิบ</button>
+          </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนสินค้า</label>
             <div className="row col-sm-5">
@@ -328,54 +473,31 @@ const EditProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">จำนวนที่ทำ/ครั้ง</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='quantity_per_time'
-                className="form-control" 
-                placeholder="จำนวน" 
-                value={formData.quantity_per_time || ''} 
-                onChange={handleChange} 
-              />
+              <input type="text" name='quantity_per_time'className="form-control" placeholder="จำนวน" value={formData.quantity_per_time || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='quantity'
-                className="form-control" 
-                placeholder="จำนวน" 
-                value={pricePreQuantity}  
-                readOnly
-              />
+              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity}  readOnly/>
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนรวม</label>
+            <div className="row col-sm-5">
+              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='selling_price_per_quantity'
-                className="form-control" 
-                placeholder="ราคาสินค้า" 
-                value={formData.selling_price_per_quantity || ''} 
-                onChange={handleChange} 
-              />
+              <input type="text" name='selling_price_per_quantity'className="form-control" placeholder="ราคาสินค้า" value={formData.selling_price_per_quantity || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='price'
-                className="form-control" 
-                placeholder="ราคาสินค้า" 
-                value={totalPrice} 
-                onChange={handleChange} 
-                readOnly
-              />
+              <input type="text" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice} onChange={handleChange} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -387,7 +509,6 @@ const EditProduct = () => {
                   rows="3" // กำหนดความสูงของ textarea
                   style={{ minWidth: '100%' }} // กำหนดความกว้างของ textarea
                 />
-
             </div>
           </div>
 

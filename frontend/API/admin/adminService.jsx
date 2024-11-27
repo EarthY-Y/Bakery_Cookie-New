@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 export const createAdminService = async(fromData) => { 
     console.log(fromData);
     try {
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         ;
         const res = await axios.post(API_URL+'/admin/create', fromData,
             {
@@ -26,7 +26,7 @@ export const createAdminService = async(fromData) => {
 
 export const listAdminService = async() => {
     try {
-        const authToken = localStorage.getItem('token')
+        const authToken = localStorage.getItem('tokenAdmin')
         ;
         const response = await axios.get(API_URL+"/admin", 
           {

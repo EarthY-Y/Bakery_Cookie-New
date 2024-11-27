@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getListCategoryService } from '../../../API/admin/categoryService';
-import { formatDate } from '../../untils/frommatters/datetime';
+import { getListCategoryService } from '../../../../API/admin/categoryPackageService';
+import { formatDate } from '../../../untils/frommatters/datetime';
 
-const categoey = () => {
+const CategoeyPackage = () => {
   const [listCategory, setListCategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -57,18 +57,18 @@ const categoey = () => {
         </thead>
         <tbody>
           {currentOrders.map((category) => (
-            <tr key={category.category_id}>
-              <td>{category.category_name}</td>
-              <td>{category.amountCategoryProduct} ชิ้น</td>
+            <tr key={category.package_category_id}>
+              <td>{category.package_category_name}</td>
+              <td>{category.amountCategoryPackage} ชิ้น</td>
               <td>{formatDate(category.created_at)}</td>
               <td>{formatDate(category.updated_at)}</td>
               <td className="text-center">{category.created_by}</td>
               <td className="text-center">{category.updated_by}</td>
               <td className="text-center">
-                <Link to={`view/${category.category_id}`} className="btn btn-outline-warning text-black">view</Link>
+                <Link to={`view/${category.package_category_id}`} className="btn btn-outline-warning text-black">view</Link>
               </td>
               <td className="text-center">
-                <Link to={`edit/${category.category_id}`} className="btn btn-outline-warning text-black">edit</Link>
+                <Link to={`edit/${category.package_category_id}`} className="btn btn-outline-warning text-black">edit</Link>
               </td>
             </tr>
           ))}
@@ -101,4 +101,4 @@ const categoey = () => {
   );
 };
 
-export default categoey;
+export default CategoeyPackage;
