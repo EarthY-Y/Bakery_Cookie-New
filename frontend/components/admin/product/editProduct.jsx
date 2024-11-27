@@ -4,6 +4,7 @@ import { Link,useNavigate,useParams } from 'react-router-dom';
 import { listProductByIdService, listProductPackageByIdService, listProductPackageService } from '../../../API/admin/productService';
 import { listMaterialService } from '../../../API/admin/materialService';
 import { editProductService } from '../../../API/admin/productService';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -17,8 +18,69 @@ const EditProduct = () => {
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        // await new Promise((resolve) => setTimeout(resolve, 3000)); //ถ้าอยากลองดูหน้า loading
+        // โหลดข้อมูลพร้อมกันเพื่อลดปัญหาการโหลดข้อมูลไม่ทัน
+        const [
+          productResponse,
+          materialsResponse,
+          packagesResponse,
+          productPackagesResponse,
+        ] = await Promise.all([
+          listProductByIdService(id),
+          listMaterialService(),
+          listProductPackageService(),
+          listProductPackageByIdService(id),
+        ]);
+
+        // จัดการข้อมูลสินค้า
+        const productData = productResponse.data[0];
+        const ingredients = productResponse.data.map((item) => ({
+          material_id: item.material_id || '',
+          quantity: item.amount || '',
+          cost_per_quantity: item.cost_per_quantity || 0,
+          material_name: item.material_name || '',
+        }));
+        const initialData = {
+          product_name: productData.product_name || '',
+          quantity_per_time: productData.quantity_per_time || '',
+          selling_price_per_quantity: productData.selling_price_per_quantity || '',
+          description: productData.description || '',
+          file: productData.productpic_name || '',
+          ingredients,
+        };
+
+        // จัดการข้อมูลวัสดุ
+        setListMaterials(materialsResponse.data);
+
+        // จัดการข้อมูลแพ็คเกจ
+        setPackageById(packagesResponse.data);
+        const packaging = productPackagesResponse.data.map((item) => ({
+          package_product_id: item.package_product_id || '',
+          package_name: item.package_name || '',
+        }));
+
+        setFormData({ ...initialData, packaging });
+        setOriginalData({ ...initialData, packaging });
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        alert(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+
+  }, [id]);  
 
   const calculateTotalCost = () => {
     return (formData.ingredients || []).reduce((totalCost, ingredient) => {
@@ -134,7 +196,6 @@ const EditProduct = () => {
 
   };
   
-
   const handleSubmit = async (event) => {
     event.preventDefault();
   
@@ -253,103 +314,15 @@ const EditProduct = () => {
   
     try {
       const res = await editProductService(formDataToSend, id);
-      console.log('Response:', res);
-      navigate(-1);
+      setIsLoading(true)
+      if(res){
+        setIsLoading(false)
+        navigate(-1);
+      }
     } catch (error) {
       console.error('Error:', error);
     }
   };
-  
-  //ค้นหา วัตถุดิบที่ใช้กับสินค้าตัวนี้เพื่อเอาไป map กับ list materail เพื่อให้เลือกโชว์ใน select box
-  useEffect(() => {
-    const getlistMaterialById = async () => {
-      try {
-        const response = await listProductByIdService(id);
-        console.log(response);
-        if (!response.data) {
-          throw new Error("ไม่มีข้อมูล");
-        }
-
-        const productData = response.data[0]; 
-        //ข้อมูลส่วนประกอบของสินค้า
-        const ingredients = response.data.map(item => ({
-          material_id: item.material_id || '',
-          quantity: item.amount || '',
-          cost_per_quantity: item.cost_per_quantity || 0, 
-          material_name: item.material_name || '',
-        }));
-        //ข้อมูลสินค้า
-        const initialData = {
-          product_name: productData.product_name || '',
-          quantity_per_time: productData.quantity_per_time || '',
-          selling_price_per_quantity: productData.selling_price_per_quantity || '',
-          description: productData.description || '',
-          file: productData.productpic_name || '',
-          ingredients,
-        };
-
-        setFormData(initialData);
-        setOriginalData(initialData);
-      } catch (error) {
-        alert(error.message);
-      }
-    };
-  
-    getlistMaterialById();
-  }, []);
-
-  useEffect(() => {
-    const getMaterial = async () => {
-        try {
-            const response = await listMaterialService();
-            console.log(response.data);
-            setListMaterials(response.data);
-        } catch (error) {
-            console.error("Error fetching materials:", error);
-        }
-    };
-    getMaterial();
-  }, []);
-
-  useEffect(() => {
-    const listProductPackage = async () => {
-        try {
-            const response = await listProductPackageService();
-            console.log(response.data);
-            setPackageById(response.data)
-        } catch (error) {
-            console.error("Error fetching materials:", error);
-        }
-    };
-    listProductPackage();
-  }, []);
-
-  useEffect(() => {
-    const getListProductPackageByIdService = async () => {
-      try {
-          const response = await listProductPackageByIdService(id);
-          console.log(response.data);
-          const packageProduct = response.data.map(item => ({
-              package_product_id: item.package_product_id || '',
-              package_name: item.package_name || '', 
-          }));
-          // เพิ่มข้อมูล package เข้าไปใน formData เป็นการเพิ่มข้อมูลต่อจากข้อมูลก่อนหน้า
-          setFormData(prev => ({
-              ...prev,
-              packaging: packageProduct
-          }));
-
-          // เพิ่มข้อมูล package เข้าไปใน originalData
-          setOriginalData(prev => ({
-              ...prev,
-              packaging: packageProduct
-          }));
-      } catch (error) {
-          console.error("Error fetching packages:", error);
-      }
-    }
-    getListProductPackageByIdService();
-  }, []);
 
   const options = packageById.map((packages) => ({
     value: packages.package_id,
@@ -367,13 +340,26 @@ const EditProduct = () => {
     setTotalCost(hiddenCosts.toFixed(3))
   }, [formData.ingredients, formData.quantity]);
 
-  
   useEffect(() => {
     if (formData.selling_price_per_quantity && formData.quantity_per_time) {
       const costPerQuantity =  formData.selling_price_per_quantity * parseFloat(formData.quantity_per_time);
       setTotalPrice(costPerQuantity);
     }
-  }, [formData.selling_price_per_quantity, formData.quantity_per_time]);
+  }, [formData.selling_price_per_quantity, formData.quantity_per_time, formData.ingredients]);
+
+  useEffect(() => {
+    if (formData.quantity_per_time && formData.ingredients) {
+      let totalWeight = 0
+      for (const item of formData.ingredients) {
+        totalWeight =+ parseFloat(item.quantity);
+      }
+        const weightPiece = totalWeight / formData.quantity_per_time
+        setFormData(prevData => ({
+          ...prevData,
+          weight_per_piece: (weightPiece ? parseFloat(weightPiece.toFixed(2)) : 0)
+        }));
+    }
+  }, [formData.ingredients, formData.quantity_per_time]);
   
   return (
     <form onSubmit={handleSubmit}>
@@ -458,46 +444,43 @@ const EditProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนสินค้า</label>
             <div className="row col-sm-5">
-              <input 
-                type="text" 
-                name='costPerQuantity'
-                className="form-control" 
-                placeholder="ต้นทุนสินค้า" 
-                // value={formData.calculateTotalCost = calculateTotalCost() } 
-                // onChange={handleChange} 
-                value={calculateTotalCost()}
-                readOnly
-              />
+              <input type="number" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost()} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">จำนวนที่ทำ/ครั้ง</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantity_per_time'className="form-control" placeholder="จำนวน" value={formData.quantity_per_time || ''} onChange={handleChange} />
+              <input type="number" name='quantity_per_time'className="form-control" placeholder="จำนวน" value={formData.quantity_per_time || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity}  readOnly/>
+              <input type="number" name='pricePreQuantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity}  readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนรวม</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
+              <input type="number" name='totalCost'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">น้ำหนักต่อชิ้น</label>
+            <div className="row col-sm-5">
+              <input type="number" name='weight_per_piece'className="form-control" placeholder="ราคาสินค้า" value={formData.weight_per_piece || 0} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input type="text" name='selling_price_per_quantity'className="form-control" placeholder="ราคาสินค้า" value={formData.selling_price_per_quantity || ''} onChange={handleChange} />
+              <input type="number" name='selling_price_per_quantity'className="form-control" placeholder="ราคาสินค้า" value={formData.selling_price_per_quantity || 0} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
             <div className="row col-sm-5">
-              <input type="text" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice} onChange={handleChange} readOnly/>
+              <input type="number" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice } onChange={handleChange} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -517,6 +500,10 @@ const EditProduct = () => {
             <button type="submit" className="btn btn-primary mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
           </div>
         </div>
+        <LoadingPopup
+          isLoading = {isLoading}
+        />
+        {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       </div>
     </form>
   );

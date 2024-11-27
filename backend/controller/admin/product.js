@@ -28,7 +28,7 @@ export const getProductById = async (req, res) => {
     const id = req.params.id
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.description, p.created_by, p.updated_by, p.created_at, p.updated_at, "+
+            db.query("SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.weight_per_piece, p.description, p.created_by, p.updated_by, p.created_at, p.updated_at, "+
                      "pp.productpic_name, pm.amount, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
                      "INNER JOIN admin a ON a.admin_id = p.created_by "+ 
                      "INNER JOIN productpicture pp ON pp.product_id = p.product_id "+
@@ -95,12 +95,12 @@ export const createProduct = async (req, res) => {
         const token = await passToken(authHeader);
         const id = uuidv4();
         
-        const { product_name, quantity, price, description, packaging, ingredients } = req.body;
+        const { product_name, quantityPerTime, price, description, packaging, ingredients, weightPerPiece } = req.body;
 
         const productResult = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product (product_id, product_name, quantity_per_time, selling_price_per_quantity, description, created_by) VALUES (?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
-                [id, product_name, quantity, price, description, token.admin_id],
+                "INSERT INTO product (product_id, product_name, quantity_per_time, selling_price_per_quantity, weight_per_piece, description, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)", // การใช้ ? คือ Parameterized Query
+                [id, product_name, quantityPerTime, price, weightPerPiece, description, token.admin_id],
                 (err, result) => {
                     if (err) return reject(err);
                     resolve(result);
@@ -230,7 +230,7 @@ export const updateProduct = async (req, res) => {
         const token = await passToken(authHeader);
         const { id } = req.params;
 
-        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, deletedPackage, packages, updatedIngredients } = req.body;
+        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, deletedPackage, packages, weight_per_piece, updatedIngredients } = req.body;
 
         // 1. อัปเดตข้อมูลในตาราง product
         let updateQuery = "UPDATE product SET  ";
@@ -242,13 +242,42 @@ export const updateProduct = async (req, res) => {
         }
 
         if (quantity_per_time) {
-            updateQuery += "quantity_per_time = ?, ";
-            updateValues.push(quantity_per_time);
+            const cleanedValue = quantity_per_time.replace(/[^0-9.]/g, '').trim(); // ลบทุกอย่างที่ไม่ใช่ตัวเลขหรือจุด
+            const numericValue = parseFloat(cleanedValue);
+        
+            if (!isNaN(numericValue)) {
+                updateQuery += "quantity_per_time = ?, ";
+                updateValues.push(numericValue);
+            } else {
+                console.error("Invalid numeric value for quantity_per_time:", quantity_per_time);
+            }
         }
 
         if (selling_price_per_quantity) {
-            updateQuery += "selling_price_per_quantity = ?, ";
-            updateValues.push(selling_price_per_quantity);
+            const cleanedValue = selling_price_per_quantity.replace(/[^0-9.]/g, '').trim(); // ลบทุกอย่างที่ไม่ใช่ตัวเลขหรือจุด
+            const numericValue = parseFloat(cleanedValue);
+        
+            if (!isNaN(numericValue)) {
+                updateQuery += "selling_price_per_quantity = ?, ";
+                updateValues.push(numericValue);
+            } else {
+                console.error("Invalid numeric value for selling_price_per_quantity:", selling_price_per_quantity);
+            }
+        }
+
+        if (weight_per_piece) {
+            console.log("Raw value:", weight_per_piece);
+        
+            // ลบอักขระพิเศษและแปลงเป็นตัวเลข เกิดข้อผิดพลาดทำให้มีอักขระพิเศษติดมาประมาณนี้ '\\"40\\"' เลยต้องเอาออก
+            const cleanedValue = weight_per_piece.replace(/[^0-9.]/g, '').trim(); // ลบทุกอย่างที่ไม่ใช่ตัวเลขหรือจุด
+            const numericValue = parseFloat(cleanedValue);
+        
+            if (!isNaN(numericValue)) {
+                updateQuery += "weight_per_piece = ?, ";
+                updateValues.push(numericValue);
+            } else {
+                console.error("Invalid numeric value for weight_per_piece:", weight_per_piece);
+            }
         }
 
         if (description) {
@@ -259,8 +288,9 @@ export const updateProduct = async (req, res) => {
         updateQuery = updateQuery.slice(0, -2); // ลบคอมม่าออก
         updateQuery += " WHERE product_id = ?";
         updateValues.push(id);
+        console.log("Final SQL:", updateQuery, updateValues);
 
-        if (product_name || quantity_per_time || selling_price_per_quantity  || description || quantity_per_time ) {
+        if (product_name || quantity_per_time || selling_price_per_quantity  || weight_per_piece || description || quantity_per_time ) {
             await new Promise((resolve, reject) => {
                 db.query(updateQuery, updateValues, (err, result) => {
                     if (err) return reject(err);

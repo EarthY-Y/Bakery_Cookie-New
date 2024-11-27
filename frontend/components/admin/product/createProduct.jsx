@@ -116,20 +116,34 @@ const CreateProduct = () => {
   //หาต้นทุนต่อชิ้น
   useEffect(() => {
     const totalCost = calculateCostMaterial();
-    if ((formData.ingredients || []).length > 0 && formData.quantity) {
-        const costPerQuantity =  totalCost / parseFloat(formData.quantity || 1); // หลีกเลี่ยงการหารด้วย 0
+    if ((formData.ingredients || []).length > 0 && formData.quantityPerTime) {
+        const costPerQuantity =  totalCost / parseFloat(formData.quantityPerTime || 1); // หลีกเลี่ยงการหารด้วย 0
         setpricePreQuantity(costPerQuantity.toFixed(3));
     }
     const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
     setTotalCost(hiddenCosts.toFixed(3))
-  }, [formData.ingredients, formData.quantity]);
+  }, [formData.ingredients, formData.quantityPerTime]);
   
   useEffect(() => {
-    if (formData.price && formData.quantity) {
-        const costPerQuantity =  (formData.price || 0) * parseFloat(formData.quantity);
+    if (formData.price && formData.quantityPerTime) {
+        const costPerQuantity =  (formData.price || 0) * parseFloat(formData.quantityPerTime);
         setTotalPrice((costPerQuantity.toFixed(2) || 0));
     }
-  }, [formData.price, formData.quantity]);
+  }, [formData.price, formData.quantityPerTime]);
+
+  useEffect(() => {
+    if (formData.quantityPerTime && formData.ingredients) {
+      let totalWeight = 0
+      for (const item of formData.ingredients) {
+        totalWeight =+ parseFloat(item.quantity);
+      }
+        const weightPiece = totalWeight / formData.quantityPerTime
+        setFormData(prevData => ({
+          ...prevData,
+          weightPerPiece: (weightPiece ? parseFloat(weightPiece.toFixed(2)) : 0)
+        }));
+    }
+  }, [formData.ingredients, formData.quantityPerTime]);
 
   useEffect(() => {
     const getMaterial = async () => {
@@ -240,11 +254,11 @@ const CreateProduct = () => {
               <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
               <div className="col-sm-5">
                 <Select
-                  options={options}
-                  value={options.find((option) => option.value === packaging.package_id) || null}
-                  onChange={(option) => handlePackageChange(index, option)}
-                  isSearchable={true}
-                  placeholder="เลือกบรรจุภัณฑ์"
+                options={options}
+                value={options.find((option) => option.value === packaging.package_id) || null}
+                onChange={(option) => handlePackageChange(index, option)}
+                isSearchable={true}
+                placeholder="เลือกบรรจุภัณฑ์"
                 />
               </div>
               <div className="col-sm-1">
@@ -266,19 +280,25 @@ const CreateProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">จำนวนที่ทำต่อครั้ง</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={formData.quantity || ''} onChange={handleChange} />
+              <input type="text" name='quantityPerTime'className="form-control" placeholder="จำนวน" value={formData.quantityPerTime || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity} readOnly/>
+              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity || 0} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนรวม</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
+              <input type="text" name='totalQuantity'className="form-control" placeholder="จำนวน" value={totalCost || 0} readOnly/>
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">น้ำหนักต่อชิ้น</label>
+            <div className="row col-sm-5">
+              <input type="number" name='weightPerPiece'className="form-control" placeholder="ราคาสินค้า" value={formData.weightPerPiece } onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -290,7 +310,7 @@ const CreateProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
             <div className="row col-sm-5">
-              <input type="text" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice} onChange={handleChange} readOnly/>
+              <input type="text" name='totalPrice'className="form-control" placeholder="ราคาสินค้า" value={totalPrice || 0} onChange={handleChange} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
