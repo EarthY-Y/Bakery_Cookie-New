@@ -54,6 +54,10 @@ import CreatePackage from '../page/admin-page/package-page/createPackage-page';
 import ListPackage from '../page/admin-page/package-page/listPackage-page';
 import PackageById from '../page/admin-page/package-page/listPackageById-page';
 import EditPackageById from '../page/admin-page/package-page/editPackage-page';
+import ListShippingCost from '../page/admin-page/shippingCost-page/listShippingCost-page'
+import ListShippingCostById from '../page/admin-page/shippingCost-page/listShippingCostById-page'
+import EditShippingCost from '../page/admin-page/shippingCost-page/editShippingCost-page'
+import CreateShippingCost from '../page/admin-page/shippingCost-page/createShippingCost-page'
 
 const router = createBrowserRouter([
   {
@@ -120,6 +124,27 @@ const router = createBrowserRouter([
               {
                 path: "edit/:id",
                 element: <EditMaterial />,
+              },
+            ],
+          },
+          {
+            path: "/shipping",
+            children: [
+              {
+                path: "",
+                element: <ListShippingCost />,
+              },
+              {
+                path: "view/:id",
+                element: <ListShippingCostById />,
+              },
+              {
+                path: "create", // ลบ '/' หน้า path
+                element: <CreateShippingCost />,
+              },
+              {
+                path: "edit/:id",
+                element: <EditShippingCost />,
               },
             ],
           },

@@ -433,7 +433,7 @@ const updateProductPackage = async (req, productId, packages, deletedPackage, to
             if (ingredientValues.length > 0) {
                 await new Promise((resolve, reject) => {
                     db.query(
-                        "INSERT INTO package_product (package_product_Id, product_id, package_id, updated_by) VALUES ?",
+                        "INSERT INTO package_product (package_product_Id, product_id, package_id, created_by) VALUES ?",
                         [ingredientValues],
                         (err, result) => {
                             if (err) return reject(err);
