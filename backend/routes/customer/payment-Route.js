@@ -3,6 +3,7 @@ import {
     validateCustomerAddress,
     getCustomerAddress,
     getPorductCart,
+    getShippingRate,
     createOrders,
     getPaymentOrders,
     updatePaymentOrder,
@@ -15,6 +16,7 @@ router.use(express.json());
 
 router.get('/customers/validate/customer/address',verifyCustomerMid, validateCustomerAddress);
 router.get('/customers/get/customer/address',verifyCustomerMid, getCustomerAddress);
+router.get('/customers/get/shipping_rate',verifyCustomerMid, getShippingRate);
 router.post('/customers/create/order',verifyCustomerMid, createOrders);
 router.get('/customers/get/orderscart/payment/:id',verifyCustomerMid, getPaymentOrders);
 router.get('/customers/cart/product',verifyCustomerMid, getPorductCart);
