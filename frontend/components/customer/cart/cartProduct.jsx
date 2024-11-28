@@ -31,6 +31,18 @@ const cartProduct = () => {
     getCart()
   },[])
 
+  const inputAmount = (value, cart_product_id) => {
+    const updatedCart = productCart.map((item) => {
+      if (item.cart_product_id === cart_product_id) {
+        const newValue = Math.max(Number(value), 1); // ตรวจสอบให้ค่าต่ำสุดคือ 1 ใช้ parseInt(value) ก้็ได้เพื่อเเปลงค่าให้มี dataType เดียวกัน
+        handleUpdateCartProduct(cart_product_id, "input" , newValue)
+        return { ...item, quantity: newValue };
+      }
+      return item;
+    });
+    setProductCart(updatedCart);
+  };
+
   const handleUpdateCartProduct = async (cart_product_id, status, value) => {
     try {
       const response = await upadateCartService(cart_product_id, status, value);
@@ -100,13 +112,7 @@ const cartProduct = () => {
                   className="form-control text-center"
                   value={item.quantity}
                   style={{ width: '60px' }}
-                  onChange={(e) =>
-                    handleUpdateCartProduct(
-                      item.cart_product_id,
-                      'input',
-                      Math.max(Number(e.target.value), 1)
-                    )
-                  }
+                  onChange={(e) => inputAmount(e.target.value, item.cart_product_id)}
                 />
                 <button className="btn btn-sm btn-outline-secondary" onClick={() => handleQuantityChange(item.cart_product_id, 1)}>+</button>
               </div>

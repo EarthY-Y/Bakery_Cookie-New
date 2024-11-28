@@ -17,7 +17,7 @@ function Sidebaradmin() {
       </nav>
 
       {/* Sidebar สำหรับหน้าจอใหญ่ อธิบาย d-lg-block อยู่ในหมวด display ใช้ ซ่อนหรือโชว์ element ในขน้าหน้าจอต่างๆ*/}
-      <div className="d-none d-lg-block bg-light p-3 col-2 min-vh-100 shadow" style={{height: '100vh', position: 'fixed' }}>
+      <div className="d-none d-lg-block bg-light p-3 col-2 min-vh-100 shadow overflow-y-auto" style={{height: '100vh', position: 'fixed' }}>
         <nav className="nav flex-column navbar-expand-lg">
           <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
           <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>

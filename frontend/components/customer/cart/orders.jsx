@@ -6,13 +6,14 @@ import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import { goBackOrHome } from '../../untils/fucntion/backFuction';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
-const cartProduct = () => {
+const orders = () => {
   const {id} = useParams();
   const [address, setAddress] = useState([])
   const [productCart, setProductCart] = useState([])
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); 
   const [totalPrice, setTotalPrice] = useState(0); 
   const [totalQuantity, setTotalQuantity] = useState(0); 
+  const [totalWeight, setTotalWeigth] = useState(0); 
   const navigate = useNavigate()
   console.log(id);
   
@@ -72,6 +73,12 @@ const cartProduct = () => {
   useEffect(() => {
     const total = productCart.reduce((acc, item) => acc + item.quantity, 0);
     setTotalQuantity(total);
+    
+    const weight = productCart.reduce((acc, item) => acc + (item.weight_per_piece * item.quantity), 0)
+    console.log(weight);
+    
+    setTotalWeigth(weight)
+    
   }, [productCart]);
 
   // คำนวณราคาสินค้า
@@ -152,6 +159,8 @@ const cartProduct = () => {
         <p className="row bg-white p-3 justify-content-center align-items-center">ไม่มีสินค้าในตะกร้า</p>
       )}
       <div className="row bg-light p-3 border rounded text-end fw-bold">
+        <h4>รวมการสั่งซื้อ: {numberGrouping(totalPrice)} ฿</h4>
+        {/* <h4>ค่าจัดส่ง: {numberGrouping(totalWeight)} ฿</h4> */}
         <h4>ยอดรวมทั้งหมด: {numberGrouping(totalPrice)} ฿</h4>
       </div>
       <div className="d-flex flex-column flex-md-row justify-content-end align-items-center mt-4">
@@ -161,4 +170,4 @@ const cartProduct = () => {
   );
 };
 
-export default cartProduct;
+export default orders;

@@ -3,9 +3,9 @@ import {
     getProductCustomer, 
     getProductById,
     getCart,
+    createCart,
     createPorductCart,
     updatePorductCart,
-    getPorductCart,
     deleteProductCart,
 } from "../../controller/customer/product.js"
 
@@ -18,7 +18,7 @@ router.get('/customers/get/product',verifyCustomerMid, getProductCustomer); //à¸
 router.get('/customers/product/:id',verifyCustomerMid, getProductById);
 router.get('/customers/get/cart',verifyCustomerMid, getCart);
 router.post('/customers/create/cart/porduct',verifyCustomerMid, createPorductCart);
+router.post('/customers/create/cart',verifyCustomerMid, createCart);
 router.patch('/customers/update/product',verifyCustomerMid, updatePorductCart);
-router.get('/customers/cart/product',verifyCustomerMid, getPorductCart);
 router.delete('/customers/delete/cart/product/:id',verifyCustomerMid, deleteProductCart);
 export default router
