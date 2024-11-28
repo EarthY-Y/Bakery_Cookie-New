@@ -200,6 +200,7 @@ const EditProduct = () => {
     event.preventDefault();
   
     const updatedData = {};
+    const formDataToSend = new FormData();
 
     const originalIngredients = originalData.ingredients || [];
     const updatedIngredients = [];
@@ -274,9 +275,9 @@ const EditProduct = () => {
 
       } else if (key === 'file') {
         if (formData.file instanceof File) {
-          updatedData.file = formData.file; // ถ้าเป็นไฟล์รูป
+          formDataToSend.append('file', formData.file); // ถ้าเป็นไฟล์ใหม่ให้ส่งไฟล์
         } else if (typeof formData.file === 'string') {
-          updatedData.productpic_name = formData.file; // ถ้าเป็นชื่อไฟล์
+          formDataToSend.append('productpic_name', formData.file); // ถ้าเป็นชื่อไฟล์เดิมให้ส่งชื่อ
         }
       } else if (formData[key] !== originalData[key]) {
         updatedData[key] = formData[key]; // อัปเดตค่าอื่นๆ ที่มีการเปลี่ยนแปลง
@@ -287,8 +288,7 @@ const EditProduct = () => {
       alert('ไม่มีการเปลี่ยนแปลงข้อมูล');
       return;
     }
-  
-    const formDataToSend = new FormData();
+
     //loop เพื่อเเปลงค่าจาก object ให้เป็น json ผ่าน key ที่สร้าง
     for (const key in updatedData) {
       if (key === 'ingredients' || key === 'packages') {
