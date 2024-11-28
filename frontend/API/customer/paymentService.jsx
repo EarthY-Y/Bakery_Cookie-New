@@ -37,6 +37,24 @@ export const getAddressCustomer = async() => {
   }
 }
 
+export const getShippingRate = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+  
+    const response = await axios.get(API_URL + "/get/shipping_rate", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+  }
+}
+
 export const createOrder = async(productCart, totalPrice, totalQuantity) => {
   try {
     const authToken = localStorage.getItem('token')
