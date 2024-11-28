@@ -1,85 +1,83 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { validateAddressCustomer, getAddressCustomer, createOrder } from '../../../API/customer/paymentService';
+import { validateAddressCustomer, getAddressCustomer, createOrder, getShippingRate } from '../../../API/customer/paymentService';
 import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
-import { goBackOrHome } from '../../untils/fucntion/backFuction';
+import LoadingPopup from '../../untils/popUp/loading';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const orders = () => {
   const {id} = useParams();
   const [address, setAddress] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
   const [productCart, setProductCart] = useState([])
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); 
   const [totalPrice, setTotalPrice] = useState(0); 
   const [totalQuantity, setTotalQuantity] = useState(0); 
   const [totalWeight, setTotalWeigth] = useState(0); 
+  const [toatalShippingRate, settoatalShippingRate] = useState(0); 
   const navigate = useNavigate()
   console.log(id);
   
   useEffect(() => {
-    const validateAddress = async() => {
+    const fetchData = async () => {
       try {
-          const response = await validateAddressCustomer()
-          if(!response.data || response.data.length === 0){
-            throw new Error("ไม่มีข้อมูล")
-          }
-          console.log(response.data);
-        }
-        catch (error) {
-          alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
+        setIsLoading(true);
+        // await new Promise((resolve) => setTimeout(resolve, 3000)); //ถ้าอยากลองดูหน้า loading
+        // โหลดข้อมูลพร้อมกันเพื่อลดปัญหาการโหลดข้อมูลไม่ทัน
+        const [
+          porductCart,
+          addressCustomer,
+        ] = await Promise.all([
+          getPorductCartService(),
+          getAddressCustomer(),
+
+        ]);
+        if(addressCustomer){
+          setAddress(addressCustomer.data[0])
+        }else{
           navigate('/create/address')
         }
-    }
-    validateAddress()
-  },[])
-
-  useEffect(() => {
-    const getAddress = async() => {
-      try {
-          const response = await getAddressCustomer()
-          if(!response.data || response.data.length === 0){
-            throw new Error("ไม่มีข้อมูล")
-          }
-          console.log(response.data);
-          setAddress(response.data[0])
+        if(addressCustomer){
+          setProductCart(porductCart.data)
+        }else{
+          navigate('/home')
         }
-        catch (error) {
-          alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
-          navigate('/create/address')
-        }
-    }
-    getAddress()
-  },[])
-
-  useEffect(() => {
-    const getCart = async()=> {
-      try {
-        const response = await getPorductCartService()
-        if(!response.data || response.data.length === 0){
-          throw new Error("ไม่มีข้อมูล")
-        }
-        console.log(response.data);
-        setProductCart(response.data)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        alert(error.message);
+      } finally {
+        setIsLoading(false);
       }
-      catch (error) {
-        alert(error)
-        navigate("/home")
-      }
-    }
-    getCart()
-  },[])
-  
+    };
+    fetchData();
+
+  }, [id]);  
+
   useEffect(() => {
     const total = productCart.reduce((acc, item) => acc + item.quantity, 0);
     setTotalQuantity(total);
     
     const weight = productCart.reduce((acc, item) => acc + (item.weight_per_piece * item.quantity), 0)
     console.log(weight);
-    
     setTotalWeigth(weight)
     
   }, [productCart]);
+
+  useEffect(() => {
+    const shippingRate = async() => {
+      try {
+        const response = await getShippingRate(totalWeight)
+        console.log(response);
+        settoatalShippingRate(response.data[0])
+        
+      } catch (error) {
+        console.error("Error ShippingRate data:", error);
+      }
+      shippingRate()
+    } 
+  },[totalWeight])
 
   // คำนวณราคาสินค้า
   useEffect(() => {
@@ -112,7 +110,8 @@ const orders = () => {
   return (
     <form className="container my-5" onSubmit={handleSubmmit}>
       <div className="row bg-light p-3 border rounded mb-4">
-        <h2 className="mb-2 text-center">ชำระเงิน</h2>
+        <h2 className="mb-2 text-center ">ชำระเงิน</h2>
+        <span className="material-symbols-outlined">check_circle</span>
         <hr className="my-4 border-secondary"/>
         <h3>ที่อยู่ที่ใช้ในการจัดส่ง</h3>
         <p>
@@ -166,6 +165,10 @@ const orders = () => {
       <div className="d-flex flex-column flex-md-row justify-content-end align-items-center mt-4">
         <button type='submit' className="btn btn-success btn-lg">ชำระเงิน</button>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </form>
   );
 };

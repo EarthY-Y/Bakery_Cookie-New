@@ -86,6 +86,27 @@ export const getPorductCart = async (req, res) => {
     }
 }
 
+export const getShippingRate = async (req, res) => {
+    try {
+        const {weight} = req.body
+        console.log(weight);
+        
+        const results = await new Promise((resolve, reject)=> {
+            db.query("SELECT * FROM shipping_rate WHERE weight_range_min <= ? AND weight_range_max >= ?",[weight, weight],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error});
+    }
+}
+
+
 export const createOrders = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
