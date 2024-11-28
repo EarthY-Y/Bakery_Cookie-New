@@ -4,12 +4,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Logoeiei from '../../../../src/assets/Logoeiei.png'
 import Sidebaradmin from '../sidebar/sidebaradmin';
 import { Link, NavLink } from "react-router-dom"
-import { logout } from '../../../../API/authService';
+import { logoutAdmin } from '../../../../API/authService';
 
 function Navbaradmin() {
 
   const handleLogout = () => {
-    logout()
+    logoutAdmin()
   }
 
   return (

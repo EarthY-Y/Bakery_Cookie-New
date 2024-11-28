@@ -195,41 +195,6 @@ export const updatePorductCart = async (req, res) => {
     }
 }
 
-export const getPorductCart = async (req, res) => {
-    try {
-        // console.log("im here getPricePorductCart");
-        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
-        const authToken = await passToken(authHeader)
-        if(!authToken){
-            return res.status(404).json({ message: "User not found" });
-        }
-        const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT cartId FROM cart c" +
-                    " INNER JOIN status_cart sc ON sc.status_cart_id = c.status WHERE c.customer_id = ? AND sc.status_name = 'พร้อมใช้งาน' LIMIT 1;",
-                     [authToken.customerId], 
-                    (err, result) => { 
-                        resolve(result)
-                    })
-        })
-        const getCartId = results[0].cartId
-        // console.log(getCartId);
-        
-        const resultsFindProductCart = await new Promise((resolve, reject)=> {          
-            db.query("SELECT cp.cart_product_id, cp.cartId, cp.quantity, p.product_name, p.selling_price_per_quantity, pp.productpic_name FROM cart_product cp"+
-                    " INNER JOIN product p ON cp.product_id = p.product_id "+
-                    " INNER JOIN productpicture pp ON pp.product_id = p.product_id WHERE cp.cartId = ?", [getCartId],
-                    (err, result) => { 
-                resolve(result)
-            })
-        })
-        
-        res.status(200).json(resultsFindProductCart)
-    }catch(error){
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
-    }
-}
-
 export const deleteProductCart = async (req, res) => {
     const id = req.params.id
     console.log(id);
