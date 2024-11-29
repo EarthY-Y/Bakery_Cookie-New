@@ -31,11 +31,11 @@ const listMaterialById = () => {
 
   const calculateTotalCost = () => {
     return productMyId.reduce((totalCost, item) => {
-      const amount = parseFloat(item.amount || 0); // จำนวนของวัตถุดิบ
+      const quantity = parseFloat(item.quantity || 0); // จำนวนของวัตถุดิบ
       const costPerQuantity = parseFloat(item.cost_per_quantity || 0); // ต้นทุนต่อหน่วย
   
-      if (!isNaN(amount) && !isNaN(costPerQuantity)) {
-        return totalCost + amount * costPerQuantity;
+      if (!isNaN(quantity) && !isNaN(costPerQuantity)) {
+        return totalCost + quantity * costPerQuantity;
       }
       return totalCost;
     }, 0);
@@ -80,7 +80,7 @@ const listMaterialById = () => {
 
             <div className="mb-3 row">
                 <p className="border p-2 rounded bg-white col-6 me-5">{product.material_name}</p>
-                <p className="border p-2 rounded bg-white col-2 me-5">{product.amount} กรัม</p>
+                <p className="border p-2 rounded bg-white col-2 me-5">{product.quantity} กรัม</p>
                 <p className="border p-2 rounded bg-white col-2 me-5">{product.cost_per_quantity} บาท/กรัม</p>
             </div>
           </div>

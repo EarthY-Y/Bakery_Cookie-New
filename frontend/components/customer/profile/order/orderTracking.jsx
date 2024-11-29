@@ -85,7 +85,7 @@ const OrderTracking = () => {
               </div>
               <div className="card-body">
                 <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
-                <p className="card-text">ราคารวม: {numberGrouping(order.price)} บาท</p>
+                <p className="card-text">ราคารวม: {numberGrouping(order.price + order.cost_shipping + order.cost_package)} บาท</p>
                 <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
               </div>
               <div className="card-footer d-flex justify-content-between">
@@ -127,7 +127,7 @@ const OrderTracking = () => {
               </div>
               <div className="card-body">
                 <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
-                <p className="card-text">ราคารวม: {numberGrouping(order.price)} บาท</p>
+                <p className="card-text">ราคารวม: {numberGrouping(order.price + order.cost_shipping + order.cost_package)} บาท</p>
                 <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
                 <p className="card-text">วันที่ชำระเงิน: {formatDate(order.updated_at)}</p>
               </div>

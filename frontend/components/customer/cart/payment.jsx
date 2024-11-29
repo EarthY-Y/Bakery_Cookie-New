@@ -2,13 +2,15 @@ import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { validateAddressCustomer, getAddressCustomer, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
-import { goBackOrHome } from '../../untils/fucntion/backFuction';
+import LoadingPopup from '../../untils/popUp/loading';
+import orders from './orders';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
   const id = useParams().id //เพราะว่ามันส่งมาจาก navigate ของหน้า orders เลยมาเป็น object ทำให้เกิดปัญหากับหลังบ้านเลยต้อง .id ในกรณีที่ไม่ใส่ {id}
+  const [isLoading, setIsLoading] = useState(true);
   const [address, setAddress] = useState([])
-  const [productOrder, setOrders] = useState([])
+  const [productOrder, setProductOrder] = useState([])
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); 
   const [totalPrice, setTotalPrice] = useState(0); 
   const [Picture, setPicture] = useState(null);
@@ -16,61 +18,45 @@ const cartProduct = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const validateAddress = async() => {
+    const fetchData = async () => {
       try {
-          const response = await validateAddressCustomer()
-          if(!response.data || response.data.length === 0){
-            throw new Error("ไม่มีข้อมูล")
-          }
-          console.log(response.data);
-        }
-        catch (error) {
-          alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
-          navigate('/create/address')
-        }
-    }
-    validateAddress()
-  },[])
+        setIsLoading(true);
+        // await new Promise((resolve) => setTimeout(resolve, 3000)); //ถ้าอยากลองดูหน้า loading
+        // โหลดข้อมูลพร้อมกันเพื่อลดปัญหาการโหลดข้อมูลไม่ทัน
+        const [
+          orders,
+          addressCustomer,
+        ] = await Promise.all([
+          getOrdersService(id),
+          getAddressCustomer(),
 
-  useEffect(() => {
-    const getAddress = async() => {
-      try {
-          const response = await getAddressCustomer()
-          if(!response.data || response.data.length === 0){
-            throw new Error("ไม่มีข้อมูล")
-          }
-          console.log(response.data);
-          setAddress(response.data[0])
+        ]);
+        if(orders){
+          console.log(orders.data[0]);
+          setProductOrder(orders.data[0])
+          setTotalPriceProduct(orders.data[0].price)
+        }else{
+          navigate(-1)
         }
-        catch (error) {
-          alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
-          navigate('/create/address')
+        if(addressCustomer){
+          setAddress(addressCustomer.data[0])
+        }else{
+          navigate(-1)
         }
-    }
-    getAddress()
-  },[])
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        alert(error.message);
+      }finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
 
-  useEffect(() => {
-    const getCart = async()=> {
-      try {
-        const response = await getOrdersService(id)
-        // if(!response.data || response.data.length === 0){
-        //   throw new Error("ไม่มีข้อมูล")
-        // }
-        console.log(response.data);
-        setOrders(response.data[0])
-        setTotalPriceProduct(response.data[0].price)
-      }
-      catch (error) {
-        navigate("/home") //ถ้าลูกค้า จ่ายเงินเเล้วจะถูกดีดไปหน้า home
-      }
-    }
-    getCart()
-  },[])
+  }, []); 
   
   // 
   useEffect(() => {
-    const total = totalPriceProduct + 52 /* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
+    const total = totalPriceProduct + productOrder.cost_shipping + productOrder.cost_package/* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
     setTotalPrice(total);
   }, [productOrder]);
 
@@ -127,7 +113,12 @@ const cartProduct = () => {
                   <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
                   <div className="d-flex justify-content-between">
                     <strong className="text-uppercase">ราคาส่ง</strong>
-                    <span>{numberGrouping(52)} ฿</span>
+                    <span>{numberGrouping(parseInt(productOrder.cost_shipping))} ฿</span>
+                  </div>
+                  <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
+                  <div className="d-flex justify-content-between">
+                    <strong className="text-uppercase">ราคากล่อง</strong>
+                    <span>{numberGrouping(parseInt(productOrder.cost_package))} ฿</span>
                   </div>
                   <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
                   <div className="d-flex justify-content-between">
@@ -157,6 +148,10 @@ const cartProduct = () => {
           <button type='submit' className="btn btn-success btn-lg" disabled={!Picture}>ชำระเงิน</button>
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </form>
   );
 };

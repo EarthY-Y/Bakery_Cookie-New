@@ -12,7 +12,7 @@ export const validateAddressCustomer = async() => {
         }
       }
     );  
-    console.log(response);
+ 
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
@@ -30,42 +30,42 @@ export const getAddressCustomer = async() => {
         }
       }
     );  
-    console.log(response);
+ 
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
   }
 }
 
-export const getShippingRate = async() => {
+export const shippingRate = async(weight) => {
   try {
     const authToken = localStorage.getItem('token')
-  
-    const response = await axios.get(API_URL + "/get/shipping_rate", 
+    const response = await axios.post(API_URL + "/get/payment/shipping/rate", {weight:weight},
       {
         headers: {
           'authorization': `Bearer ${authToken}`
         }
       }
     );  
-    console.log(response);
+ 
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
   }
 }
 
-export const createOrder = async(productCart, totalPrice, totalQuantity) => {
+export const createOrder = async(productCart, totalPrice, totalPriceProduct, price, cost_per_quantity, totalQuantity, shipping_rate_id, houseNo, tambon_nameTH, amphure_nameTH, province_nameTH, zip_code) => {
   try {
     const authToken = localStorage.getItem('token')
-    const response = await axios.post(API_URL + "/create/order",{productCart: productCart, totalprice: totalPrice, totalQuantity: totalQuantity},
+    const response = await axios.post(API_URL + "/create/order",{productCart:productCart, totalPrice: totalPrice, totalQuantity: totalQuantity, shipping_rate_id: shipping_rate_id,
+      totalPriceProduct: totalPriceProduct, shippingRate: price, cost_package_per_quantity: cost_per_quantity,
+      houseNo: houseNo, tambon: tambon_nameTH, amphure: amphure_nameTH, province: province_nameTH, zip_code: zip_code},
       {
         headers: {
           'authorization': `Bearer ${authToken}`
         }
       }
     );  
-    console.log(response);
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);

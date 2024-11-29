@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { packageDetialByIdService, editPackageService } from '../../../API/admin/packageService';
+import { packageDetailByIdService, editPackageService } from '../../../API/admin/packageService';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 const CreatePackage = () => {
@@ -18,7 +18,7 @@ const CreatePackage = () => {
   useEffect(() => {
     const getpackageById = async () => {
       try {
-        const response = await packageDetialByIdService(id)
+        const response = await packageDetailByIdService(id)
         console.log(response);
         if (!response.data) {
           throw new Error("ไม่มีข้อมูล")

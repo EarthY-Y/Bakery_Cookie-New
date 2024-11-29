@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { validateAddressCustomer, getAddressCustomer, createOrder, getShippingRate } from '../../../API/customer/paymentService';
+import { validateAddressCustomer, getAddressCustomer, createOrder, shippingRate } from '../../../API/customer/paymentService';
 import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
@@ -12,13 +12,13 @@ const orders = () => {
   const [address, setAddress] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [productCart, setProductCart] = useState([])
-  const [totalPriceProduct, setTotalPriceProduct] = useState(0); 
+  const [totalPriceProduct, setTotalPriceProduct] = useState(0); ; 
   const [totalPrice, setTotalPrice] = useState(0); 
   const [totalQuantity, setTotalQuantity] = useState(0); 
   const [totalWeight, setTotalWeigth] = useState(0); 
-  const [toatalShippingRate, settoatalShippingRate] = useState(0); 
+  const [deliveryRate,  setdeliveryRate] = useState(0); 
+  const [toatalShippingRate,  setToatalShippingRate] = useState(0); 
   const navigate = useNavigate()
-  console.log(id);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -35,11 +35,13 @@ const orders = () => {
 
         ]);
         if(addressCustomer){
+          console.log(addressCustomer.data);
           setAddress(addressCustomer.data[0])
         }else{
           navigate('/create/address')
         }
-        if(addressCustomer){
+        if(porductCart){
+          console.log(porductCart.data);
           setProductCart(porductCart.data)
         }else{
           navigate('/home')
@@ -47,15 +49,16 @@ const orders = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         alert(error.message);
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     };
     fetchData();
 
-  }, [id]);  
+  }, []);  
 
   useEffect(() => {
+    const totalPriceProduct = productCart.reduce((acc, item) => acc + item.selling_price_per_quantity * item.quantity, 0);
+    setTotalPriceProduct(totalPriceProduct);
+
     const total = productCart.reduce((acc, item) => acc + item.quantity, 0);
     setTotalQuantity(total);
     
@@ -66,35 +69,42 @@ const orders = () => {
   }, [productCart]);
 
   useEffect(() => {
-    const shippingRate = async() => {
+    const getshippingRate = async() => {
       try {
-        const response = await getShippingRate(totalWeight)
+        const response = await shippingRate(totalWeight)
         console.log(response);
-        settoatalShippingRate(response.data[0])
+        setdeliveryRate(response.data[0])
         
       } catch (error) {
         console.error("Error ShippingRate data:", error);
+      }finally {
+        setIsLoading(false);
       }
-      shippingRate()
     } 
+    if (totalWeight > 0){
+      getshippingRate()
+    }
+    
   },[totalWeight])
 
-  // คำนวณราคาสินค้า
   useEffect(() => {
-    const total = productCart.reduce((acc, item) => acc + item.selling_price_per_quantity * item.quantity, 0);
-    setTotalPriceProduct(total);
-  }, [productCart]);
+    const totalRate = parseFloat(deliveryRate.price) + parseFloat(deliveryRate.cost_per_quantity)
+    setToatalShippingRate(totalRate.toFixed(0))
+  },[deliveryRate])
+
+  // คำนวณราคาสินค้า
   // 
   useEffect(() => {
-    const total = totalPriceProduct /* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
-    setTotalPrice(total);
-  }, [totalPriceProduct]);
+    const total = parseFloat(totalPriceProduct) + parseFloat(toatalShippingRate)
+    setTotalPrice(parseInt(total.toFixed(0)));
+  }, [toatalShippingRate]);
 
   const handleSubmmit = async(event) => {
     event.preventDefault();
     try {
-      console.log();
-      const response = await createOrder(productCart, totalPrice, totalQuantity)
+      console.log(productCart, parseFloat(totalPrice), totalPriceProduct, deliveryRate.price, deliveryRate.cost_per_quantity, totalQuantity, deliveryRate.shipping_rate_id, address.houseNo, address.tambon_nameTH, address.amphure_nameTH, address.province_nameTH, address.zip_code);
+      const response = await createOrder(productCart, parseFloat(totalPrice), totalPriceProduct, deliveryRate.price, deliveryRate.cost_per_quantity, 
+                                        totalQuantity, deliveryRate.shipping_rate_id, address.houseNo, address.tambon_nameTH, address.amphure_nameTH, address.province_nameTH, address.zip_code)
       if(response.data){
         navigate("/payment/"+id)
       }else {
@@ -158,7 +168,9 @@ const orders = () => {
           <p className="row bg-white p-3 justify-content-center align-items-center">ไม่มีสินค้าในตะกร้า</p>
         )}
         <div className="row bg-light p-3 border rounded text-end fw-bold">
-          <h4>ยอดรวมทั้งหมด: {numberGrouping(totalPrice)} ฿</h4>
+          <h4>ยอดรวมทั้งหมด: {numberGrouping(totalPriceProduct)} ฿</h4>
+          <h4>ค่าจัดส่ง: {toatalShippingRate || 0} ฿</h4>
+          <h4>ยอดชำระทั้งหมด: {numberGrouping(totalPrice) || 0} ฿</h4>
         </div>
         <div className="d-flex flex-row-reverse bd-highlight mt-4">
           <button type='submit' className="btn btn-success btn-lg">ชำระเงิน</button>

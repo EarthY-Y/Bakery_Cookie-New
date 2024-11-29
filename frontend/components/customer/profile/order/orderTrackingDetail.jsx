@@ -77,7 +77,7 @@ const OrderTracking = () => {
   };
   const currentStep = getCurrentStep();
   return (
-    <div className="container mt-2">
+    <div className="container mt-2 mb-5">
       <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
@@ -167,22 +167,36 @@ const OrderTracking = () => {
                   <div className="col-md-2">
                     <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-3">
                     <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
                   </div>
+                  <div className="col-md-3">
+                    <p className="mb-0"><strong>ชิ้นละ:</strong> {order.productCartPrice} บาท</p>
+                  </div>
                   <div className="col-md-4 text-end">
-                    <p className="mb-0"><strong>ราคารวม:</strong> {numberGrouping(order.productCartPrice*order.productCartQuantity)} บาท</p>
+                    <p className="mb-0"><strong>รวมเป็น:</strong> {numberGrouping(order.productCartPrice*order.productCartQuantity)} บาท</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         ))}
-        <div className="card-footer d-flex justify-content-end">
-          <p className="mb-0"><strong>ราคารวม:</strong> {numberGrouping(ordersDetail.price || 0)} บาท</p>
+        <div className="card-footer text-end d-flex justify-content-end">
+          <div className='text-start me-2'>
+            <h5 className="mb-0 text-danger">ราคารวมสินค้า </h5> 
+            <h5 className="mb-0 text-danger">ค่าส่ง </h5> 
+            <h5 className="mb-0 text-danger">ค่ากล่อง </h5>
+            <h5 className="mb-0 text-danger">ยอดชำระ </h5>
+          </div>
+          <div className='text-start'>
+            <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.price || 0)} บาท</h5>
+            <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.cost_shipping || 0)} บาท</h5>
+            <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.cost_package || 0)} บาท</h5>
+            <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.price + ordersDetail.cost_package + ordersDetail.cost_shipping  || 0)} บาท</h5>
+          </div>
         </div>
       </div>
-      <div className="card-footer d-flex justify-content-between">
+      <div className="card-footer d-flex justify-content-end mt-4">
         <Link  to={`/payment/${ordersDetail.cartId}`}  className="btn btn-primary" style={{ display: showBtnPay ? 'block' : 'none' }}> ชำระเงิน</Link>
       </div>
     </div>

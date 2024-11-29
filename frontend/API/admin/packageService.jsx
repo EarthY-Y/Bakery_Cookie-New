@@ -35,7 +35,7 @@ export const listPackageService = async () => {
   }
 };
 
-export const packageDetialByIdService = async (id) => {
+export const packageDetailByIdService = async (id) => {
   try {
     const authToken = localStorage.getItem("tokenAdmin");
     const response = await axios.get(API_URL + "/package/" + id, {

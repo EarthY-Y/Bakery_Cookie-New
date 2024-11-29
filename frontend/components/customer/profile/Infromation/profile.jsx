@@ -6,7 +6,7 @@ const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const profile = () => {
   const [Picture, setPicture] = useState(null);
-  const [detialCustomer, setDetialCustomer] = useState([])
+  const [detailCustomer, setDetailCustomer] = useState([])
   const [customerName, setCustomerName] = useState("")
   const [customerFName, setCustomerFName] = useState("")
   const [customerLName, setCustomerLName] = useState("")
@@ -16,7 +16,7 @@ const profile = () => {
     const getInfoCustomer = async() => {
       const response = await getDeatialCustomer()
       console.log(response);
-      setDetialCustomer(response.data[0])
+      setDetailCustomer(response.data[0])
       setPicture(response.data[0]?.customerpic)
       setCustomerName(response.data[0]?.username)
       setCustomerFName(response.data[0]?.f_name)
@@ -31,10 +31,10 @@ const profile = () => {
     const updatedData = {};
     const formData = new FormData();
     
-    if (customerName !== detialCustomer.username) updatedData.username = customerName;
-    if (customerFName !== detialCustomer.f_name) updatedData.f_name = customerFName;
-    if (customerLName !== detialCustomer.l_name) updatedData.l_name = customerLName;
-    if (customerPhoneNumber !== detialCustomer.phone_number ) updatedData.phone_number = customerPhoneNumber;
+    if (customerName !== detailCustomer.username) updatedData.username = customerName;
+    if (customerFName !== detailCustomer.f_name) updatedData.f_name = customerFName;
+    if (customerLName !== detailCustomer.l_name) updatedData.l_name = customerLName;
+    if (customerPhoneNumber !== detailCustomer.phone_number ) updatedData.phone_number = customerPhoneNumber;
 
     if (Picture instanceof File) {
       updatedData.file = Picture;
@@ -56,7 +56,7 @@ const profile = () => {
         console.log(`${key}:`, value);
     }
     try {
-      const response = await updateInfoCustomer(detialCustomer.customer_id,formData)
+      const response = await updateInfoCustomer(detailCustomer.customer_id,formData)
     } catch (error) {
       
     }

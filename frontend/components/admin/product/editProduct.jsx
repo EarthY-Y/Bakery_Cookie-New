@@ -44,7 +44,7 @@ const EditProduct = () => {
         const productData = productResponse.data[0];
         const ingredients = productResponse.data.map((item) => ({
           material_id: item.material_id || '',
-          quantity: item.amount || '',
+          quantity: item.quantity || '',
           cost_per_quantity: item.cost_per_quantity || 0,
           material_name: item.material_name || '',
         }));

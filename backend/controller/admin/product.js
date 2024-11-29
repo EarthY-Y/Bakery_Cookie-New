@@ -6,7 +6,7 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getProduct = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.selling_price_per_quantity, p.quantity_per_time, p.product_name, pp.productpic_name, SUM(m.cost_per_quantity * pm.amount) AS cost FROM product p"+
+            db.query("SELECT p.product_id, p.selling_price_per_quantity, p.quantity_per_time, p.product_name, pp.productpic_name, SUM(m.cost_per_quantity * pm.quantity) AS cost FROM product p"+
                     " LEFT JOIN productpicture pp ON p.product_id = pp.product_id" +
                     " LEFT JOIN product_material pm ON p.product_id = pm.product_id" + 
                     " LEFT JOIN material m ON pm.material_id = m.material_id" +
@@ -29,7 +29,7 @@ export const getProductById = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.weight_per_piece, p.description, p.created_by, p.updated_by, p.created_at, p.updated_at, "+
-                     "pp.productpic_name, pm.amount, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
+                     "pp.productpic_name, pm.quantity, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
                      "INNER JOIN admin a ON a.admin_id = p.created_by "+ 
                      "INNER JOIN productpicture pp ON pp.product_id = p.product_id "+
                      "INNER JOIN product_material pm ON pm.product_id = p.product_id "+
@@ -175,7 +175,7 @@ const createProductMaterial = async (req, id, tokenId) => {
 
         const results = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO product_material (product_material_Id,product_id, material_id, amount, created_by) VALUES ?",
+                "INSERT INTO product_material (product_material_Id,product_id, material_id, quantity, created_by) VALUES ?",
                 [ingredientValues],
                 (err, result) => {
                     if (err) return reject(err);
@@ -394,8 +394,8 @@ const updateProductMaterial = async (req, productId, ingredients, deletedIngredi
             //อัปเดตหรือเพิ่มข้อมูลที่ไม่ได้ถูกลบ
             if (ingredientValues.length > 0) {
                 await new Promise((resolve, reject) => {
-                    db.query("INSERT INTO product_material (product_material_Id, product_id, material_id, amount, updated_by)"+
-                        " VALUES ? ON DUPLICATE KEY UPDATE amount = VALUES(amount), updated_by = VALUES(updated_by)", //ถ้ามีของที่ซ้ำกันให้เป็นการอัปเดตเเค่จำนวนเเละคนอัปเดต
+                    db.query("INSERT INTO product_material (product_material_Id, product_id, material_id, quantity, updated_by)"+
+                        " VALUES ? ON DUPLICATE KEY UPDATE quantity = VALUES(quantity), updated_by = VALUES(updated_by)", //ถ้ามีของที่ซ้ำกันให้เป็นการอัปเดตเเค่จำนวนเเละคนอัปเดต
                         [ingredientValues],
                         (err, result) => {
                             if (err) return reject(err);

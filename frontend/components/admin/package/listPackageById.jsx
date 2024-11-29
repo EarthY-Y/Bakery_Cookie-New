@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
-import { packageDetialByIdService } from '../../../API/admin/packageService';
+import { packageDetailByIdService } from '../../../API/admin/packageService';
 import { formatDate } from '../../untils/frommatters/datetime';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
@@ -14,7 +14,7 @@ const ListPackageById = () => {
   useEffect(() => {
     const getpackageById = async () => {
       try {
-        const response = await packageDetialByIdService(id)
+        const response = await packageDetailByIdService(id)
         console.log(response);
         if (!response.data) {
           throw new Error("ไม่มีข้อมูล")
@@ -28,18 +28,6 @@ const ListPackageById = () => {
     }
     getpackageById()
   }, [])
-
-  const calculateTotalCost = () => {
-    return packageById.reduce((totalCost, item) => {
-      const amount = parseFloat(item.amount || 0); // จำนวนของบรรจุภัณฑ์
-      const costPerQuantity = parseFloat(item.cost_per_quantity || 0); // ต้นทุนต่อหน่วย
-
-      if (!isNaN(amount) && !isNaN(costPerQuantity)) {
-        return totalCost + amount * costPerQuantity;
-      }
-      return totalCost;
-    }, 0);
-  };
 
   return (
     <div className="container mt-5 p-4 border rounded shadow-sm bg-light">
