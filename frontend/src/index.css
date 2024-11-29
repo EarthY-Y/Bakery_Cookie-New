@@ -29,11 +29,3 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield; /* ซ่อนใน Firefox */
 }
-
-.card-container {
-  margin-left: -250px; /* ขยับ container ไปทางซ้าย */
-}
-
-.card {
-  margin: auto; /* จัดการ์ดให้เว้นระยะจากรอบด้านเท่ากัน */
-}

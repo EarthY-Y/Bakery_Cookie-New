@@ -41,7 +41,7 @@ const Home = () => {
       <h2 className="text-center my-4" style={{ fontWeight: "bold" }}>สินค้าทั้งหมด</h2>
 
       <div className="container">
-      <div className="row g-4 justify-content-center card-container">
+      <div className="row g-4 justify-content-start card-container">
       {products.map((product) => (
         <div key={product.product_id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center" style={{ cursor: "pointer" }}>
             <Link to={`/product/${product.product_id}`} className="card shadow-sm" 
