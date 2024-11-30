@@ -5,9 +5,12 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getOrderslistWaitStatement = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT * FROM orders o INNER JOIN status_order so ON so.status_order_id = o.status"+
+            db.query("SELECT o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
+                " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
+                " INNER JOIN status_order so ON so.status_order_id = o.status"+
+                " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
                 " WHERE so.status_name LIKE ?"+
-                " GROUP BY orders_id;", ["รอ%"],
+                " GROUP BY o.orders_id;", ["รอ%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -24,12 +27,12 @@ export const getOrderslistWaitStatement = async (req, res) => {
 export const getOrderslistCheckOut = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT  o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
-                " LEFT JOIN order_profit op ON op.orders_id = o.orders_id" +
+            db.query("SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
+                " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
                 " INNER JOIN status_order so ON so.status_order_id = o.status"+
                 " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
                 " WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?"+
-                " GROUP BY orders_id;", ["รอ%", "ยกเลิก%"],
+                " GROUP BY o.orders_id;", ["รอ%", "ยกเลิก%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -53,7 +56,7 @@ export const getOrdersById = async (req, res) => {
                     " INNER JOIN cart_product cp ON c.cartId = cp.cartId"+
                     " INNER JOIN product p ON p.product_id = cp.product_id"+
                     " INNER JOIN productpicture pp ON pp.product_id = p.product_id"+
-                    " WHERE orders_id = ? ",[id],
+                    " WHERE o.orders_id = ? ",[id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

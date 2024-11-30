@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getOrderByIdService, getStatusOrderService, updateStatusOrderService, getOrderHistoryByIdService } from '../../../API/admin/ordersService';
 import { formatDate } from '../../untils/frommatters/datetime';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
+import Select from 'react-select';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -62,6 +63,7 @@ const orderById = () => {
           throw new Error("ไม่มีข้อมูล")
         }
         setStatusOrder(response.data)
+        setStatus(response.data[0]?.status_order_id)
       }
       
       catch (error) {
@@ -72,10 +74,10 @@ const orderById = () => {
   },[])
 
   
-  const handleInputChange = (value) => {
-    console.log(value);
-    setStatus(value); // อัปเดต formData
-    hadleUpadateStatus(value)
+  const handleInputChange = (option) => {
+    console.log(option.value);
+    setStatus(option.value); // อัปเดต formData
+    hadleUpadateStatus(option.value)
   };
 
   const hadleUpadateStatus = async(value) => {
@@ -91,6 +93,12 @@ const orderById = () => {
       }
     }
   }
+
+  const optionStatusOrders = statusOrders.map((status) => ({
+    value: status.status_order_id,
+    label: status.status_name
+  }));
+
   const handleConfirm = async() => {
     try {
       const response = await updateStatusOrderService(status, id, 'skip')
@@ -128,14 +136,14 @@ const orderById = () => {
                   ))}
               </select>
             )} */}
-            <select className="form-select" value={status || orderById[0]?.status} onChange={(e) => handleInputChange(e.target.value)}>
-              <option disabled>Select status</option>
-              {statusOrders.map((statusOrder) => (
-                  <option key={statusOrder.status_order_id} value={statusOrder.status_order_id}>
-                      {statusOrder.status_name}
-                  </option>
-              ))}
-            </select>
+            <Select
+              options={optionStatusOrders}
+              name="material_id"
+              value={optionStatusOrders.find((option) => option.value === status) || status}
+              onChange={(option) => handleInputChange(option)}
+              isSearchable={true}
+              // placeholder="เลือกบรรจุภัณฑ์"
+            />
           </div>
         </div>
 

@@ -179,7 +179,7 @@ export const updateStatusOrder = async (req, res) => {
             })
             console.log(resultsDupilcateHistory);
             
-            if(resultsDupilcateHistory){
+            if(resultsDupilcateHistory[0]?.history_id){
                 return res.status(400).json({ message: "เคยใช้สถานะนี้เเล้ว"})
             }
         }

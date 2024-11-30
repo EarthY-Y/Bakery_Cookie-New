@@ -103,27 +103,31 @@ const EditProduct = () => {
     }
   };
 
-  const handleInputChange = (index, event) => {
+  const handleInputChange = (index, options, event) => {
     const values = [...(formData.ingredients || [])];
     const oldIngredient = values[index];
   
     // สร้าง ingredient ใหม่
     const updatedIngredient = {
       ...oldIngredient,
-      [event.target.name]: event.target.value,
+      [event?.target?.name || 'material_id']: event?.target?.value || options?.value,
+      [event?.target?.name || 'material_name']: options?.label || '',
     };
   
+    // Update based on the event or options provided
+    if (event) {
+      updatedIngredient[event.target.name] = event.target.value;
+    }
+  
     // ถ้ามีการเปลี่ยน material_id
-    if (event.target.name === 'material_id' && oldIngredient.material_id !== event.target.value) {
+    if (updatedIngredient.material_id && oldIngredient.material_id !== updatedIngredient.material_id) {
       // สร้าง tempId ใหม่
       updatedIngredient.tempId = `temp-${Date.now()}`;
   
       // เก็บ oldIngredient เข้า deletedIngredients ถ้ามี material_id เดิม
       if (oldIngredient.material_id) {
         setDeletedIngredients((prevDeleted) => {
-          const isDuplicate = prevDeleted.some(
-            item => item.material_id === oldIngredient.material_id
-          );
+          const isDuplicate = prevDeleted.some(item => item.material_id === oldIngredient.material_id);
           return isDuplicate ? prevDeleted : [...prevDeleted, oldIngredient];
         });
       }
@@ -328,6 +332,11 @@ const EditProduct = () => {
     value: packages.package_id,
     label: packages.package_name
   }));
+  const optionsMaterial = listMaterials.map((materials) => ({
+    value: materials.material_id,
+    label: materials.material_name
+  }));
+
   //หาต้นทุนต่อชิ้น
   useEffect(() => {
     const totalCost = calculateTotalCost();
@@ -399,17 +408,17 @@ const EditProduct = () => {
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
               <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
               <div className="col-sm-3">
-                <select className="form-select" name="material_id" value={ingredient.material_id} onChange={(event) => handleInputChange(index, event)} required>
-                  <option value="" disabled>Select Material</option>
-                  {listMaterials.map((listMaterial) => (
-                    <option key={listMaterial.material_id} value={listMaterial.material_id}>
-                      {listMaterial.material_name}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  options={optionsMaterial}
+                  name="material_id"
+                  value={optionsMaterial.find((option) => option.value === ingredient.material_id) ||  ""}
+                  onChange={(options) => handleInputChange(index, options, '')}
+                  isSearchable={true}
+                  placeholder="เลือกบรรจุภัณฑ์"
+                />
               </div>
               <div className="col-sm-2">
-                <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, event)} required/>
+                <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
               </div>
               <div className="col-sm-1">
                 <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}>ลบ</button>
