@@ -5,8 +5,9 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getOrderslistWaitStatement = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
+            db.query("SELECT o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, op.profit, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
                 " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
+                " LEFT JOIN order_profit op ON op.orders_id = o.orders_id"+
                 " INNER JOIN status_order so ON so.status_order_id = o.status"+
                 " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
                 " WHERE so.status_name LIKE ?"+
@@ -50,13 +51,17 @@ export const getOrdersById = async (req, res) => {
     try {
         const id = req.params.id
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, o.updated_by, o.updated_at, o.status, o.statement_picture, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name FROM orders o"+
+            db.query("SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, o.updated_by,"+
+                    " o.updated_at, o.status, o.statement_picture, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name, "+
+                    " cpd.cost_product, ocd.total_cost, op.profit, p.selling_price_per_quantity FROM orders o"+
                     " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
+                    " LEFT JOIN order_profit op ON op.orders_id = o.orders_id"+
+                    " LEFT JOIN cost_product_detaails cpd ON cpd.order_cost_details_id = ocd.order_cost_details_id"+
                     " INNER JOIN cart c ON o.cartId = c.cartId"+
                     " INNER JOIN cart_product cp ON c.cartId = cp.cartId"+
                     " INNER JOIN product p ON p.product_id = cp.product_id"+
                     " INNER JOIN productpicture pp ON pp.product_id = p.product_id"+
-                    " WHERE o.orders_id = ? ",[id],
+                    " WHERE o.orders_id = ? GROUP BY p.product_id",[id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

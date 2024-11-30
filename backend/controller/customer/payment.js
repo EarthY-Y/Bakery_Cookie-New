@@ -339,7 +339,7 @@ export const updatePaymentOrder = async (req, res) => {
         })
         const statusOrderId = resultsFindStatusOrder[0].status_order_id
         const results = await new Promise((resolve, reject)=> { //WHERE customer_id = ? and cartId = ? อาจจะเกิด cart_id ซ้ำกันได้อนาคตต้องเเก้ไปใช้ orders_id
-            db.query("UPDATE orders SET price = ?, statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, statusOrderId, authToken.customerId, id],
+            db.query("UPDATE orders SET statement_picture = ?, status = ? WHERE customer_id = ? and cartId = ?", [statement_picture, statusOrderId, authToken.customerId, id],
                     (err, result) => { 
                         if (err) return reject(err)
                         resolve(result)

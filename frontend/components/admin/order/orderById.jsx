@@ -1,10 +1,11 @@
 import React, { useEffect, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, Link, useParams  } from 'react-router-dom';
+import Select from 'react-select';
 import { getOrderByIdService, getStatusOrderService, updateStatusOrderService, getOrderHistoryByIdService } from '../../../API/admin/ordersService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
-import Select from 'react-select';
+
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -16,6 +17,7 @@ const orderById = () => {
   const [status, setStatus] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [totalCost, setTotalCost] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const orderById = () => {
           throw new Error("ไม่มีข้อมูล")
         }
         setOrderById(response.data)
+        setStatus(response.data[0]?.status)
       }
       
       catch (error) {
@@ -63,7 +66,6 @@ const orderById = () => {
           throw new Error("ไม่มีข้อมูล")
         }
         setStatusOrder(response.data)
-        setStatus(response.data[0]?.status_order_id)
       }
       
       catch (error) {
@@ -73,7 +75,6 @@ const orderById = () => {
     getStatusOrderById()
   },[])
 
-  
   const handleInputChange = (option) => {
     console.log(option.value);
     setStatus(option.value); // อัปเดต formData
@@ -146,21 +147,17 @@ const orderById = () => {
             />
           </div>
         </div>
-
-
-        <div className="mb-3">
-            <label className="form-label fw-bold">จำนวนคำสั่งซื้อ</label>
-            <p className="border p-2 rounded bg-white">{orderById.length}</p>
-        </div>
         <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
 
         <table className="table table-bordered bg-white">
           <thead>
             <tr>
-              <th style={{ width: '5%' }}>รายการที่</th>
+              <th style={{ width: '8%' }}>รายการที่</th>
               <th style={{ width: '10%' }}>รูปภาพ</th>
               <th style={{ width: '25%' }}>ชื่อสินค้า</th>
-              <th style={{ width: '25%' }}>จำนวน</th>
+              <th style={{ width: '15%' }}>ต้นทุน</th>
+              <th style={{ width: '15%' }}>ราคาขาย</th>
+              <th style={{ width: '22%' }}>จำนวน</th>
             </tr>
           </thead>
           <tbody>
@@ -169,21 +166,39 @@ const orderById = () => {
                 <td>{index + 1}</td>
                 <td><img src={API_URL_PICTURE + order.productpic_name} height={100} width={150} alt="Material" className="rounded"/></td>
                 <td>{order.product_name}</td>
+                <td>{order.cost_product}</td>
+                <td>{order.selling_price_per_quantity}</td>
                 <td>{order.productCartQuantity} ชิ้น</td>
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan="5" className="text-end"><strong>ราคารวมสินค้ารวม</strong></td>
+              <td>{numberGrouping(orderById[0]?.price || 0)} บาท</td>
+            </tr>
+            <tr>
+              <td colSpan="5" className="text-end"><strong>ค่าส่ง</strong></td>
+              <td>{numberGrouping(orderById[0]?.cost_shipping || 0)} บาท</td>
+            </tr>
+            <tr>
+              <td colSpan="5" className="text-end"><strong>ค่ากล่อง</strong></td>
+              <td>{numberGrouping(orderById[0]?.cost_package || 0)} บาท</td>
+            </tr>
+            <tr>
+              <td colSpan="5" className="text-end"><strong>ยอดชำระ</strong></td>
+              <td>{numberGrouping(orderById[0]?.price + orderById[0]?.cost_package + orderById[0]?.cost_shipping || 0)} บาท</td>
+            </tr>
+            <tr>
+              <td colSpan="5" className="text-end"><strong>ต้นทุนคำสั่งซื้อ</strong></td>
+              <td>{numberGrouping(orderById[0]?.total_cost || 0)} บาท</td>
+            </tr>
+            <tr>
+              <td colSpan="5" className="text-end"><strong>กำไร</strong></td>
+              <td>{numberGrouping(orderById[0]?.profit || 0)} บาท</td>
+            </tr>
+          </tfoot>
         </table>
-          
-        <div className="mb-3">
-            <label className="form-label fw-bold">ปริมาณ</label>
-            <p className="border p-2 rounded bg-white">{orderById[0]?.quantity}</p>
-        </div>
-
-        <div className="mb-3">
-            <label className="form-label fw-bold">รวมเป็นเงิน</label>
-            <p className="border p-2 rounded bg-white">{orderById[0]?.price}</p>
-        </div>
 
         <div className="mb-3 row">
           <div className='col-6'>
