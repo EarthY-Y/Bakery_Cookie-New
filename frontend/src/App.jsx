@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
-import {ProtectedRouteAdmin ,ProtectedRouteCustomer} from '../API/authService';
+import {ProtectedRouteAdmin ,ProtectedRouteCustomer, CheckRouteCustomer, CheckRouteAdmin} from '../API/authService';
 import Dashboard from '../page/admin-page/dashboard/dashboard'
 import Login from '../page/login-page/login-page'
 import LoginAdmin from '../page/login-page/loginAdmin-page';
@@ -19,7 +19,8 @@ import Signup3 from '../page/customer-page/signup-page/signup3-page'
 import ListAdmin from '../page/admin-page/listAdmin-page'
 import CreateProductMaterial from '../page/admin-page/product-page/createMaterialProduct-page';
 import Home from '../page/customer-page/home/home-page'
-import GuestHome from '../page/customer-page/home/guestHome-page'
+import GuestHome from '../page/guest/guestHome-page'
+import GuestDetailPorductById from '../page/guest/guestDetailPorductById-page'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
 import { FormProviderSignUpService } from '../API/signUpService'
@@ -65,38 +66,53 @@ const router = createBrowserRouter([
     errorElement: <ErrorFallback />,
     children: [
       {
-        path: "",
-        element: <GuestHome />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/login/admin",
-        element: <LoginAdmin />,
-      },
-      {
-        path: "/signup",
+        element: <CheckRouteCustomer/>,
         children: [
           {
             path: "",
-            element: (
-              <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
-                <Signup />
-              </FormProviderSignUpService>
-            ),
+            element: <GuestHome />,
           },
           {
-            path: "step2",
-            element: (
-              <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
-                <Signup2 />
-              </FormProviderSignUpService>
-            ),
+            path: "Cookie&New/:id",
+            element: <GuestDetailPorductById />,
           },
-        ],
+          {
+            path: "/login",
+            element: <Login />,
+          },
+          {
+            path: "/signup",
+            children: [
+              {
+                path: "",
+                element: (
+                  <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
+                    <Signup />
+                  </FormProviderSignUpService>
+                ),
+              },
+              {
+                path: "step2",
+                element: (
+                  <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
+                    <Signup2 />
+                  </FormProviderSignUpService>
+                ),
+              },
+            ],
+          },
+        ]
       },
+      {
+        element: <CheckRouteAdmin/>,
+        children: [
+          {
+            path: "/login/admin",
+            element: <LoginAdmin />,
+          }
+        ]
+      },
+      
     
       //route Admin
       {
@@ -312,12 +328,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/home",
-            children: [
-              {
-                path: "",
-                element: <Home />,
-              },
-            ],
+            element: <Home />,
           },
           {
             path: "/product/:id",

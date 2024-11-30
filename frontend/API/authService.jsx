@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import LoadingPopup from '../components/untils/popUp/loading';
 
 const API_URL = import.meta.env.VITE_API_Port
+
 //ระบบ login
 export const login = async (userName, passWord) => {
   try {
@@ -43,7 +45,7 @@ export const logoutAdmin = async () => {
   }
 };
 
-//authRouth
+//authRouth //*การใช้ export จะถูกนำไปใช้กับ component เท่านั้นเรียกเอามาใช้เหมือน Function ปกติไม่ได้เพราะต้องมีการเรนเดอร์เพราะติดเรื่อง React Hook (useState, useEffect)
 export const ProtectedRouteAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -53,9 +55,10 @@ export const ProtectedRouteAdmin = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
+        autoRemoveTokenAdmin(token)
         return;
       }
-      autoRemoveTokenAdmin(token)
+      
       try {
         console.log("Verifying token...");
         const resAdmin = await axios.get(API_URL+'/verifyAdmin', {
@@ -82,7 +85,7 @@ export const ProtectedRouteAdmin = () => {
   }, [token]); //เมื่อ token มีการเปลี่ยนเเปลงก็จะมีการทำงานของ useEffect อีกครั้ง
 
   if (loading) {
-    return <div>Loading...</div>;
+    return LoadingPopup(loading);
   }
 
   if (!token || !isAdmin) {
@@ -123,6 +126,7 @@ export const ProtectedRouteCustomer = () => {
       } catch (error) {
         console.error('Error during token verification:', error);
         setIsCustomer(false); 
+        return;
       } finally {
         setLoading(false); 
       }
@@ -131,7 +135,7 @@ export const ProtectedRouteCustomer = () => {
   }, [token]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return LoadingPopup(loading);
   }
 
   if (!token || !isCustomer) {
@@ -140,6 +144,102 @@ export const ProtectedRouteCustomer = () => {
 
   return <Outlet />;
 };
+
+export const CheckRouteCustomer = () => {
+  const [loading, setLoading] = useState(true);
+  const [isCustomer, setIsCustomer] = useState(false);
+  const navigate = useNavigate()
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      if (!token) {
+        console.log("No token found. Redirecting to login...");
+        setLoading(false);
+        return;
+      }else {
+        autoRemoveToken(token)
+        try {
+          console.log("Verifying token...");
+          const resCustomer = await axios.get(API_URL+'/verifyCustomer', {
+            headers: {
+              'authorization': `Bearer ${token}`
+            }
+          });
+          console.log('Response from verifyCustomer:', resCustomer.data);
+
+          if (resCustomer.data.results && resCustomer.data.results.length !== 0) {
+            setIsCustomer(true);
+            return navigate("/home");
+          } else {
+            console.log("User is not an customer. Redirecting to login...");
+            setIsCustomer(false);
+          }
+        } catch (error) {
+          console.error('Error during token verification:', error);
+          setIsCustomer(false); 
+          return;
+        } finally {
+          setLoading(false); 
+        }
+      }
+    }
+    verifyToken();
+  },[token])
+  if (loading) {
+    return LoadingPopup(loading);
+  }
+
+  return <Outlet />;
+};
+
+export const CheckRouteAdmin = () => {
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate()
+  const token = localStorage.getItem('tokenAdmin');
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      if (!token) {
+        console.log("No token found. Redirecting to login...");
+        setLoading(false);
+        autoRemoveTokenAdmin(token)
+        return;
+      }
+      try {
+        console.log("Verifying token...");
+        const resAdmin = await axios.get(API_URL+'/verifyAdmin', {
+          headers: {
+            'authorization': `Bearer ${token}`
+          }
+        });
+        console.log('Response from verifyAdmin:', resAdmin.data);
+        
+        if (resAdmin.data.results && resAdmin.data.results.length !== 0) {
+          setIsAdmin(true);
+          return navigate("/dashboard")
+        } else {
+          console.log("User is not an admin. Redirecting to login...");
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error('Error during token verification:', error);
+        setIsAdmin(false); 
+      } finally {
+        setLoading(false); 
+      }
+    }
+    verifyToken();
+  },[token])
+
+  if (loading) {
+    return LoadingPopup(loading);
+  }
+
+  return <Outlet />;
+};
+
 
 // ฟังก์ชันในการลบ token
 function removeToken() {

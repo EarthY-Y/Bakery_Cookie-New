@@ -40,7 +40,7 @@ const Navbar = () => {
         </nav>
         {isScrolled && (
           <div className="d-flex justify-content-center align-items-center mt-2">
-            <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
+            <button className="btn btn-outline text-white rounded-pill mx-1"><Link className="dropdown-item" to="/">หน้าหลัก</Link></button>
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
               <ul className="dropdown-menu">
@@ -59,7 +59,7 @@ const Navbar = () => {
         <div className="container text-center my-4">
           <img src="https://example.com/logo.png" alt="Bakery Cookie New Happy Family" style={{ width: "150px" }} />
           <nav className="container text-center col-5 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: "#C40C0C" }}>
-            <button className="btn btn-outline text-white rounded-pill mx-1">หน้าหลัก</button>
+            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/">หน้าหลัก</Link>
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
               <ul className="dropdown-menu">

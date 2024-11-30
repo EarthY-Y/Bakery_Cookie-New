@@ -1,6 +1,6 @@
 import React from 'react'
-import LayOut from '../../../components/guest/layOut/layOut'
-import Home from '../../../components/customer/home/home'
+import LayOut from '../../components/guest/layOut/layOut'
+import Home from '../../components/guest/home/guestHome'
 const dashboard = () => {
   return (
     <LayOut>

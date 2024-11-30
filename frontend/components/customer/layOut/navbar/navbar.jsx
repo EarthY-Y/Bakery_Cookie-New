@@ -91,11 +91,11 @@ function Navbar() {
                     <i className="bi bi-basket3 fs-3 text-light me-3"></i>
                   </li>
                   <li className="nav-item dropdown ms-auto d-flex align-items-center position-relative">
-                    <button className="btn d-flex align-items-center caret-off" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", padding: "5px 10px", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
-                      <img src="https://example.com/profile.jpg" alt="Profile" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
+                    <button className="btn d-flex align-items-center caret-off mb-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
+                      <img src="https://example.com/profile.jpg" alt="Profile" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
                       <span>ชื่อโปรไฟล์</span>
                     </button>
-                    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <ul className="dropdown-menu dropdown-menu-end mt-0" aria-labelledby="profileDropdown">
                       <li><Link className="dropdown-item" to="/profile">โปรไฟล์ของฉัน</Link></li>
                       <li><Link className="dropdown-item" to="/settings">การตั้งค่า</Link></li>
                       <li><hr className="dropdown-divider" /></li>
