@@ -112,16 +112,16 @@ const orderById = () => {
 
   return (
     <div className="container mt-5 p-4 ">
-      <Link to="/orderslist" className="btn btn-light text-black mb-4">
+      <Link to="/orderslist" className="btn btn-outline-secondary mb-4">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
-      <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
+      <div className="mb-4 card col-md-12 px-40 rounded shadow border bg-light card-body">
         <div className='row'>
-          <div className="mb-3 col-8">
+          <div className="mb-3 col-md-8 col-12">
               <label className="form-label fw-bold">รหัสคำสั่งซื้อ</label>
               <p className="border p-2 rounded bg-white">{orderById[0]?.orders_id}</p>
           </div>
-          <div className="mb-3 col-4">
+          <div className="mb-3 col-md-4 col-12">
             <label className="form-label fw-bold">สถานะ</label>
             {/* {orderById[0]?.status === "รอการชำระเงิน" ? (
               // แสดงข้อความธรรมดา
@@ -149,9 +149,10 @@ const orderById = () => {
         </div>
         <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
 
-        <table className="table table-bordered bg-white">
-          <thead>
-            <tr>
+        <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
               <th style={{ width: '8%' }}>รายการที่</th>
               <th style={{ width: '10%' }}>รูปภาพ</th>
               <th style={{ width: '25%' }}>ชื่อสินค้า</th>
@@ -199,6 +200,7 @@ const orderById = () => {
             </tr>
           </tfoot>
         </table>
+        </div>
 
         <div className="mb-3 row">
           <div className='col-6'>
@@ -218,7 +220,7 @@ const orderById = () => {
                 height={250}
                 width={400}
                 alt="ยังไม่ได้จ่ายเงิน"
-                className="rounded"
+                className="rounded img-fluid"
             />
           </div>
         </div>

@@ -32,7 +32,7 @@ const listShippingById = () => {
 
   return (
     <div className="container mt-5 p-4 ">
-      <Link to="/shipping" className="btn btn-light text-dark mb-4">
+      <Link to="/shipping" className="btn btn-outline-secondary mb-4">
               <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
@@ -68,31 +68,31 @@ const listShippingById = () => {
             <p className="border p-2 rounded bg-white">{shippingMyId.package_name}</p>
         </div>
 
-        <div className="mb-3 row">
-          <div className='col-6'>
-            <label className="form-label fw-bold ">สร้างโดย</label>
+        <div className="row">
+          <div className='col-md-6 col-12'>
+            <label className="form-label fw-bold">สร้างโดย</label>
             <p className="border p-2 rounded bg-white">{shippingMyId.created_by}</p>
           </div>
-          <div className='col-6'>
-            <label className="form-label fw-bold ">สร้างเมื่อ</label>
+          <div className='col-md-6 col-12'>
+            <label className="form-label fw-bold">สร้างเมื่อ</label>
             <p className="border p-2 rounded bg-white">{formatDate(shippingMyId.created_at)}</p>
           </div>
         </div>
-        <div className="mb-3 row">
-          <div className='col-6'>
-            <label className="form-label fw-bold ">เเก้ไขโดย</label>
+        <div className="row">
+          <div className='col-md-6 col-12'>
+            <label className="form-label fw-bold">เเก้ไขโดย</label>
             <p className="border p-2 rounded bg-white">{shippingMyId.updated_by || "ยังไม่มี"}</p>
           </div>
-          <div className='col-6'>
-            <label className="form-label fw-bold ">เเก้ไขเมื่อ</label>
+          <div className='col-md-6 col-12'>
+            <label className="form-label fw-bold">เเก้ไขเมื่อ</label>
             <p className="border p-2 rounded bg-white">{formatDate(shippingMyId.updated_at)}</p>
           </div>
         </div>
 
         <div className="text-center mt-4">
-          <Link to={`/material/edit/${shippingMyId.material_id}`} className="text-center mt-3 px-4 btn btn-outline-warning text-black">Edit</Link>
+          <Link to={`/material/edit/${shippingMyId.material_id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
-        </div>
+      </div>
     </div>
 
   );

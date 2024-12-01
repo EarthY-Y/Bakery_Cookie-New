@@ -76,11 +76,11 @@ const EditShipping = () => {
 
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-dark mb-4" to="/shipping">
+      <Link className="btn btn-outline-secondary mb-4" to="/shipping">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
-        <h5>แก้ไขวัตถุดิบ</h5>
+        <h5>แก้ไขการขนส่ง</h5>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อบริษัทข่นส่ง</label>
@@ -133,7 +133,7 @@ const EditShipping = () => {
 
           <div className="d-flex justify-content-center gap-3 my-4">
             <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
-            <button className="btn btn-primary mt-3 px-4 ms-5" type="submit">แก้ไข</button>
+            <button className="btn btn-success  mt-3 px-4 ms-5" type="submit">แก้ไข</button>
           </div>
         </form>
       </div>

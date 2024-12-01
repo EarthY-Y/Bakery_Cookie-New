@@ -42,16 +42,16 @@ const createMaterial = () => {
 
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-dark mb-4" to="/material">
+      <Link className="btn btn-outline-secondary mb-4" to="/material">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 card-body">
         <h4>เพิ่มวัตถุดิบ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="mb-3 text-center">
-            <div className="position-relative" style={{ margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="position-relative" style={{ margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               {Picture ? (
-                <img src={URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+                <img src={URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', borderRadius: '5px', height: '100%', objectFit: 'cover' }}/>
               ) : (
                 <span>เพิ่มรูปวัตถุดิบ</span>
               )}
@@ -111,7 +111,7 @@ const createMaterial = () => {
         </div> */}
           <div className="d-flex justify-content-center gap-3 my-4">
             <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
-            <button className="btn btn-primary mt-3 px-4 ms-5" type="submit">เพิ่ม</button>
+            <button className="btn btn-success mt-3 px-4 ms-5" type="submit">เพิ่มวัตถุดิบ</button>
           </div>
         </form>
       </div>

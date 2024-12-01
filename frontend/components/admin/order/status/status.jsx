@@ -61,40 +61,62 @@ const ListOrders = () => {
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>รายการสั่งซื้อ</h2>
-        <Link to="create" className="btn btn-outline-warning text-black">
-          เพิ่มสถานะ
-        </Link>
+        <h2>สถานะ</h2>
+        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มสถานะ </Link>
+        <Link to="create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มสถานะ </Link>
       </div>
       <h4>คำสั่งซื้อ</h4>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '15%' }}>รหัสสถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ชื่อสถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สร้าง</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่เเก้ไข</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สร้างโดย</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไขโดย</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไข</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentStatusOrders.map((order) => (
-            <tr key={order.status_order_id}>
-              <td>{order.status_order_id}</td>
-              <td>{order.status_name}</td>
-              <td>{formatDate(order.created_at)}</td>
-              <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
-              <td className="text-center">{order.created_by}</td>
-              <td>{order.updated_by}</td>
-              <td className="text-center">
-                <Link to={`edit/order/${order.status_order_id}`} className="btn btn-outline-warning text-black">edit</Link>
-              </td>
+      <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
+              <th style={{ width: '15%' }}>รหัสสถานะ</th>
+              <th style={{ width: '10%' }}>ชื่อสถานะ</th>
+              <th style={{ width: '10%' }}>วันที่สร้าง</th>
+              <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
+              <th style={{ width: '10%' }}>สร้างโดย</th>
+              <th style={{ width: '10%' }}>เเก้ไขโดย</th>
+              <th style={{ width: '10%' }}>เเก้ไข</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentStatusOrders.map((order) => (
+              <tr key={order.status_order_id}>
+                <td>{order.status_order_id}</td>
+                <td>{order.status_name}</td>
+                <td>{formatDate(order.created_at)}</td>
+                <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
+                <td className="text-center">{order.created_by}</td>
+                <td className="text-center">{order.updated_by}</td>
+                <td className="text-center">
+                  <Link to={`edit/order/${order.status_order_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-block d-md-none pb-3">
+        <div className="row gy-4">
+          <div className="px-3 card-body">
+            {currentStatusOrders.map((order) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.status_order_id}>
+                <div className="small text-secondary">
+                  <p className="mb-1">รหัสสถานะ: {order.status_order_id}</p>
+                  <p className="mb-1">ชื่อสถานะ: {order.status_name}</p>
+                  <p className="mb-1">วันที่สร้าง: {formatDate(order.created_at)}</p>
+                  <p className="mb-1">วันที่เเก้ไข: {formatDate(order.updated_at) || `รอชำระเงิน`}</p>
+                  <p className="mb-1">สร้างโดย: {order.created_by}</p>
+                  <p className="mb-1">เเก้ไขโดย: {order.updated_by}</p>
+                </div>
+                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                  <Link to={`edit/order/${order.status_order_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <nav>
         <ul className="pagination justify-content-end"> 
@@ -118,34 +140,57 @@ const ListOrders = () => {
         </ul>
       </nav>
       <h4>ตะกร้าสินค้า</h4>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '15%' }}>รหัสสถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ชื่อสถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สร้างโดย</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไขโดย</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไข</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentStatusCart.map((order) => (
-            <tr key={order.status_cart_id}>
-              <td>{order.status_cart_id}</td>
-              <td>{order.status_name}</td>
-              <td>{formatDate(order.created_at)}</td>
-              <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
-              <td>{order.created_by}</td>
-              <td className="text-center">{order.updated_by}</td>
-              <td className="text-center">
-                <Link to={`edit/cart/${order.status_cart_id}`} className="btn btn-outline-warning text-black">Edit</Link>
-              </td>
+      <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
+              <th style={{ width: '15%' }}>รหัสสถานะ</th>
+              <th style={{ width: '10%' }}>ชื่อสถานะ</th>
+              <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
+              <th style={{ width: '10%' }}>วันที่ชำระเงิน</th>
+              <th style={{ width: '10%' }}>สร้างโดย</th>
+              <th style={{ width: '10%' }}>เเก้ไขโดย</th>
+              <th style={{ width: '10%' }}>เเก้ไข</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentStatusCart.map((order) => (
+              <tr key={order.status_cart_id}>
+                <td>{order.status_cart_id}</td>
+                <td>{order.status_name}</td>
+                <td>{formatDate(order.created_at)}</td>
+                <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
+                <td className="text-center">{order.created_by}</td>
+                <td className="text-center">{order.updated_by}</td>
+                <td className="text-center">
+                  <Link to={`edit/cart/${order.status_cart_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-block d-md-none pb-3">
+        <div className="row gy-4">
+          <div className="px-3 card-body">
+            {currentStatusCart.map((order) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.status_cart_id}>
+                <div className="small text-secondary">
+                  <p className="mb-1">รหัสสถานะ: {order.status_cart_id}</p>
+                  <p className="mb-1">ชื่อสถานะ: {order.status_name}</p>
+                  <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+                  <p className="mb-1">วันที่ชำระเงิน: {formatDate(order.updated_at) || `รอชำระเงิน`}</p>
+                  <p className="mb-1">สร้างโดย: {order.created_by}</p>
+                  <p className="mb-1">เเก้ไขโดย: {order.updated_by}</p>
+                </div>
+                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                  <Link to={`edit/cart/${order.status_cart_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <nav>
         <ul className="pagination justify-content-end"> 

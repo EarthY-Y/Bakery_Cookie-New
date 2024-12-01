@@ -35,42 +35,72 @@ const ListMaterial = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>วัตถุดิบ</h2>
-        <Link to="/material/create" className="btn btn-outline-warning text-dark">
-          เพิ่มวัตถุดิบ
-        </Link>
+        <Link to="/material/create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
+        <Link to="/material/create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
       </div>
 
       <p>จำนวน {materials.length} รายการ</p>
-      <Table striped bordered hover responsive="sm">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '15%' }}>รูปภาพ</th>
-            <th className="text-center align-middle" style={{ width: '25%' }}>ชื่อวัตถุดิบ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ต้นทุน</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ต้นทุน/ปริมาณ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สร้าง</th>
-            <th className="text-center align-middle" style={{ width: '5%' }}>ดู</th>
-            <th className="text-center align-middle" style={{ width: '5%' }}>แก้ไข</th>
-            <th className="text-center align-middle" style={{ width: '5%' }}>ลบ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {materials.map((material) => (
-            <tr key={material.material_id}>
-              <td><img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
-              <td>{material.material_name}</td>
-              <td>{material.quantity} กรัม</td>
-              <td>{material.cost} บาท</td>
-              <td>{material.cost_per_quantity} บาท</td>
-              <td>{formatDate(material.created_at)}</td>
-              <td><Link to={`view/${material.material_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto">View</Link></td>
-              <td><Link to={`edit/${material.material_id}`} className="btn btn-outline-warning text-dark d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
-              <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-outline-warning btn-danger text-dark d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
+      <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
+              <th style={{ width: '15%' }}>รูปภาพ</th>
+              <th style={{ width: '25%' }}>ชื่อวัตถุดิบ</th>
+              <th style={{ width: '10%' }}>ปริมาณ</th>
+              <th style={{ width: '10%' }}>ต้นทุน</th>
+              <th style={{ width: '10%' }}>ต้นทุน/ปริมาณ</th>
+              <th style={{ width: '10%' }}>วันที่สร้าง</th>
+              <th style={{ width: '5%' }}>ดู</th>
+              <th style={{ width: '5%' }}>แก้ไข</th>
+              <th style={{ width: '5%' }}>ลบ</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {materials.map((material) => (
+              <tr key={material.material_id}>
+                <td><img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid rounded" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
+                <td>{material.material_name}</td>
+                <td>{material.quantity} กรัม</td>
+                <td>{material.cost} บาท</td>
+                <td>{material.cost_per_quantity} บาท</td>
+                <td>{formatDate(material.created_at)}</td>
+                <td><Link to={`view/${material.material_id}`} className="btn btn-info text-light d-grid mx-auto"><i class="bi bi-eye"></i></Link></td>
+                <td><Link to={`edit/${material.material_id}`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
+                <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-block d-md-none pb-4">
+        <div className="row gy-4">
+          <div className="px-3 card-body">
+            {materials.map((material) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={material.material_id}>
+                <div className="d-flex">
+                  <img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid rounded" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/>
+                  <div className="ms-3 d-flex flex-column justify-content-between w-100">
+                    <h6 className="mb-2">{material.material_name}</h6>
+                    <div>
+                      <Link to={`view/${material.material_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
+                    </div>
+                  </div>
+                </div>
+                <div className="small text-secondary mt-2">
+                  <p className="mb-1">ปริมาณ: {material.quantity} กรัม</p>
+                  <p className="mb-1">ต้นทุน: {material.cost} บาท</p>
+                  <p className="mb-1">ต้นทุน/ปริมาณ: {material.cost_per_quantity} บาท</p>
+                  <p className="mb-1">วันที่สร้าง: {formatDate(material.created_at)}</p>
+                </div>
+                <div className="d-flex justify-content-between mt-2">
+                  <button onClick={() => handleDelete(material.material_id)} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button>
+                  <Link to={`edit/${material.material_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
