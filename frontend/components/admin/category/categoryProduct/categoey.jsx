@@ -37,43 +37,66 @@ const categoey = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>ประเภทสินค้า</h2>
-        <Link to="create" className="btn btn-outline-warning text-black">
-          เพิ่มประเภทสินค้า
-        </Link>
+        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มประเภทสินค้า </Link>
+        <Link to="create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มประเภทสินค้า </Link>
       </div>
       <h4>รอการชำระเงิน</h4>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '15%' }}>ประเภท</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>จำนวนสินค้า</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สร้าง</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่เเก้ไข</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สร้างโดย</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไขโดย</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>เเก้ไข</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>รายละเอียด</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentOrders.map((category) => (
-            <tr key={category.category_id}>
-              <td>{category.category_name}</td>
-              <td>{category.amountCategoryProduct} ชิ้น</td>
-              <td>{formatDate(category.created_at)}</td>
-              <td>{formatDate(category.updated_at)}</td>
-              <td className="text-center">{category.created_by}</td>
-              <td className="text-center">{category.updated_by}</td>
-              <td className="text-center">
-                <Link to={`view/${category.category_id}`} className="btn btn-outline-warning text-black">view</Link>
-              </td>
-              <td className="text-center">
-                <Link to={`edit/${category.category_id}`} className="btn btn-outline-warning text-black">edit</Link>
-              </td>
+      <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
+              <th style={{ width: '15%' }}>ประเภท</th>
+              <th style={{ width: '10%' }}>จำนวนสินค้า</th>
+              <th style={{ width: '10%' }}>วันที่สร้าง</th>
+              <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
+              <th style={{ width: '10%' }}>สร้างโดย</th>
+              <th style={{ width: '10%' }}>เเก้ไขโดย</th>
+              <th style={{ width: '10%' }}>รายละเอียด</th>
+              <th style={{ width: '10%' }}>แก้ไข</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentOrders.map((category) => (
+              <tr key={category.category_id}>
+                <td>{category.category_name}</td>
+                <td>{category.amountCategoryProduct} ชิ้น</td>
+                <td>{formatDate(category.created_at)}</td>
+                <td>{formatDate(category.updated_at)}</td>
+                <td className="text-center">{category.created_by}</td>
+                <td className="text-center">{category.updated_by}</td>
+                <td className="text-center">
+                  <Link to={`view/${category.category_id}`} className="btn btn-info text-light"><i class="bi bi-eye"></i></Link>
+                </td>
+                <td className="text-center">
+                  <Link to={`edit/${category.category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-block d-md-none pb-3">
+        <div className="row gy-4">
+          <div className="px-3 card-body">
+            {currentOrders.map((category) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.category_id}>
+                <div className="small text-secondary">
+                  <p className="mb-1">ประเภท: {category.category_name}</p>
+                  <p className="mb-1">จำนวนสินค้า: {category.amountCategoryProduct} ชิ้น</p>
+                  <p className="mb-1">วันที่สร้าง: {formatDate(category.created_at)}</p>
+                  <p className="mb-1">วันที่เเก้ไข: {formatDate(category.updated_at)}</p>
+                  <p className="mb-1">สร้างโดย: {category.created_by}</p>
+                  <p className="mb-1">เเก้ไขโดย: {category.updated_by}</p>
+                </div>
+                <div className="d-flex justify-content-between mt-2">
+                  <Link to={`view/${category.category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
+                  <Link to={`edit/${category.category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <nav>
         <ul className="pagination justify-content-end"> 

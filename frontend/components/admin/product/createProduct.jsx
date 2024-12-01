@@ -191,16 +191,16 @@ const CreateProduct = () => {
   return (
     <form onSubmit={handleSubmitProductMaterial}>
       <div className="container mt-5">
-        <Link className="btn btn-light text-dark mb-4" to="/product">
-          <i className="bi bi-arrow-left"></i>ย้อนกลับ
+        <Link className="btn btn-outline-secondary mb-4" to="/product">
+          <i className="bi bi-arrow-left"></i> ย้อนกลับ
         </Link>
         <div className="mb-4 card col-md-12 px-40 card-body">
           <h4>เพิ่มสินค้า</h4>
           
-          <div className="mb-3 text-center">
-            <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="mb-4 text-center">
+            <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               {formData.file ? ( /* เป็นรูปเเบบการเขียน if-eles ที่เรียกว่า Ternary Operator ใช้กับใน JSX เเต่ถ้าต้องการนำกลับมาใช้ได้ต้องเขียนเป็น renderStatus*/
-                <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '5px', objectFit: 'cover' }} />
               ) : (
                 <span>เพิ่มรูปสินค้า</span>
               )}
@@ -208,7 +208,7 @@ const CreateProduct = () => {
             </div>
             {formData.file && <p>ไฟล์ที่เลือก: {formData.file.name}</p>}
           </div>
-          <div className="row mb-3 justify-content-center">
+          <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
             <div className="row col-sm-5">
               <input type="text" name='product_name'className="form-control" placeholder="ชื่อสินค้า" value={formData.product_name || ''} 
@@ -238,21 +238,21 @@ const CreateProduct = () => {
                     ))}
                   </select>
               </div>
-              <div className="col-sm-2">
+              <div className="col-sm-2 mb-2">
                   <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, event)} required/>
               </div>
               <div className="col-sm-1">
-                  <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}>ลบ</button>
+                  <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}><i className="bi bi-trash"></i></button>
               </div>
             </div>
           ))}
-          <div className="mb-3 d-flex justify-content-center">
+          <div className="mb-4 d-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
           {(formData.packaging || []).map((packaging, index) => (
-            <div key={index} className="row mb-3 justify-content-center">
+            <div key={index} className="row mb-4 justify-content-center">
               <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
-              <div className="col-sm-5">
+              <div className="col-sm-5 mb-2">
                 <Select
                 options={options}
                 value={options.find((option) => option.value === packaging.package_id) || null}
@@ -262,12 +262,12 @@ const CreateProduct = () => {
                 />
               </div>
               <div className="col-sm-1">
-                  <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}>ลบ</button>
+                  <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}><i className="bi bi-trash"></i></button>
               </div>
             </div>
           ))}
 
-          <div className="mb-3 d-flex justify-content-center">
+          <div className="mb-4 d-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มบรรจุภัณฑ์</button>
           </div>
 
@@ -327,8 +327,8 @@ const CreateProduct = () => {
           </div>
 
           <div className="d-flex justify-content-center gap-3 my-4">
-            <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => {handleReset()}} style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button type="submit" className="btn btn-primary mt-3 px-4 ms-5"> เพิ่มสินค้า </button>
+            <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => {handleReset()}}>ล้าง</button>
+            <button type="submit" className="btn btn-success mt-3 px-4 ms-5" > เพิ่มสินค้า </button>
           </div>
         </div>
       </div>

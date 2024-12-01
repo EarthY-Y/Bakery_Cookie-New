@@ -95,19 +95,19 @@ const CreatePackage = () => {
   return (
     <form onSubmit={handleSubmitPackage}>
       <div className="container mt-5">
-        <Link className="btn btn-light text-dark mb-4" to="/package">
+        <Link className="btn btn-outline-secondary mb-4" to="/package">
           <i className="bi bi-arrow-left"></i>ย้อนกลับ
         </Link>
         <div className="mb-4 card col-md-12 px-40 card-body">
-          <h4>เพิ่มสินค้า</h4>
+          <h4>แก้ไขบรรจุภัณฑ์</h4>
 
           <div className="mb-3 text-center">
-            <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             {Picture ? (
                 // ถ้ามี Picture จะสร้าง URL สำหรับแสดงรูปที่ดึงจากฐานข้อมูลหรือรูปที่อัพโหลดใหม่
-                <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', borderRadius: '5px', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <span>เพิ่มรูปวัตถุดิบ</span>
+                <span>เพิ่มรูปบรรจุภัณฑ์</span>
               )}
               <input
                 type="file"
@@ -124,9 +124,9 @@ const CreatePackage = () => {
 
 
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ชื่อบรจุภัณฑ์</label>
+            <label className="col-sm-2 col-form-label">ชื่อบรรจุภัณฑ์</label>
             <div className="row col-sm-5">
-              <input type="text" name='package_name' className="form-control" placeholder="ชื่อสินค้า" value={packageName} onChange={(e) => setPackageName(e.target.value)}/>
+              <input type="text" name='package_name' className="form-control" placeholder="ชื่อบรรจุภัณฑ์" value={packageName} onChange={(e) => setPackageName(e.target.value)}/>
                 {/* formData.package_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
                 เเล้วไม่ได้ set ค่า เหมือนในหน้า signUp*/}
@@ -148,13 +148,13 @@ const CreatePackage = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input type="text" name='costPreQuantity' className="form-control" placeholder="ราคาสินค้า" value={packageCostPerQuantity} onChange={(e) => setPackageCostPerQuantity(e.target.value)} readOnly/>
+              <input type="text" name='costPreQuantity' className="form-control" placeholder="ราคาบรรจุภัณฑ์" value={packageCostPerQuantity} onChange={(e) => setPackageCostPerQuantity(e.target.value)} readOnly/>
             </div>
           </div>
 
           <div className="d-flex justify-content-center gap-3 my-4">
-            <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => { handleReset() }} style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button type="submit" className="btn btn-primary mt-3 px-4 ms-5"> เพิ่มสินค้า </button>
+            <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => { handleReset() }}>ล้าง</button>
+            <button type="submit" className="btn btn-success mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
           </div>
         </div>
       </div>

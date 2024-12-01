@@ -80,7 +80,7 @@ const cartProduct = () => {
   return (
     <div className="container my-5">
       <div className="px-3 card-body">
-        <div className="row bg-light p-3 border rounded mb-0 fw-bold">
+        <div className="row bg-light pb-3 pt-3 border rounded mb-0 fw-bold">
           <h2 className="mb-2 text-center">ตะกร้าสินค้าของคุณ</h2>
           <hr className="d-none d-md-block my-4 border-secondary"/>
           <div className="col-12 col-md-8 d-none d-md-block text-secondary">สินค้า</div>
@@ -92,7 +92,7 @@ const cartProduct = () => {
         <div className="cart-table">
           {productCart.length > 0 ? (
             productCart.map((item) => (
-              <div className="row align-items-center p-3 border-bottom rounded bg-white" key={item.cart_product_id}>
+              <div className="row align-items-center pb-3 pt-3 border-bottom rounded bg-white" key={item.cart_product_id}>
                 <div className="col-12 col-md-8 d-flex align-items-center">
                   <img
                     src={`${API_URL_PICTURE}/${item.productpic_name}`}
@@ -102,7 +102,7 @@ const cartProduct = () => {
                   />
                   <span className="ms-3">{item.product_name}</span>
                 </div>
-                <div className="col-4 col-md-1 text-center">
+                <div className="col-4 col-md-1 text-center text-sm">
                   <span className="text-secondary d-block d-md-none">ราคาต่อชุด</span>
                   <strong>{numberGrouping(item.selling_price_per_quantity)} ฿</strong>
                 </div>

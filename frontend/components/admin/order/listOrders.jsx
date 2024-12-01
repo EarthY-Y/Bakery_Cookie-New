@@ -64,34 +64,57 @@ const ListOrders = () => {
         <h2>รายการสั่งซื้อ</h2>
       </div>
       <h4>รอการชำระเงิน</h4>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ราคารวม</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>รายละเอียด</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentOrders.map((order) => (
-            <tr key={order.orders_id}>
-              <td>{order.orders_id}</td>
-              <td>{order.quantity} ชิ้น</td>
-              <td>{order.price} บาท</td>
-              <td>{formatDate(order.created_at)}</td>
-              <td>{`รอชำระเงิน`}</td>
-              <td className="text-center">{order.status_name}</td>
-              <td className="text-center">
-                <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
-              </td>
+      <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
+              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '10%' }}>ปริมาณ</th>
+              <th style={{ width: '10%' }}>ราคารวม</th>
+              <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
+              <th style={{ width: '10%' }}>วันที่ชำระเงิน</th>
+              <th style={{ width: '10%' }}>สถานะ</th>
+              <th style={{ width: '10%' }}>รายละเอียด</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentOrders.map((order) => (
+              <tr key={order.orders_id}>
+                <td>{order.orders_id}</td>
+                <td>{order.quantity} ชิ้น</td>
+                <td>{order.price} บาท</td>
+                <td>{formatDate(order.created_at)}</td>
+                <td className="text-center">{`รอชำระเงิน`}</td>
+                <td className="text-center">{order.status_name}</td>
+                <td className="text-center">
+                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-block d-md-none pb-3">
+        <div className="row gy-4">
+          <div className="px-3 card-body">
+            {currentOrders.map((order) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
+                <div className="small text-secondary">
+                  <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
+                  <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
+                  <p className="mb-1">ราคารวม: {order.price} บาท</p>
+                  <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+                  <p className="mb-1">วันที่ชำระเงิน: {`รอชำระเงิน`}</p>
+                  <p className="mb-1">สถานะ: {order.status_name}</p>
+                </div>
+                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light btn-sm"><i className="bi bi-eye"></i> ดู </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <nav>
         <ul className="pagination justify-content-end"> 
@@ -115,34 +138,57 @@ const ListOrders = () => {
         </ul>
       </nav>
       <h4>พร้อมดำเนินการ</h4>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th className="text-center align-middle" style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ปริมาณ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>ราคารวม</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>สถานะ</th>
-            <th className="text-center align-middle" style={{ width: '10%' }}>รายละเอียด</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentOrdersCheckOut.map((order) => (
-            <tr key={order.orders_id}>
-              <td>{order.orders_id}</td>
-              <td>{order.quantity} ชิ้น</td>
-              <td>{order.price} บาท</td>
-              <td>{formatDate(order.created_at)}</td>
-              <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
-              <td className="text-center">{order.status_name}</td>
-              <td className="text-center">
-                <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
-              </td>
+      <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
+              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '10%' }}>ปริมาณ</th>
+              <th style={{ width: '10%' }}>ราคารวม</th>
+              <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
+              <th style={{ width: '10%' }}>วันที่ชำระเงิน</th>
+              <th style={{ width: '10%' }}>สถานะ</th>
+              <th style={{ width: '10%' }}>รายละเอียด</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentOrdersCheckOut.map((order) => (
+              <tr key={order.orders_id}>
+                <td>{order.orders_id}</td>
+                <td>{order.quantity} ชิ้น</td>
+                <td>{order.price} บาท</td>
+                <td>{formatDate(order.created_at)}</td>
+                <td className="text-center">{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
+                <td className="text-center">{order.status_name}</td>
+                <td className="text-center">
+                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-block d-md-none pb-3">
+        <div className="row gy-4">
+          <div className="px-3 card-body">
+            {currentOrdersCheckOut.map((order) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
+                <div className="small text-secondary">
+                  <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
+                  <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
+                  <p className="mb-1">ราคารวม: {order.price} บาท</p>
+                  <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+                  <p className="mb-1">วันที่ชำระเงิน: {formatDate(order.updated_at) || `รอชำระเงิน`}</p>
+                  <p className="mb-1">สถานะ: {order.status_name}</p>
+                </div>
+                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light btn-sm"><i className="bi bi-eye"></i> ดู </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <nav>
         <ul className="pagination justify-content-end"> 

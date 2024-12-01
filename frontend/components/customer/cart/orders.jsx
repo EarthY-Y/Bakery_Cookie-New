@@ -132,7 +132,7 @@ const orders = () => {
             {address.houesNo} ตำบล {address.tambon_nameTH} อำเภอ {address.amphure_nameTH} จังหวัด {address.province_nameTH} {address.zip_code}
           </p>
         </div>
-        <div className="row bg-light p-3 border rounded fw-bold">
+        <div className="row bg-light pb-3 pt-3 border rounded fw-bold">
           <div className="col-12 col-md-6 d-none d-md-block text-secondary">รายการสินค้าที่สั่งซื้อ</div>
           <div className="col-4 col-md-2 text-center d-none d-md-block text-secondary">ราคาต่อชุด</div>
           <div className="col-4 col-md-2 text-center d-none d-md-block text-secondary">จำนวน</div>
@@ -140,7 +140,7 @@ const orders = () => {
         </div>
         {productCart.length > 0 ? (
           productCart.map((item) => (
-            <div className="row align-items-center p-3 border-bottom rounded bg-white" key={item.cart_product_id}>
+            <div className="row align-items-center pb-3 pt-3 border-bottom rounded bg-white" key={item.cart_product_id}>
               <div className="col-12 col-md-6 d-flex align-items-center">
                 <img
                   src={`${API_URL_PICTURE}/${item.productpic_name}`}

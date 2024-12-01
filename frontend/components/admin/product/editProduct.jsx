@@ -373,17 +373,17 @@ const EditProduct = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="container mt-5">
-        <Link className="btn btn-light text-dark mb-4" to="/product">
-          <i className="bi bi-arrow-left"></i>ย้อนกลับ
+        <Link className="btn btn-outline-secondary mb-4" to="/product">
+          <i className="bi bi-arrow-left"></i> ย้อนกลับ
         </Link>
         <div className="mb-4 card col-md-12 px-40 card-body">
           <h5>เพิ่มสินค้า</h5>
           
           <div className="mb-3 text-center">
-            <div style={{width: '100px',height: '100px',border: '1px dashed #ccc',position: 'relative',display: 'inline-flex',alignItems: 'center',justifyContent: 'center'}}>
+            <div style={{width: '100px',height: '100px',border: '1px dashed #ccc',borderRadius: '5px',position: 'relative',display: 'inline-flex',alignItems: 'center',justifyContent: 'center'}}>
               {formData.file ? (typeof formData.file === 'string' ? 
-                  ( <img src={`${API_URL_PICTURE}${formData.file}`} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />) 
-                  : ( <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />)
+                  ( <img src={`${API_URL_PICTURE}${formData.file}`} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '5px', objectFit: 'cover' }} />) 
+                  : ( <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '5px', objectFit: 'cover' }} />)
               ) : (
                 <span>เพิ่มรูปสินค้า</span>
               )}
@@ -392,7 +392,7 @@ const EditProduct = () => {
             {formData.file && <p>ไฟล์ที่เลือก: {formData.file.name}</p>}
           </div>
 
-          <div className="row mb-3 justify-content-center">
+          <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
             <div className="row col-sm-5">
               <input type="text" name='product_name'className="form-control" placeholder="ชื่อสินค้า" value={formData.product_name || ''} 
@@ -417,22 +417,22 @@ const EditProduct = () => {
                   placeholder="เลือกบรรจุภัณฑ์"
                 />
               </div>
-              <div className="col-sm-2">
+              <div className="col-sm-2 mb-2">
                 <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
               </div>
               <div className="col-sm-1">
-                <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}>ลบ</button>
+                <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}><i className="bi bi-trash"></i></button>
               </div>
             </div>
           ))}
 
-          <div className="mb-3 d-md-flex justify-content-center">
+          <div className="mb-3 d-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
           {(formData.packaging || []).map((packaging, index) => (
             <div key={packaging.tempId || packaging.package_id || index}  className="row mb-3 justify-content-center">
               <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
-              <div className="col-sm-5">
+              <div className="col-sm-5 mb-2">
                 <Select
                   options={options}
                   value={options.find((option) => option.label === packaging.package_name) ||  packaging.package_name}
@@ -442,13 +442,13 @@ const EditProduct = () => {
                 />
               </div>
               <div className="col-sm-1">
-                  <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}>ลบ</button>
+                  <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}><i className="bi bi-trash"></i></button>
               </div>
             </div>
           ))}
 
-          <div className="mb-3 d-md-flex justify-content-center">
-              <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มวัตถุดิบ</button>
+          <div className="mb-3 d-flex justify-content-center">
+              <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มบรรจุภัณฑ์</button>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนสินค้า</label>
@@ -506,7 +506,7 @@ const EditProduct = () => {
 
           <div className="d-flex justify-content-center gap-3 my-4">
             <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => {handleReset()}}>ล้าง</button>
-            <button type="submit" className="btn btn-primary mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
+            <button type="submit" className="btn btn-success mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
           </div>
         </div>
         <LoadingPopup

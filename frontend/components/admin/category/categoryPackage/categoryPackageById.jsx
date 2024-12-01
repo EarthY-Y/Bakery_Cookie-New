@@ -30,27 +30,27 @@ const CategoryPackageById = () => {
   
   return (
     <div className="container mt-5">
-      <button className="btn btn-light text-black mb-4" onClick={() => {navigate(-1)}}>
+      <button className="btn btn-outline-secondary mb-4" onClick={() => {navigate(-1)}}>
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
       <div className="mb-4 card col-md-12 px-40 card-body bg-light shadow">
         <h4></h4>
         <div className="mb-4 ">
-          <b className="col-form-label">ชื่อประเภทสินค้า</b>
+          <b className="col-form-label">ชื่อประเภทบรรจุภัณฑ์</b>
           <input type="text" className="form-control" value={categoryName} readOnly/>
         </div>
         <div>
-          <table className="table table-striped table-bordered">
+          <table className="table table-striped table-bordered rounded-3 overflow-hidden">
             <thead>
-              <tr>
-                <th className="text-center align-middle" style={{ width: '25%' }} >รูปสินค้า</th>
-                <th className="text-center align-middle" style={{ width: '25%' }} >ชื่อสินค้า</th>
+              <tr className="table-success">
+                <th className="text-center align-middle" style={{ width: '25%' }} >รูปบรรจุภัณฑ์</th>
+                <th className="text-center align-middle" style={{ width: '25%' }} >ชื่อบรรจุภัณฑ์</th>
               </tr>
             </thead>
             <tbody>
               {listCategoryPackage.map((packages) => (
                 <tr key={packages.package_id}>
-                  <td><img src={API_URL_PICTURE + packages.package_pic } className="img-fluid" alt={"ไม่มีสินค้าในประเภทนี้"} style={{ maxHeight: '100px', maxWidth: '120px' }}/></td>
+                  <td><img src={API_URL_PICTURE + packages.package_pic } className="img-fluid rounded" alt={"ไม่มีสินค้าในประเภทนี้"} style={{ maxHeight: '100px', maxWidth: '120px' }}/></td>
                   <td>{packages.package_name}</td>
                   {/* <td className="text-center">
                     <Link to={`view/detail/packages/${packages.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
@@ -60,24 +60,24 @@ const CategoryPackageById = () => {
             </tbody>
           </table>
         </div>
-        <div className="row mb-4 ">
-          <div className='col-6'>
-            <b className="col-form-label">สร้างโดย</b>
-            <input type="text" className="form-control" value={listCategoryPackage[0]?.created_by}readOnly/>
+        <div className="row">
+          <div className='col-md-6 col-12'>
+            <b className="form-label fw-bold">สร้างโดย</b>
+            <p className="border p-2 rounded bg-white">{listCategoryPackage[0]?.created_by}</p>
           </div>
-          <div className='col-6'>
-            <b className="col-form-label">วันเวลาที่สร้าง</b>
-            <input type="text" className="form-control" value={formatDate(listCategoryPackage[0]?.created_at)}readOnly/>
+          <div className='col-md-6 col-12'>
+            <b className="form-label fw-bold">วันเวลาที่สร้าง</b>
+            <p className="border p-2 rounded bg-white">{formatDate(listCategoryPackage[0]?.created_at)}</p>
           </div>
         </div>
-        <div className="row mb-4 ">
-          <div className='col-6'>
-            <b className="col-form-label">เเก้ไขโดย</b>
-            <input type="text" className="form-control" value={listCategoryPackage[0]?.updated_by} readOnly/>
+        <div className="row">
+          <div className='col-md-6 col-12'>
+            <b className="form-group fw-bold">เเก้ไขโดย</b>
+            <p className="border p-2 rounded bg-white">{listCategoryPackage[0]?.updated_by}</p>
           </div>
-          <div className='col-6'>
-            <b className="col-form-label">วันเวลาที่เเก้ไข</b>
-            <input type="text" className="form-control" value={formatDate(listCategoryPackage[0]?.updated_at)}readOnly/>
+          <div className='col-md-6 col-12'>
+            <b className="form-label fw-bold">วันเวลาที่เเก้ไข</b>
+            <p className="border p-2 rounded bg-white">{formatDate(listCategoryPackage[0]?.updated_at)}</p>
           </div>
         </div>
         {/* <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>

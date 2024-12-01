@@ -36,7 +36,7 @@ const editStatus = () => {
   
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-black mb-4" to="/status">
+      <Link className="btn btn-outline-secondary mb-4" to="/status">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 card-body">
@@ -58,9 +58,9 @@ const editStatus = () => {
             </div>
           </div>
 
-          <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
-            <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}>บันทึก</button>
+          <div className="d-flex justify-content-center gap-3 my-4">
+            <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
+            <button className="btn btn-success mt-3 px-4 ms-5" type="submit">บันทึก</button>
           </div>
         </form>
       </div>

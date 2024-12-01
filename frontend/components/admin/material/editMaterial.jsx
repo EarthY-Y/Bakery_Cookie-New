@@ -120,17 +120,17 @@ const EditMaterial = () => {
 
   return (
     <div className="container mt-5">
-      <Link className="btn btn-light text-dark mb-4" to="/material">
+      <Link className="btn btn-outline-secondary mb-4" to="/material">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
       <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
         <h5>แก้ไขวัตถุดิบ</h5>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="mb-3 text-center">
-            <div className="position-relative" style={{margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
+            <div className="position-relative" style={{margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
               {Picture ? (
                 // ถ้ามี Picture จะสร้าง URL สำหรับแสดงรูปที่ดึงจากฐานข้อมูลหรือรูปที่อัพโหลดใหม่
-                <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', borderRadius: '5px', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <span>เพิ่มรูปวัตถุดิบ</span>
               )}
@@ -237,7 +237,7 @@ const EditMaterial = () => {
 
           <div className="d-flex justify-content-center gap-3 my-4">
             <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
-            <button className="btn btn-primary mt-3 px-4 ms-5" type="submit">แก้ไข</button>
+            <button className="btn btn-success mt-3 px-4 ms-5" type="submit">บันทึกข้อมูล</button>
           </div>
         </form>
       </div>

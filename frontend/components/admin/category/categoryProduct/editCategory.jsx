@@ -70,11 +70,11 @@ const EditCategory = () => {
   
   return (
     <div className="container mt-5">
-      <button className="btn btn-light text-black mb-4" onClick={() => {navigate(-1)}}>
+      <button className="btn btn-outline-secondary mb-4" onClick={() => {navigate(-1)}}>
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
       <div className="mb-4 card col-md-12 px-40 card-body">
-        <h4>เพิ่มสถานะ</h4>
+        <h4>แก้ไขสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อประเภทสินค้า</label>
@@ -86,9 +86,9 @@ const EditCategory = () => {
             </div>
           </div>
           <div>
-            <table className="table table-striped table-bordered">
+            <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
               <thead>
-                <tr>
+                <tr className="table-success">
                   <th className="text-center align-middle" style={{ width: '25%' }} >เลือก</th>
                   <th className="text-center align-middle" style={{ width: '25%' }} >รูปสินค้า</th>
                   <th className="text-center align-middle" style={{ width: '25%' }} >ชื่อสินค้า</th>
@@ -109,7 +109,7 @@ const EditCategory = () => {
                         }}
                         checked={selectedProducts.includes(product.product_id)} //ตรวยสอบค่า ถ้ามี id นี้จะ check
                       /></td>
-                    <td><img src={API_URL_PICTURE + product.productpic_name } className="img-fluid" alt={product.product_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
+                    <td><img src={API_URL_PICTURE + product.productpic_name } className="rounded img-fluid" alt={product.product_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                     <td>{product.product_name}</td>
                     {/* <td className="text-center">
                       <Link to={`view/detail/product/${product.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
@@ -119,9 +119,9 @@ const EditCategory = () => {
               </tbody>
             </table>
           </div>
-          <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
-            <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
-            <button className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}>บันทึก</button>
+          <div className="d-flex justify-content-center gap-3 my-4">
+            <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
+            <button className="btn btn-success mt-3 px-4 ms-5" type="submit">บันทึก</button>
           </div>
         </form>
       </div>
