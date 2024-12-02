@@ -35,8 +35,8 @@ const ListMaterial = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>วัตถุดิบ</h2>
-        <Link to="/material/create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
-        <Link to="/material/create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
+        <Link to="/material/create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
+        <Link to="/material/create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
       </div>
 
       <p>จำนวน {materials.length} รายการ</p>
@@ -64,7 +64,7 @@ const ListMaterial = () => {
                 <td>{material.cost} บาท</td>
                 <td>{material.cost_per_quantity} บาท</td>
                 <td>{formatDate(material.created_at)}</td>
-                <td><Link to={`view/${material.material_id}`} className="btn btn-info text-light d-grid mx-auto"><i class="bi bi-eye"></i></Link></td>
+                <td><Link to={`view/${material.material_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${material.material_id}`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
                 <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
               </tr>

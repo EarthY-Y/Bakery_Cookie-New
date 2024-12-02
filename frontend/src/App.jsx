@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
 import {ProtectedRouteAdmin ,ProtectedRouteCustomer, CheckRouteCustomer, CheckRouteAdmin} from '../API/authService';
-import Dashboard from '../page/admin-page/dashboard/dashboard'
+import Dashboard from '../page/admin-page/dashboard-page/dashboard-page'
 import Login from '../page/login-page/login-page'
 import LoginAdmin from '../page/login-page/loginAdmin-page';
 import ListProduct from '../page/admin-page/product-page/listProduct-page'

@@ -106,29 +106,30 @@ export const ProtectedRouteCustomer = () => {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
         return;
-      }
-      autoRemoveToken(token)
-      try {
-        console.log("Verifying token...");
-        const resCustomer = await axios.get(API_URL+'/verifyCustomer', {
-          headers: {
-            'authorization': `Bearer ${token}`
-          }
-        });
-        console.log('Response from verifyCustomer:', resCustomer.data);
+      }else {
+        autoRemoveToken(token)
+        try {
+          console.log("Verifying token...");
+          const resCustomer = await axios.get(API_URL+'/verifyCustomer', {
+            headers: {
+              'authorization': `Bearer ${token}`
+            }
+          });
+          console.log('Response from verifyCustomer:', resCustomer.data);
 
-        if (resCustomer.data.results && resCustomer.data.results.length !== 0) {
-          setIsCustomer(true);
-        } else {
-          console.log("User is not an customer. Redirecting to login...");
-          setIsCustomer(false);
+          if (resCustomer.data.results && resCustomer.data.results.length !== 0) {
+            setIsCustomer(true);
+          } else {
+            console.log("User is not an customer. Redirecting to login...");
+            setIsCustomer(false);
+          }
+        } catch (error) {
+          console.error('Error during token verification:', error);
+          setIsCustomer(false); 
+          return;
+        } finally {
+          setLoading(false); 
         }
-      } catch (error) {
-        console.error('Error during token verification:', error);
-        setIsCustomer(false); 
-        return;
-      } finally {
-        setLoading(false); 
       }
     };
     verifyToken();

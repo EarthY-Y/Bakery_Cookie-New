@@ -28,7 +28,7 @@ const layOutComponent = ({children}) => {
         </div>  
 
         {/* Main content ที่จะเลื่อนตามปกติ */}
-        <div className={`min-vh-100 ${window.innerWidth >= 992 ? 'col-10 offset-2 d-lg-block' : 'col-12 d-lg-none'}`}>
+        <div className={`${window.innerWidth >= 992 ? 'col-10 offset-2 d-lg-block' : 'col-12 d-lg-none'}`}>
           <main>{children}</main>
         </div>
       </div>

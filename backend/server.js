@@ -22,6 +22,7 @@ import OrderTrackingRoute from './routes/customer/orderTracking-Route.js';
 import PackageRoute from './routes/admin/package-Route.js'
 import ShippingRoute from './routes/admin/shippingCost-Route.js'
 import GuestProductRoute from './routes/guest/guestProduct-Route.js'
+import DashboardRoute from './routes/admin/dashboardRoute.js'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -85,3 +86,4 @@ app.use(provinceAmphureTambon);
 app.use(AddressCustomerRoute);
 app.use(ShippingRoute);
 app.use(GuestProductRoute)
+app.use(DashboardRoute)
