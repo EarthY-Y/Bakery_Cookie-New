@@ -63,7 +63,7 @@ app.use(session ({
   }
 }))
 
-app.listen(process.env.APP_PORT, () => {
+app.listen(process.env.APP_PORT || 5000, () => {
   console.log(`Server is running `);
 })
 app.use('/picture', express.static(path.join(__dirname, 'picture')));
