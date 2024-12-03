@@ -8,6 +8,7 @@ const db = mysql.createConnection({
     user: process.env.DATABASE_USERNAME,
     password: process.env.passwordDatabase, //ถ้าเป็น xampp ไม่ต้องใส่ process.env.passwordDatabase
     database: process.env.DATABASE_NAME,
+    port: process.env.DATABASE_PORT
     // pool: {
     //     max: 5,
     //     min: 0,
