@@ -6,7 +6,7 @@ dotenv.config();
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USERNAME,
-    password: '', //ถ้าเป็น xampp ไม่ต้องใส่ process.env.passwordDatabase
+    password: process.env.passwordDatabase, //ถ้าเป็น xampp ไม่ต้องใส่ process.env.passwordDatabase
     database: process.env.DATABASE_NAME,
     // pool: {
     //     max: 5,
