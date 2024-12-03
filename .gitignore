@@ -14,7 +14,7 @@ node_modules
 .env
 
 #config
-database.js
+# database.js
 service/
 
 # Log files
