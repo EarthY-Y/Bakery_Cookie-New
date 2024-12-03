@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, scales, Ticks, BarElement} from "chart.js";
+import { Line, Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, scales, Ticks, } from "chart.js";
 import LoadingPopup from "../../../untils/popUp/loading";
 
 ChartJS.register(
@@ -10,8 +10,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
-  BarElement
+  Legend
 );
 
 const salesLineChart = ({ dataSales }) => {
@@ -177,13 +176,13 @@ const salesLineChart = ({ dataSales }) => {
         )}
       </div>
       <div className="d-none d-md-block">
-        <Bar data={data} options={optionsMdScreen} />
+        <Line data={data} options={optionsMdScreen} />
       </div>
       <div
         className="d-block d-md-none"
         style={{ height: "400px", width: "100%" }}
       >
-        <Bar data={data} options={options} />
+        <Line data={data} options={options} />
       </div>
     </>
   );
