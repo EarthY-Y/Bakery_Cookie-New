@@ -32,6 +32,8 @@ import { fileURLToPath } from 'url';
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const port = process.env.APP_PORT|| 5000; 
+const portFront = process.env.FRONTEND || 5173; 
 
 dotenv.config();
 
@@ -46,7 +48,7 @@ app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ�
 
 //กำหนดต้นทางหรือ origin ที่จะเข้ามาใช้ API ของเรา
 app.use(cors({
-  origin: [process.env.FRONTEND || 5173], //กำหนดอยู่ใน vite.config
+  origin: portFront, //กำหนดอยู่ใน vite.config
   //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
   credential: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
@@ -63,7 +65,7 @@ app.use(session ({
   }
 }))
 
-app.listen(process.env.APP_PORT || 5000, () => {
+app.listen(port, () => {
   console.log(`Server is running `);
 })
 app.use('/picture', express.static(path.join(__dirname, 'picture')));
