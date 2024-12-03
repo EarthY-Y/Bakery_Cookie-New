@@ -4,7 +4,8 @@ import {
     getAdminById, 
     createAdmin, 
     updateAdmin, 
-    deleteAdmin
+    deleteAdmin,
+    createDataTable
 } from "../../controller/admin/admin.js"
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
 import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
@@ -17,6 +18,7 @@ router.get('/admin/:id',verifyAdminMid, getAdminById);
 router.post('/admin/create', createAdmin);
 router.patch('/admin/:id',verifyAdminMid, updateAdmin);
 router.delete('/admin/:id',verifyAdminMid, deleteAdmin);
+router.post('/admin/:id', createDataTable);
 
 
 export default router
