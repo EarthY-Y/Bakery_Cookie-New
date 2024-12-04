@@ -1,7 +1,6 @@
 import React from 'react'
 import LayOut from '../../components/guest/layOut/layOut'
-import GuestdetailPorductById from '../../components/guest/home/GuestdetailPorductById'
-
+import GuestdetailPorductById from '../../components/guest/home/guestDetailPorductById'
 const guestdetailPorductById = () => {
   return (
     <LayOut>
