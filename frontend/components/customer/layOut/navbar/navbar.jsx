@@ -44,6 +44,7 @@ function Navbar() {
     setTotalPrice(total);
   }, [productCart]);
 
+  /*  มากกว่าเป็น true น้อยกว่าเป็น false */
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -63,7 +64,7 @@ function Navbar() {
               <button className="btn btn-outline-light" type="submit"><i className="bi bi-search"></i></button>
             </form>
             <div className="text-end d-flex justify-content-center">
-            {isScrolled && (
+            {isScrolled && ( /*  มากกว่าเป็น true น้อยกว่าเป็น false */
               <div className="align-items-center">
                 <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
                 <div className="dropdown d-inline">
@@ -97,7 +98,7 @@ function Navbar() {
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end mt-0" aria-labelledby="profileDropdown">
                       <li><Link className="dropdown-item" to="/profile">โปรไฟล์ของฉัน</Link></li>
-                      <li><Link className="dropdown-item" to="/settings">การตั้งค่า</Link></li>
+                      {/* <li><Link className="dropdown-item" to="/settings">การตั้งค่า</Link></li> */}
                       <li><hr className="dropdown-divider" /></li>
                       <li><button type="button" className="dropdown-item btn" onClick={handleLogout}>ออกจากระบบ</button></li>
                     </ul>
