@@ -44,7 +44,7 @@ const Navbar = () => {
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <li className="nav-item"><Link className="nav-link active text-light" aria-current="page" to="/Login">เข้าสู่ระบบ</Link></li>
+                  <li className="nav-item"><Link className="nav-link active text-light" aria-current="page" to="/login">เข้าสู่ระบบ</Link></li>
                   <i className="bi bi-dash-lg fs-3 text-black d-none d-lg-inline" style={{ transform: "rotate(90deg)" }}></i>
                   <li className="nav-item"><Link className="nav-link active text-light" aria-current="page" to="/signup">สมัครสมาชิก</Link></li>
                   <li className="nav-item"><Link className="nav-link active text-light" to="#">฿ 0.00</Link></li>
