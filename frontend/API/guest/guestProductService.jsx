@@ -1,11 +1,9 @@
 import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_PORT_GUEST 
-
+console.log(API_URL);
 export const listProductService = async() => {
     try {
       const authToken = localStorage.getItem('token')
-      console.log(API_URL);
-      
       const response = await axios.get(API_URL + "/get/product", 
         {
           headers: {
