@@ -50,6 +50,7 @@ export const ProtectedRouteAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const token = localStorage.getItem('tokenAdmin');
+  const navigate = useNavigate()
   useEffect(() => {
     const verifyToken = async () => {
       if (!token) {
@@ -89,7 +90,7 @@ export const ProtectedRouteAdmin = () => {
   }
 
   if (!token || !isAdmin) {
-    return <Navigate to="" />;
+    navigate("")
   }
 
   return <Outlet />;//จะเเสดง Route ลูกที่ Function นี้ครอบไว้ใน App.jsx
@@ -99,7 +100,7 @@ export const ProtectedRouteCustomer = () => {
   const [loading, setLoading] = useState(true);
   const [isCustomer, setIsCustomer] = useState(false);
   const token = localStorage.getItem('token');
-
+  const navigate = useNavigate()
   useEffect(() => {
     const verifyToken = async () => {
       if (!token) {
@@ -140,7 +141,7 @@ export const ProtectedRouteCustomer = () => {
   }
 
   if (!token || !isCustomer) {
-    return <Navigate to="" />;
+    navigate("")
   }
 
   return <Outlet />;
