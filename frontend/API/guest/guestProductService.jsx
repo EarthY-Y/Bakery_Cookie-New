@@ -4,7 +4,7 @@ console.log(API_URL);
 export const listProductService = async() => {
     try {
       const authToken = localStorage.getItem('token')
-      const response = await axios.get(API_URL + "/get/product", 
+      const response = await axios.get("https://bakery-cookie-new.onrender.com/guest/get/product", 
         {
           headers: {
             'authorization': `Bearer ${authToken}`
