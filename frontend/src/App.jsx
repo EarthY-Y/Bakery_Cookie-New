@@ -15,7 +15,6 @@ import CreateAdmin from '../page/admin-page/createAdmin-page'
 import Admin from '../page/admin-page/listAdmin-page'
 import Signup from '../page/customer-page/signup-page/signup-page'
 import Signup2 from '../page/customer-page/signup-page/signup2-page'
-import Signup3 from '../page/customer-page/signup-page/signup3-page'
 import ListAdmin from '../page/admin-page/listAdmin-page'
 import CreateProductMaterial from '../page/admin-page/product-page/createMaterialProduct-page';
 import Home from '../page/customer-page/home/home-page'
