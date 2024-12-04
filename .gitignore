@@ -27,7 +27,7 @@ requset.rest
 *.tmp
 *.pid
 
-# dist
+dist
 dist-ssr
 *.local
 

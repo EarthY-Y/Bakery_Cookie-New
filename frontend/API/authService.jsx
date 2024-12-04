@@ -245,8 +245,10 @@ export const CheckRouteAdmin = () => {
 // ฟังก์ชันในการลบ token
 function removeToken() {
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
+  const navigate = useNavigate()
   console.log('Token has been removed. Please log in again.');
-  location.reload(); 
+  location.reload();
+  navigate("/") 
 }
 
 // ฟังก์ชันในการตรวจสอบและลบ token อัตโนมัติ
@@ -274,8 +276,10 @@ function autoRemoveToken(token) {
 
 function removeTokenAdmin() {
   localStorage.removeItem('tokenAdmin');
+  const navigate = useNavigate()
   console.log('Token has been removed. Please log in again.');
   location.reload(); 
+  navigate("/Login/admin") 
 }
 function autoRemoveTokenAdmin(token) {
   if (!token) return;
