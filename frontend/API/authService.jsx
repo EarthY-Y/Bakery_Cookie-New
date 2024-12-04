@@ -89,7 +89,7 @@ export const ProtectedRouteAdmin = () => {
   }
 
   if (!token || !isAdmin) {
-    return <Navigate to="/login/admin" />;
+    return <Navigate to="" />;
   }
 
   return <Outlet />;//จะเเสดง Route ลูกที่ Function นี้ครอบไว้ใน App.jsx
@@ -140,7 +140,7 @@ export const ProtectedRouteCustomer = () => {
   }
 
   if (!token || !isCustomer) {
-    return <Navigate to="/login" />;
+    return <Navigate to="" />;
   }
 
   return <Outlet />;
@@ -245,11 +245,8 @@ export const CheckRouteAdmin = () => {
 // ฟังก์ชันในการลบ token
 function removeToken() {
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
-  const navigate = useNavigate()
   console.log('Token has been removed. Please log in again.');
-  return navigate("") 
-  location.reload();
-
+  location.reload(); 
 }
 
 // ฟังก์ชันในการตรวจสอบและลบ token อัตโนมัติ
@@ -277,10 +274,8 @@ function autoRemoveToken(token) {
 
 function removeTokenAdmin() {
   localStorage.removeItem('tokenAdmin');
-  const navigate = useNavigate()
   console.log('Token has been removed. Please log in again.');
-  return navigate("")
-  location.reload();  
+  location.reload(); 
 }
 function autoRemoveTokenAdmin(token) {
   if (!token) return;
