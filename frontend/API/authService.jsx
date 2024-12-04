@@ -247,7 +247,7 @@ function removeToken() {
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
   const navigate = useNavigate()
   console.log('Token has been removed. Please log in again.');
-  navigate("") 
+  return navigate("") 
   location.reload();
 
 }
@@ -279,7 +279,7 @@ function removeTokenAdmin() {
   localStorage.removeItem('tokenAdmin');
   const navigate = useNavigate()
   console.log('Token has been removed. Please log in again.');
-  navigate("")
+  return navigate("")
   location.reload();  
 }
 function autoRemoveTokenAdmin(token) {
