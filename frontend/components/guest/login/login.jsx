@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import liff from '@line/liff'
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../../API/authService';
 import { Modal } from '../../error/errorPopup';
+
+const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
+
 const Login = () => {
   const [userName, setuserName] = useState("");
   const [passWord, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // login ด้วย Line
+  useEffect(() =>{
+    liff.init({
+      liffId: `2006630207-4ENd2JnL`, // Use own liffId
+    })
+  },[])
+
+  const handleLoginLine = async() =>{
+    try {
+      liff.login() //ทำการ login ผ่าน Line
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // login ด้วย userName password
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -44,9 +63,9 @@ const Login = () => {
                   <input type="password" className="form-control" placeholder="รหัสผ่าน" value={passWord} onChange={(e) => setPassword(e.target.value)}/>
                 </div>
               </div>
-              <div className="text-end mb-4">
+              {/* <div className="text-end mb-4">
                 <a href="#" className="small">ลืมรหัสผ่าน</a>
-              </div>
+              </div> */}
               <div className="row mb-3 justify-content-center">
                 <div className="col-5 text-center">
                   <button style={{ backgroundColor: '#F2EEB0' }} type="button" className="btn btn-outline-dark w-100">กลับ</button>
@@ -55,10 +74,9 @@ const Login = () => {
                   <button style={{ backgroundColor: '#A8E5F8' }} type="submit" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
                 </div>
               </div>
+              <button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark w-100" >เข้าสู่ระบบด้วย LINE </button>
               <div className="text-center mt-3">
-                <p className="small">
-                  ยังไม่ได้เป็นสมาชิก? <Link to="/signup">สมัครสมาชิก</Link>
-                </p>
+                <p className="small">ยังไม่ได้เป็นสมาชิก? <Link to="/signup">สมัครสมาชิก</Link></p>
               </div>
             </div>
           </div>
