@@ -100,310 +100,310 @@ const router = createBrowserRouter([
               },
             ],
           },
-        ]
-      },
-      {
-        element: <CheckRouteAdmin/>,
-        children: [
           {
-            path: "/login/admin",
-            element: <LoginAdmin />,
+            element: <CheckRouteAdmin/>,
+            children: [
+              {
+                path: "/login/admin",
+                element: <LoginAdmin />,
+              }
+            ]
+          },
+          
+        
+          //route Admin
+          {
+            element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
+            children: [
+              {
+                path: "/dashboard",
+                element: <Dashboard />,
+              },
+              {
+                path: "/material",
+                children: [
+                  {
+                    path: "",
+                    element: <ListMaterial />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <ListMaterialById />,
+                  },
+                  {
+                    path: "create", // ลบ '/' หน้า path
+                    element: <CreateMaterial />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditMaterial />,
+                  },
+                ],
+              },
+              {
+                path: "/shipping",
+                children: [
+                  {
+                    path: "",
+                    element: <ListShippingCost />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <ListShippingCostById />,
+                  },
+                  {
+                    path: "create", // ลบ '/' หน้า path
+                    element: <CreateShippingCost />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditShippingCost />,
+                  },
+                ],
+              },
+              {
+                path: "category",
+                children: [
+                  {
+                    path: "prduct",
+                    children: [
+                      {
+                        path: "",
+                        element: <Categoey />,
+                      },
+                      {
+                        path: "view/:id",
+                        element: <CategoryById />,
+                      },
+                      {
+                        path: "create",
+                        element: <CreateCategory />,
+                      },
+                      {
+                        path: "edit/:id",
+                        element: <EditCategory />,
+                      },
+                    ],
+                  },
+                  
+                  {
+                    path: "package",
+                    children: [
+                      {
+                        path: "",
+                        element: <ListCategoryPackage />,
+                      },
+                      {
+                        path: "view/:id",
+                        element: <CategoryByIdPackage />,
+                      },
+                      {
+                        path: "create",
+                        element: <CreateCategoryPackage />,
+                      },
+                      {
+                        path: "edit/:id",
+                        element: <EditCategoryPackage />,
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                path: "/product",
+                children: [
+                  {
+                    path: "",
+                    element: <ListProduct />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <ListPorductById />,
+                  },
+                  {
+                    path: "create", // ลบ '/' หน้า path
+                    children: [
+                      {
+                        path: "",
+                        element: (
+                          <FormProviderProductService>
+                            <CreateProduct />
+                          </FormProviderProductService>
+                          ),
+                      },
+                      {
+                        path: "materialproduct", // ลบ '/' หน้า path
+                        element: (
+                        <FormProviderProductService>
+                          <CreateProductMaterial />
+                        </FormProviderProductService>
+                        ),
+                      },
+                    ]
+                    
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditPorductById />,
+                  },
+                ],
+              },
+              {
+                path: "/package",
+                children: [
+                  {
+                    path: "",
+                    element: <ListPackage />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <PackageById />,
+                  },
+                  {
+                    path: "create", // ลบ '/' หน้า path
+                    element: <CreatePackage/>
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditPackageById />,
+                  },
+                ],
+              },
+              {
+                path: "/admin",
+                children: [
+                  {
+                    path: "",
+                    element: <ListAdmin />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateAdmin />,
+                  },
+                ],
+              },
+              {
+                path: "/orderslist",
+                children: [
+                  {
+                    path: "",
+                    element: <LisetOrder />,
+                  },
+                  {
+                    path: "view/detail/order/:id",
+                    element: <OrderById />,
+                  },
+                ],
+              },
+              {
+                path: "/status",
+                children: [
+                  {
+                    path: "",
+                    element: <Status />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateStatus/>
+                  },
+                  {
+                    path: "edit/cart/:id",
+                    element: <EditCratStatus/>
+                  },
+                  {
+                    path: "edit/order/:id",
+                    element: <EditOrderStatus/>
+                  },
+                ],
+              },
+            ],
+          },
+        
+          //route User
+          {
+            element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
+            children: [
+              {
+                path: "/home",
+                element: <Home />,
+              },
+              {
+                path: "/product/:id",
+                element: <DetailPorductById />,
+              },
+              {
+                path: "/cart/:id",
+                element: <Cart />,
+              },
+              {
+                path: "/orders/:id",
+                element: <Orders />,
+              },
+              {
+                path: "/payment/:id",
+                element: <Payment />,
+              },
+              {
+                path: "/create/address",
+                children: [
+                  {
+                    path: "",
+                    element: <CreateAddress />,
+                  },
+                ],
+              },
+              {
+                path: "/profile",
+                children: [
+                  {
+                    path: "",
+                    element: <Profile />,
+                  },
+                  {
+                    path: "customer/address",
+                    children: [
+                      {
+                        path: "",
+                        element: <ListAddress />,
+                      },
+                      {
+                        path: "edit/:id",
+                        element: <EditAddress />,
+                      },
+                    ],
+                  },
+                  {
+                    path: "orderTracking",
+                    children: [
+                      {
+                        path: "",
+                        element: <OrderTracking />,
+                      },
+                      {
+                        path: "view/detail/:id",
+                        element: <OrderTrackingDetail />,
+                      },
+                    ]
+                  },
+                  {
+                    path: "orderHistory",
+                    children: [
+                      {
+                        path: "",
+                        element: <HistoryOrder />,
+                      },
+                      {
+                        path: "view/detail/:id",
+                        element: <OrderTrackingDetail />,
+                      },
+                    ]
+                  },
+                ],
+              },
+            ],
           }
         ]
-      },
-      
-    
-      //route Admin
-      {
-        element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
-        children: [
-          {
-            path: "/dashboard",
-            element: <Dashboard />,
-          },
-          {
-            path: "/material",
-            children: [
-              {
-                path: "",
-                element: <ListMaterial />,
-              },
-              {
-                path: "view/:id",
-                element: <ListMaterialById />,
-              },
-              {
-                path: "create", // ลบ '/' หน้า path
-                element: <CreateMaterial />,
-              },
-              {
-                path: "edit/:id",
-                element: <EditMaterial />,
-              },
-            ],
-          },
-          {
-            path: "/shipping",
-            children: [
-              {
-                path: "",
-                element: <ListShippingCost />,
-              },
-              {
-                path: "view/:id",
-                element: <ListShippingCostById />,
-              },
-              {
-                path: "create", // ลบ '/' หน้า path
-                element: <CreateShippingCost />,
-              },
-              {
-                path: "edit/:id",
-                element: <EditShippingCost />,
-              },
-            ],
-          },
-          {
-            path: "category",
-            children: [
-              {
-                path: "prduct",
-                children: [
-                  {
-                    path: "",
-                    element: <Categoey />,
-                  },
-                  {
-                    path: "view/:id",
-                    element: <CategoryById />,
-                  },
-                  {
-                    path: "create",
-                    element: <CreateCategory />,
-                  },
-                  {
-                    path: "edit/:id",
-                    element: <EditCategory />,
-                  },
-                ],
-              },
-              
-              {
-                path: "package",
-                children: [
-                  {
-                    path: "",
-                    element: <ListCategoryPackage />,
-                  },
-                  {
-                    path: "view/:id",
-                    element: <CategoryByIdPackage />,
-                  },
-                  {
-                    path: "create",
-                    element: <CreateCategoryPackage />,
-                  },
-                  {
-                    path: "edit/:id",
-                    element: <EditCategoryPackage />,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: "/product",
-            children: [
-              {
-                path: "",
-                element: <ListProduct />,
-              },
-              {
-                path: "view/:id",
-                element: <ListPorductById />,
-              },
-              {
-                path: "create", // ลบ '/' หน้า path
-                children: [
-                  {
-                    path: "",
-                    element: (
-                      <FormProviderProductService>
-                        <CreateProduct />
-                      </FormProviderProductService>
-                      ),
-                  },
-                  {
-                    path: "materialproduct", // ลบ '/' หน้า path
-                    element: (
-                    <FormProviderProductService>
-                      <CreateProductMaterial />
-                    </FormProviderProductService>
-                    ),
-                  },
-                ]
-                
-              },
-              {
-                path: "edit/:id",
-                element: <EditPorductById />,
-              },
-            ],
-          },
-          {
-            path: "/package",
-            children: [
-              {
-                path: "",
-                element: <ListPackage />,
-              },
-              {
-                path: "view/:id",
-                element: <PackageById />,
-              },
-              {
-                path: "create", // ลบ '/' หน้า path
-                element: <CreatePackage/>
-              },
-              {
-                path: "edit/:id",
-                element: <EditPackageById />,
-              },
-            ],
-          },
-          {
-            path: "/admin",
-            children: [
-              {
-                path: "",
-                element: <ListAdmin />,
-              },
-              {
-                path: "create",
-                element: <CreateAdmin />,
-              },
-            ],
-          },
-          {
-            path: "/orderslist",
-            children: [
-              {
-                path: "",
-                element: <LisetOrder />,
-              },
-              {
-                path: "view/detail/order/:id",
-                element: <OrderById />,
-              },
-            ],
-          },
-          {
-            path: "/status",
-            children: [
-              {
-                path: "",
-                element: <Status />,
-              },
-              {
-                path: "create",
-                element: <CreateStatus/>
-              },
-              {
-                path: "edit/cart/:id",
-                element: <EditCratStatus/>
-              },
-              {
-                path: "edit/order/:id",
-                element: <EditOrderStatus/>
-              },
-            ],
-          },
-        ],
-      },
-    
-      //route User
-      {
-        element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
-        children: [
-          {
-            path: "/home",
-            element: <Home />,
-          },
-          {
-            path: "/product/:id",
-            element: <DetailPorductById />,
-          },
-          {
-            path: "/cart/:id",
-            element: <Cart />,
-          },
-          {
-            path: "/orders/:id",
-            element: <Orders />,
-          },
-          {
-            path: "/payment/:id",
-            element: <Payment />,
-          },
-          {
-            path: "/create/address",
-            children: [
-              {
-                path: "",
-                element: <CreateAddress />,
-              },
-            ],
-          },
-          {
-            path: "/profile",
-            children: [
-              {
-                path: "",
-                element: <Profile />,
-              },
-              {
-                path: "customer/address",
-                children: [
-                  {
-                    path: "",
-                    element: <ListAddress />,
-                  },
-                  {
-                    path: "edit/:id",
-                    element: <EditAddress />,
-                  },
-                ],
-              },
-              {
-                path: "orderTracking",
-                children: [
-                  {
-                    path: "",
-                    element: <OrderTracking />,
-                  },
-                  {
-                    path: "view/detail/:id",
-                    element: <OrderTrackingDetail />,
-                  },
-                ]
-              },
-              {
-                path: "orderHistory",
-                children: [
-                  {
-                    path: "",
-                    element: <HistoryOrder />,
-                  },
-                  {
-                    path: "view/detail/:id",
-                    element: <OrderTrackingDetail />,
-                  },
-                ]
-              },
-            ],
-          },
-        ],
-      }
+      },  
     ]
   },
 
