@@ -46,7 +46,7 @@ app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ�
 
 //กำหนดต้นทางหรือ origin ที่จะเข้ามาใช้ API ของเรา
 app.use(cors({
-  origin: 'https://bakerycookienew.netlify.app', //กำหนดอยู่ใน vite.config
+  origin: process.env.FRONTEND, //กำหนดอยู่ใน vite.config
   //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
   credential: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
