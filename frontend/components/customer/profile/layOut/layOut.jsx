@@ -9,8 +9,9 @@ const layOutComponent = ({ children }) => {
     <React.Fragment>
       <div style={{ backgroundColor: '#FFF2E1' }}>
         {/* Navbar */}
+        <div style={{ position: 'sticky', top: 0, zIndex: 1000, height: '65px', width: '100%'}} >
         <Navbar />
-        
+        </div>
         <div className="container d-flex mb-5" style={{ minHeight: '80vh'}}>
           {/* Sidebar */}
           <div style={{ width: '250px' }}>

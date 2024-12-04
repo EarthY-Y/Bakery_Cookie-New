@@ -35,25 +35,13 @@ const Login = () => {
               <div className="row mb-3">
                 <label className="col-3 col-form-label">ชื่อผู้ใช้</label>
                 <div className="col-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="ชื่อผู้ใช้"
-                    value={userName}
-                    onChange={(e) => setuserName(e.target.value)}
-                  />
+                  <input type="text" className="form-control" placeholder="ชื่อผู้ใช้" value={userName} onChange={(e) => setuserName(e.target.value)}/>
                 </div>
               </div>
               <div className="row mb-3">
                 <label htmlFor="password" className="col-3 col-form-label">รหัสผ่าน</label>
                 <div className="col-9">
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="รหัสผ่าน"
-                    value={passWord}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <input type="password" className="form-control" placeholder="รหัสผ่าน" value={passWord} onChange={(e) => setPassword(e.target.value)}/>
                 </div>
               </div>
               <div className="text-end mb-4">
@@ -61,22 +49,10 @@ const Login = () => {
               </div>
               <div className="row mb-3 justify-content-center">
                 <div className="col-5 text-center">
-                  <button
-                    style={{ backgroundColor: '#F2EEB0' }}
-                    type="button"
-                    className="btn btn-outline-dark w-100"
-                  >
-                    กลับ
-                  </button>
+                  <button style={{ backgroundColor: '#F2EEB0' }} type="button" className="btn btn-outline-dark w-100">กลับ</button>
                 </div>
                 <div className="col-5 text-center">
-                  <button
-                    style={{ backgroundColor: '#A8E5F8' }}
-                    type="submit"
-                    className="btn btn-outline-dark w-100"
-                  >
-                    เข้าสู่ระบบ
-                  </button>
+                  <button style={{ backgroundColor: '#A8E5F8' }} type="submit" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
                 </div>
               </div>
               <div className="text-center mt-3">
