@@ -30,7 +30,7 @@ const ListPackageById = () => {
   }, [])
 
   return (
-    <div className="container mt-5 p-4">
+    <div className="container mt-5 p-3">
       <Link to="/package" className="btn btn-outline-secondary mb-4">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
@@ -65,18 +65,18 @@ const ListPackageById = () => {
           <p className="border p-2 rounded bg-white">{packageById.quantity}</p>
         </div>
 
-        <div className="mb-3">
+        <div className="">
           <label className="form-label fw-bold">ราคา/ชิ้น</label>
           <p className="border p-2 rounded bg-white">{packageById.cost_per_quantity}</p>
         </div>
 
         <div className="mb-3 row">
-          <div className='col-md-6 col-12'>
-            <label className="form-label fw-bold ">สร้างโดย</label>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">สร้างโดย</label>
             <p className="border p-2 rounded bg-white">{packageById.created_by}</p>
           </div>
-          <div className='col-md-6 col-12'>
-            <label className="form-label fw-bold ">เวลา</label>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">เวลา</label>
             <p className="border p-2 rounded bg-white form-control">{formatDate(packageById.created_at)}</p>
           </div>
         </div>

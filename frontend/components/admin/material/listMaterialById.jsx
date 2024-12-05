@@ -32,7 +32,7 @@ const listMaterialById = () => {
   },[])
 
   return (
-    <div className="container mt-5 p-4 ">
+    <div className="container mt-5 p-3">
       <Link to="/material" className="btn btn-outline-secondary mb-4">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
@@ -62,18 +62,18 @@ const listMaterialById = () => {
           <p className="border p-2 rounded bg-white">{materialMyId.cost}</p>
         </div>
 
-        <div className="mb-3">
+        <div className="">
           <label className="form-label fw-bold">ปริมาณ</label>
           <p className="border p-2 rounded bg-white">{materialMyId.quantity}</p>
         </div>
 
         <div className="mb-3 row">
-          <div className='col-md-6 col-12'>
+          <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold ">สร้างโดย</label>
             <p className="border p-2 rounded bg-white">{materialMyId.userName}</p>
           </div>
-          <div className='col-md-6 col-12'>
-            <label className="form-label fw-bold ">เวลา</label>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">เวลา</label>
             <p className="border p-2 rounded bg-white">{formatDate(materialMyId.created_at)}</p>
           </div>
         </div>

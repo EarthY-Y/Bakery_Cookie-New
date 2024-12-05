@@ -46,11 +46,11 @@ const createShipping = () => {
     label: packages.package_name
   })) || [];
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 p-3">
       <Link className="btn btn-outline-secondary mb-4" to="/shipping">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
-      <div className="mb-4 card col-md-12 px-40 card-body">
+      <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h4>เพิ่มการขนส่ง</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
 

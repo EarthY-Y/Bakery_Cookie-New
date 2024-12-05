@@ -28,14 +28,14 @@ const CategoryById = () => {
   },[])
   
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 p-3">
       <button className="btn btn-outline-secondary mb-4" onClick={() => {navigate(-1)}}>
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
       <div className="mb-4 card col-md-12 px-40 card-body bg-light shadow">
         <h4></h4>
         <div className="mb-4 ">
-          <b className="col-form-label">ชื่อประเภทสินค้า</b>
+          <label className="col-form-label">ชื่อประเภทสินค้า</label>
           <input type="text" className="form-control" value={categoryName}readOnly/>
         </div>
         <div>
@@ -60,22 +60,22 @@ const CategoryById = () => {
           </table>
         </div>
         <div className="row">
-          <div className='col-md-6 col-12'>
-            <b className="form-label fw-bold">สร้างโดย</b>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">สร้างโดย</label>
             <p className="border p-2 rounded bg-white">{listCategoryProduct[0]?.created_by}</p>
           </div>
-          <div className='col-md-6 col-12'>
-            <b className="form-label fw-bold">วันเวลาที่สร้าง</b>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">วันเวลาที่สร้าง</label>
             <p className="border p-2 rounded bg-white">{formatDate(listCategoryProduct[0]?.created_at)}</p>
           </div>
         </div>
-        <div className="row">
-          <div className='col-md-6 col-12'>
-            <b className="form-label fw-bold">เเก้ไขโดย</b>
+        <div className="mb-3 row">
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">เเก้ไขโดย</label>
             <p className="border p-2 rounded bg-white">{listCategoryProduct[0]?.updated_by}</p>
           </div>
-          <div className='col-md-6 col-12'>
-            <b className="form-label fw-bold">วันเวลาที่เเก้ไข</b>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">วันเวลาที่เเก้ไข</label>
             <p className="border p-2 rounded bg-white">{formatDate(listCategoryProduct[0]?.updated_at)}</p>
           </div>
         </div>

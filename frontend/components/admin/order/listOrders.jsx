@@ -63,7 +63,7 @@ const ListOrders = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>รายการสั่งซื้อ</h2>
       </div>
-      <h4>รอการชำระเงิน</h4>
+      <p>รอการชำระเงิน</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -107,7 +107,7 @@ const ListOrders = () => {
                   <p className="mb-1">วันที่ชำระเงิน: {`รอชำระเงิน`}</p>
                   <p className="mb-1">สถานะ: {order.status_name}</p>
                 </div>
-                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                <div className="d-flex flex-row-reverse bd-highlight mt-3">
                   <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light btn-sm"><i className="bi bi-eye"></i> ดู </Link>
                 </div>
               </div>
@@ -181,7 +181,7 @@ const ListOrders = () => {
                   <p className="mb-1">วันที่ชำระเงิน: {formatDate(order.updated_at) || `รอชำระเงิน`}</p>
                   <p className="mb-1">สถานะ: {order.status_name}</p>
                 </div>
-                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                <div className="d-flex flex-row-reverse bd-highlight mt-3">
                   <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light btn-sm"><i className="bi bi-eye"></i> ดู </Link>
                 </div>
               </div>

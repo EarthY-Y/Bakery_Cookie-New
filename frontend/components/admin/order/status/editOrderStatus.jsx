@@ -35,11 +35,11 @@ const editStatus = () => {
   }, []);  
   
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 p-3">
       <Link className="btn btn-outline-secondary mb-4" to="/status">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
-      <div className="mb-4 card col-md-12 px-40 card-body">
+      <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h4>แก้ไขสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 mt-4 justify-content-center">

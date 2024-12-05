@@ -37,10 +37,10 @@ const CategoeyPackage = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>ประเภทบรรจุภัณฑ์</h2>
-        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มประเภทบรรจุภัณฑ์ </Link>
-        <Link to="create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มประเภทบรรจุภัณฑ์ </Link>
+        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทบรรจุภัณฑ์ </Link>
+        <Link to="create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทบรรจุภัณฑ์ </Link>
       </div>
-      <h4>รอการชำระเงิน</h4>
+      <p>รอการชำระเงิน</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -65,7 +65,7 @@ const CategoeyPackage = () => {
                 <td className="text-center">{category.created_by}</td>
                 <td className="text-center">{category.updated_by}</td>
                 <td className="text-center">
-                  <Link to={`view/${category.package_category_id}`} className="btn btn-info text-light"><i class="bi bi-eye"></i></Link>
+                  <Link to={`view/${category.package_category_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>
                 <td className="text-center">
                   <Link to={`edit/${category.package_category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
@@ -79,7 +79,7 @@ const CategoeyPackage = () => {
         <div className="row gy-4">
           <div className="px-3 card-body">
             {currentOrders.map((category) => (
-              <div className="col-12 border rounded p-3  bg-light" key={category.package_category_id}>
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.package_category_id}>
                 <div className="small text-secondary">
                   <p className="mb-1">ประเภท: {category.package_category_name}</p>
                   <p className="mb-1">จำนวนบรรจุภัณฑ์: {category.amountCategoryPackage} ชิ้น</p>
@@ -88,7 +88,7 @@ const CategoeyPackage = () => {
                   <p className="mb-1">สร้างโดย: {category.created_by}</p>
                   <p className="mb-1">เเก้ไขโดย: {category.updated_by}</p>
                 </div>
-                <div className="d-flex justify-content-between mt-2">
+                <div className="d-flex justify-content-between mt-3">
                   <Link to={`view/${category.package_category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
                   <Link to={`edit/${category.package_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>

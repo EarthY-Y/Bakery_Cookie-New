@@ -13,15 +13,15 @@ function Navbaradmin() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg" >
-      <div className="container-fluid d-flex justify-content-between align-items-center">
+    <nav className="navbar navbar-expand-lg" style={{ height: '65px' }}>
+      <div className="container-fluid d-flex justify-content-between align-items-center" style={{ height: '100%' }}>
         {/* Sidebar สำหรับหน้าจอเล็ก */}
-        <div className="d-lg-none">
+        <div className="d-lg-none" style={{ height: '100%' }}>
           <Sidebaradmin />
         </div>
 
         {/* โลโก้ */}
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand" href="/" style={{ height: '100%' }}>
           <img
             src={Logoeiei}
             alt="Logo"

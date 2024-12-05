@@ -372,15 +372,15 @@ const EditProduct = () => {
   
   return (
     <form onSubmit={handleSubmit}>
-      <div className="container mt-5">
+      <div className="container mt-5 p-3">
         <Link className="btn btn-outline-secondary mb-4" to="/product">
           <i className="bi bi-arrow-left"></i> ย้อนกลับ
         </Link>
-        <div className="mb-4 card col-md-12 px-40 card-body">
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
           <h5>เพิ่มสินค้า</h5>
           
           <div className="mb-3 text-center">
-            <div style={{width: '100px',height: '100px',border: '1px dashed #ccc',borderRadius: '5px',position: 'relative',display: 'inline-flex',alignItems: 'center',justifyContent: 'center'}}>
+            <div className="bg-white" style={{width: '100px',height: '100px',border: '1px dashed #ccc',borderRadius: '5px',position: 'relative',display: 'inline-flex',alignItems: 'center',justifyContent: 'center'}}>
               {formData.file ? (typeof formData.file === 'string' ? 
                   ( <img src={`${API_URL_PICTURE}${formData.file}`} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '5px', objectFit: 'cover' }} />) 
                   : ( <img src={URL.createObjectURL(formData.file)} alt="Preview" style={{ width: '100%', height: '100%', borderRadius: '5px', objectFit: 'cover' }} />)
