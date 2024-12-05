@@ -93,16 +93,18 @@ export const getOrdersTrackingById = async (req, res) => {
     try {
         const id = req.params.id
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, o.updated_by, o.updated_at, o.statement_picture, so.status_name as status, "+
-                    " c.cartId, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name FROM orders o"+
-                    " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
-                    " LEFT JOIN status_order so ON so.status_order_id = o.status"+
-                    " INNER JOIN cart c ON o.cartId = c.cartId"+
-                    " INNER JOIN cart_product cp ON c.cartId = cp.cartId"+
-                    " INNER JOIN product p ON p.product_id = cp.product_id"+
-                    " INNER JOIN productpicture pp ON pp.product_id = p.product_id"+
-                    " WHERE o.orders_id = ? "+
-                    " GROUP BY o.orders_id;",[id],
+            db.query(`SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, 
+                     o.updated_by, o.updated_at, o.statement_picture, so.status_name as status, osh.note,
+                     c.cartId, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name FROM orders o
+                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                     LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
+                     LEFT JOIN status_order so ON so.status_order_id = o.status
+                     INNER JOIN cart c ON o.cartId = c.cartId
+                     INNER JOIN cart_product cp ON c.cartId = cp.cartId
+                     INNER JOIN product p ON p.product_id = cp.product_id
+                     INNER JOIN productpicture pp ON pp.product_id = p.product_id
+                     WHERE o.orders_id = ? 
+                     GROUP BY o.orders_id;`,[id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
