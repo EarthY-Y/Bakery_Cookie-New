@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const CancelOrderModal = ({ showModal, handleClose, handleCancelOrder }) => {
   const [cancelReason, setCancelReason] = useState("");
-
+  //เมื่อกดปุ่มจะทำงานตามคำสั่งที่หน้านั้นๆเอาไปใช้ คือเป็นการเอา function หรือ ตัวเเปรจากหน้าที่นำมาใช้เข้ามาใช้ในตัวมัน
   const handleSubmit = () => {
     handleCancelOrder(cancelReason); // ส่งเหตุผลไปยัง parent
     setCancelReason(""); // รีเซ็ตข้อความ

@@ -21,7 +21,6 @@ export const createPackageService = async (fromData) => {
 };
 export const listPackageService = async () => {
   try {
-    console.log(API_URL);
     const authToken = localStorage.getItem("tokenAdmin");
     const response = await axios.get(API_URL + "/package", {
       headers: {

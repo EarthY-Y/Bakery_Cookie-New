@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { formatDate } from '../../untils/frommatters/datetime';
 import { Table, Button } from 'react-bootstrap';
 import { listProductService, deleteProductByIdService } from '../../../API/admin/productService';
+import Search from '../../untils/fucntion/search';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const listProduct = () => {
   const [products, setProducts] = useState([]);
+  const [productsSearch, setProductsSearch] = useState([]);
   
   useEffect(() => {
     const getPosts = async () => {
@@ -22,6 +25,10 @@ const listProduct = () => {
 
     getPosts();
   }, []);
+
+  const handleSearch = (results) => {
+    setProductsSearch(results);
+  };
 
   const handleDelete = (id) => {
     deleteProductByIdService(id)
@@ -39,8 +46,13 @@ const listProduct = () => {
         <Link to="/product/create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มสินค้า </Link>
         <Link to="/product/create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มสินค้า </Link>
       </div>
-
-      <p>จำนวน {products.length} รายการ</p>
+      < Search
+        data={products}
+        handleSearch={handleSearch}
+        name="ชื่อสินค้า"
+        itemKeys={["product_name"]}//ถ้าอยากส่งไปเเบบ array
+      />
+      <p>จำนวน {productsSearch.length} รายการ</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -57,7 +69,7 @@ const listProduct = () => {
           </thead>
         
           <tbody>
-            {products.map((products, index) => (
+            {productsSearch.map((products, index) => (
               <tr key={index}>
                 <td><img src={API_URL_PICTURE + products.productpic_name} className="img-fluid rounded text-center" style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                 <td>{products.product_name}</td>

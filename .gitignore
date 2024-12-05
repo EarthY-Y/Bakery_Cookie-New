@@ -13,6 +13,9 @@ node_modules
 #environment
 .env
 
+# AWS Amplify
+amplify/
+
 #config
 # database.js
 service/

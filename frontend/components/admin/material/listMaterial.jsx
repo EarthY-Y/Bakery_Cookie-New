@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listMaterialService, deleteMaterialByIdService } from '../../../API/admin/materialService'
 import { formatDate } from '../../untils/frommatters/datetime'
-import { Table, Button } from 'react-bootstrap'
+import Search from '../../untils/fucntion/search'
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const ListMaterial = () => {
   const [materials, setMaterials] = useState([])
+  const [materialsSearch, setMaterialsSearch] = useState([])
 
   useEffect(() => {
     const getMaterials = async () => {
@@ -21,6 +22,10 @@ const ListMaterial = () => {
 
     getMaterials()
   }, [])
+
+  const handleSearch = (results) => {
+    setMaterialsSearch(results);
+  };
 
   const handleDelete = (id) => {
     deleteMaterialByIdService(id)
@@ -38,8 +43,13 @@ const ListMaterial = () => {
         <Link to="/material/create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
         <Link to="/material/create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มวัตถุดิบ </Link>
       </div>
-
-      <p>จำนวน {materials.length} รายการ</p>
+      <Search 
+        data = {materials}
+        handleSearch = {handleSearch}
+        name = "ชื่อวัตถุดิบ"
+        itemKeys = "material_name"
+      />
+      <p>จำนวน {materialsSearch.length} รายการ</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -56,7 +66,7 @@ const ListMaterial = () => {
             </tr>
           </thead>
           <tbody>
-            {materials.map((material) => (
+            {materialsSearch.map((material) => (
               <tr key={material.material_id}>
                 <td><img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid rounded" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                 <td>{material.material_name}</td>
@@ -75,7 +85,7 @@ const ListMaterial = () => {
       <div className="d-block d-md-none pb-4">
         <div className="row gy-4">
           <div className="px-3 card-body">
-            {materials.map((material) => (
+            {materialsSearch.map((material) => (
               <div className="col-12 border rounded p-3 shadow-sm bg-light" key={material.material_id}>
                 <div className="d-flex">
                   <img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid rounded" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/>
