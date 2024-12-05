@@ -86,6 +86,7 @@ const OrderTracking = () => {
                 <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
                 <p className="card-text">ราคารวม: {numberGrouping(order.price)} บาท</p>
                 <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+                <p className="card-text" style={{ display: order.note ? 'block' : 'none' }}>เหตุผลในการยกเลิก: {order.note}</p>
               </div>
               <div className="card-footer d-flex justify-content-end">
                 <Link  to={`view/detail/${order.orders_id}`}  className="btn btn-secondary ">  รายละเอียด</Link>

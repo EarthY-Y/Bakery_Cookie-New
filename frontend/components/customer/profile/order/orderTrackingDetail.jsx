@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { orderDetailById,orderHistoryById,orderProductById } from '../../../../API/customer/orderTrackingService';
+import { orderDetailById, orderHistoryById, orderProductById, cancelOrder } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { goBackOrHome } from '../../../untils/fucntion/backFuction';
+import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const OrderTracking = () => {
@@ -14,6 +15,9 @@ const OrderTracking = () => {
   const [ordersProduct, setOrdersProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0); 
   const [showBtnPay, setShowBtnPay] = useState(false); 
+  const [showCanCel, setShowCanCel] = useState(true); 
+  const [showStep ,setShowStep] = useState(true); 
+  const [showCancelModal, setShowCancelModal] = useState(false);
   // สถานะที่ต้องการแสดงบน Progress Bar
   const statusSteps = [
     { name: "ชำระเงินเรียบร้อย", icon: "bi bi-cash" },
@@ -28,6 +32,13 @@ const OrderTracking = () => {
         console.log(res.data);
         setOrdersDetail(res.data[0]);
         res.data[0]?.status === "รอการชำระเงิน" ? setShowBtnPay(true) : ""; 
+        if (res.data[0]?.status === "จัดส่งสำเร็จ") {
+          setShowCanCel(false)
+        }else if(res.data[0]?.status === "ยกเลิก") {
+          setShowCanCel(false)
+          setShowStep(false)
+        }
+        
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -76,6 +87,16 @@ const OrderTracking = () => {
     return null;
   };
   const currentStep = getCurrentStep();
+
+  const handleCancelOrder = async(reason) => {
+    console.log("เหตุผลในการยกเลิก:", reason, id);
+    const response = await cancelOrder(id, reason)
+    if(response){
+      setShowCancelModal(false)
+      navigate(-1)
+    }
+  };
+
   return (
     <div className="container mt-2 mb-5">
       <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
@@ -90,8 +111,8 @@ const OrderTracking = () => {
         </div>
       </div>
       <div className="card">
-        <div className="card-body">
-          <div className="progress-container d-flex justify-content-between align-items-center">
+        <div className={`card-body ${showStep ? 'd-block' : 'd-none'}`}>
+          <div className={`progress-container d-flex justify-content-between align-items-center `} >
             {statusSteps.map((step, index) => (
               <div key={index} className="progress-step text-center">
                 <div
@@ -113,6 +134,14 @@ const OrderTracking = () => {
             ))}
           </div>
         </div>
+        <div className={`card-body ${showStep ? 'd-none' : 'd-block'} bg-danger bg-opacity-10 pb-0`}>
+            <div className={`text-danger`} >
+                <h3>{ordersDetail.status}</h3>
+            </div>
+            <div>
+                <p>{formatDate(ordersDetail.updated_at)}</p>
+            </div>
+          </div>
       </div>
 
       {/* CSS สำหรับ Progress Bar */}
@@ -158,24 +187,22 @@ const OrderTracking = () => {
       <div className="card mt-5">
         {ordersProduct.map((order) => (
           <div key={order.product_name} className="col-md-12">
-            <div className="border-secondary">
-              <div className="card-header d-flex justify-content-between align-items-center">
-                <p className="mb-0"><strong>ชื่อสินค้า:</strong> {order.product_name}</p>
-              </div>
-              <div className="card-body">
-                <div className="row align-items-center">
-                  <div className="col-md-2">
-                    <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
-                  </div>
-                  <div className="col-md-3">
-                    <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
-                  </div>
-                  <div className="col-md-3">
-                    <p className="mb-0"><strong>ชิ้นละ:</strong> {order.productCartPrice} บาท</p>
-                  </div>
-                  <div className="col-md-4 text-end">
-                    <p className="mb-0"><strong>รวมเป็น:</strong> {numberGrouping(order.productCartPrice*order.productCartQuantity)} บาท</p>
-                  </div>
+            <div className="card-header d-flex justify-content-between align-items-center">
+              <p className="mb-0"><strong>ชื่อสินค้า:</strong> {order.product_name}</p>
+            </div>
+            <div className="card-body">
+              <div className="row align-items-center">
+                <div className="col-md-2">
+                  <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
+                </div>
+                <div className="col-md-3">
+                  <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
+                </div>
+                <div className="col-md-3">
+                  <p className="mb-0"><strong>ชิ้นละ:</strong> {order.productCartPrice} บาท</p>
+                </div>
+                <div className="col-md-4 text-end">
+                  <p className="mb-0"><strong>รวมเป็น:</strong> {numberGrouping(order.productCartPrice * order.productCartQuantity)} บาท</p>
                 </div>
               </div>
             </div>
@@ -196,9 +223,16 @@ const OrderTracking = () => {
           </div>
         </div>
       </div>
-      <div className="card-footer d-flex justify-content-end mt-4">
+      <div className="card-footer d-flex justify-content-between mt-4">
+      <button className="btn btn-danger" onClick={() => setShowCancelModal(true)} style={{ display: showCanCel ? 'block' : 'none' }}> ยกเลิกคำสั่งซื้อ</button> 
         <Link  to={`/payment/${ordersDetail.cartId}`}  className="btn btn-primary" style={{ display: showBtnPay ? 'block' : 'none' }}> ชำระเงิน</Link>
       </div>
+      <CancelOrderModal
+        showModal={showCancelModal}
+        handleClose={() => setShowCancelModal(false)}
+        handleCancelOrder={handleCancelOrder} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
+      />
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

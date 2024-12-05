@@ -90,7 +90,7 @@ export const ProtectedRouteAdmin = () => {
   }
 
   if (!token || !isAdmin) {
-    navigate("")
+    return <Navigate to="/login/admin" />;
   }
 
   return <Outlet />;//จะเเสดง Route ลูกที่ Function นี้ครอบไว้ใน App.jsx
@@ -141,7 +141,7 @@ export const ProtectedRouteCustomer = () => {
   }
 
   if (!token || !isCustomer) {
-    navigate("")
+    return <Navigate to="/login" />;
   }
 
   return <Outlet />;

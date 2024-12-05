@@ -63,12 +63,13 @@ const OrderTracking = () => {
   };
 
   const handleCancelOrder = async(reason) => {
-    console.log("เหตุผลในการยกเลิก:", reason, orderId);
-    const response = await cancelOrder(orderId, reason)
-    if(response){
-      setShowCancelModal(false)
-    }
-  };
+      cancelOrder(orderId, reason)
+      .then(() => {
+        setOrdersCheckOut(prevOrdersCheckOut => prevOrdersCheckOut.filter(OrdersCheck => OrdersCheck.orders_id !== orderId))
+      })
+      .catch(err => console.log(err))
+  }
+
 
   return (
     <div className="container mt-5">
