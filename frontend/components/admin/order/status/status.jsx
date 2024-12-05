@@ -62,10 +62,10 @@ const ListOrders = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>สถานะ</h2>
-        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มสถานะ </Link>
-        <Link to="create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มสถานะ </Link>
+        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มสถานะ </Link>
+        <Link to="create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มสถานะ </Link>
       </div>
-      <h4>คำสั่งซื้อ</h4>
+      <p>คำสั่งซื้อ</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -109,7 +109,7 @@ const ListOrders = () => {
                   <p className="mb-1">สร้างโดย: {order.created_by}</p>
                   <p className="mb-1">เเก้ไขโดย: {order.updated_by}</p>
                 </div>
-                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                <div className="d-flex flex-row-reverse bd-highlight mt-3">
                   <Link to={`edit/order/${order.status_order_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>
               </div>
@@ -139,7 +139,7 @@ const ListOrders = () => {
           </li>
         </ul>
       </nav>
-      <h4>ตะกร้าสินค้า</h4>
+      <p>ตะกร้าสินค้า</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -183,7 +183,7 @@ const ListOrders = () => {
                   <p className="mb-1">สร้างโดย: {order.created_by}</p>
                   <p className="mb-1">เเก้ไขโดย: {order.updated_by}</p>
                 </div>
-                <div className="d-flex flex-row-reverse bd-highlight mt-2">
+                <div className="d-flex flex-row-reverse bd-highlight mt-3">
                   <Link to={`edit/cart/${order.status_cart_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>
               </div>

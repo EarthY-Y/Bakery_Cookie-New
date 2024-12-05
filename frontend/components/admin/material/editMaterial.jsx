@@ -119,15 +119,15 @@ const EditMaterial = () => {
   }, [TotalQuantity , Costes, NewQuantity]); 
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 p-3">
       <Link className="btn btn-outline-secondary mb-4" to="/material">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
-      <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
+      <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h5>แก้ไขวัตถุดิบ</h5>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="mb-3 text-center">
-            <div className="position-relative" style={{margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
+            <div className="position-relative bg-white" style={{margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
               {Picture ? (
                 // ถ้ามี Picture จะสร้าง URL สำหรับแสดงรูปที่ดึงจากฐานข้อมูลหรือรูปที่อัพโหลดใหม่
                 <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', borderRadius: '5px', height: '100%', objectFit: 'cover' }} />

@@ -80,19 +80,19 @@ const ListMaterial = () => {
                 <div className="d-flex">
                   <img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid rounded" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/>
                   <div className="ms-3 d-flex flex-column justify-content-between w-100">
-                    <h6 className="mb-2">{material.material_name}</h6>
+                    <h6 className="mb-3">{material.material_name}</h6>
                     <div>
                       <Link to={`view/${material.material_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
                     </div>
                   </div>
                 </div>
-                <div className="small text-secondary mt-2">
+                <div className="small text-secondary mt-3">
                   <p className="mb-1">ปริมาณ: {material.quantity} กรัม</p>
                   <p className="mb-1">ต้นทุน: {material.cost} บาท</p>
                   <p className="mb-1">ต้นทุน/ปริมาณ: {material.cost_per_quantity} บาท</p>
                   <p className="mb-1">วันที่สร้าง: {formatDate(material.created_at)}</p>
                 </div>
-                <div className="d-flex justify-content-between mt-2">
+                <div className="d-flex justify-content-between mt-3">
                   <button onClick={() => handleDelete(material.material_id)} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button>
                   <Link to={`edit/${material.material_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>

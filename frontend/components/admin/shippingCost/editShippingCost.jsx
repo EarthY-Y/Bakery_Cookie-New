@@ -75,11 +75,11 @@ const EditShipping = () => {
   })) || [];
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 p-3">
       <Link className="btn btn-outline-secondary mb-4" to="/shipping">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
-      <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
+      <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h5>แก้ไขการขนส่ง</h5>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">

@@ -36,8 +36,8 @@ const ListPackage = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>บรรจุภัณฑ์</h2>
-        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มบรรจุภัณฑ์ </Link>
-        <Link to="create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มบรรจุภัณฑ์ </Link>
+        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มบรรจุภัณฑ์ </Link>
+        <Link to="create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มบรรจุภัณฑ์ </Link>
       </div>
 
       <p>จำนวน {products.length} รายการ</p>
@@ -66,7 +66,7 @@ const ListPackage = () => {
                 <td>{products.quantity}</td>
                 <td>{products.cost_per_quantity}</td>
                 {/* <td>{formatDate(products.created_at)}</td> */}
-                <td><Link to={`view/${products.package_id}`} className="btn btn-info text-light d-grid mx-auto"><i class="bi bi-eye"></i></Link></td>
+                <td><Link to={`view/${products.package_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${products.package_id}`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
                 <td><button onClick={() => handleDelete(products.package_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
               </tr>
@@ -82,18 +82,18 @@ const ListPackage = () => {
                 <div className="d-flex">
                   <img src={API_URL_PICTURE + products.package_pic} className="img-fluid rounded" style={{ maxHeight: '75px', maxWidth: '120px' }} />
                   <div className="ms-3 d-flex flex-column justify-content-between w-100">
-                    <h6 className="mb-2">{products.package_name}</h6>
+                    <h6 className="mb-3">{products.package_name}</h6>
                     <div>
                       <Link to={`view/${products.package_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
                     </div>
                   </div>
                 </div>
-                <div className="small text-secondary mt-2">
+                <div className="small text-secondary mt-3">
                   <p className="mb-1">ต้นทุน: {products.cost}</p>
                   <p className="mb-1">จำนวน/ชุด: {products.quantity}</p>
                   <p className="mb-1">ต้นทุน/ชิ้น: {products.cost_per_quantity}</p>
                 </div>
-                <div className="d-flex justify-content-between mt-2">
+                <div className="d-flex justify-content-between mt-3">
                   <button onClick={() => handleDelete(products.package_id)} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button>
                   <Link to={`edit/${products.package_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>

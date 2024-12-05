@@ -37,10 +37,10 @@ const categoey = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>ประเภทสินค้า</h2>
-        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มประเภทสินค้า </Link>
-        <Link to="create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มประเภทสินค้า </Link>
+        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทสินค้า </Link>
+        <Link to="create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทสินค้า </Link>
       </div>
-      <h4>รอการชำระเงิน</h4>
+      <p>รอการชำระเงิน</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -65,7 +65,7 @@ const categoey = () => {
                 <td className="text-center">{category.created_by}</td>
                 <td className="text-center">{category.updated_by}</td>
                 <td className="text-center">
-                  <Link to={`view/${category.category_id}`} className="btn btn-info text-light"><i class="bi bi-eye"></i></Link>
+                  <Link to={`view/${category.category_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>
                 <td className="text-center">
                   <Link to={`edit/${category.category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
@@ -88,7 +88,7 @@ const categoey = () => {
                   <p className="mb-1">สร้างโดย: {category.created_by}</p>
                   <p className="mb-1">เเก้ไขโดย: {category.updated_by}</p>
                 </div>
-                <div className="d-flex justify-content-between mt-2">
+                <div className="d-flex justify-content-between mt-3">
                   <Link to={`view/${category.category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
                   <Link to={`edit/${category.category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>

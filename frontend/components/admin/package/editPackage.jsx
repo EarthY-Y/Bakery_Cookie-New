@@ -94,15 +94,15 @@ const CreatePackage = () => {
 
   return (
     <form onSubmit={handleSubmitPackage}>
-      <div className="container mt-5">
+      <div className="container mt-5 p-3">
         <Link className="btn btn-outline-secondary mb-4" to="/package">
           <i className="bi bi-arrow-left"></i>ย้อนกลับ
         </Link>
-        <div className="mb-4 card col-md-12 px-40 card-body">
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
           <h4>แก้ไขบรรจุภัณฑ์</h4>
 
           <div className="mb-3 text-center">
-            <div style={{ width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="bg-white" style={{ width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             {Picture ? (
                 // ถ้ามี Picture จะสร้าง URL สำหรับแสดงรูปที่ดึงจากฐานข้อมูลหรือรูปที่อัพโหลดใหม่
                 <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', borderRadius: '5px', height: '100%', objectFit: 'cover' }} />

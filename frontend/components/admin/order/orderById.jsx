@@ -111,7 +111,7 @@ const orderById = () => {
   };
 
   return (
-    <div className="container mt-5 p-4 ">
+    <div className="container mt-5 p-3">
       <Link to="/orderslist" className="btn btn-outline-secondary mb-4">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
@@ -147,9 +147,8 @@ const orderById = () => {
             />
           </div>
         </div>
-        <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
-
         <div className="d-none d-md-block">
+        <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
@@ -201,13 +200,45 @@ const orderById = () => {
           </tfoot>
         </table>
         </div>
+        <div className="d-block d-md-none mt-3">
+          <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
+          <div className="border rounded p-3 bg-white">
+            {orderById.map((order, index) => (
+              <div key={index}>
+                <div className="d-flex">
+                  <h6 className="mb-2" style={{ marginRight: "10px" }}>{index + 1}</h6>
+                  <img src={API_URL_PICTURE + order.productpic_name} height={100} width={150} alt="Material" className="img-fluid rounded"/>
+                  <div className="ms-3 d-flex flex-column justify-content-between w-100">
+                    <h6 className="mb-2">{order.product_name}</h6>
+                  </div>
+                </div>
+                <div className="small text-secondary mt-2">
+                  <p className="mb-1">ต้นทุน: {order.cost_product}</p>
+                  <p className="mb-1">ราคาขาย: {order.selling_price_per_quantity}</p>
+                  <p className="mb-1">จำนวน: {order.productCartQuantity} ชิ้น</p>
+                </div>
+                {index < orderById.length - 1 && <hr />}
+              </div>
+            ))}
+          </div>
+          <div className="px-3 card-body">
+            <div className="row bg-white p-3 border rounded text-end small">
+              <p>ราคารวมสินค้ารวม: {numberGrouping(orderById[0]?.price || 0)} บาท</p>
+              <p>ค่าส่ง: {numberGrouping(orderById[0]?.cost_shipping || 0)} บาท</p>
+              <p>ค่ากล่อง: {numberGrouping(orderById[0]?.cost_package || 0)} บาท</p>
+              <p>ยอดชำระ: {numberGrouping(orderById[0]?.price + orderById[0]?.cost_package + orderById[0]?.cost_shipping || 0)} บาท</p>
+              <p>ต้นทุนคำสั่งซื้อ: {numberGrouping(orderById[0]?.total_cost || 0)} บาท</p>
+              <p>กำไร: {numberGrouping(orderById[0]?.profit || 0)} บาท</p>
+            </div>
+          </div>
+        </div>
 
         <div className="mb-3 row">
-          <div className='col-6'>
-            <label className="form-label fw-bold ">วันที่สั่ง</label>
+          <div className='col-md-6 col-12'>
+            <label className="form-label fw-bold mt-3">วันที่สั่ง</label>
             <p className="border p-2 rounded bg-white">{formatDate(orderById[0]?.created_at)}</p>
           </div>
-          <div className='col-6'>
+          <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold ">วันที่ชำระเงิน</label>
             <p className="border p-2 rounded bg-white">{formatDate(orderById[0]?.updated_at)}</p>
           </div>

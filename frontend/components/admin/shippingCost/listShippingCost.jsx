@@ -34,8 +34,8 @@ const ListShipping = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>ขนส่ง</h2>
-        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i class="bi bi-plus-circle-fill"></i> เพิ่มการขนส่ง </Link>
-        <Link to="create" className="btn btn-success btn-sm d-md-none"><i class="bi bi-plus-circle-fill"></i> เพิ่มการขนส่ง </Link>
+        <Link to="create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มการขนส่ง </Link>
+        <Link to="create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มการขนส่ง </Link>
       </div>
 
       <p>จำนวน {shipping.length} รายการ</p>
@@ -61,7 +61,7 @@ const ListShipping = () => {
                 <td>{shipp.weight_range_min} กรัม - {shipp.weight_range_max} กรัม</td>
                 <td>{numberGrouping(shipp.price)}</td>
                 <td>{shipp.estimated_delivery_days} วัน</td>
-                <td><Link to={`view/${shipp.shipping_rate_id }`} className="btn btn-info text-light d-grid mx-auto"><i class="bi bi-eye"></i></Link></td>
+                <td><Link to={`view/${shipp.shipping_rate_id }`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${shipp.shipping_rate_id }`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
                 <td><button onClick={() => handleDelete(shipp.shipping_rate_id )} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
               </tr>
@@ -75,16 +75,16 @@ const ListShipping = () => {
             {shipping.map((shipp) => (
               <div className="col-12 border rounded p-3 shadow-sm bg-light" key={shipp.shipping_rate_id}>
                 <div className="small text-secondary">
-                  <td className="d-flex flex-row-reverse bd-highlight">
-                  <Link to={`view/${shipp.shipping_rate_id }`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
-                  </td>
-                  <p className="mb-1">บริษัทขนส่ง: {shipp.carrier_name}</p>
+                  <div className="small text-secondary d-flex justify-content-between">
+                    <p className="mb-1">บริษัทขนส่ง: {shipp.carrier_name}</p>
+                    <Link to={`view/${shipp.shipping_rate_id }`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
+                  </div>
                   <p className="mb-1">ประเภท: {shipp.service_type}</p>
                   <p className="mb-1">ช่วงน้ำหนัก น้อย-มาก: {shipp.weight_range_min} กรัม - {shipp.weight_range_max} กรัม</p>
                   <p className="mb-1">ราคา: {numberGrouping(shipp.price)}</p>
                   <p className="mb-1">เวลาที่ใช้: {shipp.estimated_delivery_days} วัน</p>
                 </div>
-                <div className="d-flex justify-content-between mt-2">
+                <div className="d-flex justify-content-between mt-3">
                   <button onClick={() => handleDelete(shipp.shipping_rate_id )} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button>
                   <Link to={`edit/${shipp.shipping_rate_id }`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>
