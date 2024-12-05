@@ -58,7 +58,7 @@ function Sidebaradmin() {
               <div id="collapseOrders" className="accordion-collapse collapse show" data-bs-parent="#accordionOrders">
                 <div className="accordion-body">
                   <Link className="nav-link text-dark" to="/orderslist">รายการการสั่งซื้อ</Link>
-                  <Link className="nav-link text-dark" to="#">ประวัติการสั่งซื้อ</Link>
+                  <Link className="nav-link text-dark" to="/ordershistory">ประวัติการสั่งซื้อ</Link>
                 </div>
               </div>
             </div>
@@ -111,7 +111,7 @@ function Sidebaradmin() {
                 <div id="collapseMaterialsMobile" className="accordion-collapse collapse" data-bs-parent="#accordionExampleMobile">
                   <div className="accordion-body">
                     <Link className="nav-link text-dark" to="/material">วัตถุดิบ</Link>
-                    <Link className="nav-link text-dark" to="#">บรรจุภัณฑ์</Link>
+                    <Link className="nav-link text-dark" to="/package">บรรจุภัณฑ์</Link>
                   </div>
                 </div>
               </div>
@@ -126,7 +126,7 @@ function Sidebaradmin() {
                 <div id="collapseOrdersMobile" className="accordion-collapse collapse" data-bs-parent="#accordionOrdersMobile">
                   <div className="accordion-body">
                     <Link className="nav-link text-dark" to="/orderslist">รายการการสั่งซื้อ</Link>
-                    <Link className="nav-link text-dark" to="#">ประวัติการสั่งซื้อ</Link>
+                    <Link className="nav-link text-dark" to="/ordershistory">ประวัติการสั่งซื้อ</Link>
                   </div>
                 </div>
               </div>

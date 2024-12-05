@@ -1,15 +1,15 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
-import { getOrderByIdService, getStatusOrderService, updateStatusOrderService, getOrderHistoryByIdService } from '../../../API/admin/ordersService';
-import { formatDate } from '../../untils/frommatters/datetime';
-import { numberGrouping } from '../../untils/frommatters/numberFormatting';
-import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
+import { getOrderHistoryByIdService, getStatusOrderService, updateStatusOrderService, getStatusOrderHistoryByIdService } from '../../../../API/admin/ordersHistoryService';
+import { formatDate } from '../../../untils/frommatters/datetime';
+import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
+import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
 
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
-const orderById = () => {
+const orderHistoryById = () => {
   const {id} = useParams();
   const [orderById, setOrderById] = useState([])
   const [orderHistoryById, setOrderHistoryById] = useState([])
@@ -23,7 +23,7 @@ const orderById = () => {
   useEffect(() => {
     const getOrderById = async()=> {
       try {
-        const response = await getOrderByIdService(id)
+        const response = await getOrderHistoryByIdService(id)
         console.log(response);
         if(!response.data){
           throw new Error("ไม่มีข้อมูล")
@@ -42,7 +42,7 @@ const orderById = () => {
   useEffect(() => {
     const getOrderHistoryById = async()=> {
       try {
-        const response = await getOrderHistoryByIdService(id)
+        const response = await getStatusOrderHistoryByIdService(id)
         console.log(response);
         if(!response.data){
           throw new Error("ไม่มีข้อมูล")
@@ -111,10 +111,7 @@ const orderById = () => {
   };
 
   return (
-    <div className="container mt-5 p-3">
-      <Link to="/orderslist" className="btn btn-outline-secondary mb-4">
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
+    <div className="container mt-5 p-4 ">
       <div className="mb-4 card col-md-12 px-40 rounded shadow border bg-light card-body">
         <div className='row'>
           <div className="mb-3 col-md-8 col-12">
@@ -123,32 +120,32 @@ const orderById = () => {
           </div>
           <div className="mb-3 col-md-4 col-12">
             <label className="form-label fw-bold">สถานะ</label>
-            {/* {orderById[0]?.status === "รอการชำระเงิน" ? (
-              // แสดงข้อความธรรมดา
-              <p className="border p-2 rounded bg-white">{orderById[0]?.status}</p>
+            {orderHistoryById[0]?.status_name === "ยกเลิก" ? (
+              <p className="border p-2 rounded bg-white">{orderHistoryById[0]?.status_name}</p>
             ) : (
-              // แสดง select box
-              <select className="form-select" value={orderById[0]?.status} onChange={(e) => handleInputChange(e.target.value)}>
-                  <option disabled>Select status</option>
-                  {statusOrders.map((statusOrder) => (
-                      <option key={statusOrder.status_order_id} value={statusOrder.status_order_id}>
-                          {statusOrder.status_name}
-                      </option>
-                  ))}
-              </select>
-            )} */}
-            <Select
-              options={optionStatusOrders}
-              name="material_id"
-              value={optionStatusOrders.find((option) => option.value === status) || status}
-              onChange={(option) => handleInputChange(option)}
-              isSearchable={true}
-              // placeholder="เลือกบรรจุภัณฑ์"
-            />
+              <Select
+                options={optionStatusOrders}
+                name="material_id"
+                value={optionStatusOrders.find((option) => option.value === status) || status}
+                onChange={(option) => handleInputChange(option)}
+                isSearchable={true}
+                // placeholder="เลือกบรรจุภัณฑ์"
+              />
+            )}
           </div>
+          {orderHistoryById[0]?.status_name === "ยกเลิก" ? (          
+            <div className="mb-3">
+              <label className="form-label fw-bold">สาเหตุ</label>
+              <p className="border p-2 rounded bg-white">{orderHistoryById[0]?.note || "ไม่มี"}</p>
+            </div>
+          ):(
+            <div className=""></div>
+          ) }
+
         </div>
-        <div className="d-none d-md-block">
         <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
+        {/*หน้าจอใหญ่*/}
+        <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
@@ -200,6 +197,7 @@ const orderById = () => {
           </tfoot>
         </table>
         </div>
+        {/*หน้าจอเล็ก*/}
         <div className="d-block d-md-none mt-3">
           <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
           <div className="border rounded p-3 bg-white">
@@ -234,11 +232,11 @@ const orderById = () => {
         </div>
 
         <div className="mb-3 row">
-          <div className='col-md-6 col-12'>
-            <label className="form-label fw-bold mt-3">วันที่สั่ง</label>
+          <div className='col-6'>
+            <label className="form-label fw-bold ">วันที่สั่ง</label>
             <p className="border p-2 rounded bg-white">{formatDate(orderById[0]?.created_at)}</p>
           </div>
-          <div className='col-md-6 col-12 mt-3'>
+          <div className='col-6'>
             <label className="form-label fw-bold ">วันที่ชำระเงิน</label>
             <p className="border p-2 rounded bg-white">{formatDate(orderById[0]?.updated_at)}</p>
           </div>
@@ -286,4 +284,4 @@ const orderById = () => {
   );
 };
 
-export default orderById;
+export default orderHistoryById;
