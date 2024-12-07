@@ -84,3 +84,20 @@ export const updateCategoryPackageService = async(id, changesCategoryProduct) =>
       console.error("Error listMaterialService:", error);
   }
 }
+
+export const deleteCategoryPackageService = async(id, skip) => {
+  try {     
+    const authToken = localStorage.getItem('tokenAdmin')
+    //ใช้ patch เพราะต้องมีการส่งข้อมูลไป delete ส่งข้อมูลผ่าน body ไม่ได้
+    const response = await axios.patch(API_URL + "/delete/category/package/"+id, {skip:skip},
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    ); 
+    return response
+  } catch (error) {
+    throw error;
+  }
+}

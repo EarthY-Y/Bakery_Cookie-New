@@ -4,6 +4,7 @@ import {
     craetePacakageCategory,
     updateCategoryPackage,
     getCategoryPackageById,
+    deleteCategoryPackage
 } from "../../controller/admin/categoryPackage.js"
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
 import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
@@ -15,5 +16,6 @@ router.get('/admin/get/list/category/package',verifyAdminMid, getListCategoryPac
 router.get('/admin/get/category/package/:id',verifyAdminMid, getCategoryPackageById);
 router.post('/admin/create/category/package',verifyAdminMid, craetePacakageCategory);
 router.patch('/admin/edit/category/package/:id',verifyAdminMid, updateCategoryPackage);
+router.patch('/admin/delete/category/package/:id',verifyAdminMid, deleteCategoryPackage);
 
 export default router

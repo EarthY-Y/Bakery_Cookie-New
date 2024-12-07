@@ -30,7 +30,7 @@ export const getCategoryPackageById = async (req, res) => {
 
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT pc.package_category_id, pc.package_category_name, cp.package_id, p.package_id,"+
-                    " p.package_name, p.package_pic, a_created.userName as created_by, a_updated.userName as upadated_by,"+
+                    " p.package_name, p.package_pic, a_created.userName as created_by, a_updated.userName as updated_by,"+
                     " pc.created_at, pc.updated_at FROM package_category pc"+
                     " LEFT JOIN category_package cp ON cp.package_category_id = pc.package_category_id"+
                     " LEFT JOIN package p ON p.package_id = cp.package_id"+
@@ -172,3 +172,85 @@ export const updateCategoryPackage = async (req, res) => {
         res.status(400).json({ message: "Error edit category", error});
     }
 };
+
+export const deleteCategoryPackage = async (req, res) => {
+    try {
+        const id = req.params.id
+        const {skip} = req.body
+        console.log(id, skip);
+        if(!skip){
+            const results = await new Promise((resolve, reject) => {
+                db.query(
+                    "DELETE FROM package_category WHERE package_category_id = ?", [id], 
+                    (err, result) => { 
+                        if (err) return reject(err);
+                        resolve(result);
+                    }
+                );
+            });
+            console.log(results);
+            return res.status(200).json(results)
+        }
+        console.log(skip);
+        const results = await new Promise((resolve, reject) => {
+            db.query(
+                "DELETE FROM category_package WHERE package_category_id = ?", [id], 
+                (err, result) => { 
+                    if (err) return reject(err);
+                    resolve(result);
+                }
+            );
+        });
+        console.log(results);
+        if(results){
+            const results = await new Promise((resolve, reject) => {
+                db.query(
+                    "DELETE FROM package_category WHERE package_category_id = ?", [id], 
+                    (err, result) => { 
+                        if (err) return reject(err);
+                        resolve(result);
+                    }
+                );
+            });
+            console.log(results);
+            return res.status(200).json(results)
+        }
+
+    } catch (error) {
+        console.error('Error delete category_product:', error);
+        res.status(400).json({ message: "ต้องการลบจริงๆใช่ไหม?", error});
+    }
+};
+
+// export const deleteCategoryPackage = async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         const { skip } = req.body;
+//         console.log(id, skip);
+//         const results = await new Promise((resolve, reject) => {
+//             db.query(
+//                 "DELETE FROM package_category WHERE package_category_id = ?", [id],
+//                 (err, result) => {
+//                     if (err) return reject(err);
+//                     resolve(result);
+//                 }
+//             );
+//         });
+
+//         console.log(results);
+//         res.status(200).json({ message: "Category package deleted successfully" });
+//     } catch (error) {
+//         console.error('Error delete category_product:', error);
+
+//         if (error.sqlState === '23000') {
+//             // Foreign key constraint error
+//             res.status(409).json({
+//                 message: "ไม่สามารถลบได้ เพราะยังถูกนำไปใช้อยู่",
+//                 error: error.sqlMessage,
+//             });
+//         } else {
+//             // General error
+//             res.status(400).json({ message: "Error delete category_product", error });
+//         }
+//     }
+// };

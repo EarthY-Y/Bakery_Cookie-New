@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getListCategoryService } from '../../../../API/admin/categoryPackageService';
+import { getListCategoryService, deleteCategoryPackageService } from '../../../../API/admin/categoryPackageService';
 import { formatDate } from '../../../untils/frommatters/datetime';
+import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
 
 const CategoeyPackage = () => {
   const [listCategory, setListCategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("")
+  const [idCategoryPackage, setIdCategoryPackage] = useState("")
 
   useEffect(() => {
     const getCategoryList = async () => {
@@ -33,6 +37,31 @@ const CategoeyPackage = () => {
     setCurrentPage(pageNumber);
   };
 
+  const hadleDelete = async(id) => {
+    setIdCategoryPackage(id)
+    try {
+      const response = await deleteCategoryPackageService(id, '')
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error);
+      if(error.response.data.message){
+        setErrorMsg(error.response.data.message)
+        setShowCancelModal(true)
+      }
+    }
+  }
+
+  const handleConfirm = async() => {
+    try {
+      const response = await deleteCategoryPackageService(idCategoryPackage, 'skip')
+      console.log(response);
+      setListCategory(prev => prev.filter(categorPackage => categorPackage.package_category_id !== idCategoryPackage))
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -45,14 +74,15 @@ const CategoeyPackage = () => {
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{ width: '15%' }}>ประเภท</th>
+              <th style={{ width: '10%' }}>ประเภท</th>
               <th style={{ width: '10%' }}>จำนวนบรรจุภัณฑ์</th>
               <th style={{ width: '10%' }}>วันที่สร้าง</th>
               <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
-              <th style={{ width: '10%' }}>รายละเอียด</th>
-              <th style={{ width: '10%' }}>แก้ไข</th>
+              <th style={{ width: '5%' }}>รายละเอียด</th>
+              <th style={{ width: '5%' }}>แก้ไข</th>
+              <th style={{ width: '5%' }}>ลบ</th>
             </tr>
           </thead>
           <tbody>
@@ -70,6 +100,9 @@ const CategoeyPackage = () => {
                 <td className="text-center">
                   <Link to={`edit/${category.package_category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
                 </td>
+                <td className="text-center">
+                  <button className="btn btn-danger" onClick={() => hadleDelete(category.package_category_id)} ><i className="bi bi-trash"></i></button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -81,7 +114,10 @@ const CategoeyPackage = () => {
             {currentOrders.map((category) => (
               <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.package_category_id}>
                 <div className="small text-secondary">
-                  <p className="mb-1">ประเภท: {category.package_category_name}</p>
+                  <div className="d-flex justify-content-between mt-3">
+                    <p className="mb-1">ประเภท: {category.package_category_name}</p>                   
+                    <Link to={`edit/${category.package_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                  </div>
                   <p className="mb-1">จำนวนบรรจุภัณฑ์: {category.amountCategoryPackage} ชิ้น</p>
                   <p className="mb-1">วันที่สร้าง: {formatDate(category.created_at)}</p>
                   <p className="mb-1">วันที่เเก้ไข: {formatDate(category.updated_at)}</p>
@@ -89,8 +125,8 @@ const CategoeyPackage = () => {
                   <p className="mb-1">เเก้ไขโดย: {category.updated_by}</p>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
+                  <button className="btn btn-danger" onClick={() => hadleDelete(category.package_category_id)} ><i className="bi bi-trash"></i></button>
                   <Link to={`view/${category.package_category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
-                  <Link to={`edit/${category.package_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>
               </div>
             ))}
@@ -119,7 +155,13 @@ const CategoeyPackage = () => {
           </li>
         </ul>
       </nav>
-
+      <ConfirmPopUpModal
+        showModal={showCancelModal}
+        handleClose={() => setShowCancelModal(false)}
+        handleConfirm={handleConfirm}
+        text={errorMsg}
+      />
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };
