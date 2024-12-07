@@ -9,7 +9,6 @@ const CategoeyPackage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("")
   const [idCategoryPackage, setIdCategoryPackage] = useState("")
 
   useEffect(() => {
@@ -39,17 +38,8 @@ const CategoeyPackage = () => {
 
   const hadleDelete = async(id) => {
     setIdCategoryPackage(id)
-    try {
-      const response = await deleteCategoryPackageService(id, '')
-      console.log(response);
-      
-    } catch (error) {
-      console.log(error);
-      if(error.response.data.message){
-        setErrorMsg(error.response.data.message)
-        setShowCancelModal(true)
-      }
-    }
+    setShowCancelModal(true)
+
   }
 
   const handleConfirm = async() => {
@@ -159,7 +149,7 @@ const CategoeyPackage = () => {
         showModal={showCancelModal}
         handleClose={() => setShowCancelModal(false)}
         handleConfirm={handleConfirm}
-        text={errorMsg}
+        text="ต้องการลบประเภทบรรจุภัณฑ์นี้จริงๆใช่ไหม ?"
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>

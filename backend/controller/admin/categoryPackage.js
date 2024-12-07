@@ -176,22 +176,6 @@ export const updateCategoryPackage = async (req, res) => {
 export const deleteCategoryPackage = async (req, res) => {
     try {
         const id = req.params.id
-        const {skip} = req.body
-        console.log(id, skip);
-        if(!skip){
-            const results = await new Promise((resolve, reject) => {
-                db.query(
-                    "DELETE FROM package_category WHERE package_category_id = ?", [id], 
-                    (err, result) => { 
-                        if (err) return reject(err);
-                        resolve(result);
-                    }
-                );
-            });
-            console.log(results);
-            return res.status(200).json(results)
-        }
-        console.log(skip);
         const results = await new Promise((resolve, reject) => {
             db.query(
                 "DELETE FROM category_package WHERE package_category_id = ?", [id], 
