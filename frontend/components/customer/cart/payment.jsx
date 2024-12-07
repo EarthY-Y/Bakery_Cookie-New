@@ -56,7 +56,7 @@ const cartProduct = () => {
   
   // 
   useEffect(() => {
-    const total = totalPriceProduct + productOrder.cost_shipping + productOrder.cost_package/* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
+    const total = totalPriceProduct || 0 + productOrder.cost_shipping || 0 + productOrder.cost_package || 0/* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
     setTotalPrice(total);
   }, [productOrder]);
 
@@ -113,12 +113,12 @@ const cartProduct = () => {
                   <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
                   <div className="d-flex justify-content-between">
                     <strong className="text-uppercase">ราคาส่ง</strong>
-                    <span>{numberGrouping(parseInt(productOrder.cost_shipping))} ฿</span>
+                    <span>{numberGrouping(parseInt(productOrder.cost_shipping || 0))} ฿</span>
                   </div>
                   <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
                   <div className="d-flex justify-content-between">
                     <strong className="text-uppercase">ราคากล่อง</strong>
-                    <span>{numberGrouping(parseInt(productOrder.cost_package))} ฿</span>
+                    <span>{numberGrouping(parseInt(productOrder.cost_package || 0))} ฿</span>
                   </div>
                   <hr className="my-4" style={{ borderTop: '2px dashed grey' }} />
                   <div className="d-flex justify-content-between">

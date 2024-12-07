@@ -14,7 +14,7 @@ const router = express.Router();
 router.use(express.json());
 
 router.get('/customers/get/profile',verifyCustomerMid, getCustomer);
-router.get('/customers/get/profile:id',verifyCustomerMid, getCustomerById);
+router.get('/customers/get/profile/by/id',verifyCustomerMid, getCustomerById);
 router.post('/customers/create', createCustomer);
 router.patch('/customers/edit/profile/:id',verifyCustomerMid, uploadSingle, (req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
     // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่

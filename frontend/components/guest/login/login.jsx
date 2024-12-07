@@ -13,18 +13,20 @@ const Login = () => {
   const navigate = useNavigate();
 
   // login ด้วย Line
-  useEffect(() =>{
-    liff.init({
-      liffId: `2006630207-4ENd2JnL`, // Use own liffId
-    })
-  },[])
+  // useEffect(() =>{
+  //   liff.init({
+  //     liffId: `2006630207-4ENd2JnL`, // Use own liffId
+  //   })
+  // },[])
 
   const handleLoginLine = async() =>{
-    try {
+    await liff.init({liffId: '2006630207-4ENd2JnL', }) // Use own liffId
+    if(!liff.isLoggedIn()){
       liff.login() //ทำการ login ผ่าน Line
-    } catch (error) {
-      console.log(error)
+      return false
     }
+    const profile = await liff.getProfile()
+    console.log(profile);
   }
   // login ด้วย userName password
   const handleSubmit = async (event) => {

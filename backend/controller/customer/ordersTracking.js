@@ -4,13 +4,16 @@ import { passToken } from "../../middleware/passAuth.js";
 
 export const getOrderslistWaitStatement = async (req, res) => {
     try {
+        const authHeader = req.headers['authorization'];
+        const token = await passToken(authHeader);
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT o.cartId, o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, so.status_name, o.created_at, o.updated_at FROM orders o "+
-                " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
-                " INNER JOIN status_order so ON so.status_order_id = o.status"+
-                " LEFT JOIN order_profit op ON op.orders_id = o.orders_id" +
-                " WHERE so.status_name LIKE ?"+
-                " GROUP BY o.orders_id", ["รอ%"],
+            db.query(`SELECT o.cartId, o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, so.status_name, o.created_at, o.updated_at FROM orders o 
+                     LEFT JOIN customer c ON c.customer_id = o.customer_id
+                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                     INNER JOIN status_order so ON so.status_order_id = o.status
+                     LEFT JOIN order_profit op ON op.orders_id = o.orders_id
+                     WHERE so.status_name LIKE ? AND c.customer_id = ? 
+                     GROUP BY o.orders_id`, ["รอ%", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -26,13 +29,17 @@ export const getOrderslistWaitStatement = async (req, res) => {
 
 export const getOrderslistCheckOut = async (req, res) => {
     try {
+        const authHeader = req.headers['authorization'];
+        const token = await passToken(authHeader)
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
-                " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
-                " INNER JOIN status_order so ON so.status_order_id = o.status"+
-                " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
-                " WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?"+
-                " GROUP BY o.orders_id", ["รอ%","ยกเลิก%", "จัดส่ง%"],
+            db.query(`SELECT o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, 
+                     so.status_name, o.created_at, osh.change_time as updated_at FROM orders o
+                     LEFT JOIN customer c ON c.customer_id = o.customer_id
+                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                     INNER JOIN status_order so ON so.status_order_id = o.status
+                     LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
+                     WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ? AND c.customer_id = ? 
+                     GROUP BY o.orders_id`, ["รอ%","ยกเลิก%", "จัดส่ง%", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -47,14 +54,17 @@ export const getOrderslistCheckOut = async (req, res) => {
 }
 export const getOrderslistCancel = async (req, res) => {
     try {
+        const authHeader = req.headers['authorization'];
+        const token = await passToken(authHeader)
         const results = await new Promise((resolve, reject)=> {
             db.query(`SELECT  o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, 
                  so.status_name as status, o.created_at, osh.change_time as updated_at, osh.note  FROM orders o
+                 LEFT JOIN customer c ON c.customer_id = o.customer_id
                  LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                  INNER JOIN status_order so ON so.status_order_id = o.status
                  LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
-                 WHERE so.status_name LIKE ?
-                 GROUP BY o.orders_id`, ["ยกเลิก%"],
+                 WHERE so.status_name LIKE ? AND c.customer_id = ? 
+                 GROUP BY o.orders_id`, ["ยกเลิก%", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -69,13 +79,17 @@ export const getOrderslistCancel = async (req, res) => {
 }
 export const getOrderslistFinish = async (req, res) => {
     try {
-        const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT  o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
-                " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
-                " INNER JOIN status_order so ON so.status_order_id = o.status"+
-                " LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id"+
-                " WHERE so.status_name LIKE ?" +
-                " GROUP BY o.orders_id", ["%สำเร็จ"],
+        const authHeader = req.headers['authorization'];
+        const token = await passToken(authHeader)
+        const results = await new Promise((resolve, reject)=> {  
+            db.query(`SELECT  o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, 
+                     so.status_name, o.created_at, osh.change_time as updated_at FROM orders o 
+                     LEFT JOIN customer c ON c.customer_id = o.customer_id
+                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                     INNER JOIN status_order so ON so.status_order_id = o.status
+                     LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
+                     WHERE so.status_name LIKE ? AND c.customer_id = ? 
+                     GROUP BY o.orders_id`, ["%สำเร็จ", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

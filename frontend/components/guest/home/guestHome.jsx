@@ -1,11 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import liff from '@line/liff'
 import { listProductService } from '../../../API/guest/guestProductService';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const Home = () => {
   const [products, setProducts] = useState([]);
-  
+
+  const handleLoginLine = async() =>{
+    await liff.init({liffId: '2006630207-4ENd2JnL', }) // Use own liffId
+    if(!liff.isLoggedIn()){
+      liff.login() //ทำการ login ผ่าน Line
+      return false
+    }
+    const profile = await liff.getProfile()
+    console.log(profile);
+      
+  }
+
+  useEffect(() => {
+    handleLoginLine()
+  }, []);
+
+
   useEffect(() => {
     const getProducts = async () => {
       try {

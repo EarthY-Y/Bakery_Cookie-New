@@ -12,7 +12,7 @@ export const getProductCustomer = async (req, res) => {
                 resolve(result)
             })
         })
-        console.log("results",results);
+        // console.log("results",results);
         
         return res.status(200).json(results);
     } catch (error) {

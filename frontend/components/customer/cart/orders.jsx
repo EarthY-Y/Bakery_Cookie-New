@@ -34,7 +34,7 @@ const orders = () => {
           getAddressCustomer(),
 
         ]);
-        if(addressCustomer){
+        if(addressCustomer.data.length !== 0 ){
           console.log(addressCustomer.data);
           setAddress(addressCustomer.data[0])
         }else{
@@ -88,7 +88,7 @@ const orders = () => {
   },[totalWeight])
 
   useEffect(() => {
-    const totalRate = parseFloat(deliveryRate.price) + parseFloat(deliveryRate.cost_per_quantity)
+    const totalRate = parseFloat(deliveryRate.price || 0) + parseFloat(deliveryRate.cost_per_quantity || 0)
     setToatalShippingRate(totalRate.toFixed(0))
   },[deliveryRate])
 
@@ -173,7 +173,7 @@ const orders = () => {
           <h4>ยอดชำระทั้งหมด: {numberGrouping(totalPrice) || 0} ฿</h4>
         </div>
         <div className="d-flex flex-row-reverse bd-highlight mt-4">
-          <button type='submit' className="btn btn-success btn-lg">ชำระเงิน</button>
+          <button type='submit' className="btn btn-primary btn-lg">ไปหน้าชำระเงิน</button>
         </div>
       </div>
       <LoadingPopup

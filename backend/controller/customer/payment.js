@@ -29,21 +29,19 @@ export const getCustomerAddress = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
         const authToken = await passToken(authHeader)
-        if(!authToken){
-            return res.status(404).json({ message: "User not found" });
-        }
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT a.houseNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a"+
-                    " INNER JOIN customer c ON c.customer_id = a.created_by"+
-                    " INNER JOIN province p ON p.province_id = a.province_id"+
-                    " INNER JOIN amphure ap ON ap.amphure_id = a.amphure_id"+
-                    " INNER JOIN tambon t ON t.tambon_id = a.tambon_id  where a.created_by = ?;",[authToken.customerId],
+            db.query(`SELECT a.houseNo, a.zip_code, c.phone_number, c.f_name, c.l_name, p.province_nameTH, ap.amphure_nameTH, t.tambon_nameTH FROM address a
+                      LEFT JOIN customer c ON c.customer_id = a.created_by
+                      LEFT JOIN province p ON p.province_id = a.province_id
+                      LEFT JOIN amphure ap ON ap.amphure_id = a.amphure_id
+                      LEFT JOIN tambon t ON t.tambon_id = a.tambon_id  
+                      where a.created_by = ?;`,[authToken.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
             })
         })
-        // console.log("results",results);
+        console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get product:", error);
