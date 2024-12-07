@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listOrderWaitStatementService, listOrderCheckOutService } from '../../../API/admin/ordersService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import Search from '../../untils/fucntion/search';
 
 const ListOrders = () => {
   const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
+  const [orderWaitStatementSearch, setOrdersWaitStatementSearch] = useState([]);
   const [orderCheckOut, setOrdersCheckOut] = useState([]);
+  const [orderCheckOutSearch, setOrdersCheckOutSearch] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCheckOut, setCurrentPageCheckOut] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -40,9 +43,9 @@ const ListOrders = () => {
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrders = orderWaitStatement.slice(indexOfFirstItem, indexOfLastItem);
+  const currentOrders = orderWaitStatementSearch.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(orderWaitStatement.length / itemsPerPage);
+  const totalPages = Math.ceil(orderWaitStatementSearch.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -50,12 +53,21 @@ const ListOrders = () => {
 
   const indexOfLastItemCheckOut = currentPageCheckOut * itemsPerPage;
   const indexOfFirstItemCheckOut = indexOfLastItemCheckOut - itemsPerPage;
-  const currentOrdersCheckOut = orderCheckOut.slice(indexOfFirstItemCheckOut, indexOfLastItemCheckOut);
+  const currentOrdersCheckOut = orderCheckOutSearch.slice(indexOfFirstItemCheckOut, indexOfLastItemCheckOut);
 
-  const totalPagesCheckOut = Math.ceil(orderCheckOut.length / itemsPerPage);
+  const totalPagesCheckOut = Math.ceil(orderCheckOutSearch.length / itemsPerPage);
 
   const handlePageChangeCheckOut = (pageNumber) => {
     setCurrentPageCheckOut(pageNumber);
+  };
+
+  const handleSearchWaitStatement = (results) => {
+    setOrdersWaitStatementSearch(results);
+  };
+  const handleSearchCheckOut = (results) => {
+    console.log(results);
+    setOrdersCheckOutSearch(results)
+    // setOrdersCheckOutSearch((prev) => prev.filter((item => item.orders_id === results.orders_id)));
   };
 
   return (
@@ -63,81 +75,26 @@ const ListOrders = () => {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>รายการสั่งซื้อ</h2>
       </div>
-      <p>รอการชำระเงิน</p>
-      <div className="d-none d-md-block">
-        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
-          <thead className="table-success">
-            <tr className="text-center align-middle">
-              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
-              <th style={{ width: '10%' }}>ปริมาณ</th>
-              <th style={{ width: '10%' }}>ราคารวม</th>
-              <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-              <th style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-              <th style={{ width: '10%' }}>สถานะ</th>
-              <th style={{ width: '10%' }}>รายละเอียด</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentOrders.map((order) => (
-              <tr key={order.orders_id}>
-                <td>{order.orders_id}</td>
-                <td>{order.quantity} ชิ้น</td>
-                <td>{order.price} บาท</td>
-                <td>{formatDate(order.created_at)}</td>
-                <td className="text-center">{`รอชำระเงิน`}</td>
-                <td className="text-center">{order.status_name}</td>
-                <td className="text-center">
-                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="d-block d-md-none pb-3">
-        <div className="row gy-4">
-          <div className="px-3 card-body">
-            {currentOrders.map((order) => (
-              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
-                <div className="small text-secondary">
-                  <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
-                  <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
-                  <p className="mb-1">ราคารวม: {order.price} บาท</p>
-                  <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
-                  <p className="mb-1">วันที่ชำระเงิน: {`รอชำระเงิน`}</p>
-                  <p className="mb-1">สถานะ: {order.status_name}</p>
-                </div>
-                <div className="d-flex flex-row-reverse bd-highlight mt-3">
-                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light btn-sm"><i className="bi bi-eye"></i> ดู </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <nav>
-        <ul className="pagination justify-content-end"> 
-          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}> {/* หน้าเเรก */}
-            <button className="page-link" onClick={() => handlePageChange(1)}>First</button> 
-          </li>
-          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}> {/*หน้าก่อนหน้านี้*/}
-            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
-          </li>
-          {[...Array(totalPages)].map((_, index) => ( //หน้าปัจุบันเเละหน้าทั้งหมดที่มี
-            <li key={index + 1} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
-              <button className="page-link" onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
-            </li>
-          ))}
-          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}> {/*หน้าต่อไป*/}
-            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>Next</button>
-          </li>
-          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}> {/*หน้าสุดท้าย */}
-            <button className="page-link" onClick={() => handlePageChange(totalPages)}>Last</button>
-          </li>
-        </ul>
-      </nav>
       <h4>พร้อมดำเนินการ</h4>
+      <div className='row'>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderCheckOut}
+            handleSearch={handleSearchCheckOut}
+            name="ชื่อลูกค้า"
+            itemKeys={["username"]}
+          />
+        </div>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderCheckOut}
+            handleSearch={handleSearchCheckOut}
+            name="สถานะ"
+            itemKeys={["status_name"]}
+          />
+        </div>
+
+      </div>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -208,6 +165,87 @@ const ListOrders = () => {
           </li>
           <li className={`page-item ${currentPageCheckOut === totalPagesCheckOut ? 'disabled' : ''}`}> {/*หน้าสุดท้าย */}
             <button className="page-link" onClick={() => handlePageChangeCheckOut(totalPagesCheckOut)}>Last</button>
+          </li>
+        </ul>
+      </nav>
+
+      <h4>รอการชำระเงิน</h4>
+      <Search 
+        data={orderWaitStatement}
+        handleSearch={handleSearchWaitStatement}
+        name="ชื่อลูกค้า"
+        itemKeys={["username"]}
+      />
+      <div className="d-none d-md-block">
+        <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
+          <thead className="table-success">
+            <tr className="text-center align-middle">
+              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '10%' }}>ปริมาณ</th>
+              <th style={{ width: '10%' }}>ราคารวม</th>
+              <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
+              <th style={{ width: '10%' }}>วันที่ชำระเงิน</th>
+              <th style={{ width: '10%' }}>สถานะ</th>
+              <th style={{ width: '10%' }}>รายละเอียด</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentOrders.map((order) => (
+              <tr key={order.orders_id}>
+                <td>{order.orders_id}</td>
+                <td>{order.quantity} ชิ้น</td>
+                <td>{order.price} บาท</td>
+                <td>{formatDate(order.created_at)}</td>
+                <td className="text-center">{`รอชำระเงิน`}</td>
+                <td className="text-center">{order.status_name}</td>
+                <td className="text-center">
+                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="d-block d-md-none pb-3">
+        <div className="row gy-4">
+          <div className="px-3 card-body">
+            {currentOrders.map((order) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
+                <div className="small text-secondary">
+                  <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
+                  <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
+                  <p className="mb-1">ราคารวม: {order.price} บาท</p>
+                  <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+                  <p className="mb-1">วันที่ชำระเงิน: {`รอชำระเงิน`}</p>
+                  <p className="mb-1">สถานะ: {order.status_name}</p>
+                </div>
+                <div className="d-flex flex-row-reverse bd-highlight mt-3">
+                  <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light btn-sm"><i className="bi bi-eye"></i> ดู </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <nav>
+        <ul className="pagination justify-content-end"> 
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}> {/* หน้าเเรก */}
+            <button className="page-link" onClick={() => handlePageChange(1)}>First</button> 
+          </li>
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}> {/*หน้าก่อนหน้านี้*/}
+            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+          </li>
+          {[...Array(totalPages)].map((_, index) => ( //หน้าปัจุบันเเละหน้าทั้งหมดที่มี
+            <li key={index + 1} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}> {/*หน้าต่อไป*/}
+            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+          </li>
+          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}> {/*หน้าสุดท้าย */}
+            <button className="page-link" onClick={() => handlePageChange(totalPages)}>Last</button>
           </li>
         </ul>
       </nav>

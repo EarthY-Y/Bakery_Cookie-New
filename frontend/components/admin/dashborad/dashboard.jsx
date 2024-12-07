@@ -21,6 +21,7 @@ const Dashboard = () => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
+        //await new Promise((resolve) => setTimeout(resolve, 3000)); //ถ้าอยากลองดูหน้า loading
         const [
           getAmoutOrders,
           getAllSales,
