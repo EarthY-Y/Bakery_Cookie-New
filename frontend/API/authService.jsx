@@ -56,6 +56,7 @@ export const ProtectedRouteAdmin = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
+        autoRemoveToken(token)
         autoRemoveTokenAdmin(token)
         return;
       }
@@ -106,6 +107,7 @@ export const ProtectedRouteCustomer = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
+        autoRemoveToken(token)
         return;
       }else {
         autoRemoveToken(token)
@@ -158,9 +160,10 @@ export const CheckRouteCustomer = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
+        autoRemoveTokenAdmin(token)
         return;
       }else {
-        autoRemoveToken(token)
+        autoRemoveTokenAdmin(token)
         try {
           console.log("Verifying token...");
           const resCustomer = await axios.get(API_URL+'/verifyCustomer', {
