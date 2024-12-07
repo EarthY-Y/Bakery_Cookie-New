@@ -57,8 +57,8 @@ function Navbar() {
     <div>
       {/* Navbar ส่วนบน */}
       <div className={`p-1 mb-2 text-dark ${isScrolled ? "scrolled-navbar" : ""}`} style={{ backgroundColor: "#C40C0C" }}>
-        <nav className="navbar navbar-expand-lg navbar-light">
-          <div className="container-fluid">
+      <nav className="navbar navbar-expand-lg navbar-light">
+          <div className="container-fluid"> {/* หน้าจอใหญ่ */}
             <form className="d-flex flex-grow-1">
               <input className="form-control me-2" style={{ width: "100%", maxWidth: "400px", borderRadius: "10px" }} type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-outline-light" type="submit"><i className="bi bi-search"></i></button>
@@ -110,10 +110,11 @@ function Navbar() {
         </nav>
         
       </div>
+      {/* Navbar ส่วนล่าง */}
       {!isScrolled && (
         <div className="container text-center my-4">
           <img src="https://example.com/logo.png" alt="Bakery Cookie New Happy Family" style={{ width: "150px" }} />
-          <nav className="container text-center col-5 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: "#C40C0C" }}>
+          <nav className="container text-center col-9 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: "#C40C0C" }}>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
