@@ -10,7 +10,7 @@ export const LoginCutomer = async (req, res) =>{
     const {userName,passWord} = req.body
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT customer_id, username, password, is_active FROM customer WHERE username = ?", userName, (err, results) => {
+            db.query("SELECT customer_id, username, password FROM customer WHERE username = ?", userName, (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -68,7 +68,7 @@ export const LoginAdmin = async (req, res) =>{
 //     const {userName,passWord} = req.body
 //     try {
 //         const results = await new Promise((resolve, reject) => {
-//             db.query("SELECT customer_id, username, password, is_active FROM customer WHERE username = ?", userName, (err, results) => {
+//             db.query("SELECT customer_id, username, password FROM customer WHERE username = ?", userName, (err, results) => {
 //                 if (err) return reject(err);
 //                 resolve(results);
 //             });

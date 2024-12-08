@@ -52,8 +52,8 @@ export const createCustomer = async (req, res) => {
     try {
         const response = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password, is_active) VALUES(?, ?, ?, ?, ?, ?, ?)",
-                [id, phone_number, f_name, l_name, username, hashPassword, "Y"],  (err, result) => {
+                "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password) VALUES( ?, ?, ?, ?, ?, ?)",
+                [id, phone_number, f_name, l_name, username, hashPassword],  (err, result) => {
                     if (err) return reject(err);
                     resolve(result);
                 }

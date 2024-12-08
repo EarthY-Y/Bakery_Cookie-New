@@ -2,18 +2,21 @@ import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
 import { getOrderHistoryByIdService, getStatusOrderService, updateStatusOrderService, getStatusOrderHistoryByIdService } from '../../../../API/admin/ordersHistoryService';
+import { getOrderAddressService } from '../../../../API/admin/ordersService'
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
-
+import LoadingPopup from '../../../untils/popUp/loading';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const orderHistoryById = () => {
   const {id} = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [orderById, setOrderById] = useState([])
-  const [orderHistoryById, setOrderHistoryById] = useState([])
+  const [statusOrderHistoryById, setStatusOrderHistoryById] = useState([])
   const [statusOrders, setStatusOrder] = useState([])
+  const [ordersAddress, setOrderAddress] = useState([])
   const [status, setStatus] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -21,58 +24,35 @@ const orderHistoryById = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getOrderById = async()=> {
+    setIsLoading(true);
+    const fetchData = async() => {
       try {
-        const response = await getOrderHistoryByIdService(id)
-        console.log(response);
-        if(!response.data){
-          throw new Error("ไม่มีข้อมูล")
-        }
-        setOrderById(response.data)
-        setStatus(response.data[0]?.status)
-      }
-      
-      catch (error) {
-        alert(error)
+        const [
+          getOrderById,
+          getStatusOrderHistoryById,
+          getStatusOrder,
+          getOrderAddress,
+        ] = await Promise.all([
+          getOrderHistoryByIdService(id),
+          getStatusOrderHistoryByIdService(id),
+          getStatusOrderService(),
+          getOrderAddressService(id),
+        ]);
+        console.log(getOrderById,getStatusOrderHistoryById,getStatusOrder,);
+        
+        setOrderById(getOrderById.data)
+        setStatus(getOrderById.data[0]?.status)
+        setStatusOrderHistoryById(getStatusOrderHistoryById.data)
+        setStatusOrder(getStatusOrder.data)
+        setOrderAddress(getOrderAddress.data[0])
+      } catch (error) {
+        
+      }finally{
+        setIsLoading(false);
       }
     }
-    getOrderById()
-  },[])
 
-  useEffect(() => {
-    const getOrderHistoryById = async()=> {
-      try {
-        const response = await getStatusOrderHistoryByIdService(id)
-        console.log(response);
-        if(!response.data){
-          throw new Error("ไม่มีข้อมูล")
-        }
-        setOrderHistoryById(response.data)
-      }
-      
-      catch (error) {
-        alert(error)
-      }
-    }
-    getOrderHistoryById()
-  },[showCancelModal])
-
-  useEffect(() => {
-    const getStatusOrderById = async()=> {
-      try {
-        const response = await getStatusOrderService()
-        console.log(response);
-        if(!response.data){
-          throw new Error("ไม่มีข้อมูล")
-        }
-        setStatusOrder(response.data)
-      }
-      
-      catch (error) {
-        alert(error)
-      }
-    }
-    getStatusOrderById()
+    fetchData()
   },[])
 
   const handleInputChange = (option) => {
@@ -120,8 +100,8 @@ const orderHistoryById = () => {
           </div>
           <div className="mb-3 col-md-4 col-12">
             <label className="form-label fw-bold">สถานะ</label>
-            {orderHistoryById[0]?.status_name === "ยกเลิก" ? (
-              <p className="border p-2 rounded bg-white">{orderHistoryById[0]?.status_name}</p>
+            {statusOrderHistoryById[0]?.status_name === "ยกเลิก" ? (
+              <p className="border p-2 rounded bg-white">{statusOrderHistoryById[0]?.status_name}</p>
             ) : (
               <Select
                 options={optionStatusOrders}
@@ -133,10 +113,10 @@ const orderHistoryById = () => {
               />
             )}
           </div>
-          {orderHistoryById[0]?.status_name === "ยกเลิก" ? (          
+          {statusOrderHistoryById[0]?.status_name === "ยกเลิก" ? (          
             <div className="mb-3">
               <label className="form-label fw-bold">สาเหตุ</label>
-              <p className="border p-2 rounded bg-white">{orderHistoryById[0]?.note || "ไม่มี"}</p>
+              <p className="border p-2 rounded bg-white">{statusOrderHistoryById[0]?.note || "ไม่มี"}</p>
             </div>
           ):(
             <div className=""></div>
@@ -230,6 +210,51 @@ const orderHistoryById = () => {
             </div>
           </div>
         </div>
+        <h5>รายละเอียดลูกค้า</h5>
+        <div className='row'>
+          <div className="mb-3 col-md-6 col-12">
+            <label className="form-label fw-bold">ชื่อ</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.f_name}</p>
+          </div>
+          <div className="mb-3 col-md-6 col-12">
+            <label className="form-label fw-bold">นามสกุล</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.l_name}</p>
+          </div>
+        </div>
+        <div className='row'>
+          <div className="mb-3 col-md-6 col-12">
+            <label className="form-label fw-bold">ชื่อบัญชีลูกค้า</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.username}</p>
+          </div>
+          <div className="mb-3 col-md-6 col-12">
+            <label className="form-label fw-bold">นามสกุล</label>
+            <p className="border p-2 rounded bg-white">0{ordersAddress.phone_number}</p>
+          </div>
+        </div>
+        <div className='row'>
+          <div className="mb-3 col-md-6 col-12">
+            <label className="form-label fw-bold">ที่อยู่</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.house_no}</p>
+          </div>
+          <div className="mb-3 col-md-6 col-12">
+            <label className="form-label fw-bold">ตำบล</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.tambon_name}</p>
+          </div>
+        </div>
+        <div className='row'>
+          <div className="mb-3 col-md-4 col-12">
+            <label className="form-label fw-bold">อำเภอ</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.amphure_name}</p>
+          </div>
+          <div className="mb-3 col-md-4 col-12">
+            <label className="form-label fw-bold">จังหวัด</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.province_name}</p>
+          </div>
+          <div className="mb-3 col-md-4 col-12">
+            <label className="form-label fw-bold">รหัสไปรษณีย์</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.zip_code}</p>
+          </div>
+        </div>
 
         <div className="mb-3 row">
           <div className='col-6'>
@@ -254,7 +279,7 @@ const orderHistoryById = () => {
           </div>
         </div>
         <div className="mb-3">
-          {orderHistoryById.map((order, index) => (
+          {statusOrderHistoryById.map((order, index) => (
             <div key={index} className="row p-2">
               <div className='col-4'>
                 <label className="form-label fw-bold">สถานะที่ดำเนินการ</label>
@@ -279,6 +304,11 @@ const orderHistoryById = () => {
         text={errorMsg + ' ต้องการยืนยันใช้สถานะซ้ำไหม'}
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
 
   );

@@ -56,17 +56,17 @@ export const getOrdersById = async (req, res) => {
     try {
         const id = req.params.id
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, o.updated_by,"+
-                    " o.updated_at, o.status, o.statement_picture, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name, "+
-                    " cpd.cost_product, ocd.total_cost, op.profit, p.selling_price_per_quantity FROM orders o"+
-                    " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
-                    " LEFT JOIN order_profit op ON op.orders_id = o.orders_id"+
-                    " LEFT JOIN cost_product_detaails cpd ON cpd.order_cost_details_id = ocd.order_cost_details_id"+
-                    " INNER JOIN cart c ON o.cartId = c.cartId"+
-                    " INNER JOIN cart_product cp ON c.cartId = cp.cartId"+
-                    " INNER JOIN product p ON p.product_id = cp.product_id"+
-                    " INNER JOIN productpicture pp ON pp.product_id = p.product_id"+
-                    " WHERE o.orders_id = ? GROUP BY p.product_id",[id],
+            db.query(`SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, o.updated_by,
+                     o.updated_at, o.status, o.statement_picture, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name, 
+                     cpd.cost_product, ocd.total_cost, op.profit, p.selling_price_per_quantity FROM orders o
+                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                     LEFT JOIN order_profit op ON op.orders_id = o.orders_id
+                     LEFT JOIN cost_product_detaails cpd ON cpd.order_cost_details_id = ocd.order_cost_details_id
+                     INNER JOIN cart c ON o.cartId = c.cartId
+                     INNER JOIN cart_product cp ON c.cartId = cp.cartId
+                     INNER JOIN product p ON p.product_id = cp.product_id
+                     INNER JOIN productpicture pp ON pp.product_id = p.product_id
+                     WHERE o.orders_id = ? GROUP BY p.product_id`,[id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -103,6 +103,29 @@ export const getOrdersHistoryById = async (req, res) => {
         res.status(400).json({ message: "Error get product", error });
     }
 }
+
+export const getOrdersAddressById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT ra.tambon_name, ra.amphure_name, ra.province_name, ra.zip_code, ra.house_no,
+                     ra.zip_code, c.username, c.f_name, c.l_name, c.phone_number FROM order_address ra
+                     LEFT JOIN orders o ON o.orders_id = ra.orders_id
+                     LEFT JOIN customer c ON c.customer_id = o.customer_id 
+                     WHERE ra.orders_id = ?`, [id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}
+
 // export const updateStatusOrder = async (req, res) => {
 //     try {
 //         const authHeader = req.headers['authorization'];
