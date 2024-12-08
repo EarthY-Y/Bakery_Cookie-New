@@ -19,7 +19,7 @@ export const getListCategoryPackage = async (req, res) => {
         })
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get category:", error);
+        console.error("Error get ListCategoryPackage:", error);
         res.status(400).json({ message: "Error get product", error});
     }
 }
@@ -46,7 +46,7 @@ export const getCategoryPackageById = async (req, res) => {
         console.log(results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get category:", error);
+        console.error("Error get CategoryPackageById:", error);
         res.status(400).json({ message: "Error get product", error});
     }
 }
@@ -74,7 +74,7 @@ export const craetePacakageCategory = async (req, res) => {
         return res.status(200).json('create package successfully ');
 
     } catch (error) {
-        console.error("Error create category:", error);
+        console.error("Error create PacakageCategory:", error);
         res.status(400).json({ message: "Error create package", error});
     }
 }
@@ -169,7 +169,7 @@ export const updateCategoryPackage = async (req, res) => {
 
     } catch (error) {
         console.error('Error inserting product into category_product:', error);
-        res.status(400).json({ message: "Error edit category", error});
+        res.status(400).json({ message: "Error edit category_product", error});
     }
 };
 
