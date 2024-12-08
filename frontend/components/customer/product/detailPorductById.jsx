@@ -2,16 +2,17 @@ import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService, createCartService, getCartService } from '../../../API/customer/productService';
+import { useCart } from '../layOut/navbar/CartContext';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const detailPorductById = () => {
   const {id} = useParams();
+  const { addToCart } = useCart();
   const [productById, setproductMyId] = useState([])
   const [CartId, setCartId] = useState()
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate()
-  console.log(id);
   
   const handleIncreaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -62,7 +63,7 @@ const detailPorductById = () => {
 
   const handleSubmitProductMaterial = async (event) => {
     event.preventDefault();
-
+    addToCart(productById, quantity);
     try {
         const res = await createCartService(id, CartId.cartId, productById.selling_price_per_quantity, quantity);
         console.log(res);

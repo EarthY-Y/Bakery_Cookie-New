@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { getCartService, getPorductCartService } from "../../../../API/customer/productService";
 import { logout } from "../../../../API/authService";
+import { useCart } from "./CartContext";
 
-function Navbar() {
+const Navbar = memo(() => { 
   const [productCart, setProductCart] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPriceCart, setTotalPriceCrat] = useState(0);
   const [cartId, setCartId] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const { totalPrice } = useCart();
+  
   const handleLogout = () => {
     logout();
   };
@@ -41,8 +43,10 @@ function Navbar() {
 
   useEffect(() => {
     const total = productCart.reduce((sum, item) => sum + item.selling_price_per_quantity * item.quantity, 0);
-    setTotalPrice(total);
-  }, [productCart]);
+    console.log(totalPrice, total);
+    const totalCart = total + parseInt(totalPrice || 0)
+    setTotalPriceCrat(totalCart);
+  }, [productCart, totalPrice]);
 
   /*  มากกว่าเป็น true น้อยกว่าเป็น false */
   useEffect(() => {
@@ -86,7 +90,7 @@ function Navbar() {
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                   <li className="nav-item">
-                    <Link className="nav-link active text-light" to={`/cart/${cartId}`}>฿ {totalPrice}</Link>
+                    <Link className="nav-link active text-light" to={`/cart/${cartId}`}>฿ {totalPriceCart}</Link>
                   </li>
                   <li className="nav-item">
                     <i className="bi bi-basket3 fs-3 text-light me-3"></i>
@@ -132,6 +136,6 @@ function Navbar() {
       )}
     </div>
   );
-}
+})
 
 export default Navbar;
