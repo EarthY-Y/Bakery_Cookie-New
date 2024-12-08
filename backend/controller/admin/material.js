@@ -55,8 +55,8 @@ export const createMaterial = async (req, res) => {
             return res.status(400).send({ message: "Material picture is required." });
         }
         const results = await new Promise((resolve, reject) => {
-            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, cost_per_quantity, materialpic_type, status, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [id, material_name, quantity, cost, materialPictureName, costesperquantities, materialPictureType, 'active', token.admin_id],
+            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, cost_per_quantity, materialpic_type, created_by) VALUES( ?, ?, ?, ?, ?, ?, ?, ?)",
+                [id, material_name, quantity, cost, materialPictureName, costesperquantities, materialPictureType, token.admin_id],
                 (err, result, fields) => {
                     if (err) {
                         return reject(err);

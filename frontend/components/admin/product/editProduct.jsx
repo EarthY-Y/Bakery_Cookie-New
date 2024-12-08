@@ -193,11 +193,11 @@ const EditProduct = () => {
 
   const handlePackageRemoveRow = (index) => {
     const values = [...(formData.packaging || [])];
-    const deletedPackage = values.splice(index, 1)[0]; // ลบแถวออก
-  
-    setFormData((prev) => ({ ...prev, packaging: values }));
-    setDeletedPackage((prevDeleted) => [...prevDeleted, deletedPackage]);
-
+    if (deletedPackage.length > 0) { 
+      const deletedPackage = values.splice(index, 1); // ลบแถวออก
+      setFormData((prev) => ({ ...prev, packaging: values }));
+      setDeletedPackage((prevDeleted) => [...prevDeleted, deletedPackage]);
+    }
   };
   
   const handleSubmit = async (event) => {
@@ -343,10 +343,10 @@ const EditProduct = () => {
     if (formData.ingredients) {
       console.log(totalCost);
       const costPerQuantity =  parseFloat(totalCost) / parseFloat(formData.quantity_per_time || 1); // หลีกเลี่ยงการหารด้วย 0
-      setpricePreQuantity(costPerQuantity.toFixed(3));
+      setpricePreQuantity(costPerQuantity.toFixed(2));
     }
     const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
-    setTotalCost(hiddenCosts.toFixed(3))
+    setTotalCost(hiddenCosts.toFixed(2))
   }, [formData.ingredients, formData.quantity]);
 
   useEffect(() => {
@@ -447,13 +447,13 @@ const EditProduct = () => {
             </div>
           ))}
 
-          <div className="mb-3 d-flex justify-content-center">
+          {/* <div className="mb-3 d-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มบรรจุภัณฑ์</button>
-          </div>
+          </div> */}
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนสินค้า</label>
             <div className="row col-sm-5">
-              <input type="number" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost()} readOnly/>
+              <input type="number" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost().toFixed(2)} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">

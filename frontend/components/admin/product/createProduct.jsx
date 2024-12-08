@@ -267,9 +267,9 @@ const CreateProduct = () => {
             </div>
           ))}
 
-          <div className="mb-4 d-flex justify-content-center">
+          {/* <div className="mb-4 d-flex justify-content-center">
               <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มบรรจุภัณฑ์</button>
-          </div>
+          </div> */}
 
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>

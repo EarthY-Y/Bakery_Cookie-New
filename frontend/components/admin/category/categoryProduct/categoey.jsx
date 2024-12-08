@@ -57,7 +57,7 @@ const categoey = () => {
           </thead>
           <tbody>
             {currentOrders.map((category) => (
-              <tr key={category.category_id}>
+              <tr key={category.product_category_id}>
                 <td>{category.category_name}</td>
                 <td>{category.amountCategoryProduct} ชิ้น</td>
                 <td>{formatDate(category.created_at)}</td>
@@ -65,10 +65,10 @@ const categoey = () => {
                 <td className="text-center">{category.created_by}</td>
                 <td className="text-center">{category.updated_by}</td>
                 <td className="text-center">
-                  <Link to={`view/${category.category_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
+                  <Link to={`view/${category.product_category_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>
                 <td className="text-center">
-                  <Link to={`edit/${category.category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
+                  <Link to={`edit/${category.product_category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
                 </td>
               </tr>
             ))}
@@ -79,7 +79,7 @@ const categoey = () => {
         <div className="row gy-4">
           <div className="px-3 card-body">
             {currentOrders.map((category) => (
-              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.category_id}>
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.product_category_id}>
                 <div className="small text-secondary">
                   <p className="mb-1">ประเภท: {category.category_name}</p>
                   <p className="mb-1">จำนวนสินค้า: {category.amountCategoryProduct} ชิ้น</p>
@@ -89,8 +89,8 @@ const categoey = () => {
                   <p className="mb-1">เเก้ไขโดย: {category.updated_by}</p>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
-                  <Link to={`view/${category.category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
-                  <Link to={`edit/${category.category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                  <Link to={`view/${category.product_category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
+                  <Link to={`edit/${category.product_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>
               </div>
             ))}

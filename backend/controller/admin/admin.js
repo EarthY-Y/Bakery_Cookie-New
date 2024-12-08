@@ -294,7 +294,7 @@ export const createDataTable = async (req, res) => {
                     );
 
                     CREATE TABLE product_category (
-                    category_id VARCHAR(40) PRIMARY KEY,
+                    product_category_id VARCHAR(40) PRIMARY KEY,
                     category_name VARCHAR(50),
                     created_by VARCHAR(40),
                     updated_by VARCHAR(40),
@@ -305,13 +305,13 @@ export const createDataTable = async (req, res) => {
                     CREATE TABLE category_product (
                     category_product_id VARCHAR(40) PRIMARY KEY,
                     product_id VARCHAR(40),
-                    category_id VARCHAR(40),
+                    product_category_id VARCHAR(40),
                     created_by VARCHAR(40),
                     updated_by VARCHAR(40),
                     created_at DATETIME,
                     updated_at DATETIME,
                     FOREIGN KEY (product_id) REFERENCES product(product_id),
-                    FOREIGN KEY (category_id) REFERENCES product_category(category_id)
+                    FOREIGN KEY (product_category_id) REFERENCES product_category(product_category_id)
                     );
 
                     CREATE TABLE productpicture (

@@ -138,8 +138,8 @@ const createProductPicture = async (req, id, tokenId) => {
 
         const results = await new Promise((resolve, reject) => {
             db.query(
-                "INSERT INTO productpicture (productpic_id, product_id, productpic_name, productpic_type, created_by) VALUES (?, ?, ?, ?, ?)",
-                [idPicture, id, productPictureName, materialPictureType, tokenId],
+                "INSERT INTO productpicture (productpic_id, product_id, productpic_name, created_by) VALUES (?, ?, ?, ?)",
+                [idPicture, id, productPictureName, tokenId],
                 (err, result) => {
                     if (err) return reject(err);
                     resolve(result);
@@ -325,8 +325,8 @@ const updateProductPicture = async (req, productId, tokenId) => {
         let updateValues = [];
 
         if (req.file) {
-            updateQuery += "productpic_name = ?, productpic_type = ?, updated_by = ? ";
-            updateValues.push(req.file.filename, req.file.mimetype, tokenId);
+            updateQuery += "productpic_name = ?, updated_by = ? ";
+            updateValues.push(req.file.filename, tokenId);
         }
 
         updateQuery += "WHERE product_id = ? LIMIT 1";
