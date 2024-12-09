@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { Link,useNavigate } from 'react-router-dom';
 import { listMaterialService } from '../../../API/admin/materialService';
 import { createProductService, listProductPackageService } from '../../../API/admin/productService';
+import TooltipUntils from '../../untils/popUp/tooltip';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({}) //
@@ -25,13 +26,41 @@ const CreateProduct = () => {
     }, 0);
   };
 
-  const handleInputChange = (index, event) => {
-      const values = [...(formData.ingredients || [])]; // ใช้ค่าที่เก็บอยู่ใน formData
-      values[index] = {
-          ...values[index],
-          [event.target.name]: event.target.value
-      };
-      setFormData(prev => ({ ...prev, ingredients: values })); // อัปเดต formData
+  const handleInputChange = (index, options, event) => {
+    const values = [...(formData.ingredients || [])];
+    const oldIngredient = values[index];
+  
+    // สร้าง ingredient ใหม่
+    const updatedIngredient = {
+      ...oldIngredient,
+      [event?.target?.name || 'material_id']: event?.target?.value || options?.value,
+      [event?.target?.name || 'material_name']: options?.label || '',
+    };
+  
+    // Update based on the event or options provided
+    if (event) {
+      updatedIngredient[event.target.name] = event.target.value;
+    }
+  
+    // ถ้ามีการเปลี่ยน material_id
+    if (updatedIngredient.material_id && oldIngredient.material_id !== updatedIngredient.material_id) {
+      // สร้าง tempId ใหม่
+      updatedIngredient.tempId = `temp-${Date.now()}`;
+  
+      // เก็บ oldIngredient เข้า deletedIngredients ถ้ามี material_id เดิม
+      if (oldIngredient.material_id) {
+        setDeletedIngredients((prevDeleted) => {
+          const isDuplicate = prevDeleted.some(item => item.material_id === oldIngredient.material_id);
+          return isDuplicate ? prevDeleted : [...prevDeleted, oldIngredient];
+        });
+      }
+    }
+  
+    // แทนที่ค่าเดิมด้วย ingredient ใหม่
+    values[index] = updatedIngredient;
+  
+    // อัปเดต state
+    setFormData((prev) => ({ ...prev, ingredients: values }));
   };
 
   const handlePackageChange = (index, option) => {
@@ -73,8 +102,11 @@ const CreateProduct = () => {
   };
 
   const handleAddRow = () => {
-      const newIngredients = [...(formData.ingredients || []), { material_id: '', quantity: '' }];
-      setFormData(prev => ({ ...prev, ingredients: newIngredients })); // อัปเดต formData
+    const newIngredients = [
+      ...(formData.ingredients || []),
+      { tempId: `temp-${Date.now()}`, material_id: '', quantity: '' }
+    ];
+    setFormData((prev) => ({ ...prev, ingredients: newIngredients }));
   };
 
   const handleRemoveRow = (index) => {
@@ -118,10 +150,10 @@ const CreateProduct = () => {
     const totalCost = calculateCostMaterial();
     if ((formData.ingredients || []).length > 0 && formData.quantityPerTime) {
         const costPerQuantity =  totalCost / parseFloat(formData.quantityPerTime || 1); // หลีกเลี่ยงการหารด้วย 0
-        setpricePreQuantity(costPerQuantity.toFixed(3));
+        setpricePreQuantity(costPerQuantity.toFixed(2));
     }
     const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
-    setTotalCost(hiddenCosts.toFixed(3))
+    setTotalCost(hiddenCosts.toFixed(2))
   }, [formData.ingredients, formData.quantityPerTime]);
   
   useEffect(() => {
@@ -175,7 +207,10 @@ const CreateProduct = () => {
     value: packages.package_id,
     label: packages.package_name
   }));
-
+  const optionsMaterial = listMaterials.map((materials) => ({
+    value: materials.material_id,
+    label: materials.material_name
+  }));
   const handleSubmitProductMaterial = async (event) => {
     event.preventDefault();
     console.log(formData); // Log formData for debugging
@@ -188,6 +223,11 @@ const CreateProduct = () => {
     }
   };
 
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      รวมต้นทุนเเฝงอีก 10 % เช่น ค่าน้ำ ค่าไฟ ค่าเเก๊ส เเละค่าบรรจุภัฑณ์
+    </Tooltip>
+  ); 
   return (
     <form onSubmit={handleSubmitProductMaterial}>
       <div className="container mt-5 p-3">
@@ -223,26 +263,20 @@ const CreateProduct = () => {
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
               <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
               <div className="col-sm-3">
-                  <select //ไม่ควรใช้ defaultValue="" เพราะว่าด้านล่างมี value="" อยู่เเล้วไม่งั้นเดี๋ยวเกิด error: elect elements must be either controlled or uncontrolled 
-                    className="form-select"
-                    name="material_id"
-                    value={ingredient.material_id}
-                    onChange={(event) => handleInputChange(index, event)}
-                    required
-                  >
-                    <option value="" disabled>Select Material</option>
-                    {listMaterials.map((listMaterial) => (
-                        <option key={listMaterial.material_id} value={listMaterial.material_id}>
-                            {listMaterial.material_name}
-                        </option>
-                    ))}
-                  </select>
+                <Select
+                  options={optionsMaterial}
+                  name="material_id"
+                  value={optionsMaterial.find((option) => option.value === ingredient.material_id) ||  ""}
+                  onChange={(options) => handleInputChange(index, options, '')}
+                  isSearchable={true}
+                  placeholder="เลือกบรรจุภัณฑ์"
+                />
               </div>
-              <div className="col-sm-2 mb-2">
-                  <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, event)} required/>
+              <div className="col-sm-1 mb-2">
+                <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
               </div>
               <div className="col-sm-1">
-                  <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}><i className="bi bi-trash"></i></button>
+                <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}><i className="bi bi-trash"></i></button>
               </div>
             </div>
           ))}
@@ -250,9 +284,9 @@ const CreateProduct = () => {
               <button type="button" className="btn btn-primary" onClick={handleAddRow}>เพิ่มวัตถุดิบ</button>
           </div>
           {(formData.packaging || []).map((packaging, index) => (
-            <div key={index} className="row mb-4 justify-content-center">
-              <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
-              <div className="col-sm-5 mb-2">
+            <div key={index} className="row mb-3 justify-content-center">
+              <label className="col-sm-2 col-form-label ">บรรจุภัณฑ์ {index + 1}</label>
+              <div className="col-sm-4 mb-2">
                 <Select
                 options={options}
                 value={options.find((option) => option.value === packaging.package_id) || null}
@@ -274,7 +308,7 @@ const CreateProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
             <div className="row col-sm-5">
-              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateCostMaterial()} readOnly/>
+              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateCostMaterial().toFixed(2)} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -290,7 +324,11 @@ const CreateProduct = () => {
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ต้นทุนรวม</label>
+            <label className="col-sm-2 col-form-label">ต้นทุนรวม
+              <TooltipUntils 
+                text="รวมต้นทุนเเฝงอีก 10 % เช่น ค่าน้ำ ค่าไฟ ค่าเเก๊ส เเละค่าบรรจุภัฑณ์"
+              />
+            </label>
             <div className="row col-sm-5">
               <input type="text" name='totalQuantity'className="form-control" placeholder="จำนวน" value={totalCost || 0} readOnly/>
             </div>

@@ -5,6 +5,7 @@ import { listProductByIdService, listProductPackageByIdService, listProductPacka
 import { listMaterialService } from '../../../API/admin/materialService';
 import { editProductService } from '../../../API/admin/productService';
 import LoadingPopup from '../../untils/popUp/loading';
+import TooltipUntils from '../../untils/popUp/tooltip';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -417,7 +418,7 @@ const EditProduct = () => {
                   placeholder="เลือกบรรจุภัณฑ์"
                 />
               </div>
-              <div className="col-sm-2 mb-2">
+              <div className="col-sm-1 mb-2">
                 <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
               </div>
               <div className="col-sm-1">
@@ -432,7 +433,7 @@ const EditProduct = () => {
           {(formData.packaging || []).map((packaging, index) => (
             <div key={packaging.tempId || packaging.package_id || index}  className="row mb-3 justify-content-center">
               <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
-              <div className="col-sm-5 mb-2">
+              <div className="col-sm-4 mb-2">
                 <Select
                   options={options}
                   value={options.find((option) => option.label === packaging.package_name) ||  packaging.package_name}
@@ -469,7 +470,11 @@ const EditProduct = () => {
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ต้นทุนรวม</label>
+            <label className="col-sm-2 col-form-label">ต้นทุนรวม
+              <TooltipUntils 
+                text="รวมต้นทุนเเฝงอีก 10 % เช่น ค่าน้ำ ค่าไฟ ค่าเเก๊ส เเละค่าบรรจุภัฑณ์"
+              />
+            </label>
             <div className="row col-sm-5">
               <input type="number" name='totalCost'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
             </div>
