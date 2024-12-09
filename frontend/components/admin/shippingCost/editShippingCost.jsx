@@ -83,7 +83,7 @@ const EditShipping = () => {
         <h5>แก้ไขการขนส่ง</h5>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">ชื่อบริษัทข่นส่ง</label>
+            <label className="col-sm-2 col-form-label">ชื่อบริษัทขนส่ง</label>
             <div className="row col-sm-4">
               <input type="text" className="form-control" placeholder="ชื่อวัตถุดิบ" value={carrierName} onChange={(e) => setCarrierName(e.target.value)} />
             </div>
