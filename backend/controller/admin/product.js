@@ -6,12 +6,13 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getProduct = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.selling_price_per_quantity, p.quantity_per_time, p.product_name, pp.productpic_name, SUM(m.cost_per_quantity * pm.quantity) AS cost FROM product p"+
-                    " LEFT JOIN productpicture pp ON p.product_id = pp.product_id" +
-                    " LEFT JOIN product_material pm ON p.product_id = pm.product_id" + 
-                    " LEFT JOIN material m ON pm.material_id = m.material_id" +
-                    " GROUP BY p.product_id, p.product_name, pp.productpic_name" +
-                    " ORDER BY p.product_id;",
+            db.query(`SELECT p.product_id, p.selling_price_per_quantity, p.quantity_per_time, p.product_name, pp.productpic_name, 
+                      SUM(m.cost_per_quantity * pm.quantity) AS cost, p.is_active FROM product p
+                      LEFT JOIN productpicture pp ON p.product_id = pp.product_id
+                      LEFT JOIN product_material pm ON p.product_id = pm.product_id
+                      LEFT JOIN material m ON pm.material_id = m.material_id
+                      GROUP BY p.product_id, p.product_name, pp.productpic_name
+                      ORDER BY p.product_id;`,
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -28,12 +29,13 @@ export const getProductById = async (req, res) => {
     const id = req.params.id
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.weight_per_piece, p.description, p.created_by, p.updated_by, p.created_at, p.updated_at, "+
-                     "pp.productpic_name, pm.quantity, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p "+
-                     "INNER JOIN admin a ON a.admin_id = p.created_by "+ 
-                     "INNER JOIN productpicture pp ON pp.product_id = p.product_id "+
-                     "INNER JOIN product_material pm ON pm.product_id = p.product_id "+
-                     "INNER JOIN material m ON m.material_id = pm.material_id WHERE p.product_id = ?",
+            db.query(`SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.weight_per_piece, 
+                    p.description, p.created_by, p.updated_by, p.created_at, p.updated_at, p.is_active,
+                     pp.productpic_name, pm.quantity, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p 
+                     INNER JOIN admin a ON a.admin_id = p.created_by 
+                     INNER JOIN productpicture pp ON pp.product_id = p.product_id 
+                     INNER JOIN product_material pm ON pm.product_id = p.product_id 
+                     INNER JOIN material m ON m.material_id = pm.material_id WHERE p.product_id = ?`,
                      [id], 
                     (err, result) => { 
                 if (err) return reject(err)
@@ -230,12 +232,24 @@ export const updateProduct = async (req, res) => {
         const token = await passToken(authHeader);
         const { id } = req.params;
 
-        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name, deletedIngredients, deletedPackage, packages, weight_per_piece, updatedIngredients } = req.body;
-
+        const { product_name, quantity_per_time, selling_price_per_quantity, description, ingredients, productpic_name,
+                is_active, deletedIngredients, deletedPackage, packages, weight_per_piece, updatedIngredients } = req.body;
+        
         // 1. อัปเดตข้อมูลในตาราง product
+        let change_status = is_active.replace(/[^0-9.]/g, '').trim()// ลบทุกอย่างที่ไม่ใช่ตัวเลขหรือจุด เพราข้อมูลที่วส่งมาคือ "1" ถ้าจะเอาไปเทียบต้องใช้ ""1""
         let updateQuery = "UPDATE product SET  ";
         let updateValues = [];
-
+        
+        if (change_status == "1") {
+            let active = true
+            updateQuery += "is_active = ?, ";
+            updateValues.push(active);
+        }else{
+            let active = false
+            updateQuery += "is_active = ?, ";
+            updateValues.push(active);
+        }
+        
         if (product_name) {
             updateQuery += "product_name = ?, ";
             updateValues.push(product_name);
@@ -290,7 +304,7 @@ export const updateProduct = async (req, res) => {
         updateValues.push(id);
         console.log("Final SQL:", updateQuery, updateValues);
 
-        if (product_name || quantity_per_time || selling_price_per_quantity  || weight_per_piece || description || quantity_per_time ) {
+        if (product_name || quantity_per_time || selling_price_per_quantity  || weight_per_piece || description || quantity_per_time || is_active ) {
             await new Promise((resolve, reject) => {
                 db.query(updateQuery, updateValues, (err, result) => {
                     if (err) return reject(err);

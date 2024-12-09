@@ -58,13 +58,13 @@ const listProduct = () => {
           <thead className="table-success">
             <tr className="text-center align-middle">
               <th style={{width: '15%' }}>รูปภาพ</th>
-              <th style={{width: '30%' }}>ชื่อสินค้า</th>
+              <th style={{width: '20%' }}>ชื่อสินค้า</th>
               <th style={{width: '10%' }}>ต้นทุน</th>
               <th style={{width: '10%' }}>ราคาขาย/ชิ้น</th>
               <th style={{width: '10%' }}>จำนวนที่ทำ/ครั้ง</th>
+              <th style={{width: '10%' }}>สถานะสินค้า</th>
               <th style={{width: '5%' }}>ดู</th>
               <th style={{width: '5%' }}>แก้ไข</th>
-              <th style={{width: '5%' }}>ลบ</th>
             </tr>
           </thead>
         
@@ -77,9 +77,9 @@ const listProduct = () => {
                 <td>{products.selling_price_per_quantity} บาท</td>
                 <td>{products.quantity_per_time} ชิ้น</td>
                 {/* <td>{formatDate(products.created_at)}</td> */}
+                {products.is_active === 1 ? <td className="text-center text-success">วางขาย</td> : <td className="text-center text-danger">เลิกขาย</td>}
                 <td><Link to={`view/${products.product_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${products.product_id}`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
-                <td><button onClick={() => handleDelete(products.product_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
               </tr>
             ) )}
           </tbody>
@@ -103,6 +103,7 @@ const listProduct = () => {
                   <p className="mb-1">ต้นทุน: {products.cost.toFixed(3)} บาท</p>
                   <p className="mb-1">ราคาขาย/ชิ้น: {products.selling_price_per_quantity} บาท</p>
                   <p className="mb-1">จำนวนที่ทำ/ครั้ง: {products.quantity_per_time} ชิ้น</p>
+                  {products.is_active === 1 ? <p className="mb-1 text-success">วางขาย</p> : <p className="mb-1 text-danger">เลิกขาย</p>}
                 </div>
                 <div className="d-flex justify-content-between mt-3">
                   <button onClick={() => handleDelete(products.product_id)} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button>

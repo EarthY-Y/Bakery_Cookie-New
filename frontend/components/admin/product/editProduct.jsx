@@ -20,6 +20,7 @@ const EditProduct = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [active, setStatusactive] = useState("ใช้งาน");
   const { id } = useParams();
   const navigate = useNavigate();
   
@@ -55,6 +56,7 @@ const EditProduct = () => {
           selling_price_per_quantity: productData.selling_price_per_quantity || '',
           description: productData.description || '',
           file: productData.productpic_name || '',
+          is_active : productData.is_active,
           ingredients,
         };
 
@@ -70,6 +72,7 @@ const EditProduct = () => {
 
         setFormData({ ...initialData, packaging });
         setOriginalData({ ...initialData, packaging });
+        setStatusactive(productData.is_active)
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -497,6 +500,16 @@ const EditProduct = () => {
               <input type="number" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice } onChange={handleChange} readOnly/>
             </div>
           </div>
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">การใช้งาน</label>
+            <div className="row col-sm-5">
+              <select className="form-select" name="is_active" value={formData.is_active || active} onChange={handleChange}   required aria-label="Default select example" placeholder="เลือก">
+                <option value="1">วางขาย</option>
+                <option value="0">เลิกขาย</option>
+                {/* <option value="3">Three</option> */}
+              </select>
+            </div>
+          </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
             <div className="row col-sm-5">
@@ -508,7 +521,6 @@ const EditProduct = () => {
                 />
             </div>
           </div>
-
           <div className="d-flex justify-content-center gap-3 my-4">
             <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => {handleReset()}}>ล้าง</button>
             <button type="submit" className="btn btn-success mt-3 px-4 ms-5"> บันทึกข้อมูล </button>

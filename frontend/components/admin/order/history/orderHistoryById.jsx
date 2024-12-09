@@ -1,7 +1,8 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
-import { getOrderHistoryByIdService, getStatusOrderListService, updateStatusOrderService, getStatusOrderHistoryByIdService } from '../../../../API/admin/ordersHistoryService';
+import { getOrderHistoryByIdService, updateStatusOrderService, getStatusOrderHistoryByIdService } from '../../../../API/admin/ordersHistoryService';
+import { getStatusOrderListService } from '../../../../API/admin/ordersService'
 import { getOrderAddressService } from '../../../../API/admin/ordersService'
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
