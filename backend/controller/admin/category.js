@@ -10,7 +10,7 @@ export const getListCategory = async (req, res) => {
                     " a_updated.userName AS updated_by, COUNT(cp.category_product_id) AS amountCategoryProduct FROM product_category c"+
                     " LEFT JOIN admin a_created ON a_created.admin_id = c.created_by"+
                     " LEFT JOIN admin a_updated ON a_updated.admin_id = c.updated_by"+
-                    " LEFT JOIN category_product cp ON cp.category_product_id = c.product_category_id"+
+                    " LEFT JOIN category_product cp ON cp.product_category_id = c.product_category_id"+
                     " GROUP BY c.product_category_id, c.category_name",
                     (err, result) => { 
                 if (err) return reject(err)
@@ -31,7 +31,7 @@ export const getCategoryById = async (req, res) => {
         
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT c.*, cp.category_product_id, p.product_id, p.product_name, pp.productpic_name, a_created.username as created_by, a_updated.username as updated_by FROM product_category c"+
-                    " LEFT JOIN category_product cp ON cp.category_product_id  = c.product_category_id"+
+                    " LEFT JOIN category_product cp ON cp.product_category_id  = c.product_category_id"+
                     " LEFT JOIN product p ON p.product_id = cp.product_id"+
                     " LEFT JOIN productpicture pp ON pp.product_id = p.product_id"+
                     " LEFT JOIN admin a_created ON a_created.admin_id = c.created_by"+
@@ -175,8 +175,8 @@ export const updateCategoryProduct = async (req, res) => {
 export const getProductPicture = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.* , pp.productpic_name FROM product p" + 
-                    " INNER JOIN productpicture pp ON pp.product_id = p.product_id",
+            db.query(`SELECT p.* , pp.productpic_name FROM product p
+                     INNER JOIN productpicture pp ON pp.product_id = p.product_id`,
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

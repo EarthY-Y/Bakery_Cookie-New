@@ -56,11 +56,9 @@ export const ProtectedRouteAdmin = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
-        autoRemoveToken(token)
         autoRemoveTokenAdmin(token)
         return;
       }
-      
       try {
         console.log("Verifying token...");
         const resAdmin = await axios.get(API_URL+'/verifyAdmin', {
@@ -160,10 +158,10 @@ export const CheckRouteCustomer = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
-        autoRemoveTokenAdmin(token)
+        autoRemoveToken(token)
         return;
       }else {
-        autoRemoveTokenAdmin(token)
+        autoRemoveToken(token)
         try {
           console.log("Verifying token...");
           const resCustomer = await axios.get(API_URL+'/verifyCustomer', {
@@ -213,6 +211,7 @@ export const CheckRouteAdmin = () => {
         return;
       }
       try {
+        autoRemoveTokenAdmin(token)
         console.log("Verifying token...");
         const resAdmin = await axios.get(API_URL+'/verifyAdmin', {
           headers: {
@@ -291,11 +290,11 @@ function autoRemoveTokenAdmin(token) {
 
     if (timeUntilExpiration > 0) {
         setTimeout(() => { // ตั้งเวลาให้ตรงตามเวลาที่เหลือก่อน token จะหมด
-          removeTokenAdmin(); 
+            removeTokenAdmin(); 
             alert('Token has expired. Please log in again.');
         }, timeUntilExpiration);
     } else {
-        removeToken(); // หาก token หมดอายุแล้วให้ลบทันที
+      removeTokenAdmin(); // หาก token หมดอายุแล้วให้ลบทันที
     }
   } catch (error) {
     console.error("Invalid token format:", error); // จัดการกับกรณี token ผิดรูปแบบ

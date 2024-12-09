@@ -72,7 +72,6 @@ function Sidebaradmin() {
                 <div className="accordion-body">
                   <Link className="nav-link text-dark" to="/status/orders">สถานะของคำสั่งซื้อ</Link>
                   <Link className="nav-link text-dark" to="/status/cart">สถานะของตะกร้าสินค้า</Link>
-                  <Link className="nav-link text-dark" to="/status/product">สถานะของสินค้า</Link>
                 </div>
               </div>
             </div>
@@ -141,8 +140,8 @@ function Sidebaradmin() {
                 </h2>
                 <div id="collapseAnotherMobile" className="accordion-collapse collapse" data-bs-parent="#accordionAnotherMobile">
                   <div className="accordion-body">
-                    <Link className="nav-link text-dark" to="/status/order">สถานะ</Link>
-                    
+                    <Link className="nav-link text-dark" to="/category/prduct">ประเภทสินค้า</Link>
+                    <Link className="nav-link text-dark" to="/category/package">ประเภทบรรจุภัณฑ์</Link>
                   </div>
                 </div>
               </div>
