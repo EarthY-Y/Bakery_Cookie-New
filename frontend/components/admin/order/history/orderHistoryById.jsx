@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
-import { getOrderHistoryByIdService, getStatusOrderService, updateStatusOrderService, getStatusOrderHistoryByIdService } from '../../../../API/admin/ordersHistoryService';
+import { getOrderHistoryByIdService, getStatusOrderListService, updateStatusOrderService, getStatusOrderHistoryByIdService } from '../../../../API/admin/ordersHistoryService';
 import { getOrderAddressService } from '../../../../API/admin/ordersService'
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
@@ -35,7 +35,7 @@ const orderHistoryById = () => {
         ] = await Promise.all([
           getOrderHistoryByIdService(id),
           getStatusOrderHistoryByIdService(id),
-          getStatusOrderService(),
+          getStatusOrderListService(),
           getOrderAddressService(id),
         ]);
         console.log(getOrderById,getStatusOrderHistoryById,getStatusOrder,);

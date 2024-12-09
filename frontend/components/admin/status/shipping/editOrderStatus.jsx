@@ -4,17 +4,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { updateStatusOrderServiceById, getStatusOrderServiceById } from '../../../../API/admin/ordersService';
 import { Link } from 'react-router-dom';
 
-const editStatus = () => {
+const editOrderStatus = () => {
   const id = useParams().id
   const [statusName, setStatusName] = useState("");
+  const [active, setStatusactive] = useState("ใช้งาน");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       console.log(statusName);      
-      const res = await updateStatusOrderServiceById(id, statusName); //จะส่งไปเป็น formData เเบบนี้ได้ต้องผ่าน multer ก่อน
-      navigate('/status');
+      const res = await updateStatusOrderServiceById(id, statusName,active); //จะส่งไปเป็น formData เเบบนี้ได้ต้องผ่าน multer ก่อน
+      navigate(-1);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -27,6 +28,7 @@ const editStatus = () => {
         const res = await getStatusOrderServiceById(id);
         console.log(res.data);
         setStatusName(res.data[0]?.status_name);
+        setStatusactive(res.data[0]?.is_active)
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -36,9 +38,6 @@ const editStatus = () => {
   
   return (
     <div className="container mt-5 p-3">
-      <Link className="btn btn-outline-secondary mb-4" to="/status">
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
       <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h4>แก้ไขสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -57,6 +56,16 @@ const editStatus = () => {
               />
             </div>
           </div>
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">การใช้งาน</label>
+            <div className="row col-sm-4">
+              <select className="form-select" onChange={(e) => setStatusactive(e.target.value)} value={active}  required aria-label="Default select example" placeholder="เลือก">
+                <option value="1">ใช้งาน</option>
+                <option value="0">ไม่ใช้งาน</option>
+                {/* <option value="3">Three</option> */}
+              </select>
+            </div>
+          </div>
 
           <div className="d-flex justify-content-center gap-3 my-4">
             <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
@@ -68,4 +77,4 @@ const editStatus = () => {
   );
 };
 
-export default editStatus;
+export default editOrderStatus;

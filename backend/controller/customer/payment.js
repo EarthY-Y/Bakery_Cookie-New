@@ -59,8 +59,8 @@ export const getPorductCart = async (req, res) => {
         }
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT cartId FROM cart c" +
-                    " INNER JOIN status_cart sc ON sc.status_cart_id = c.status WHERE c.customer_id = ? AND sc.status_name = 'พร้อมใช้งาน' LIMIT 1;",
-                     [authToken.customerId], 
+                    " INNER JOIN status_cart sc ON sc.status_cart_id = c.status WHERE c.customer_id = ? AND sc.status_name = ? LIMIT 1;",
+                     [authToken.customerId, "พร้อมใช้งาน"], 
                     (err, result) => { 
                         resolve(result)
                     })

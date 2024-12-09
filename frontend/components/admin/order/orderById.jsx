@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
-import { getOrderByIdService, getStatusOrderService, updateStatusOrderService, getOrderHistoryByIdService, getOrderAddressService } from '../../../API/admin/ordersService';
+import { getOrderByIdService, getStatusOrderListService, updateStatusOrderService, getOrderHistoryByIdService, getOrderAddressService } from '../../../API/admin/ordersService';
 import { formatDate } from '../../untils/frommatters/datetime';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
@@ -34,7 +34,7 @@ const orderById = () => {
         ] = await Promise.all([
           getOrderByIdService(id),
           getOrderHistoryByIdService(id),
-          getStatusOrderService(),
+          getStatusOrderListService(),
           getOrderAddressService(id),
         ]);
         console.log(getOrderById,getOrderHistoryById,getStatusOrder,getOrderAddress);

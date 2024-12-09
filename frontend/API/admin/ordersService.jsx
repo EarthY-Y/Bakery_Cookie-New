@@ -4,10 +4,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_PORT_ADMIN
 
-export const CreateStatusCartService = async(statusId,statusName,statusfor) => {
+export const CreateStatusCartService = async(statusName,statusfor) => {
   try {
     const authToken = localStorage.getItem('tokenAdmin')
-    const response = await axios.post(API_URL + "/create/status", {statusId:statusId, statusName:statusName,statusfor:statusfor},
+    const response = await axios.post(API_URL + "/create/status", {statusName:statusName,statusfor:statusfor},
       {
         headers: {
           'authorization': `Bearer ${authToken}`
@@ -74,6 +74,22 @@ export const getOrderHistoryByIdService = async(id) => {
 
     const authToken = localStorage.getItem('tokenAdmin');
     const response = await axios.get(API_URL + "/view/detail/order/history/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    ); 
+    return response
+  } catch (error) {
+    console.error("Error listMaterialService:", error);
+  }
+}
+
+export const getStatusOrderListService = async() => {
+  try {
+    const authToken = localStorage.getItem('tokenAdmin');
+    const response = await axios.get(API_URL + "/get/status/orders/list", 
       {
         headers: {
           'authorization': `Bearer ${authToken}`
@@ -166,10 +182,10 @@ export const getOrderAddressService = async(id) => {
   }
 }
 
-export const updateStatusCartServiceById = async(id,statusName) => {
+export const updateStatusCartServiceById = async(id,statusName,active) => {
   try {
     const authToken = localStorage.getItem('tokenAdmin');
-    const response = await axios.patch(API_URL + "/update/status/cart/"+id, {statusName:statusName},
+    const response = await axios.patch(API_URL + "/update/status/cart/"+id, {active:active,statusName:statusName},
       {
         headers: {
           'authorization': `Bearer ${authToken}`
@@ -182,10 +198,10 @@ export const updateStatusCartServiceById = async(id,statusName) => {
   }
 }
 
-export const updateStatusOrderServiceById = async(id,statusName) => {
+export const updateStatusOrderServiceById = async(id,statusName,active) => {
   try {
     const authToken = localStorage.getItem('tokenAdmin');
-    const response = await axios.patch(API_URL + "/update/status/order/"+id, {statusName:statusName},
+    const response = await axios.patch(API_URL + "/update/status/order/"+id, {active:active,statusName:statusName},
       {
         headers: {
           'authorization': `Bearer ${authToken}`

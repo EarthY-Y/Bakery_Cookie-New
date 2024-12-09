@@ -34,10 +34,12 @@ import ListHistoryOrders from '../page/admin-page/order-page/history-page/listHi
 import OrderHistoryById from '../page/admin-page/order-page/history-page/ordersHistoryById-page';
 import Orders from '../page/customer-page/cart-page/orders-page';
 import OrderById from '../page/admin-page/order-page/ordersBtId-page';
-import Status from '../page/admin-page/order-page/status/status-page';
-import CreateStatus from '../page/admin-page/order-page/status/createStatus-page'
-import EditCratStatus from '../page/admin-page/order-page/status/editCartStatus-page'
-import EditOrderStatus from '../page/admin-page/order-page/status/editOrderStatus-page'
+import Status from '../page/admin-page/status/orders/status-page';
+import CreateStatusOrder from '../page/admin-page/status/orders/createStatusOrder-page'
+import EditOrderStatus from '../page/admin-page/status/orders/editOrderStatus-page'
+import StatusCart from '../page/admin-page/status/cart/statusCart-page';
+import CreateStatusCart from '../page/admin-page/status/cart/createStatusCart-page'
+import EditCratStatus from '../page/admin-page/status/cart/editCartStatus-page'
 import Categoey from '../page/admin-page/category/categoryProduct/listCategory-page';
 import CreateCategory from '../page/admin-page/category/categoryProduct/createCategory-page'
 import EditCategory from '../page/admin-page/category/categoryProduct/editCategory-page';
@@ -316,20 +318,38 @@ const router = createBrowserRouter([
             path: "/status",
             children: [
               {
-                path: "",
-                element: <Status />,
+                path: "orders",
+                children: [
+                  {
+                    path: "",
+                    element: <Status />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateStatusOrder />
+                  },
+                  {
+                    path: "edit/order/:id",
+                    element: <EditOrderStatus/>
+                  },
+                ]
               },
               {
-                path: "create",
-                element: <CreateStatus/>
-              },
-              {
-                path: "edit/cart/:id",
-                element: <EditCratStatus/>
-              },
-              {
-                path: "edit/order/:id",
-                element: <EditOrderStatus/>
+                path: "cart",
+                children: [
+                  {
+                    path: "",
+                    element: <StatusCart />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateStatusCart/>
+                  },
+                  {
+                    path: "edit/cart/:id",
+                    element: <EditCratStatus/>
+                  },
+                ]
               },
             ],
           },

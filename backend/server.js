@@ -14,7 +14,8 @@ import productRoute from "./routes/admin/product-Route.js"
 import productCustomerRoute from "./routes/customer/product-Route.js"
 import paymentRoute from "./routes/customer/payment-Route.js"
 import AddressRoute from "./routes/addressRoute.js"
-import StatusRoute from "./routes/admin/status-Route.js"
+import StatusShippingRoute from "./routes/admin/statusOrder-Route.js"
+import StatusCartRoute from './routes/admin/statusCart-Route.js'
 import CategoryRoute from "./routes/admin/category-Route.js"
 import CategoryPackageRoute from "./routes/admin/categoryPackage-Route.js"
 import AddressCustomerRoute from "./routes/customer/addressCustomer-Route.js"
@@ -78,7 +79,8 @@ app.use(authRoute)
 app.use(adminRoute)
 app.use(paymentRoute)
 app.use(AddressRoute)
-app.use(StatusRoute)
+app.use(StatusShippingRoute)
+app.use(StatusCartRoute)
 app.use(CategoryRoute)
 app.use(CategoryPackageRoute);
 app.use(OrderTrackingRoute);

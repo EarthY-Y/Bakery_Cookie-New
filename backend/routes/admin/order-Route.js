@@ -5,6 +5,7 @@ import {
     getOrdersById,
     getOrdersHistoryById,
     getOrdersAddressById,
+    getStatusOrderslist,
     // updateStatusOrder,
 } from "../../controller/admin/orders.js"
 
@@ -15,6 +16,7 @@ router.use(express.json());
 
 router.get('/admin/get/orders/list/waitstatement', verifyAdminMid, getOrderslistWaitStatement);
 router.get('/admin/get/orders/list/checkout', verifyAdminMid, getOrderslistCheckOut);
+router.get('/admin/get/status/orders/list', verifyAdminMid, getStatusOrderslist);
 router.get('/admin/view/detail/order/:id', verifyAdminMid, getOrdersById);
 router.get('/admin/view/detail/order/history/:id', verifyAdminMid, getOrdersHistoryById);
 router.get('/admin/get/order/address/:id', verifyAdminMid, getOrdersAddressById);

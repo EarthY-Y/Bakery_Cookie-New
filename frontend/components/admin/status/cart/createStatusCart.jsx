@@ -4,52 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import { CreateStatusCartService } from '../../../../API/admin/ordersService';
 import { Link } from 'react-router-dom';
 
-const createStatus = () => {
+const createStatusCart = () => {
   const [statusName, setStatusName] = useState("");
-  const [statusfor, setStatusfor] = useState("");
-  const [statusId, setStatusId] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(statusId,statusName);      
-      const res = await CreateStatusCartService(statusId,statusName,statusfor); //จะส่งไปเป็น formData เเบบนี้ได้ต้องผ่าน multer ก่อน
-      navigate('/status');
+      console.log(statusName);      
+      const res = await CreateStatusCartService(statusName,"cart"); //จะส่งไปเป็น formData ได้ต้องผ่าน multer ก่อน
+      navigate(-1);
       console.log(res);
     } catch (err) {
       console.log(err);
     }
   }
-
-  useEffect(() => {
-    if (statusfor && statusName) {
-      const CreatetatusId = `${statusfor}-${statusName}`;
-      setStatusId(CreatetatusId);
-    } else {
-      setStatusId();
-    }
-  }, [statusfor, statusName]);
   
   return (
     <div className="container mt-5 p-3">
-      <Link className="btn btn-outline-secondary mb-4" to="/status">
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
       <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h4>เพิ่มสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <div className="row mb-4 mt-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">สถานะของ</label>
-            <div className="row col-sm-4">
-            <select className="form-select" onChange={(e) => setStatusfor(e.target.value)} value={statusfor}  required aria-label="Default select example">
-              <option value="">เลือก</option>
-              <option value="cart">ตะกร้าสินค้า</option>
-              <option value="order">คำสั่งซื้อ</option>
-              {/* <option value="3">Three</option> */}
-            </select>
-            </div>
-          </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อสถานะ</label>
             <div className="row col-sm-4">
@@ -70,4 +45,4 @@ const createStatus = () => {
   );
 };
 
-export default createStatus;
+export default createStatusCart;

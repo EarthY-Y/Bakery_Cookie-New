@@ -66,16 +66,18 @@ function Sidebaradmin() {
           <div className="accordion mt-2 shadow-sm" id="accordionAnother">
             <div className="accordion-item border-0">
               <h2 className="accordion-header">
-                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnother" aria-expanded="false" aria-controls="collapseAnother">อื่น</button>
+                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnother" aria-expanded="false" aria-controls="collapseAnother">สถานะ</button>
               </h2>
               <div id="collapseAnother" className="accordion-collapse collapse show" data-bs-parent="#accordionAnother">
                 <div className="accordion-body">
-                  <Link className="nav-link text-dark" to="/status">สถานะ</Link>
-                  <Link className="nav-link text-dark" to="/shipping">ขนส่ง</Link> 
+                  <Link className="nav-link text-dark" to="/status/orders">สถานะของคำสั่งซื้อ</Link>
+                  <Link className="nav-link text-dark" to="/status/cart">สถานะของตะกร้าสินค้า</Link>
+                  <Link className="nav-link text-dark" to="/status/product">สถานะของสินค้า</Link>
                 </div>
               </div>
             </div>
           </div>
+          <Link className="nav-link text-dark" to="/shipping">ขนส่ง</Link> 
         </nav>
       </div>
 
@@ -135,16 +137,17 @@ function Sidebaradmin() {
             <div className="accordion" id="accordionAnotherMobile">
               <div className="accordion-item border-0">
                 <h2 className="accordion-header">
-                  <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnotherMobile" aria-expanded="false" aria-controls="collapseAnotherMobile">อื่นๆ</button>
+                  <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnotherMobile" aria-expanded="false" aria-controls="collapseAnotherMobile">สถานะ</button>
                 </h2>
                 <div id="collapseAnotherMobile" className="accordion-collapse collapse" data-bs-parent="#accordionAnotherMobile">
                   <div className="accordion-body">
-                    <Link className="nav-link text-dark" to="/status">สถานะ</Link>
-                    <Link className="nav-link text-dark" to="/shipping">ขนส่ง</Link>
+                    <Link className="nav-link text-dark" to="/status/order">สถานะ</Link>
+                    
                   </div>
                 </div>
               </div>
             </div>
+            <Link className="nav-link text-dark" to="/shipping">ขนส่ง</Link>
           </nav>
         </div>
       </div>
