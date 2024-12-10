@@ -73,7 +73,7 @@ const orders = () => {
       try {
         const response = await shippingRate(totalWeight)
         console.log(response);
-        setdeliveryRate(response.data[0])
+        setdeliveryRate(response.data[0] || 0) //ถ้าไม่มีไรส่งมีให้เป็น 0 เพราะถ้าปิดใช้งาน shipping_rate ตัวนั้น
         
       } catch (error) {
         console.error("Error ShippingRate data:", error);
@@ -95,15 +95,15 @@ const orders = () => {
   // คำนวณราคาสินค้า
   // 
   useEffect(() => {
-    const total = parseFloat(totalPriceProduct) + parseFloat(toatalShippingRate)
+    const total = parseFloat(totalPriceProduct) + parseFloat(toatalShippingRate || 0)
     setTotalPrice(parseInt(total.toFixed(0)));
-  }, [toatalShippingRate]);
+  }, [toatalShippingRate, totalPriceProduct]); //totalPriceProduct เพราะถ้าไม่ใช่ค่า totalPrice จะไม่อัปตอนไม่มีค่า shipping rate
 
   const handleSubmmit = async(event) => {
     event.preventDefault();
     try {
-      console.log(productCart, parseFloat(totalPrice), totalPriceProduct, deliveryRate.price, deliveryRate.cost_per_quantity, totalQuantity, deliveryRate.shipping_rate_id, address.houseNo, address.tambon_nameTH, address.amphure_nameTH, address.province_nameTH, address.zip_code);
-      const response = await createOrder(productCart, parseFloat(totalPrice), totalPriceProduct, deliveryRate.price, deliveryRate.cost_per_quantity, 
+      console.log(productCart, parseFloat(totalPrice), totalPriceProduct , deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, totalQuantity, deliveryRate.shipping_rate_id, address.houseNo, address.tambon_nameTH, address.amphure_nameTH, address.province_nameTH, address.zip_code);
+      const response = await createOrder(productCart, parseFloat(totalPrice) || 0, totalPriceProduct || 0, deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, 
                                         totalQuantity, deliveryRate.shipping_rate_id, address.houseNo, address.tambon_nameTH, address.amphure_nameTH, address.province_nameTH, address.zip_code)
       if(response.data){
         navigate("/payment/"+id)

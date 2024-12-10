@@ -14,6 +14,7 @@ const EditShipping = () => {
   const [packageId, setPackageId] = useState("");
   const [deliveryDays, setDeliveryDays] = useState("");
   const [listPackage, setListPackage] = useState([]);
+  const [active, setStatusactive] = useState("1");
   const navigate = useNavigate();
   const { id } = useParams();
   
@@ -35,6 +36,7 @@ const EditShipping = () => {
         setPrice(response.data[0].price)
         setDeliveryDays(response.data[0].estimated_delivery_days)
         setPackageId(response.data[0].package_id)
+        setStatusactive(response.data[0].is_active)
       } catch (error) {
         alert(error);
       }
@@ -61,7 +63,7 @@ const EditShipping = () => {
     try {
       
       // ส่งข้อมูลไป Backend
-      const res = await updateShippingService(carrierName, serviceType, weightRangeMin, weightRangeMax, price, deliveryDays, packageId, id);
+      const res = await updateShippingService(carrierName, serviceType, weightRangeMin, weightRangeMax, price, deliveryDays, packageId, id, active);
       navigate(-1);
       console.log(res);
     } catch (err) {
@@ -127,7 +129,18 @@ const EditShipping = () => {
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">เลือกบรรจุภัณฑ์</label>
             <div className="row col-sm-4">
-              <Select options={options} value={options.find((option) => option.value === packageId) || null} onChange={(selectedOption) => setPackageId(selectedOption ? selectedOption.value : null)} isSearchable={true} placeholder="เลือกบรรจุภัณฑ์" />
+              <Select options={options} value={options.find((option) => option.value === packageId) || null} 
+              onChange={(selectedOption) => setPackageId(selectedOption ? selectedOption.value : null)} isSearchable={true} placeholder="เลือกบรรจุภัณฑ์" />
+            </div>
+          </div>
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">การใช้งาน</label>
+            <div className="row col-sm-4">
+              <select className="form-select" onChange={(e) => setStatusactive(e.target.value)} value={active}  required aria-label="Default select example" placeholder="เลือก">
+                <option value="1">ใช้งาน</option>
+                <option value="0">ไม่ใช้งาน</option>
+                {/* <option value="3">Three</option> */}
+              </select>
             </div>
           </div>
 

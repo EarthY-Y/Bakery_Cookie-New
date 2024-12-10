@@ -21,14 +21,14 @@ const ListShipping = () => {
     getShipping()
   }, [])
 
-  const handleDelete = (id) => {
-    deleteShippingByIdService(id)
-      .then(() => {
-        // ลบ item ที่มี id ตรงกันออกจาก shipping โดยใช้ filter
-        setShipping(prevShipping => prevShipping.filter(shipp => shipp.shipping_rate_id !== id))
-      })
-      .catch(err => console.log(err))
-  }
+  // const handleDelete = (id) => {
+  //   deleteShippingByIdService(id)
+  //     .then(() => {
+  //       // ลบ item ที่มี id ตรงกันออกจาก shipping โดยใช้ filter
+  //       setShipping(prevShipping => prevShipping.filter(shipp => shipp.shipping_rate_id !== id))
+  //     })
+  //     .catch(err => console.log(err))
+  // }
 
   return (
     <div className="container mt-5">
@@ -44,13 +44,15 @@ const ListShipping = () => {
           <thead className="table-success">
             <tr className="text-center align-middle">
               <th style={{ width: '15%' }}>บริษัทขนส่ง</th>
-              <th style={{ width: '15%' }}>ประเภท</th>
-              <th style={{ width: '25%' }}>ช่วงน้ำหนัก น้อย-มาก</th>
+              <th style={{ width: '10%' }}>ประเภท</th>
+              <th style={{ width: '20%' }}>ช่วงน้ำหนัก น้อย-มาก</th>
               <th style={{ width: '10%' }}>ราคา</th>
+              <th style={{ width: '10%' }}>ราคาบรรจุภัณฑ์</th>
               <th style={{ width: '10%' }}>เวลาที่ใช้</th>
+              <th style={{ width: '10%' }}>สถานะ</th>
               <th style={{ width: '5%' }}>ดู</th>
               <th style={{ width: '5%' }}>แก้ไข</th>
-              <th style={{ width: '5%' }}>ลบ</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -59,11 +61,13 @@ const ListShipping = () => {
                 <td>{shipp.carrier_name}</td>
                 <td>{shipp.service_type}</td>
                 <td>{shipp.weight_range_min} กรัม - {shipp.weight_range_max} กรัม</td>
-                <td>{numberGrouping(shipp.price)}</td>
+                <td>{numberGrouping(shipp.price)} บาท</td>
+                <td>{numberGrouping(shipp.cost_per_quantity)} บาท</td>
                 <td>{shipp.estimated_delivery_days} วัน</td>
+                {shipp.is_active === 1 ? <td className="text-center text-success">ใช้งาน</td> : <td className="text-center text-danger">ไม่ใช่งาน</td>}
                 <td><Link to={`view/${shipp.shipping_rate_id }`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${shipp.shipping_rate_id }`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
-                <td><button onClick={() => handleDelete(shipp.shipping_rate_id )} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
+                {/* <td><button onClick={() => handleDelete(shipp.shipping_rate_id )} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td> */}
               </tr>
             ))}
           </tbody>
@@ -83,9 +87,10 @@ const ListShipping = () => {
                   <p className="mb-1">ช่วงน้ำหนัก น้อย-มาก: {shipp.weight_range_min} กรัม - {shipp.weight_range_max} กรัม</p>
                   <p className="mb-1">ราคา: {numberGrouping(shipp.price)}</p>
                   <p className="mb-1">เวลาที่ใช้: {shipp.estimated_delivery_days} วัน</p>
+                  {shipp.is_active === 1 ? <p className="mb-1 text-success">ใช้งาน</p> : <p className="mb-1 text-danger">ไม่ใช้งาน</p>}
                 </div>
                 <div className="d-flex justify-content-between mt-3">
-                  <button onClick={() => handleDelete(shipp.shipping_rate_id )} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button>
+                  {/* <button onClick={() => handleDelete(shipp.shipping_rate_id )} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button> */}
                   <Link to={`edit/${shipp.shipping_rate_id }`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>
               </div>

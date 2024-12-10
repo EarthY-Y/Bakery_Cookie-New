@@ -73,11 +73,11 @@ export const listShippingPackageService = async () => {
   }
 }
 
-export const updateShippingService = async (carrierName, serviceType, weightRangeMin, weightRangeMax, price, deliveryDays, packageId, id) => {
+export const updateShippingService = async (carrierName, serviceType, weightRangeMin, weightRangeMax, price, deliveryDays, packageId, id, active) => {
   try {
     const authToken = localStorage.getItem('tokenAdmin')
     const res = await axios.patch(API_URL + '/shipping/update/' + id, {carrierName:carrierName, serviceType:serviceType, weightRangeMin:weightRangeMin, 
-      weightRangeMax:weightRangeMax, price:price, deliveryDays:deliveryDays, packageId:packageId},
+      weightRangeMax:weightRangeMax, price:price, deliveryDays:deliveryDays, packageId:packageId, active:active},
       {
         headers: {
           'authorization': `Bearer ${authToken}`

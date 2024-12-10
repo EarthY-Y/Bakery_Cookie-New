@@ -90,8 +90,9 @@ export const getShippingRate = async (req, res) => {
         console.log(weight);
         
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT sr.*, p.package_name, p.cost_per_quantity FROM shipping_rate sr LEFT JOIN package p ON p.package_id = sr.package_id"+
-                    " WHERE weight_range_min <= ? AND weight_range_max >= ?",[weight, weight],
+            db.query(`SELECT sr.*, p.package_name, p.cost_per_quantity FROM shipping_rate sr 
+                     LEFT JOIN package p ON p.package_id = sr.package_id
+                     WHERE weight_range_min <= ? AND weight_range_max >= ? AND sr.is_active = ?`,[weight, weight, "1"],
                     (err, result) => { 
                     if (err) return reject(err)
                     resolve(result)

@@ -7,7 +7,7 @@ export const getOrderslistWaitStatement = async (req, res) => {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader);
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT o.cartId, o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, so.status_name, o.created_at, o.updated_at FROM orders o 
+            db.query(`SELECT o.cartId, o.orders_id, o.quantity, o.total_price_product + COALESCE(ocd.cost_shipping, 0) + COALESCE(ocd.cost_package, 0)as price, so.status_name, o.created_at, o.updated_at FROM orders o 
                      LEFT JOIN customer c ON c.customer_id = o.customer_id
                      LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                      INNER JOIN status_order so ON so.status_order_id = o.status
@@ -32,7 +32,7 @@ export const getOrderslistCheckOut = async (req, res) => {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader)
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, 
+            db.query(`SELECT o.orders_id, o.quantity, o.total_price_product + COALESCE(ocd.cost_shipping, 0) + COALESCE(ocd.cost_package, 0) as price, 
                      so.status_name, o.created_at, osh.change_time as updated_at FROM orders o
                      LEFT JOIN customer c ON c.customer_id = o.customer_id
                      LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
@@ -57,7 +57,7 @@ export const getOrderslistCancel = async (req, res) => {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader)
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT  o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, 
+            db.query(`SELECT  o.orders_id, o.quantity, o.total_price_product + COALESCE(ocd.cost_shipping, 0) + COALESCE(ocd.cost_package, 0)as price, 
                  so.status_name as status, o.created_at, osh.change_time as updated_at, osh.note  FROM orders o
                  LEFT JOIN customer c ON c.customer_id = o.customer_id
                  LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
@@ -82,7 +82,7 @@ export const getOrderslistFinish = async (req, res) => {
         const authHeader = req.headers['authorization'];
         const token = await passToken(authHeader)
         const results = await new Promise((resolve, reject)=> {  
-            db.query(`SELECT  o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, 
+            db.query(`SELECT  o.orders_id, o.quantity, o.total_price_product + COALESCE(ocd.cost_shipping, 0) + COALESCE(ocd.cost_package, 0)as price, 
                      so.status_name, o.created_at, osh.change_time as updated_at FROM orders o 
                      LEFT JOIN customer c ON c.customer_id = o.customer_id
                      LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id

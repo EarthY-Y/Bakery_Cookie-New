@@ -5,7 +5,7 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getOrderslistSuccessStatement = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT o.orders_id, o.quantity, o.total_price_product + ocd.cost_shipping + ocd.cost_package as price, op.profit, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
+            db.query("SELECT o.orders_id, o.quantity, o.total_price_product + COALESCE(ocd.cost_shipping, 0) + COALESCE(ocd.cost_package, 0)as price, op.profit, so.status_name, o.created_at, osh.change_time as updated_at FROM orders o "+
                 " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
                 " LEFT JOIN order_profit op ON op.orders_id = o.orders_id"+
                 " INNER JOIN status_order so ON so.status_order_id = o.status"+

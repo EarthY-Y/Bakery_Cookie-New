@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const editOrderStatus = () => {
   const id = useParams().id
   const [statusName, setStatusName] = useState("");
-  const [active, setStatusactive] = useState("ใช้งาน");
+  const [active, setStatusactive] = useState("1");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
