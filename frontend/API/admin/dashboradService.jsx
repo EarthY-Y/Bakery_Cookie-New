@@ -71,10 +71,10 @@ export const growthUpSalesService = async() => {
     }
 }
 
-export const salesPerMonthService = async() => {
+export const salesPankPerMonthService = async() => {
     try {
         const authToken = localStorage.getItem('tokenAdmin')
-        const response = await axios.get(API_URL+"/dashboard/get/sales/per/mouth", 
+        const response = await axios.get(API_URL+"/dashboard/get/sales/rank/per/mouth", 
           {
             headers: {
               'authorization': `Bearer ${authToken}`
@@ -86,4 +86,21 @@ export const salesPerMonthService = async() => {
     } catch (error) {
         console.error("Error listAdminService:", error);
     }
+}
+
+export const salesPerMonthService = async() => {
+  try {
+      const authToken = localStorage.getItem('tokenAdmin')
+      const response = await axios.get(API_URL+"/dashboard/get/sales/per/mouth", 
+        {
+          headers: {
+            'authorization': `Bearer ${authToken}`
+          }
+        }
+      ); 
+      console.log(response);
+      return response
+  } catch (error) {
+      console.error("Error listAdminService:", error);
+  }
 }

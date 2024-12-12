@@ -5,7 +5,9 @@ import argon2 from "argon2";
 export const getAmountOrders = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT COUNT(*) as countOrders FROM orders;", (err, result) => {
+            db.query(`SELECT  DATE_FORMAT(created_at, '%Y-%m') AS sale_month,
+                      COUNT(*) as countOrders FROM orders
+                      WHERE DATE_FORMAT(created_at, '%m') = MONTH(NOW());`, (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
             }) 
@@ -41,7 +43,7 @@ export const getSales = async (req, res) => {
     }
 }
 
-export const getSalesPerMonth = async (req, res) => {
+export const getSalesRankPerMonth = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => { //DATE_FORMAT(o.created_at, '%Y-%m') คำสั่ง Format วันเดือนปี
             db.query(`WITH product_sales AS (
@@ -101,14 +103,36 @@ export const getSalesPerMonth = async (req, res) => {
     }
 }
 
+export const getSalesPerMonth = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject) => { //DATE_FORMAT(o.created_at, '%Y-%m') คำสั่ง Format วันเดือนปี
+            db.query(`SELECT DATE_FORMAT(o.created_at, '%Y-%m') AS sale_month,
+                    SUM(o.total_price_product + ocd.cost_shipping + ocd.cost_package) AS total_sales,
+                    SUM(ocd.total_cost + ocd.cost_shipping + ocd.cost_package) as total_cost,
+                    SUM(op.profit) as profit_month FROM orders o 
+                    LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                    LEFT JOIN order_profit op ON op.orders_id = o.orders_id
+                    WHERE MONTH(o.created_at) = MONTH(NOW());`, 
+                (err, result) => {
+                if (err) return reject(err)
+                resolve(result)
+            }) 
+        })
+        // console.log(results)
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get admin:", error);
+        res.status(400).json({ message: "Error get admin", error });
+    }
+}
+
 export const getNewCustomer = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT DATE_FORMAT(c.created_at, '%Y-%m') AS month, "+
-                    " COUNT(customer_id) AS total_new_customer"+
-                    " FROM customer c"+
-                    " GROUP BY DATE_FORMAT(c.created_at, '%Y-%m')"+
-                    " ORDER BY month;",
+            db.query(`SELECT DATE_FORMAT(c.created_at, '%Y-%m') AS month, 
+                     COUNT(customer_id) AS total_new_customer
+                     FROM customer c
+                     WHERE MONTH(created_at) = MONTH(NOW());`,
                 (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
