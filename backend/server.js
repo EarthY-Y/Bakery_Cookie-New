@@ -36,13 +36,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 dotenv.config();
-
-app.use(bodyParser.json()); 
+ 
 app.use(express.json({ //convert object to json object
   strict: true,  // ตั้งค่าให้ตรวจสอบ JSON ที่ไม่ถูกต้องอย่างเคร่งครัด
   limit: '1mb',  // จำกัดขนาดของ body เพื่อป้องกันการส่งข้อมูลที่มากเกินไป
 }));
-
 
 app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ่าน backend
 

@@ -13,8 +13,6 @@ const EditMaterial = () => {
   const [Costes, setCost] = useState("");
   const [CostesPerQuantities, setCostesPerQuantities] = useState("");
   const [NewCostesPerQuantities, setNewCostesPerQuantities] = useState("");
-  const [NewQuantity, setNewQuantity] = useState("");
-  const [TotalQuantity, setTotalQuantity] = useState("");
   const [Picture, setPicture] = useState(null); // เก็บทั้งรูปที่ดึงจากฐานข้อมูลและรูปใหม่ที่อัพโหลด
   const navigate = useNavigate();
   const { id } = useParams();
@@ -49,7 +47,7 @@ const EditMaterial = () => {
       const formData = new FormData();
       
       if (MaterialName !== materialMyId.material_name) updatedData.material_name = MaterialName;
-      if (TotalQuantity !== materialMyId.quantity) updatedData.quantity = TotalQuantity;
+      if (Quantities !== materialMyId.quantity) updatedData.quantity = Quantities;
       if (Costes !== materialMyId.cost) updatedData.cost = Costes;
       if (NewCostesPerQuantities) updatedData.cost_per_quantity = NewCostesPerQuantities;
       
@@ -80,43 +78,10 @@ const EditMaterial = () => {
     }
   };
 
-  const addMaterial = () => {
-    const quantity = Quantities, newquantity = parseFloat(NewQuantity)
-    const sum =  quantity + newquantity
-    console.log(sum)
-    setTotalQuantity(sum)
-  }
-
-  const minusMaterial = () => {
-    const quantity = Quantities, newquantity = parseFloat(NewQuantity)
-    const sum =  quantity - newquantity
-    console.log(sum)
-    setTotalQuantity(sum)
-  }
-
   useEffect(() => {
-    // ตรวจสอบให้แน่ใจว่า Quantities และ Costes มีค่า และ Quantities ไม่เป็น 0
-    //ราคาไม่เท่า เเละ ปริมาณเปลี่ยน
-    if ( Costes != materialMyId.cost && NewQuantity != 0 ) {
-      console.log(parseFloat(Costes) , materialMyId.cost ,parseFloat(NewQuantity) , materialMyId.quantity);
-      const costPerQuantity = (parseFloat(Costes) + materialMyId.cost) / TotalQuantity;
-      setNewCostesPerQuantities(costPerQuantity); // ปัดเป็นทศนิยม 2 ตำแหน่ง //!อาจจะต้องหา lib มาช่วยคำนวน
-    }
-    //ราคาเปลี่ยน เเต่ว่า ปริมาณเท่าเดิม
-    else if ( Costes != materialMyId.cost || TotalQuantity == materialMyId.quantity ) {
-      console.log(parseFloat(Costes) , parseFloat(Quantities));
-      const costPerQuantity = parseFloat(Costes) / parseFloat(Quantities)
-      setNewCostesPerQuantities(costPerQuantity);
-    }
-    //ปริมาณเปลี่ยน เเต่ ราคาเท่าเดิม
-    else if ( NewQuantity != materialMyId.quantity && Costes == materialMyId.cost) {
-      const costPerQuantity = materialMyId.cost / parseFloat(TotalQuantity)
-      setNewCostesPerQuantities(costPerQuantity);
-    }
-    else {
-      setNewCostesPerQuantities(CostesPerQuantities);
-    }
-  }, [TotalQuantity , Costes, NewQuantity]); 
+    const newCsotPerQuantity = Costes / Quantities 
+    setNewCostesPerQuantities(newCsotPerQuantity)
+  },[Quantities, Costes])
 
   return (
     <div className="container mt-5 p-3">
@@ -159,7 +124,7 @@ const EditMaterial = () => {
           </div>
 
           <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวนวัตถุดิบเดิม</label>
+            <label className="col-sm-2 col-form-label">ปริมาณวัตถุ</label>
             <div className="row col-sm-4">
               <input
                 type="number"
@@ -167,46 +132,10 @@ const EditMaterial = () => {
                 placeholder="จำนวนวัตถุดิบ"
                 value={Quantities}
                 onChange={(e) => setQuantity(e.target.value)}
-                readOnly
               />
             </div>
           </div>
-
-          <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวนวัตถุดิบใหม่</label>
-            <div className="row col-sm-4">
-              <input
-                type="number"
-                className="form-control"
-                placeholder="จำนวนวัตถุดิบ"
-                value={NewQuantity}
-                onChange={(e) => setNewQuantity(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label"></label>
-            <div className="row col-sm-4">
-              <button className="mb-2 btn btn-primary ms-5" type="button" style={{ width: '100px', height: '40px' }} onClick={() => addMaterial()}>เพิ่มวัตถุดิบ</button> {/* type="button" เพื่อไม่ให้ถูกตีว่าเป็นการกด submit */}
-              <button className="btn btn-danger ms-5" type="button" style={{ width: '100px', height: '40px' }} onClick={() => minusMaterial()}>ลดวัตถุดิบ</button>
-            </div>
-          </div>
-
-
-          <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">ผลลัพธ์จำนวนวัตถุดิบ</label>
-            <div className="row col-sm-4">
-              <input
-                type="number"
-                className="form-control"
-                placeholder="จำนวนวัตถุดิบ"
-                value={TotalQuantity}
-                onChange={(e) => setNewQuantity(e.target.value)}
-                readOnly
-              />
-            </div>
-          </div>
+          {/* type="button" เพื่อไม่ให้ถูกตีว่าเป็นการกด submit */}
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบที่ซื้อมา</label>
