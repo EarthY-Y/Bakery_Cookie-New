@@ -236,18 +236,21 @@ export const updateProduct = async (req, res) => {
                 is_active, deletedIngredients, deletedPackage, packages, weight_per_piece, updatedIngredients } = req.body;
         
         // 1. อัปเดตข้อมูลในตาราง product
-        let change_status = is_active.replace(/[^0-9.]/g, '').trim()// ลบทุกอย่างที่ไม่ใช่ตัวเลขหรือจุด เพราข้อมูลที่วส่งมาคือ "1" ถ้าจะเอาไปเทียบต้องใช้ ""1""
+  
         let updateQuery = "UPDATE product SET  ";
         let updateValues = [];
         
-        if (change_status == "1") {
-            let active = true
-            updateQuery += "is_active = ?, ";
-            updateValues.push(active);
-        }else{
-            let active = false
-            updateQuery += "is_active = ?, ";
-            updateValues.push(active);
+        if(is_active){
+            let change_status = is_active.replace(/[^0-9.]/g, '').trim()// ลบทุกอย่างที่ไม่ใช่ตัวเลขหรือจุด เพราข้อมูลที่วส่งมาคือ "1" ถ้าจะเอาไปเทียบต้องใช้ ""1""
+            if (change_status == "1") {
+                let active = true
+                updateQuery += "is_active = ?, ";
+                updateValues.push(active);
+            }else{
+                let active = false
+                updateQuery += "is_active = ?, ";
+                updateValues.push(active);
+            }
         }
         
         if (product_name) {

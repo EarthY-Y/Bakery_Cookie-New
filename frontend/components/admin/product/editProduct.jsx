@@ -20,7 +20,7 @@ const EditProduct = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [active, setStatusactive] = useState("ใช้งาน");
+  const [active, setStatusactive] = useState("1");
   const { id } = useParams();
   const navigate = useNavigate();
   
