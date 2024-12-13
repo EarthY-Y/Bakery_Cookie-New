@@ -76,7 +76,7 @@ export const getPackages = async (req, res) => {
     console.log("getPackage");
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT package_id, package_name, cost_per_quantity FROM package",
+            db.query("SELECT package_id, package_name, cost_per_quantity FROM package WHERE is_active = ?", ["1"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

@@ -10,7 +10,7 @@ export const LoginCutomer = async (req, res) =>{
     const {userName,passWord} = req.body
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT customer_id, username, password FROM customer WHERE username = ?", userName, (err, results) => {
+            db.query("SELECT customer_id, username, password, is_active FROM customer WHERE username = ?", userName, (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -24,6 +24,9 @@ export const LoginCutomer = async (req, res) =>{
         const match = await argon2.verify(user.password, passWord);
         if (!match) {
             return res.status(400).json({ message: "Wrong Password" });
+        }
+        if (user.is_active == 0) {
+            return res.status(400).json({ message: "It's account not active" });
         }
         const token = jwt.sign({ customerId: user.customer_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         return res.status(200).json({ message: "login complete", token: token, role: "user" });

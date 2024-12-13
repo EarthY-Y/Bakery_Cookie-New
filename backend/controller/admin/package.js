@@ -77,7 +77,7 @@ export const updatepackage = async (req, res) => {
         const token = await passToken(authHeader);
         const { id } = req.params;
 
-        const { package_name, quantity, cost, cost_per_quantity} = req.body;
+        const {active, package_name, quantity, cost, cost_per_quantity} = req.body;
 
         // 1. อัปเดตข้อมูลในตาราง package
         let updateQuery = "UPDATE package SET  ";
@@ -86,6 +86,18 @@ export const updatepackage = async (req, res) => {
         if (package_name) {
             updateQuery += "package_name = ?, ";
             updateValues.push(package_name);
+        }
+
+        if (active) {
+            let change_status = active.replace(/[^0-9.]/g, '').trim()
+            let is_active = false
+            if (change_status == "1") {
+                is_active = true
+                updateQuery += "is_active = ?, ";
+                updateValues.push(is_active);
+            } 
+            updateQuery += "is_active = ?, ";
+            updateValues.push(is_active);
         }
 
         if (quantity) {
@@ -117,7 +129,7 @@ export const updatepackage = async (req, res) => {
         updateQuery += " WHERE package_id = ?";
         updateValues.push(id);
 
-        if (package_name || quantity || cost  || cost_per_quantity || req.file ) {
+        if (package_name || quantity || cost  || cost_per_quantity || req.file || active ) {
             await new Promise((resolve, reject) => {
                 db.query(updateQuery, updateValues, (err, result) => {
                     if (err) return reject(err);

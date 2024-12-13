@@ -62,6 +62,8 @@ import ListShippingCost from '../page/admin-page/shippingCost-page/listShippingC
 import ListShippingCostById from '../page/admin-page/shippingCost-page/listShippingCostById-page'
 import EditShippingCost from '../page/admin-page/shippingCost-page/editShippingCost-page'
 import CreateShippingCost from '../page/admin-page/shippingCost-page/createShippingCost-page'
+import ManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustomer-page';
+import EditManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustomerById-page';
 
 const router = createBrowserRouter([
   {
@@ -352,6 +354,19 @@ const router = createBrowserRouter([
                 ]
               },
             ],
+          },
+          {
+            path: "manager/customer",
+            children: [
+              {
+                path: "",
+                element: <ManagerCustomer />,
+              },
+              {
+                path: "view/:id",
+                element: <EditManagerCustomer/>
+              },
+            ]
           },
         ],
       },

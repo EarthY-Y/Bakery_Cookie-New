@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginAdmin } from '../../../API/authService';
-import { Modal } from '../../error/errorPopup';
+import ErrorPopup from '../../error/errorPopup';
+
 const Login = () => {
   const [userName, setuserName] = useState("");
   const [passWord, setPassword] = useState("");
@@ -86,7 +87,7 @@ const Login = () => {
             </div>
           </div>
           {error && (
-            <Modal message={error} onClose={() => setError(null)} />
+            <ErrorPopup message={error} text="เข้าสู่ระบบล้มเหลว" onClose={() => setError(null)} />
           )}
         </div>
       </div>

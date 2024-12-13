@@ -25,6 +25,7 @@ import ShippingRoute from './routes/admin/shippingCost-Route.js'
 import GuestProductRoute from './routes/guest/guestProduct-Route.js'
 import DashboardRoute from './routes/admin/dashboardRoute.js'
 import OrderHistoryRoute from './routes/admin/orderHistory-Route.js'
+import ManageCustomer from './routes/admin/manageCustomer-Route.js'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -89,3 +90,4 @@ app.use(AddressCustomerRoute);
 app.use(ShippingRoute);
 app.use(GuestProductRoute)
 app.use(DashboardRoute)
+app.use(ManageCustomer)

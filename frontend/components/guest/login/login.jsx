@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import liff from '@line/liff'
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../../API/authService';
-import { Modal } from '../../error/errorPopup';
+import ErrorPopup from '../../error/errorPopup';
 
 const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
 
@@ -83,7 +83,7 @@ const Login = () => {
             </div>
           </div>
           {error && (
-            <Modal message={error} onClose={() => setError(null)} />
+            <ErrorPopup message={error} text="เข้าสู่ระบบล้มเหลว" onClose={() => setError(null)} />
           )}
         </div>
       </div>

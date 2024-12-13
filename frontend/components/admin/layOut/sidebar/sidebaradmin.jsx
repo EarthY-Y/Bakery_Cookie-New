@@ -77,6 +77,7 @@ function Sidebaradmin() {
             </div>
           </div>
           <Link className="nav-link text-dark" to="/shipping">ขนส่ง</Link> 
+          <Link className="nav-link text-dark" to="/manager/customer">จัดการลูกค้า</Link>
         </nav>
       </div>
 
@@ -147,6 +148,7 @@ function Sidebaradmin() {
               </div>
             </div>
             <Link className="nav-link text-dark" to="/shipping">ขนส่ง</Link>
+            <Link className="nav-link text-dark" to="manager/customer">จัดการลูกค้า</Link>
           </nav>
         </div>
       </div>

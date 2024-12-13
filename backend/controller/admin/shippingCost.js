@@ -51,7 +51,7 @@ export const getShippingPackage = async (req, res) => {
         // console.log('getShippingPackage');
 
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT * FROM package WHERE package_name LIKE ? ", ["กล่อง%"],
+            db.query("SELECT * FROM package WHERE package_name LIKE ? AND is_active = ?", ["กล่อง%", "1"],
                 (err, result) => {
                     if (err) return reject(err)
                     resolve(result)

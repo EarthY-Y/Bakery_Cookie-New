@@ -1,35 +1,25 @@
-// Pop-up Modal Component
-export const Modal = ({ message, onClose }) => {
-    console.log(message);
-    const errorMessage = message.response.data.message
-    
-    return (
-      <div style={modalStyles}>
-        <div style={modalContentStyles}>
-          <h2>เกิดข้อผิดพลาด</h2>
-          <p>{errorMessage}</p>
-          <button onClick={onClose}>ปิด</button>
+import React, { useState } from 'react';
+
+const ErrorPopup = ({onClose, handleConfirm, message, text }) => {
+  const errorMessage = message.response.data.message
+  const [showModal , setShowModal] = useState(true)
+
+  return (
+    <div className={`modal fade ${showModal ? "show" : ""}`} tabIndex="-1" style={{ display: showModal ? 'block' : 'none' }} aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className='text-danger'>{text}</h5>
+            <button type="button" className="btn-close" onClick={onClose}></button> {/* ปุ่มปิด */}
+          </div>
+          <div className="modal-body">
+            {/*value ข้อมูลที่จะส่งไป*/}
+            <p>{errorMessage}</p>
+          </div>
         </div>
       </div>
-    );
-  };
-  
-  // Styles for Modal
-  const modalStyles = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-  
-  const modalContentStyles = {
-    background: '#fff',
-    padding: '20px',
-    borderRadius: '5px',
-    textAlign: 'center',
-  };
+    </div>
+  );
+};
+
+export default ErrorPopup;

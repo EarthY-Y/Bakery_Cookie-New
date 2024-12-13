@@ -13,6 +13,7 @@ const CreatePackage = () => {
   const [packageCost, setPackageCost] = useState('');
   const [packageQuantity, setPackageQuantity] = useState('');
   const [packageCostPerQuantity, setPackageCostPerQuantity] = useState('');
+  const [active, setStatusactive] = useState("1");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const CreatePackage = () => {
         setPackageCost(response.data[0]?.cost)
         setPackageQuantity(response.data[0]?.quantity)
         setPackageCostPerQuantity(response.data[0]?.cost_per_quantity)
+        setStatusactive(response.data[0]?.is_active)
       }
 
       catch (error) {
@@ -67,6 +69,7 @@ const CreatePackage = () => {
       if (packageQuantity !== packageById.quantity) updatedData.quantity = packageQuantity;
       if (packageCost !== packageById.cost) updatedData.cost = packageCost;
       if (packageCostPerQuantity !== packageById.cost_per_quantity) updatedData.cost_per_quantity = packageCostPerQuantity;
+      if (active !== packageById.active) updatedData.active = active;
       
       if (Picture instanceof File) {
         formData.append('file', Picture);
@@ -149,6 +152,16 @@ const CreatePackage = () => {
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
             <div className="row col-sm-5">
               <input type="text" name='costPreQuantity' className="form-control" placeholder="ราคาบรรจุภัณฑ์" value={packageCostPerQuantity} onChange={(e) => setPackageCostPerQuantity(e.target.value)} readOnly/>
+            </div>
+          </div>
+
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">การใช้งาน</label>
+            <div className='row col-sm-5'>
+              <select className="form-select" onChange={(e) => setStatusactive(e.target.value)} value={active}  required aria-label="Default select example" placeholder="เลือก">
+                <option value="1">ใช้งาน</option>
+                <option value="0">ไม่ใช้งาน</option>
+              </select>
             </div>
           </div>
 
