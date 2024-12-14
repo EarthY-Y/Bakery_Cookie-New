@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import LoadingPopup from '../components/untils/popUp/loading';
+import liff from '@line/liff'
 
 const API_URL = import.meta.env.VITE_API_Port
 
@@ -9,6 +10,17 @@ const API_URL = import.meta.env.VITE_API_Port
 export const login = async (userName, passWord) => {
   try {
     const res = await axios.post(API_URL+'/login', { userName, passWord });
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error; // ส่ง error ออกไปให้ component จัดการ
+  }
+};
+
+export const loginLINE = async (profile) => {
+  try {
+    const res = await axios.post(API_URL+'/login-line/customer', {profile});
     console.log(res);
     return res;
   } catch (error) {
@@ -30,6 +42,7 @@ export const loginAdmin = async (userName, passWord) => {
 export const logout = async () => {
   try {
     removeToken()
+    await liff.logout()
   } catch (error) {
     console.error("Error logout:", error);
     throw error; // ส่ง error ออกไปให้ component จัดการ
@@ -141,7 +154,7 @@ export const ProtectedRouteCustomer = () => {
   }
 
   if (!token || !isCustomer) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return <Outlet />;
@@ -248,6 +261,7 @@ export const CheckRouteAdmin = () => {
 // ฟังก์ชันในการลบ token
 function removeToken() {
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
+  liff.logout()
   console.log('Token has been removed. Please log in again.');
   location.reload(); 
 }

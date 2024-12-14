@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { getDeatialCustomer, updateInfoCustomer } from '../../../../API/customer/customerService';
+import liff from '@line/liff'
+import { getDeatialCustomerService, updateInfoCustomer, createConnectionLineIDService, checkConnectionLineIDService } from '../../../../API/customer/customerService';
+import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../error/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
+// console.log(API_LINE_LOGIN); //ใช้ .env ไม่ได้ได้ค่ามาเป็น undefine
 
 const profile = () => {
   const [Picture, setPicture] = useState(null);
@@ -11,20 +16,65 @@ const profile = () => {
   const [customerFName, setCustomerFName] = useState("")
   const [customerLName, setCustomerLName] = useState("")
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("")
-  // const [customerName, setCustomerName] = useState("")
+  const [isLoading, setIsLoading] = useState(true);
+  const [checkLoginLine, setCheckLoginLine] = useState([])
+  const [error, setError] = useState(null);
   useState(()=>{
+    setIsLoading(true)
     const getInfoCustomer = async() => {
-      const response = await getDeatialCustomer()
-      console.log(response);
-      setDetailCustomer(response.data[0])
-      setPicture(response.data[0]?.customerpic)
-      setCustomerName(response.data[0]?.username)
-      setCustomerFName(response.data[0]?.f_name)
-      setCustomerLName(response.data[0]?.l_name)
-      setCustomerPhoneNumber(response.data[0]?.phone_number)
+      const [
+        getDeatialCustomer,
+      ] = await Promise.all([
+        getDeatialCustomerService(),
+      ])
+      console.log(getDeatialCustomer);
+      
+      setDetailCustomer(getDeatialCustomer.data[0])
+      setPicture(getDeatialCustomer.data[0]?.customerpic)
+      setCustomerName(getDeatialCustomer.data[0]?.username)
+      setCustomerFName(getDeatialCustomer.data[0]?.f_name)
+      setCustomerLName(getDeatialCustomer.data[0]?.l_name)
+      setCustomerPhoneNumber(getDeatialCustomer.data[0]?.phone_number)
     }
     getInfoCustomer()
-  })
+  }, [])
+
+  const handleLoginLine = async() =>{
+    await liff.init({liffId: '2006630207-agRmBy9G' }) // Use own liffId
+    if(!liff.isLoggedIn()){
+      liff.login() //ทำการ login ผ่าน Line
+      return false
+    }
+    
+  }
+
+  useEffect(() => {
+    const connectionLineAccount = async() => {
+      await liff.init({liffId: '2006630207-agRmBy9G' })
+      const getCkeckLoginLine = await checkConnectionLineIDService()
+      setCheckLoginLine(getCkeckLoginLine.data[0])
+      if(!getCkeckLoginLine.data[0].provider_login_id){
+        if(liff.isLoggedIn()){
+          const profile = await liff.getProfile()
+          console.log(profile);
+          if(profile){
+            try {
+              const connentLineID = await createConnectionLineIDService(profile, "LINE")
+              console.log(connentLineID);
+              setIsLoading(false)
+            } catch (error) {
+              setError(error);
+              liff.logout()
+              console.log(error);
+              setIsLoading(false)
+            }
+          }
+        }
+      }
+      setIsLoading(false)
+    }
+    connectionLineAccount()
+  },[])
 
   const handleSubmit = async(event) =>{
     event.preventDefault();
@@ -126,8 +176,22 @@ const profile = () => {
           </select>
         </div>
       </div>*/}
-      <button type="submit" className="btn btn-danger">บันทึก</button>
+      <div className='row justify-content-between mt-4'>
+        <div className='col-7'>
+          <label className="form-label col-2">เชื่อมต่อ</label>
+          {checkLoginLine.provider_login_id ? (<button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} disabled={true} className="btn btn-outline-dark col-5" >เชื่อมต่อ LINE ID เเล้ว</button>)
+          : (<button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark col-4" >เชื่อมต่อ LINE ID</button>)}
+        </div>
+        <button type="submit" className="btn btn-danger col-1 me-2">บันทึก</button>
+      </div>
+      {error && (
+        <ErrorPopup message={error} text="เข้าสู่ระบบล้มเหลว" onClose={() => setError(null)} />
+      )}
     </form>
+    <LoadingPopup
+      isLoading = {isLoading}
+    />
+    {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
   </div>
   );
 };

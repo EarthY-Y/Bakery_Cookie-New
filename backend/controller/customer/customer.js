@@ -159,3 +159,65 @@ export const createAddress = async (req, res) => {
         res.status(400).json({ message: "Error get product", error });
     }
 }
+
+export const createConnectLineID = async (req, res) => {
+    try {
+        const id = uuidv4()
+        const {profile, provider_name} = req.body
+        console.log(profile, provider_name);
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ message: "User not found" });
+        }
+        const results = await new Promise((resolve, reject)=> {
+            db.query("INSERT INTO provider_login (provider_login_id, customer_id, provider_name, provider_id) VALUES (?, ?, ?, ?)",
+                    [id, authToken.customerId, provider_name, profile.userId ],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error('Error delete category_product:', error);
+
+        if (error.sqlState === '23000') {
+            // Foreign key constraint error
+            return res.status(409).json({
+                message: "Line Account นี้ถูกใช้เเล้ว",
+                error: error.sqlMessage,
+            });
+        } else {
+            return res.status(400).json({ message: "Error delete category_product", error });
+        }
+    }
+}
+
+export const checkConnectLineID = async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ message: "User not found" });
+        }
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT pl.provider_login_id, c.customer_id FROM customer c
+                      LEFT JOIN provider_login pl ON pl.customer_id = c.customer_id
+                      WHERE c.customer_id = ?`,
+                    [authToken.customerId],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}

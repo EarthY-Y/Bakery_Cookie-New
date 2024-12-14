@@ -3,6 +3,7 @@ import liff from '@line/liff'
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../../API/authService';
 import ErrorPopup from '../../error/errorPopup';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
 
@@ -10,23 +11,20 @@ const Login = () => {
   const [userName, setuserName] = useState("");
   const [passWord, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // login ด้วย Line
-  // useEffect(() =>{
-  //   liff.init({
-  //     liffId: `2006630207-4ENd2JnL`, // Use own liffId
-  //   })
-  // },[])
-
+  useEffect(() =>{
+    liff.init({liffId: '2006630207-4ENd2JnL', }) 
+  },[])
   const handleLoginLine = async() =>{
-    await liff.init({liffId: '2006630207-4ENd2JnL', }) // Use own liffId
-    if(!liff.isLoggedIn()){
-      liff.login() //ทำการ login ผ่าน Line
-      return false
+    try {
+      if(!liff.isLoggedIn()){
+        liff.login() //ทำการ login ผ่าน Line
+      }
+    } catch (error) {
+      console.log(error);
     }
-    const profile = await liff.getProfile()
-    console.log(profile);
   }
   // login ด้วย userName password
   const handleSubmit = async (event) => {
@@ -87,6 +85,10 @@ const Login = () => {
           )}
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </form>
   );
 };
