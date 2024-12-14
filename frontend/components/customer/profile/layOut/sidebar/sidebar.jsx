@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 function Sidebar() {
   return (
   <div className="d-flex justify-content-center"> {/* หน้าจอใหญ่ */}
-      <div className="card border-0 shadow-sm d-none d-md-block" style={{ width: "300px", borderRadius: "8px" }}>
+      <div className="card border-0 shadow-sm d-none d-lg-block" style={{ width: "300px", borderRadius: "8px" }}>
         <div className="card-body">
           <nav className="nav flex-column navbar-expand-lg">
             <Link className="nav-link text-dark" to="/profile">บัญชีของฉัน</Link>
@@ -15,7 +15,7 @@ function Sidebar() {
       </div>
 
       {/* หน้าจอเล็ก */}
-      <div className="border-0 shadow-sm d-block d-md-none ">
+      <div className="border-0 shadow-sm d-block d-lg-none ">
         {/* ส่วนของโปรไฟล์ */}
         <div className="row text-center">
           <Link className="text-dark text-decoration-none col-3" to="/profile">

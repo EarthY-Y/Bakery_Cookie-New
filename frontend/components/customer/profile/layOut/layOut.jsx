@@ -14,14 +14,14 @@ const layOutComponent = ({ children }) => {
         </div>
         <div className="container d-flex mb-5" style={{ minHeight: '80vh'}}>
           {/* Sidebar */}
-          <div className="d-none d-md-block">
+          <div className="d-none d-lg-block">
             <Sidebar />
           </div>
           
           {/* Main Content */}
           <main className="flex-grow-1 p-3 ms-2 bg-white" >
             {/* Sidebar (Mobile - Above Content) */}
-            <div className="d-md-none d-block mb-3 w-5">
+            <div className="d-lg-none d-block mb-3 w-5">
               <Sidebar />
             </div>
             {children}

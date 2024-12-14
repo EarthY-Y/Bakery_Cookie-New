@@ -50,10 +50,10 @@ const profile = () => {
 
   useEffect(() => {
     const connectionLineAccount = async() => {
-      await liff.init({liffId: '2006630207-agRmBy9G' })
       const getCkeckLoginLine = await checkConnectionLineIDService()
       setCheckLoginLine(getCkeckLoginLine.data[0])
       if(!getCkeckLoginLine.data[0].provider_login_id){
+        await liff.init({liffId: '2006630207-agRmBy9G' })
         if(liff.isLoggedIn()){
           const profile = await liff.getProfile()
           console.log(profile);
@@ -177,15 +177,15 @@ const profile = () => {
         </div>
       </div>*/}
       <div className='row justify-content-between mt-4'>
-        <div className='col-7'>
+        <div className='col-9'>
           <label className="form-label col-2">เชื่อมต่อ</label>
           {checkLoginLine.provider_login_id ? (<button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} disabled={true} className="btn btn-outline-dark col-5" >เชื่อมต่อ LINE ID เเล้ว</button>)
           : (<button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark col-4" >เชื่อมต่อ LINE ID</button>)}
         </div>
-        <button type="submit" className="btn btn-danger col-1 me-2">บันทึก</button>
+        <button type="submit" className="btn btn-danger col-2 me-2">บันทึก</button>
       </div>
       {error && (
-        <ErrorPopup message={error} text="เข้าสู่ระบบล้มเหลว" onClose={() => setError(null)} />
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
       )}
     </form>
     <LoadingPopup
