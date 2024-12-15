@@ -22,10 +22,10 @@ const Home = () => {
   return(
     <div className="container">
       <div id="productCarousel" className="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="3000">
-    <div className="carousel-inner w-100 overflow-hidden" style={{ height: "50vh" }}>
+    <div className="carousel-inner overflow-hidden" style={{ height: "50vh" }}>
       {products.map((product, index) => (
         <div key={product.product_id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
-          <img src={API_URL_PICTURE + product.productpic_name} className="d-block w-100" alt={product.product_name} style={{ width: "100%", height: "100%", objectFit: "cover",}}/>
+          <img src={API_URL_PICTURE + product.productpic_name} className="d-block" alt={product.product_name} style={{ width: "100%", height: "100%", objectFit: "cover",}}/>
         </div>
       ))}
     </div>
@@ -44,7 +44,7 @@ const Home = () => {
       <div className="container">
       <div className="row g-4 justify-content-start card-container">
       {products.map((product) => (
-        <div key={product.product_id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center" style={{ cursor: "pointer" }}>
+        <div key={product.product_id} className="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center" style={{ cursor: "pointer" }}>
             <Link to={`/product/${product.product_id}`} className="card shadow-sm" 
               style={{ textDecoration: "none",color: "inherit",width: "100%",maxWidth: "300px", // จำกัดความกว้างของ 
                 cardminHeight: "350px", // ล็อคความสูงของ card ให้เท่ากัน

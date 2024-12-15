@@ -177,13 +177,23 @@ const profile = () => {
         </div>
       </div>*/}
       <div className='row justify-content-between mt-4'>
-        <div className='col-9'>
-          <label className="form-label col-2">เชื่อมต่อ</label>
-          {checkLoginLine.provider_login_id ? (<button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} disabled={true} className="btn btn-outline-dark col-5" >เชื่อมต่อ LINE ID เเล้ว</button>)
-          : (<button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark col-4" >เชื่อมต่อ LINE ID</button>)}
+        <div className='col-12 col-md-9'>
+          <label className="form-label col-4 col-md-2 small">เชื่อมต่อ</label>
+          {checkLoginLine.provider_login_id ? (
+            <button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} disabled={true} className="btn btn-outline-dark col-8 col-md-5 small" >
+              เชื่อมต่อ LINE ID เเล้ว
+            </button>
+          ) : (
+            <button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark col-12 col-md-8 small" >
+              เชื่อมต่อ LINE ID
+            </button>
+          )}
         </div>
-        <button type="submit" className="btn btn-danger col-2 me-2">บันทึก</button>
+        <div className="col-12 col-md-3 mt-2 mt-md-0">
+          <button type="submit" className="btn btn-danger col-12">บันทึก</button>
+        </div>
       </div>
+
       {error && (
         <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
       )}

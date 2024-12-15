@@ -3,42 +3,38 @@ import { Link } from "react-router-dom";
 import { getCartService, getPorductCartService } from "../../../../API/customer/productService";
 import { logout } from "../../../../API/authService";
 import { useCart } from "./CartContext";
+import SearchShowList from '../../../untils/fucntion/searchShowList';
 
-const Navbar = memo(() => { 
+const Navbar = memo(() => {
   const [productCart, setProductCart] = useState([]);
   const [totalPriceCart, setTotalPriceCrat] = useState(0);
   const [cartId, setCartId] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const { totalPrice } = useCart();
-  
+  const [productsSearch, setProductsSearch] = useState([]);
+
   const handleLogout = () => {
     logout();
   };
 
   useEffect(() => {
-    const getCart = async () => {
+    const fechData = async () => {
       try {
-        const response = await getCartService();
-        if (!response.data) throw new Error("ไม่มีข้อมูล");
-        setCartId(response.data[0].cartId);
-      } catch (error) {
-        alert(error);
-      }
-    };
-    getCart();
-  }, []);
+        const [
+          getCart,
+          getPorductCart,
+        ] = await Promise.all([
+          getCartService(),
+          getPorductCartService(),
+        ])
 
-  useEffect(() => {
-    const getCartItems = async () => {
-      try {
-        const response = await getPorductCartService();
-        if (!response.data) throw new Error("ไม่มีข้อมูล");
-        setProductCart(response.data);
+        setCartId(getCart.data[0].cartId);
+        setProductCart(getPorductCart.data);
       } catch (error) {
         alert(error);
       }
     };
-    getCartItems();
+    fechData();
   }, []);
 
   useEffect(() => {
@@ -57,17 +53,17 @@ const Navbar = memo(() => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
   return (
     <div>
       {/* Navbar ส่วนบน */}
       <div className={`p-1 mb-2 text-dark ${isScrolled ? "scrolled-navbar" : ""}`} style={{ backgroundColor: "#C40C0C" }}>
-      <nav className="navbar navbar-expand-lg navbar-light">
-          <div className="container-fluid"> {/* หน้าจอใหญ่ */}
-            <form className="d-flex flex-grow-1">
-              <input className="form-control me-2" style={{ width: "100%", maxWidth: "400px", borderRadius: "10px" }} type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-light" type="submit"><i className="bi bi-search"></i></button>
+        {/* //! หน้าจอใหญ่ */}
+        <nav className="navbar navbar-expand-lg navbar-light d-none d-lg-block">
+          <div className="container-fluid">
+            <form className="d-flex flex-grow-1 ">
+              < SearchShowList name="ค้นหา" itemKeys={["product_name"]} />
             </form>
-            <div className="text-end d-flex justify-content-center">
             {isScrolled && ( /*  มากกว่าเป็น true น้อยกว่าเป็น false */
               <div className="align-items-center">
                 <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
@@ -84,6 +80,7 @@ const Navbar = memo(() => {
                 <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
               </div>
             )}
+            <div className="text-end d-flex justify-content-center">
               <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span className="navbar-toggler-icon"></span>
               </button>
@@ -112,11 +109,21 @@ const Navbar = memo(() => {
             </div>
           </div>
         </nav>
-        
+        {/* //! หน้าจอเล็ก */}
+        <nav className="d-block d-lg-none navbar container-fluid d-flex align-items-start p-0 mt-2" style={{ backgroundColor: '#C40C0C', height: "50px" }}> {/* align-items-start ทำให้ของอยู่บนสุดช่วยจัดให้ดูสวยงาม */}
+          <Link className="btn btn-outline-light bi bi-house-door-fill" to="/home"></Link>
+          <div className="flex-grow-1 me-2 ms-2">
+            <SearchShowList name="ค้นหา" itemKeys={["product_name"]} />
+          </div>
+          <Link className="btn btn-outline-light d-flex align-items-center" to={`/cart/${cartId}`} style={{ borderRadius: '20px' }}>
+            <i className="bi bi-cart3 ms-1"></i>
+            <span className="small">฿ {totalPriceCart}</span>
+          </Link>
+        </nav>
       </div>
       {/* Navbar ส่วนล่าง */}
       {!isScrolled && (
-        <div className="container text-center my-4">
+        <div className="container text-center my-4 d-none d-lg-block">
           <img src="https://example.com/logo.png" alt="Bakery Cookie New Happy Family" style={{ width: "150px" }} />
           <nav className="container text-center col-9 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: "#C40C0C" }}>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>

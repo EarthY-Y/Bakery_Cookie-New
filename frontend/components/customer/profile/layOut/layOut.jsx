@@ -9,7 +9,7 @@ const layOutComponent = ({ children }) => {
     <React.Fragment>
       <div style={{ backgroundColor: '#FFF2E1' }}>
         {/* Navbar */}
-        <div style={{ position: 'sticky', top: 0, zIndex: 1000, height: '65px', width: '100%', marginBottom: '300px'}} >
+        <div style={{ position: 'sticky', top: 0, zIndex: 1000, width: '100%', }} > {/* เเค่เอาขนาดความสูงออกก็ทำให้เว้นระยะห่าง auto ระหว่าง navbar กับ main ได้เเล้ว */}
         <Navbar />
         </div>
         <div className="container d-flex mb-5" style={{ minHeight: '80vh'}}>
@@ -19,7 +19,7 @@ const layOutComponent = ({ children }) => {
           </div>
           
           {/* Main Content */}
-          <main className="flex-grow-1 p-3 ms-2 bg-white" >
+          <main className="flex-grow-1 p-3 ms-2 bg-white mt-3" >
             {/* Sidebar (Mobile - Above Content) */}
             <div className="d-lg-none d-block mb-3 w-5">
               <Sidebar />

@@ -1,53 +1,38 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, NavLink } from "react-router-dom"
 import { getCartService, getPorductCartService } from '../../../../../API/customer/productService';
 import { logout } from '../../../../../API/authService';
+import SearchShowList from '../../../../untils/fucntion/searchShowList';
 
 function Navbar() {
   const [productCart, setproductCart] = useState([])
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartId, setCartId] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
-  const handleLogout = () => {
-    logout()
-  }
+  const [productsSearch, setProductsSearch] = useState([]);
 
   useEffect(() => {
-    const getCart = async()=> {
+    const fechData = async () => {
       try {
-        const response = await getCartService()
-        if(!response.data){
-          throw new Error("ไม่มีข้อมูล")
-        }
-        setCartId(response.data[0].cartId)
+        const [
+          getCart,
+          getProductCart,
+        ] = await Promise.all([
+          getCartService(),
+          getPorductCartService(),
+        ])
+        // console.log(getListProduct.data);
+        setCartId(getCart.data[0].cartId)
+        setproductCart(getProductCart.data)
+      } catch (error) {
+        alert(error);
       }
-      
-      catch (error) {
-        alert(error)
-      }
-    }
-    getCart()
-  },[])
-
-  useEffect(() => {
-    const getCart = async()=> {
-      try {
-        const response = await getPorductCartService()
-        if(!response.data){
-          throw new Error("ไม่มีข้อมูล")
-        }
-        setproductCart(response.data)
-      }
-      
-      catch (error) {
-        alert(error)
-      }
-    }
-    getCart()
-  },[])
+    };
+    fechData();
+  }, []);
 
   const calculateTotalPrice = () => {
-    const total = productCart.reduce((sum, item) => sum + item.selling_price_per_quantity * item.quantity, 0); 
+    const total = productCart.reduce((sum, item) => sum + item.selling_price_per_quantity * item.quantity, 0);
     setTotalPrice(total); // อัปเดตราคารวม
   };
 
@@ -55,43 +40,44 @@ function Navbar() {
     calculateTotalPrice(); // คำนวณราคาทันทีเมื่อรายการสินค้าเปลี่ยน
   }, [productCart, totalPrice]);
 
-    /*  มากกว่าเป็น true น้อยกว่าเป็น false */
-    useEffect(() => {
-      const handleScroll = () => {
-        setIsScrolled(window.scrollY > 50);
-      };
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-  
+  /*  มากกว่าเป็น true น้อยกว่าเป็น false */
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
+  const handleLogout = () => {
+    logout()
+  }
   return (
     <div> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
       {/* Navbar ส่วนบน */}
       <div className={`p-1 mb-2 text-dark ${isScrolled ? "scrolled-navbar" : ""}`} style={{ backgroundColor: "#C40C0C" }}>
-        <nav className="navbar navbar-expand-lg navbar-light">
+        <nav className="navbar navbar-expand-lg navbar-light d-none d-lg-block">
           <div className="container-fluid">
             <form className="d-flex flex-grow-1">
-              <input className="form-control me-2" style={{ width: "100%", maxWidth: "400px", borderRadius: "10px" }} type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-light" type="submit"><i className="bi bi-search"></i></button>
+              < SearchShowList name="ค้นหา" itemKeys={["product_name"]} />
             </form>
             <div className="text-end d-flex justify-content-center">
-            {isScrolled && ( /*  มากกว่าเป็น true น้อยกว่าเป็น false */
-              <div className="align-items-center">
-                <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
-                <div className="dropdown d-inline">
-                  <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-                  <ul className="dropdown-menu">
-                    <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
-                    <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>
-                    <li><Link className="dropdown-item" to="#">ขนมปัง</Link></li>
-                    <li><Link className="dropdown-item" to="#">Separated link</Link></li>
-                  </ul>
+              {isScrolled && ( /*  มากกว่าเป็น true น้อยกว่าเป็น false */
+                <div className="align-items-center">
+                  <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
+                  <div className="dropdown d-inline">
+                    <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
+                    <ul className="dropdown-menu">
+                      <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
+                      <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>
+                      <li><Link className="dropdown-item" to="#">ขนมปัง</Link></li>
+                      <li><Link className="dropdown-item" to="#">Separated link</Link></li>
+                    </ul>
+                  </div>
+                  <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
+                  <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
                 </div>
-                <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
-                <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
-              </div>
-            )}
+              )}
               <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span className="navbar-toggler-icon"></span>
               </button>
@@ -120,9 +106,17 @@ function Navbar() {
             </div>
           </div>
         </nav>
-        
+        <nav className="d-block d-lg-none navbar container-fluid d-flex align-items-start mt-2 mb-2" style={{ backgroundColor: '#C40C0C', height: "50px" }}> {/* align-items-start ทำให้ของอยู่บนสุดช่วยจัดให้ดูสวยงาม */}
+          <Link className="btn btn-outline-light bi bi-house-door-fill" to="/home"></Link>
+          <div className="flex-grow-1 me-2 ms-2">
+            <SearchShowList name="ค้นหา" itemKeys={["product_name"]} />
+          </div>
+          <Link className="btn btn-outline-light d-flex align-items-center" to={`/cart/${cartId}`} style={{ borderRadius: '20px' }}>
+            <i className="bi bi-cart3 ms-1"></i>
+            <span className="small">฿ {totalPrice}</span>
+          </Link>
+        </nav>
       </div>
-
       {/* Navbar ส่วนล่าง */}
       {!isScrolled && (
         <div className="container text-center my-4 d-none d-lg-block">
@@ -136,7 +130,7 @@ function Navbar() {
 
             {/* Dropdown menu สำหรับหมวดหมู่ */}
             <div className="dropdown d-inline">
-            <button type="button" className="btn btn-outline text-white rounded-pill mx-1 " data-bs-toggle="dropdown" aria-expanded="false" >หมวดหมู่</button>
+              <button type="button" className="btn btn-outline text-white rounded-pill mx-1 " data-bs-toggle="dropdown" aria-expanded="false" >หมวดหมู่</button>
               <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
                 <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>

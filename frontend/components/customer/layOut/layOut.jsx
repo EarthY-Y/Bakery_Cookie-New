@@ -17,7 +17,9 @@ const layOutComponent = ({children}) => {
           </div>
         </div>
       </CartProvider>
-      <Footer/>
+      <div  style={{ backgroundColor: '#C40C0C'}}>
+        <Footer/>
+      </div>
     </React.Fragment>
   )
 }
