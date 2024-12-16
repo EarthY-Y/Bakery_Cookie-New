@@ -137,7 +137,7 @@ const OrderTracking = () => {
         <div className={`card-body ${showStep ? 'd-none' : 'd-block'} bg-danger bg-opacity-10 pb-0`}>
             <div className={`text-danger d-flex justify-content-between align-items-center`} >
                 <h3>{ordersDetail.status}</h3>
-                <p4>{formatDate(ordersDetail.updated_at)}</p4>
+                <p>{formatDate(ordersDetail.updated_at)}</p>
             </div>
             <div className="text-danger">
                 <p>เหตุผลในการยกเลิก: {ordersDetail.note}</p>
