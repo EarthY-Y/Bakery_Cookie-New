@@ -5,8 +5,9 @@ import { passToken } from "../../middleware/passAuth.js";
 export const gusetGetProductCustomer = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.product_id, p.selling_price_per_quantity, p.quantity_per_time, p.product_name, pp.productpic_name FROM product p"+
-                    " INNER JOIN productpicture pp ON p.product_id = pp.product_id",
+            db.query(`SELECT p.product_id, p.selling_price_per_quantity, p.quantity_per_time, p.product_name, pp.productpic_name FROM product p
+                     INNER JOIN productpicture pp ON p.product_id = pp.product_id
+                     WHERE p.is_active = ?`,["1"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

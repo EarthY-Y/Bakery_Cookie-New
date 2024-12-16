@@ -56,9 +56,9 @@ const Login = () => {
                   />
                 </div>
               </div>
-              <div className="text-end mb-4">
+              {/* <div className="text-end mb-4">
                 <a href="#" className="small">ลืมรหัสผ่าน</a>
-              </div>
+              </div> */}
               <div className="row mb-3 justify-content-center">
                 <div className="col-5 text-center">
                   <button

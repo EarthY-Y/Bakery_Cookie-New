@@ -15,6 +15,7 @@ const Navbar = memo(() => {
 
   const handleLogout = () => {
     logout();
+    location.reload()
   };
 
   useEffect(() => {

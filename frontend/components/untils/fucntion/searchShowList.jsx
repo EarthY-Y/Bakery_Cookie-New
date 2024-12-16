@@ -10,7 +10,7 @@ const SearchShowList = ({ name, itemKeys }) => {
   //useMemo เพื่อเก็บ instance ของ Fuse ช่วยลดการสร้างตัวแปรใหม่ทุกครั้งที่ component render หรือ data เปลี่ยนแปลง
   const fuse = useMemo(() => new Fuse(products, {
     keys: ["product_name"], //ได้เเค่ Array
-    threshold: 0.1,
+    threshold: 0.2,
   }), [products]); //เเต่จะถูก reder เมื่อ data ถูกเปลี่ยนเเปลงจริงๆ
 
   useEffect(() => {
