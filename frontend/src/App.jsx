@@ -50,6 +50,7 @@ import CreateCategoryPackage from '../page/admin-page/category/categoryPackge/cr
 import EditCategoryPackage from '../page/admin-page/category/categoryPackge/editCategoryPackage-page';
 import CategoryByIdPackage from '../page/admin-page/category/categoryPackge/categoryPackgeById-page'
 import Profile from '../page/customer-page/profile-page/profile-page';
+import ChangePassword from '../page/customer-page/profile-page/changePassword-page';
 import ListAddress from '../page/customer-page/profile-page/listAddress-page'
 import EditAddress from '../page/customer-page/profile-page/editAddress-page'
 import OrderTracking from '../page/customer-page/profile-page/orderTracking-page'
@@ -420,6 +421,10 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: <Profile />,
+              },
+              {
+                path: "changePassword",
+                element: <ChangePassword />,
               },
               {
                 path: "customer/address",

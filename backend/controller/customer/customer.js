@@ -221,3 +221,32 @@ export const checkConnectLineID = async (req, res) => {
         res.status(400).json({ message: "Error get product", error });
     }
 }
+
+export const changePassword = async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
+        const authToken = await passToken(authHeader)
+        if(!authToken){
+            return res.status(404).json({ message: "User not found" });
+        }
+        const {newPassword, confirmNewPassword} = req.body;
+    
+        if(newPassword !== confirmNewPassword) return res.status(400).json({message: "Password not match"});
+
+        const hashPassword = await argon2.hash(newPassword); 
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`UPDATE customer SET password = ?
+                      WHERE customer_id = ?`,[hashPassword ,authToken.customerId],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}

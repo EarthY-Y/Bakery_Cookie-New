@@ -7,7 +7,8 @@ import {
     deleteCustomer,
     createAddress,
     createConnectLineID,
-    checkConnectLineID
+    checkConnectLineID,
+    changePassword
 } from "../../controller/customer/customer.js"
 import { verifyCustomerMid } from "../../middleware/authUser.js"
 import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
@@ -31,5 +32,6 @@ router.delete('/customers/delete/profile:id',verifyCustomerMid, deleteCustomer);
 router.post('/customers/create/address',verifyCustomerMid, createAddress);
 router.post('/customers/create/connect/line',verifyCustomerMid, createConnectLineID);
 router.get('/customers/check/connect/line',verifyCustomerMid, checkConnectLineID);
+router.patch('/customers/change/password',verifyCustomerMid, changePassword);
 
 export default router

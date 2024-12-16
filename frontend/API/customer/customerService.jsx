@@ -63,5 +63,23 @@ export const checkConnectionLineIDService = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error
+  }
+}
+
+export const changePasswordService = async(newPassword, confirmNewPassword) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.patch(API_URL + "/change/password", {newPassword:newPassword, confirmNewPassword:confirmNewPassword},
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error
   }
 }
