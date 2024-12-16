@@ -56,7 +56,7 @@ const cartProduct = () => {
   
   // 
   useEffect(() => {
-    const total = totalPriceProduct || 0 + productOrder.cost_shipping || 0 + productOrder.cost_package || 0/* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
+    const total = (totalPriceProduct || 0 )+ (productOrder.cost_shipping || 0) + (productOrder.cost_package || 0)/* อนาคตต้องทำคำนวนต้นทุนค่าส่ง */;
     setTotalPrice(total);
   }, [productOrder]);
 
