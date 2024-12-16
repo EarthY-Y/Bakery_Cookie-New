@@ -1,10 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getCategoryService } from '../../../../API/guest/guestProductService'
 import SearchShowListGuest from '../../../untils/fucntion/searchShowListGuest';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const [categoryList, setCategoryList] = useState([]);
+    useEffect(() => {
+      const fechData = async () => {
+        try {
+          const [        
+            getCategory,
+          ] = await Promise.all([
+            getCategoryService(),
+          ])
+          // console.log(getListProduct.data);
+          setCategoryList(getCategory.data)
+        } catch (error) {
+          alert(error);
+        }
+      };
+      fechData();
+    }, []);
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) setIsScrolled(true);
@@ -28,11 +45,10 @@ const Navbar = () => {
                 <button className="btn btn-outline text-white rounded-pill mx-1"><Link className="dropdown-item" to="/">หน้าหลัก</Link></button>
                 <div className="dropdown d-inline">
                   <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-                  <ul className="dropdown-menu">
-                    <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
-                    <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>
-                    <li><Link className="dropdown-item" to="#">ขนมปัง</Link></li>
-                    <li><Link className="dropdown-item" to="#">Separated link</Link></li>
+                  <ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                    {categoryList.map((item, index)=>(
+                      <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                    ))}
                   </ul>
                 </div>
                 <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
@@ -69,11 +85,10 @@ const Navbar = () => {
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/">หน้าหลัก</Link>
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-              <ul className="dropdown-menu">
-                <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
-                <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>
-                <li><Link className="dropdown-item" to="#">ขนมปัง</Link></li>
-                <li><Link className="dropdown-item" to="#">Separated link</Link></li>
+              <ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                {categoryList.map((item, index)=>(
+                  <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                ))}
               </ul>
             </div>
             <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>

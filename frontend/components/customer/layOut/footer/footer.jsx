@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
+import { getCategoryService } from "../../../../API/customer/productService"
 
 const Footer = () => {
+  const [categoryList, setCategoryList] = useState([]);
+  useEffect(() => {
+    const fechData = async () => {
+      try {
+        const [         
+          getCategory,
+        ] = await Promise.all([
+          getCategoryService(),
+        ])
+        setCategoryList(getCategory.data)
+      } catch (error) {
+        alert(error);
+      }
+    };
+    fechData();
+  }, []);
   return (
     <footer className="text-white py-5 d-flex align-items-end flex-column ">
       <div className="container col-12 text-start mt-auto p-2 d-none d-md-block">
@@ -21,18 +38,9 @@ const Footer = () => {
                 <p className="small m-0">หมวดหมู่</p>
               </button>
               <ul className="dropdown-menu mb-4" aria-labelledby="dropdownMenuButton" style={{ position: "absolute", bottom: "100%", left: "0" }}>
-                <li>
-                  <Link className="dropdown-item" to="#">เค้ก</Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="#">คุกกี้</Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="#">ขนมปัง</Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="#">Separated link</Link>
-                </li>
+                {categoryList.map((item, index)=>(
+                  <li key={index}><Link className="dropdown-item" to="#">{item.category_name}</Link></li>
+                ))}
               </ul>
             </div>
           </div>

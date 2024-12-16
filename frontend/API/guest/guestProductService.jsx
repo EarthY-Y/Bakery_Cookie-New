@@ -34,3 +34,37 @@ export const detailProductByIdService = async(id) => {
     console.error("Error listProductByIdService:", error);
   }
 }
+
+export const getCategoryService = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/product/category/nav", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    return response
+  }catch (error) {
+    console.error("Error listProductService:", error);
+  }
+}
+
+export const listProductCategoryService = async(id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+  
+    const response = await axios.get(API_URL + "/get/product/category/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error listProductService:", error);
+  }
+}

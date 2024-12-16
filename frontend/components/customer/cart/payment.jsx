@@ -102,7 +102,8 @@ const cartProduct = () => {
             <div>
               <h3>ช่องทางการชำระเงิน</h3>
               <div>
-                <h5>ธนาคารกรุงไทย เลขที่บัญชี: <strong>000-000-000-0</strong></h5>
+                <h5>พร้อมเพย์: <strong>0891175751</strong></h5>
+                <h5><strong>นางสาาว รุ่งรวีกาณ บุญเอี่ยม</strong></h5>
               </div>
             </div>
             <div className="d-flex justify-content-center mt-4">

@@ -1,12 +1,14 @@
 import React, { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { getCartService, getPorductCartService } from "../../../../API/customer/productService";
+import { getCategoryService } from "../../../../API/customer/productService"
 import { logout } from "../../../../API/authService";
 import { useCart } from "./CartContext";
 import SearchShowList from '../../../untils/fucntion/searchShowList';
 
 const Navbar = memo(() => {
   const [productCart, setProductCart] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const [totalPriceCart, setTotalPriceCrat] = useState(0);
   const [cartId, setCartId] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,13 +25,17 @@ const Navbar = memo(() => {
         const [
           getCart,
           getPorductCart,
+          getCategory,
         ] = await Promise.all([
           getCartService(),
           getPorductCartService(),
+          getCategoryService(),
         ])
-
+        console.log(getCategory);
+        
         setCartId(getCart.data[0].cartId);
         setProductCart(getPorductCart.data);
+        setCategoryList(getCategory.data)
       } catch (error) {
         alert(error);
       }
@@ -69,11 +75,10 @@ const Navbar = memo(() => {
                 <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
                 <div className="dropdown d-inline">
                   <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-                  <ul className="dropdown-menu">
-                    <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
-                    <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>
-                    <li><Link className="dropdown-item" to="#">ขนมปัง</Link></li>
-                    <li><Link className="dropdown-item" to="#">Separated link</Link></li>
+                  <ul className="dropdown-menu mt-2">
+                    {categoryList.map((item, index)=>(
+                      <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                    ))}
                   </ul>
                 </div>
                 <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
@@ -129,11 +134,10 @@ const Navbar = memo(() => {
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-              <ul className="dropdown-menu">
-                <li><Link className="dropdown-item" to="#">เค้ก</Link></li>
-                <li><Link className="dropdown-item" to="#">คุกกี้</Link></li>
-                <li><Link className="dropdown-item" to="#">ขนมปัง</Link></li>
-                <li><Link className="dropdown-item" to="#">Separated link</Link></li>
+              <ul className="dropdown-menu mt-2">
+                {categoryList.map((item, index)=>(
+                  <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                ))}
               </ul>
             </div>
             <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>

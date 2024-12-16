@@ -40,3 +40,45 @@ export const guestGetProductById = async (req, res) => {
         res.status(400).json({ message: "Error get product", error });
     }
 }
+
+export const getNavbarCategory = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT category_name, product_category_id FROM product_category`,
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}
+
+export const getCategoryProduct = async (req, res) => {
+    try {
+        const id = req.params.id
+        console.log(id);
+        
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT p.*, pp.productpic_name FROM product p 
+                      LEFT JOIN category_product cp ON cp.product_id = p.product_id
+                      LEFT JOIN product_category pc ON pc.product_category_id = cp.product_category_id
+                      LEFT JOIN productpicture pp ON p.product_id = pp.product_id
+                      WHERE pc.category_name = ?`, [id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get product:", error);
+        res.status(400).json({ message: "Error get product", error });
+    }
+}

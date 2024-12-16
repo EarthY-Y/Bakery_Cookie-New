@@ -19,7 +19,7 @@ const layOutComponent = ({ children }) => {
           </div>
           
           {/* Main Content */}
-          <main className="flex-grow-1 p-3 ms-2 bg-white mt-3" >
+          <main className="flex-grow-1 p-3 bg-white mt-3" >
             {/* Sidebar (Mobile - Above Content) */}
             <div className="d-lg-none d-block mb-3 w-5">
               <Sidebar />

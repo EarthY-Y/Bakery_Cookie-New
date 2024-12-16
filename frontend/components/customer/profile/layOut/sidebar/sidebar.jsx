@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 function Sidebar() {
   return (
-    <div className="d-flex justify-content-center mt-3"> 
+    <div className="d-flex justify-content-center mt-3 me-2"> 
       {/* หน้าจอใหญ่ */}
       <div className="card border-0 shadow-sm d-none d-lg-block" style={{ width: "300px", borderRadius: "8px" }}>
         <div className="card-body">

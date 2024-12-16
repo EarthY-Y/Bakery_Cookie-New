@@ -42,7 +42,6 @@ export const loginAdmin = async (userName, passWord) => {
 export const logout = async () => {
   try {
     removeToken()
-    liff.logout()
   } catch (error) {
     console.error("Error logout:", error);
     throw error; // ส่ง error ออกไปให้ component จัดการ

@@ -20,6 +20,7 @@ import ListAdmin from '../page/admin-page/listAdmin-page'
 import CreateProductMaterial from '../page/admin-page/product-page/createMaterialProduct-page';
 import Home from '../page/customer-page/home/home-page'
 import GuestHome from '../page/guest/guestHome-page'
+import CategoryProductListGuest from '../page/guest/categoryProductList-page';
 import GuestDetailPorductById from '../page/guest/guestDetailPorductById-page'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
@@ -27,6 +28,7 @@ import { FormProviderSignUpService } from '../API/signUpService'
 import { FormProviderProductService } from '../API/admin/productService'
 import CreateProduct from '../page/admin-page/product-page/createProduct-page'
 import DetailPorductById from '../page/customer-page/product/detailPorductById-page';
+import CategoryProductList from '../page/customer-page/product/categoryProductList-page copy';
 import Cart from '../page/customer-page/cart-page/cartProduct-page';
 import Payment from '../page/customer-page/cart-page/payment-page';
 import CreateAddress from '../page/customer-page/profile-page/createAddress-page';
@@ -82,6 +84,10 @@ const router = createBrowserRouter([
           {
             path: "Cookie&New/:id",
             element: <GuestDetailPorductById />,
+          },
+          {
+            path: "/list/category/product/:id",
+            element: <CategoryProductListGuest />,
           },
           {
             path: "/login",
@@ -393,6 +399,10 @@ const router = createBrowserRouter([
           {
             path: "/product/:id",
             element: <DetailPorductById />,
+          },
+          {
+            path: "/category/:id",
+            element: <CategoryProductList />,
           },
           {
             path: "/cart/:id",

@@ -2,21 +2,21 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_PORT_CUSTOMER 
 
 export const listProductService = async() => {
-    try {
-      const authToken = localStorage.getItem('token')
-   
-      const response = await axios.get(API_URL + "/get/product", 
-        {
-          headers: {
-            'authorization': `Bearer ${authToken}`
-          }
+  try {
+    const authToken = localStorage.getItem('token')
+  
+    const response = await axios.get(API_URL + "/get/product", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
         }
-      );  
-      console.log(response);
-      return response
-    }catch (error) {
-      console.error("Error listProductService:", error);
-    }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error listProductService:", error);
+  }
 }
 
 export const getCartService = async() => {
@@ -113,6 +113,40 @@ export const deletePorductCartService = async(id) => {
         }
       }
     );  
+    return response
+  }catch (error) {
+    console.error("Error listProductService:", error);
+  }
+}
+
+export const getCategoryService = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/nav/category", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    return response
+  }catch (error) {
+    console.error("Error listProductService:", error);
+  }
+}
+
+export const listProductCategoryService = async(id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+  
+    const response = await axios.get(API_URL + "/get/product/category/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
     return response
   }catch (error) {
     console.error("Error listProductService:", error);
