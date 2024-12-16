@@ -63,11 +63,11 @@ const OrderTracking = () => {
   };
 
   const handleCancelOrder = async(reason) => {
-      cancelOrder(orderId, reason)
-      .then(() => {
-        setOrdersCheckOut(prevOrdersCheckOut => prevOrdersCheckOut.filter(OrdersCheck => OrdersCheck.orders_id !== orderId))
-      })
-      .catch(err => console.log(err))
+    cancelOrder(orderId, reason)
+    .then(() => {
+      setOrdersCheckOut(prevOrdersCheckOut => prevOrdersCheckOut.filter(OrdersCheck => OrdersCheck.orders_id !== orderId))
+    })
+    .catch(err => console.log(err))
   }
 
 

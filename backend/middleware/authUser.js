@@ -11,9 +11,9 @@ export const verifyCustomer = async (req, res , next) => {
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
         const authToken = await passToken(authHeader)
 
-        await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
+        db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
             [authToken.customerId],
-        (err, results) => {
+            (err, results) => {
             if (results.length === 0) {
                 console.log('in length = 0');
                 return res.status(404).json({ message: "User not found" });
@@ -36,7 +36,7 @@ export const verifyCustomerMid = async (req, res , next) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        await db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
+        db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
             [authToken.customerId],
             (err, results) => {
             if(err){

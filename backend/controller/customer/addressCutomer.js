@@ -108,3 +108,20 @@ export const updateAddressByAddressId = async(req, res) => {
         
     }
 }
+
+export const deleteAddressCustomer = async(req, res) => {
+    try {
+        const {addressId} = req.body
+        const results = await new Promise((resolve, reject) => {
+            db.query(`DELETE FROM address WHERE addressId = ?`,[addressId], 
+                (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                })
+        })
+        console.log(results);
+        return res.status(200).json(results)
+    } catch (error) {
+        console.log(error);
+    }
+}

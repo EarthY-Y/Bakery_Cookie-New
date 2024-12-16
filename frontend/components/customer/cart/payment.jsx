@@ -63,6 +63,7 @@ const cartProduct = () => {
   const handleSubmmit = async(event) => {
     event.preventDefault();
     try {
+      setIsLoading(true);
       const formData = new FormData();  
       formData.append('file', Picture);
       formData.append('totalPrice', totalPrice);
@@ -76,6 +77,8 @@ const cartProduct = () => {
     } catch (error) {
       console.log(error);
       alert(error)
+    }finally{
+      setIsLoading(false);
     }
   }
   
@@ -91,7 +94,7 @@ const cartProduct = () => {
               {address.f_name} {address.l_name} | โทร: 0{address.phone_number}
             </strong>
             <br />
-            {address.houesNo} ตำบล {address.tambon_nameTH} อำเภอ {address.amphure_nameTH} จังหวัด {address.province_nameTH} {address.zip_code}
+            {address.houseNo} ตำบล {address.tambon_nameTH} อำเภอ {address.amphure_nameTH} จังหวัด {address.province_nameTH} {address.zip_code}
           </p>
         </div>
         <div className="row flex-column align-items-center p-3 border rounded bg-light mt-3">

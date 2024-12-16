@@ -4,12 +4,14 @@ import { validateAddressCustomer, getAddressCustomer, createOrder, shippingRate 
 import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
+import SelectBox from '../../untils/popUp/selectBox'
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const orders = () => {
   const {id} = useParams();
   const [address, setAddress] = useState([])
+  const [selectAddress, setSelectAddress] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [productCart, setProductCart] = useState([])
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); ; 
@@ -18,6 +20,7 @@ const orders = () => {
   const [totalWeight, setTotalWeigth] = useState(0); 
   const [deliveryRate,  setdeliveryRate] = useState(0); 
   const [toatalShippingRate,  setToatalShippingRate] = useState(0); 
+  const [showSelectModal, setShowSelectModal] = useState(false);
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -36,7 +39,7 @@ const orders = () => {
         ]);
         if(addressCustomer.data.length !== 0 ){
           console.log(addressCustomer.data);
-          setAddress(addressCustomer.data[0])
+          setAddress(addressCustomer.data)
         }else{
           navigate('/create/address')
         }
@@ -101,10 +104,31 @@ const orders = () => {
 
   const handleSubmmit = async(event) => {
     event.preventDefault();
+    let selectedAddress;
+    if (address.length === 1) {
+      selectedAddress = address[0];
+    } else if (!isNaN(selectAddress)) {
+      alert("กรุณาเลือกที่อยู่ก่อนทำการสั่งซื้อ");
+      return;
+    } else {
+      selectedAddress = selectAddress;
+    }
     try {
-      console.log(productCart, parseFloat(totalPrice), totalPriceProduct , deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, totalQuantity, deliveryRate.shipping_rate_id, address.houseNo, address.tambon_nameTH, address.amphure_nameTH, address.province_nameTH, address.zip_code);
-      const response = await createOrder(productCart, parseFloat(totalPrice) || 0, totalPriceProduct || 0, deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, 
-                                        totalQuantity, deliveryRate.shipping_rate_id, address.houseNo, address.tambon_nameTH, address.amphure_nameTH, address.province_nameTH, address.zip_code)
+      console.log(productCart, parseFloat(totalPrice), totalPriceProduct , deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, totalQuantity, deliveryRate.shipping_rate_id, selectedAddress.houseNo,selectedAddress.tambon_nameTH,selectedAddress.amphure_nameTH,selectedAddress.province_nameTH,selectedAddress.zip_code);
+      const response = await createOrder(
+        productCart,
+        parseFloat(totalPrice) || 0,
+        totalPriceProduct || 0,
+        deliveryRate.price || 0,
+        deliveryRate.cost_per_quantity || 0,
+        totalQuantity,
+        deliveryRate.shipping_rate_id,
+        selectedAddress.houseNo,
+        selectedAddress.tambon_nameTH,
+        selectedAddress.amphure_nameTH,
+        selectedAddress.province_nameTH,
+        selectedAddress.zip_code
+      );
       if(response.data){
         navigate("/payment/"+id)
       }else {
@@ -117,6 +141,10 @@ const orders = () => {
     }
   }
 
+  const handleSelect = async(selectedAddress) => {
+    setSelectAddress(selectedAddress)
+  }
+
   return (
     <form className="container my-5" onSubmit={handleSubmmit}>
       <div className="px-3 card-body">
@@ -124,13 +152,30 @@ const orders = () => {
           <h2 className="mb-2 text-center">ชำระเงิน</h2>
           <hr className="my-4 border-secondary"/>
           <h3>ที่อยู่ที่ใช้ในการจัดส่ง</h3>
-          <p>
-            <strong>
-              {address.f_name} {address.l_name} | โทร: 0{address.phone_number}
-            </strong>
-            <br />
-            {address.houesNo} ตำบล {address.tambon_nameTH} อำเภอ {address.amphure_nameTH} จังหวัด {address.province_nameTH} {address.zip_code}
-          </p>
+          {address.length > 1 ? (
+            <div>
+              {isNaN(selectAddress) ? (
+                <p>
+                  <strong>
+                    {selectAddress.f_name} {selectAddress.l_name} | โทร: 0{selectAddress.phone_number}
+                  </strong>
+                  <br />
+                  {selectAddress.houseNo} ตำบล {selectAddress.tambon_nameTH} อำเภอ {selectAddress.amphure_nameTH} จังหวัด {selectAddress.province_nameTH} {selectAddress.zip_code}
+                </p>
+              ): (
+                <p>กรุณาเลือกที่อยู่</p>
+              )}
+              <button type='button' className="btn btn-primary" onClick={() => setShowSelectModal(true)}>เลือกที่อยู่</button>
+            </div>
+          ) : (
+            <p>
+              <strong>
+                {address[0]?.f_name} {address[0]?.l_name} | โทร: 0{address[0]?.phone_number}
+              </strong>
+              <br />
+              {address[0]?.houseNo} ตำบล {address[0]?.tambon_nameTH} อำเภอ {address[0]?.amphure_nameTH} จังหวัด {address[0]?.province_nameTH} {address[0]?.zip_code}
+            </p>
+          )}
         </div>
         <div className="row bg-light pb-3 pt-3 border rounded fw-bold">
           <div className="col-12 col-md-6 d-none d-md-block text-secondary">รายการสินค้าที่สั่งซื้อ</div>
@@ -180,6 +225,13 @@ const orders = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      <SelectBox
+        showModal={showSelectModal}
+        handleClose={() => setShowSelectModal(false)}
+        data={address}
+        handleSelect={handleSelect} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
+      />
+      {showSelectModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </form>
   );
 };

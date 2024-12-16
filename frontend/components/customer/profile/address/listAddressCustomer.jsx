@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllAddressCustomer } from '../../../../API/customer/addressCustomerService';
+import { getAllAddressCustomer, deleteAddressById } from '../../../../API/customer/addressCustomerService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 
 const listAddressCustomer = () => {
@@ -18,6 +18,14 @@ const listAddressCustomer = () => {
     };
     getCategoryList();
   }, []);
+
+    const handleDeleteAddress = async(addressId) => {
+      deleteAddressById(addressId)
+      .then(() => {
+        setListAddress(prevListAddress => prevListAddress.filter(listAddress => listAddress.addressId !== addressId))
+      })
+      .catch(err => console.log(err))
+    }
 
   return (
     <div className="container mt-5">
@@ -46,7 +54,7 @@ const listAddressCustomer = () => {
                     </button>
                 </div>
                 <div className='p-2 bd-highlight '>
-                    <button className="btn btn-danger mb-2">ลบ</button>
+                  <button className="btn btn-danger mb-2" onClick={()=> handleDeleteAddress(address.addressId)}>ลบ</button>
                 </div>
                 {/* <button className="btn p-0">ตั้งเป็นค่าตั้งต้น</button> */}
             </div>

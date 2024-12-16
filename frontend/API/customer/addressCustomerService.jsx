@@ -51,3 +51,20 @@ export const updateAddressById = async(tambonsId, amphuresId, provincesId, house
     console.error("Error validateAddressCustomer:", error);
   }
 }
+
+export const deleteAddressById = async(addressId) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.patch(API_URL + "/delete/address", {addressId},
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+  }
+}
