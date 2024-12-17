@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navbar ,Container ,Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Logoeiei from '../../../../src/assets/Logoeiei.png'
 import Sidebaradmin from '../sidebar/sidebaradmin';
 import { Link, NavLink } from "react-router-dom"
 import { logoutAdmin } from '../../../../API/authService';
@@ -23,9 +22,9 @@ function Navbaradmin() {
         {/* โลโก้ */}
         <a className="navbar-brand" href="/" style={{ height: '100%' }}>
           <img
-            src={Logoeiei}
+            src="../../../../src/assets/LogoCN.PNG"
             alt="Logo"
-            style={{ height: '40px' }}
+            style={{ height: '50px' }}
           />
         </a>
 
