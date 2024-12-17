@@ -320,7 +320,7 @@ export const updatePaymentOrder = async (req, res) => {
         console.log("updatePaymentOrder");
         
         const id = req.params.id
-        const statement_picture = req.file.key;
+        const statement_picture = req.file.filename;
         console.log(req.body);  
         
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 

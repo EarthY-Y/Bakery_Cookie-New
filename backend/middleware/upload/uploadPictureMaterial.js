@@ -35,6 +35,16 @@ const storage = multerS3({
 
     cb(null, `image/material/${baseName}_${Date.now()}${ext}`);
   },
+  filename: function (req, file, cb) { //ตัวที่จะ save ลง database
+      // แปลงชื่อไฟล์ให้อยู่ในรูปแบบ UTF-8
+      const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8'); //latin1 (หรือ ISO/IEC 8859-1) เป็นชื่อที่ใช้อธิบายการเข้ารหัสข้อความที่ใช้ 8 บิต 
+      
+      // ตรวจสอบและเพิ่ม extension ของไฟล์
+      const ext = path.extname(fileName);
+      const baseName = path.basename(fileName, ext);
+      
+      cb(null, `${baseName}_${Date.now()}${ext}`); // ป้องกันชื่อไฟล์ซ้ำโดยเพิ่ม timestamp
+  }
 });
 
 // กำหนดฟังก์ชันอัปโหลดพร้อมตัวกรอง

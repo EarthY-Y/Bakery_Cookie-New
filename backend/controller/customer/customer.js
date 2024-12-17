@@ -84,7 +84,7 @@ export const updateCustomer = async (req, res) => {
         console.log(authToken.customerId, formData);
     
         if (req.file) {
-            customerPic = req.file.key; 
+            customerPic = req.file.filename; 
             console.log(customerPic);  
         }
         // Dynamic SQL - สร้าง Query เฉพาะฟิลด์ที่มีการเปลี่ยนแปลง

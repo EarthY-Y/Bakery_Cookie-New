@@ -132,7 +132,7 @@ export const createProduct = async (req, res) => {
 const createProductPicture = async (req, id, tokenId) => {
     try {
         const idPicture = uuidv4();
-        const productPictureName = req.file.key;
+        const productPictureName = req.file.filename;
         const materialPictureType = req.file.mimetype;
 
         if (!req.file) {
@@ -362,7 +362,7 @@ const updateProductPicture = async (req, productId, tokenId) => {
 
         if (req.file) {
             updateQuery += "productpic_name = ?, updated_by = ? ";
-            updateValues.push(req.file.key, tokenId);
+            updateValues.push(req.file.filename, tokenId);
         }
 
         updateQuery += "WHERE product_id = ? LIMIT 1";
