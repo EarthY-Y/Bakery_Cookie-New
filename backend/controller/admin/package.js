@@ -48,7 +48,7 @@ export const createpackage = async (req, res) => {
         const id = uuidv4();
         
         const { package_name, cost, quantity, costPreQuantity } = req.body;
-        const packagePictureName = req.file.filename;
+        const packagePictureName = req.file.key;
 
         const packageResult = await new Promise((resolve, reject) => {
             db.query(
@@ -134,7 +134,7 @@ export const updatepackage = async (req, res) => {
 
         if (req.file) {
             updateQuery += "package_pic = ?, ";
-            updateValues.push(req.file.filename);
+            updateValues.push(req.file.key);
         }
 
         if (token.admin_id) {

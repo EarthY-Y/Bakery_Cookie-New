@@ -47,7 +47,7 @@ export const createMaterial = async (req, res) => {
         const id = uuidv4();
         const { material_name, quantity, cost, costesperquantities } = req.body;
         console.log('file req',req.file);
-        const materialPictureName = req.file.filename;
+        const materialPictureName = req.file.key;
         const materialPictureType = req.file.mimetype;
         console.log('file name ',materialPictureName ,'and', materialPictureType);
     
@@ -96,7 +96,7 @@ export const updateMaterial = async (req, res) => {
             }
         }
         if (req.file) {
-            materialpic_name = req.file.filename; // เก็บ URL ของไฟล์ที่อัปโหลด
+            materialpic_name = req.file.key; // เก็บ URL ของไฟล์ที่อัปโหลด
         }
       
         // Dynamic SQL - สร้าง Query เฉพาะฟิลด์ที่มีการเปลี่ยนแปลง
