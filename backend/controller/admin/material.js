@@ -7,7 +7,7 @@ import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 export const getMaterial = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT material_id, material_name, quantity, cost, cost_per_quantity, materialpic_name, materialpic_type, created_at, updated_at FROM material", 
+            db.query("SELECT material_id, material_name, quantity, cost, cost_per_quantity, materialpic_name, created_at, updated_at FROM material", 
                 (err, result) => {
                     if(err) return reject(err)
                     resolve(result)
@@ -55,7 +55,7 @@ export const createMaterial = async (req, res) => {
             return res.status(400).send({ message: "Material picture is required." });
         }
         const results = await new Promise((resolve, reject) => {
-            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, cost_per_quantity, materialpic_type, created_by) VALUES( ?, ?, ?, ?, ?, ?, ?, ?)",
+            db.query("INSERT INTO material (material_id, material_name, quantity, cost, materialpic_name, cost_per_quantity, created_by) VALUES( ?, ?, ?, ?, ?, ?, ?, ?)",
                 [id, material_name, quantity, cost, materialPictureName, costesperquantities, materialPictureType, token.admin_id],
                 (err, result, fields) => {
                     if (err) {
