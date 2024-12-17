@@ -35,6 +35,9 @@ const storage = multerS3({
 
     cb(null, `image/package/${baseName}_${Date.now()}${ext}`);
   },
+});
+
+const storageMulter = multer.diskStorage({
   filename: function (req, file, cb) {
       // แปลงชื่อไฟล์ให้อยู่ในรูปแบบ UTF-8
       const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8'); //latin1 (หรือ ISO/IEC 8859-1) เป็นชื่อที่ใช้อธิบายการเข้ารหัสข้อความที่ใช้ 8 บิต 
@@ -50,6 +53,7 @@ const storage = multerS3({
 // กำหนดฟังก์ชันอัปโหลดพร้อมตัวกรอง
 const upload = multer({
   storage,
+  storageMulter,
   fileFilter: (req, file, cb) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!allowedTypes.includes(file.mimetype)) {
