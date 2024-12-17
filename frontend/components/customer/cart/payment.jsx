@@ -3,8 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { validateAddressCustomer, getAddressCustomer, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
-import orders from './orders';
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
   const id = useParams().id //เพราะว่ามันส่งมาจาก navigate ของหน้า orders เลยมาเป็น object ทำให้เกิดปัญหากับหลังบ้านเลยต้อง .id ในกรณีที่ไม่ใส่ {id}

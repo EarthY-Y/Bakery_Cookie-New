@@ -5,7 +5,7 @@ import { manageCustomerServiceById, manageCustomerAddressServiceById, updateCust
 import { formatDate } from '../../untils/frommatters/datetime';
 import LoadingPopup from '../../untils/popUp/loading';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_CUSTOMER
 
 const manageCustomerById = () => {
   const navigate = useNavigate();

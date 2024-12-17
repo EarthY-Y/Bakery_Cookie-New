@@ -11,7 +11,7 @@ import {
     changePassword
 } from "../../controller/customer/customer.js"
 import { verifyCustomerMid } from "../../middleware/authUser.js"
-import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
+import {uploadSingle} from '../../middleware/upload/uploadPictureProfileCustomer.js'
 
 const router = express.Router();
 router.use(express.json());

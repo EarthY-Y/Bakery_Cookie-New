@@ -1,8 +1,8 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
-import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
-
+import fs from 'fs';
+import path from 'path';
 
 export const getpackage = async (req, res) => {
     try {
@@ -78,6 +78,23 @@ export const updatepackage = async (req, res) => {
         const { id } = req.params;
 
         const {active, package_name, quantity, cost, cost_per_quantity} = req.body;
+
+        // ดึงชื่อไฟล์รูปภาพเก่าจากฐานข้อมูล
+        const oldPictureQuery = "SELECT package_pic FROM package WHERE package_id = ? LIMIT 1";
+        const oldPicture = await new Promise((resolve, reject) => {
+            db.query(oldPictureQuery, [id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.package_pic); // ได้ชื่อไฟล์รูปภาพเก่า
+            });
+        });
+
+        // ลบรูปภาพเก่าถ้ามีการอัปโหลดไฟล์ใหม่
+        if (req.file && oldPicture) {
+            const oldPicturePath = path.join('picture', oldPicture); // พาธของไฟล์เก่า
+            if (fs.existsSync(oldPicturePath)) { // ตรวจสอบว่าไฟล์มีอยู่จริง
+                fs.unlinkSync(oldPicturePath); // ลบไฟล์
+            }
+        }
 
         // 1. อัปเดตข้อมูลในตาราง package
         let updateQuery = "UPDATE package SET  ";

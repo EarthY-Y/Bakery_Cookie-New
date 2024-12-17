@@ -5,7 +5,7 @@ import { Table, Button } from 'react-bootstrap';
 import { listPackageService, deletePackageByIdService } from '../../../API/admin/packageService';
 import Search from '../../untils/fucntion/search';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PACKAGE
 
 const ListPackage = () => {
   const [packges, setPackges] = useState([]);

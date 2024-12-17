@@ -10,7 +10,7 @@ import {
 } from "../../controller/admin/product.js"
 
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
-import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
+import {uploadSingle} from '../../middleware/upload/uploadPictureProduct.js'
 
 const router = express.Router();
 router.use(express.json());

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { listMaterialService, deleteMaterialByIdService } from '../../../API/admin/materialService'
 import { formatDate } from '../../untils/frommatters/datetime'
 import Search from '../../untils/fucntion/search'
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_MATERIAL
 
 const ListMaterial = () => {
   const [materials, setMaterials] = useState([])

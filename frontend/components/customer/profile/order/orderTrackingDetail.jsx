@@ -5,7 +5,7 @@ import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { goBackOrHome } from '../../../untils/fucntion/backFuction';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const OrderTracking = () => {
   const {id} = useParams()

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import liff from '@line/liff'
 import { listProductService } from '../../../API/guest/guestProductService';
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const Home = () => {
   const [products, setProducts] = useState([]);

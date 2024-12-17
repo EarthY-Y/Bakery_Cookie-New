@@ -67,7 +67,13 @@ app.use(session ({
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running `);
 })
-app.use('/picture', express.static(path.join(__dirname, 'picture')));
+app.use('/picture/upload/package', express.static(path.join(__dirname, 'upload/image/package')));
+app.use('/picture/upload/material', express.static(path.join(__dirname, 'upload/image/material')));
+app.use('/picture/upload/product', express.static(path.join(__dirname, 'upload/image/product')));
+app.use('/picture/upload/profile/customer', express.static(path.join(__dirname, 'upload/image/profileCustomer')));
+app.use('/picture/upload/profile/admin', express.static(path.join(__dirname, 'upload/image/profileAdmin')));
+app.use('/picture/upload/payment', express.static(path.join(__dirname, 'upload/image/payment')));
+
 //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
 app.use(customerRoute)
 app.use(orderRounte)

@@ -8,7 +8,7 @@ import {
     deleteMaterial
 } from "../../controller/admin/material.js"
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
-import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
+import {uploadSingle} from '../../middleware/upload/uploadPictureMaterial.js'
 
 const router = express()
 router.use(express.json());

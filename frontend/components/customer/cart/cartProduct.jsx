@@ -6,7 +6,7 @@ import { formatDate } from '../../untils/frommatters/datetime';
 import { goBackOrHome } from '../../untils/fucntion/backFuction';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const cartProduct = () => {
   const {id} = useParams();

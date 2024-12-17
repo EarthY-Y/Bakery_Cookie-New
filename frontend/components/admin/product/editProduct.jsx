@@ -7,7 +7,7 @@ import { editProductService } from '../../../API/admin/productService';
 import LoadingPopup from '../../untils/popUp/loading';
 import TooltipUntils from '../../untils/popUp/tooltip';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const EditProduct = () => {
   const [formData, setFormData] = useState({});

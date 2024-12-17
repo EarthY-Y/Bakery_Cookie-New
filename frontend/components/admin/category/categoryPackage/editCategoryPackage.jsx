@@ -2,7 +2,7 @@ import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { updateCategoryPackageService, getListPackageService, getCategoryPackageByIdService } from '../../../../API/admin/categoryPackageService';
 import { formatDate } from '../../../untils/frommatters/datetime';
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PACKAGE
 
 const EditCategoryPackage = () => {
   const {id} = useParams()

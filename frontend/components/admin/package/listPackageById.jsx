@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { packageDetailByIdService } from '../../../API/admin/packageService';
 import { formatDate } from '../../untils/frommatters/datetime';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PACKAGE
 
 const ListPackageById = () => {
   const { id } = useParams();

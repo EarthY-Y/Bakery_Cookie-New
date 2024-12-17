@@ -7,7 +7,7 @@ import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
 import LoadingPopup from '../../untils/popUp/loading';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PAYMENT
 
 const orderById = () => {
   const {id} = useParams();

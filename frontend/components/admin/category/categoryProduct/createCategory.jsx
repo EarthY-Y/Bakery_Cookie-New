@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createCategoryService, getListProductPictureService } from '../../../../API/admin/categoryService';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../../untils/frommatters/datetime';
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const createCategory = () => {
   const [categoryName, setCategoryName] = useState("");

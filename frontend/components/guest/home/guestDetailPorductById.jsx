@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService } from '../../../API/guest/guestProductService';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const detailPorductById = () => {
   const {id} = useParams();

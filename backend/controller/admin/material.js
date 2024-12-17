@@ -1,8 +1,8 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
-import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
-import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
+import fs from 'fs';
+import path from 'path';
 
 export const getMaterial = async (req, res) => {
     try {
@@ -79,6 +79,22 @@ export const updateMaterial = async (req, res) => {
         let materialpic_name = null;
         console.log(updates);
 
+        // ดึงชื่อไฟล์รูปภาพเก่าจากฐานข้อมูล
+        const oldPictureQuery = "SELECT materialpic_name FROM material WHERE material_id = ? LIMIT 1";
+        const oldPicture = await new Promise((resolve, reject) => {
+            db.query(oldPictureQuery, [id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.materialpic_name); // ได้ชื่อไฟล์รูปภาพเก่า
+            });
+        });
+
+        // ลบรูปภาพเก่าถ้ามีการอัปโหลดไฟล์ใหม่
+        if (req.file && oldPicture) {
+            const oldPicturePath = path.join('picture', oldPicture); // พาธของไฟล์เก่า
+            if (fs.existsSync(oldPicturePath)) { // ตรวจสอบว่าไฟล์มีอยู่จริง
+                fs.unlinkSync(oldPicturePath); // ลบไฟล์
+            }
+        }
         if (req.file) {
             materialpic_name = req.file.filename; // เก็บ URL ของไฟล์ที่อัปโหลด
         }

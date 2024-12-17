@@ -6,7 +6,7 @@ import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
 import SelectBox from '../../untils/popUp/selectBox'
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const orders = () => {
   const {id} = useParams();

@@ -5,8 +5,6 @@ import { Link, useParams } from 'react-router-dom';
 import { listShippingByIdService } from '../../../API/admin/shippingCostService';
 import { formatDate } from '../../untils/frommatters/datetime';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
-
 const listShippingById = () => {
   const {id} = useParams();
   const [shippingMyId, setShippingId] = useState([])

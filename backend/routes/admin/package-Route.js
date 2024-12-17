@@ -8,7 +8,7 @@ import {
 } from "../../controller/admin/package.js"
 
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
-import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
+import {uploadSingle} from '../../middleware/upload/uploadPicturePackage.js'
 
 const router = express.Router();
 router.use(express.json());

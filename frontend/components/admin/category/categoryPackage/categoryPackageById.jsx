@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getListPackageService, getCategoryPackageByIdService } from '../../../../API/admin/categoryPackageService';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../../untils/frommatters/datetime';
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PACKAGE
 
 const CategoryPackageById = () => {
   const {id} = useParams()

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { packageDetailByIdService, editPackageService } from '../../../API/admin/packageService';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PACKAGE
 const CreatePackage = () => {
   const {id} = useParams()
   const [formData, setFormData] = useState({}) //

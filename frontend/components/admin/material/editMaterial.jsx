@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { updateMaterialService, listMaterialByIdService } from '../../../API/admin/materialService';
 import { Link, useParams } from 'react-router-dom';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_MATERIAL
 
 const EditMaterial = () => {
   const [materialMyId, setMaterialMyId] = useState({});

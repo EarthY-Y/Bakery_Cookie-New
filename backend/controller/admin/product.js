@@ -1,7 +1,8 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
-import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
+import fs from 'fs';
+import path from 'path';
 
 export const getProduct = async (req, res) => {
     try {
@@ -338,6 +339,24 @@ export const updateProduct = async (req, res) => {
 };
 const updateProductPicture = async (req, productId, tokenId) => {
     try {
+
+        // ดึงชื่อไฟล์รูปภาพเก่าจากฐานข้อมูล
+        const oldPictureQuery = "SELECT productpic_name FROM productpicture WHERE product_id = ? LIMIT 1";
+        const oldPicture = await new Promise((resolve, reject) => {
+            db.query(oldPictureQuery, [productId], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.productpic_name); // ได้ชื่อไฟล์รูปภาพเก่า
+            });
+        });
+
+        // ลบรูปภาพเก่าถ้ามีการอัปโหลดไฟล์ใหม่
+        if (req.file && oldPicture) {
+            const oldPicturePath = path.join('picture', oldPicture); // พาธของไฟล์เก่า
+            if (fs.existsSync(oldPicturePath)) { // ตรวจสอบว่าไฟล์มีอยู่จริง
+                fs.unlinkSync(oldPicturePath); // ลบไฟล์
+            }
+        }
+
         let updateQuery = "UPDATE productpicture SET ";
         let updateValues = [];
 

@@ -9,7 +9,7 @@ import {
     updatePaymentOrder,
 } from "../../controller/customer/payment.js"
 import { verifyCustomerMid } from "../../middleware/authUser.js"
-import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
+import {uploadSingle} from '../../middleware/upload/uploadPicturePayment.js'
 
 const router = express()
 router.use(express.json());
