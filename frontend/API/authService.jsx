@@ -260,7 +260,10 @@ export const CheckRouteAdmin = () => {
 // ฟังก์ชันในการลบ token
 function removeToken() {
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
-  liff.logout()
+  liff.init({liffId: '2006630207-4ENd2JnL', }) 
+  if(liff.isLoggedIn()){
+    liff.logout()
+  }
   console.log('Token has been removed. Please log in again.');
   location.reload(); 
 }
