@@ -17,16 +17,30 @@ const CreateProduct = () => {
   const navigate = useNavigate();
 
   // ฟังก์ชันสำหรับคำนวณต้นทุนรวม
-  const calculateCostMaterial = () => {
-    return (formData.ingredients || []).reduce((totalCost, ingredient) => {
+  const calculateTotalCost = () => {
+    // คำนวณต้นทุนวัตถุดิบ
+    const ingredientCost = (formData.ingredients || []).reduce((totalCost, ingredient) => {
       const material = listMaterials.find((mat) => mat.material_id === ingredient.material_id);
       const quantity = parseFloat(ingredient.quantity || 0);
       if (material && !isNaN(quantity)) {
-        return totalCost + material.cost_per_quantity * quantity;
+        return totalCost + (material.cost_per_quantity * quantity);
       }
       return totalCost;
     }, 0);
+  
+    // คำนวณต้นทุนบรรจุภัณฑ์
+    const packagingCost = (formData.packaging || []).reduce((totalCost, packaging) => {
+      const selectedPackage = listPackage.find((pack) => pack.package_id === packaging.package_id);
+      if (selectedPackage) {
+        return totalCost + selectedPackage.cost_per_quantity;
+      }
+      return totalCost;
+    }, 0);
+  
+    // รวมต้นทุนวัตถุดิบและบรรจุภัณฑ์
+    return ingredientCost + packagingCost;
   };
+  
 
   const handleInputChange = (index, options, event) => {
     const values = [...(formData.ingredients || [])];
@@ -149,14 +163,14 @@ const CreateProduct = () => {
   }, []);
   //หาต้นทุนต่อชิ้น
   useEffect(() => {
-    const totalCost = calculateCostMaterial();
+    const totalCost = calculateTotalCost();
     if ((formData.ingredients || []).length > 0 && formData.quantityPerTime) {
         const costPerQuantity =  totalCost / parseFloat(formData.quantityPerTime || 1); // หลีกเลี่ยงการหารด้วย 0
         setpricePreQuantity(costPerQuantity.toFixed(2));
     }
     const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
     setTotalCost(hiddenCosts.toFixed(2))
-  }, [formData.ingredients, formData.quantityPerTime]);
+  }, [formData.ingredients, formData.quantityPerTime, formData.packaging]);
   
   useEffect(() => {
     if (formData.price && formData.quantityPerTime) {
@@ -166,7 +180,7 @@ const CreateProduct = () => {
   }, [formData.price, formData.quantityPerTime]);
 
   useEffect(() => {
-    if (formData.quantityPerTime && formData.ingredients) {
+    if (formData.quantityPerTime && formData.ingredients || formData.packaging) {
       let totalWeight = 0
       for (const item of formData.ingredients) {
         totalWeight =+ parseFloat(item.quantity);
@@ -177,7 +191,7 @@ const CreateProduct = () => {
           weightPerPiece: (weightPiece ? parseFloat(weightPiece.toFixed(2)) : 0)
         }));
     }
-  }, [formData.ingredients, formData.quantityPerTime]);
+  }, [formData.ingredients, formData.quantityPerTime, formData.packaging]);
 
   useEffect(() => {
     const fechData = async () => {
@@ -304,7 +318,7 @@ const CreateProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
             <div className="row col-sm-5">
-              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateCostMaterial().toFixed(2)} readOnly/>
+              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost().toFixed(2)} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
