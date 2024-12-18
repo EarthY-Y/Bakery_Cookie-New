@@ -190,7 +190,7 @@ const OrderTracking = () => {
             <div className="card-body">
               <div className="row align-items-center">
                 <div className="col-md-2">
-                  <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
+                  <img src={API_URL_PICTURE + order.productpic_name} alt="Product" className="img-fluid" />
                 </div>
                 <div className="col-md-3">
                   <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
