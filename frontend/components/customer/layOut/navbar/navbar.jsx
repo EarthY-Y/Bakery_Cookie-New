@@ -20,7 +20,7 @@ const Navbar = memo(() => {
   };
 
   useEffect(() => {
-    const fechData = async () => {
+    const fetchData = async () => {
       try {
         const [
           getCart,
@@ -40,7 +40,7 @@ const Navbar = memo(() => {
         alert(error);
       }
     };
-    fechData();
+    fetchData();
   }, []);
 
   useEffect(() => {

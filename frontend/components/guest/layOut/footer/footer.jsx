@@ -5,7 +5,7 @@ import { getCategoryService } from "../../../../API/guest/guestProductService"
 const Footer = () => {
   const [categoryList, setCategoryList] = useState([]);
   useEffect(() => {
-    const fechData = async () => {
+    const fetchData = async () => {
       try {
         const [         
           getCategory,
@@ -17,7 +17,7 @@ const Footer = () => {
         alert(error);
       }
     };
-    fechData();
+    fetchData();
   }, []);
   return (
     <footer className="text-white py-5 d-flex align-items-end flex-column" style={{ backgroundColor: '#C40C0C'}}>

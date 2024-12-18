@@ -29,18 +29,23 @@ const Login = () => {
   // login ด้วย userName password
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true)
     try {
       const res = await login(userName, passWord); 
       console.log(res.data);
       localStorage.setItem('token', res.data.token);
       const userRole = res.data.role;
       if (userRole === 'user') {
+        setIsLoading(false)
         navigate("/home");
       } else {
+        setIsLoading(false)
         navigate("");
       }
     } catch (err) {
       setError(err);
+    }finally{
+      setIsLoading(false)
     }
   };
 

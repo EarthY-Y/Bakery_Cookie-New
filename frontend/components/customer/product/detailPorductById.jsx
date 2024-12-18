@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService, createCartService, getCartService } from '../../../API/customer/productService';
 import { useCart } from '../layOut/navbar/CartContext';
-
+import LoadingPopup from '../../untils/popUp/loading';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const detailPorductById = () => {
@@ -13,7 +13,8 @@ const detailPorductById = () => {
   const [CartId, setCartId] = useState()
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate()
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleIncreaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
@@ -26,50 +27,43 @@ const detailPorductById = () => {
   };
   
   useEffect(() => {
-    const detailProduct = async()=> {
+    const fetchData = async()=> {
       try {
-        const response = await detailProductByIdService(id)
-        if(!response.data){
+        setIsLoading(true);
+        const [
+          response,
+          getDetailProductById
+        ] = await Promise.all([
+          getCartService(),
+          detailProductByIdService(id)
+        ]) 
+        if(!response.data || !getDetailProductById.data){
           throw new Error("ไม่มีข้อมูล")
         }
-        console.log(response.data);
-        setproductMyId(response.data[0])
-      }
-      
-      catch (error) {
-        alert(error)
-      }
-    }
-    detailProduct()
-  },[])
-
-  useEffect(() => {
-    const getCart = async()=> {
-      try {
-        const response = await getCartService()
-        if(!response.data){
-          throw new Error("ไม่มีข้อมูล")
-        }
-        console.log(response.data);
         setCartId(response.data[0])
+        setproductMyId(getDetailProductById.data[0])
       }
-      
       catch (error) {
-        alert(error)
+        console.log(error)
+      }finally{
+        setIsLoading(false);
       }
     }
-    getCart()
+    fetchData()
   },[])
 
   const handleSubmitProductMaterial = async (event) => {
     event.preventDefault();
     addToCart(productById, quantity);
     try {
+      setIsLoading(true);
         const res = await createCartService(id, CartId.cartId, productById.selling_price_per_quantity, quantity);
         console.log(res);
         // navigate('/product');
     } catch (error) {
         console.log(error); // แสดงข้อผิดพลาด
+    }finally{
+      setIsLoading(false);
     }
 };
 
@@ -141,6 +135,10 @@ const detailPorductById = () => {
           </div>
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

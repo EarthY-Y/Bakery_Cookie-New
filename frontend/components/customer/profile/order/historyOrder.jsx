@@ -4,7 +4,7 @@ import { getlistOrdersCancel, getlistOrdersFinish, cancelOrder } from '../../../
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
-
+import LoadingPopup from '../../../untils/popUp/loading';
 const OrderTracking = () => {
   const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
   const [orderCheckOut, setOrdersCheckOut] = useState([]);
@@ -13,33 +13,33 @@ const OrderTracking = () => {
   const [itemsPerPage] = useState(10);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getOrders = async () => {
+    const fetchOrders = async () => {
       try {
-        const res = await getlistOrdersCancel();
-        console.log(res.data);
-        setOrdersWaitStatement(res.data);
+        setIsLoading(true)
+        const [cancelResponse, finishResponse] = await Promise.all([
+          getlistOrdersCancel(),
+          getlistOrdersFinish(),
+        ]);
+  
+        // ตั้งค่าข้อมูลคำสั่งซื้อ
+        console.log("Orders Cancelled:", cancelResponse.data);
+        console.log("Orders Finished:", finishResponse.data);
+  
+        setOrdersWaitStatement(cancelResponse.data);
+        setOrdersCheckOut(finishResponse.data);
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error fetching orders data:", err);
+      }finally{
+        setIsLoading(false)
       }
     };
-    getOrders();
+  
+    fetchOrders();
   }, []);
-
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const res = await getlistOrdersFinish();
-        console.log(res.data);
-        setOrdersCheckOut(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-    getOrders();
-  }, []);
-
+  
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage; //sum 10
   const indexOfFirstItem = indexOfLastItem - itemsPerPage; //sum 0

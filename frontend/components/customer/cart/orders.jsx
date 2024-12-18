@@ -107,6 +107,7 @@ const orders = () => {
 
   const handleSubmmit = async(event) => {
     event.preventDefault();
+    setIsLoading(true);
     let selectedAddress;
     if (address.length === 1) {
       selectedAddress = address[0];
@@ -133,6 +134,7 @@ const orders = () => {
         selectedAddress.zip_code
       );
       if(response.data){
+        setIsLoading(false);
         navigate("/payment/"+id)
       }else {
         throw new Error("เกิดข้อผิดพลาดบ้างอย่าง")
@@ -141,6 +143,8 @@ const orders = () => {
     } catch (error) {
       console.log(error);
       alert(error)
+    }finally{
+      setIsLoading(false);
     }
   }
 

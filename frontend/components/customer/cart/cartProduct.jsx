@@ -5,7 +5,7 @@ import { getPorductCartService,deletePorductCartService, upadateCartService } fr
 import { formatDate } from '../../untils/frommatters/datetime';
 import { goBackOrHome } from '../../untils/fucntion/backFuction';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
-
+import LoadingPopup from '../../untils/popUp/loading';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const cartProduct = () => {
@@ -14,10 +14,12 @@ const cartProduct = () => {
   const [productCart, setProductCart] = useState([])
   const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getCart = async()=> {
       try {
+        setIsLoading(true);
         const response = await getPorductCartService()
         if(!response.data){
           throw new Error("ไม่มีข้อมูล")
@@ -26,6 +28,8 @@ const cartProduct = () => {
       }
       catch (error) {
         alert(error)
+      }finally{
+        setIsLoading(false)
       }
     }
     getCart()
@@ -139,6 +143,10 @@ const cartProduct = () => {
           </button>
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

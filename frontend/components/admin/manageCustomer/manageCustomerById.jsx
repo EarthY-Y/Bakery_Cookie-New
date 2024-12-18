@@ -18,7 +18,7 @@ const manageCustomerById = () => {
   
   // useEffect สำหรับดึงข้อมูลวัตถุดิบ
   useEffect(() => {
-    const fechData = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
         const [
@@ -42,7 +42,7 @@ const manageCustomerById = () => {
         setIsLoading(false);
       }
     };
-    fechData();
+    fetchData();
   }, []);
 
   useEffect(() =>{
