@@ -15,6 +15,7 @@ export const getAllAddressCustomer = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -32,6 +33,7 @@ export const getAddressById = async(id) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -66,5 +68,6 @@ export const deleteAddressById = async(addressId) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }

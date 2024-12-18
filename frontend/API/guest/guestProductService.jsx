@@ -15,6 +15,7 @@ export const listProductService = async() => {
       return response
     }catch (error) {
       console.error("Error listProductService:", error);
+      throw error;
     }
 }
 
@@ -32,6 +33,7 @@ export const detailProductByIdService = async(id) => {
     return response
   }catch (error) {
     console.error("Error listProductByIdService:", error);
+    throw error;
   }
 }
 
@@ -48,6 +50,7 @@ export const getCategoryService = async() => {
     return response
   }catch (error) {
     console.error("Error listProductService:", error);
+    throw error;
   }
 }
 
@@ -66,5 +69,6 @@ export const listProductCategoryService = async(id) => {
     return response
   }catch (error) {
     console.error("Error listProductService:", error);
+    throw error;
   }
 }
