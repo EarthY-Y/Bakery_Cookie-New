@@ -47,13 +47,14 @@ const orders = () => {
           console.log(porductCart.data);
           setProductCart(porductCart.data)
         }else{
-          setIsLoading(false);
+          setIsLoading(false)
           navigate('/home')
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        alert(error.message);
       }finally{
-        setIsLoading(false);
+        setIsLoading(false)
       }
     };
     fetchData();
