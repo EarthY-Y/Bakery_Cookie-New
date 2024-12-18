@@ -79,7 +79,7 @@ const CategoeyPackage = () => {
             {currentOrders.map((category) => (
               <tr key={category.package_category_id}>
                 <td>{category.package_category_name}</td>
-                <td>{category.amountCategoryPackage} ชิ้น</td>
+                <td>{category.amountCategoryPackage} อย่าง</td>
                 <td>{formatDate(category.created_at)}</td>
                 <td>{formatDate(category.updated_at)}</td>
                 <td className="text-center">{category.created_by}</td>
@@ -108,7 +108,7 @@ const CategoeyPackage = () => {
                     <p className="mb-1">ประเภท: {category.package_category_name}</p>                   
                     <Link to={`edit/${category.package_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                   </div>
-                  <p className="mb-1">จำนวนบรรจุภัณฑ์: {category.amountCategoryPackage} ชิ้น</p>
+                  <p className="mb-1">จำนวนบรรจุภัณฑ์: {category.amountCategoryPackage} อย่าง</p>
                   <p className="mb-1">วันที่สร้าง: {formatDate(category.created_at)}</p>
                   <p className="mb-1">วันที่เเก้ไข: {formatDate(category.updated_at)}</p>
                   <p className="mb-1">สร้างโดย: {category.created_by}</p>

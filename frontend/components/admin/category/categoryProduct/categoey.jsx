@@ -58,7 +58,7 @@ const categoey = () => {
             {currentOrders.map((category) => (
               <tr key={category.product_category_id}>
                 <td>{category.category_name}</td>
-                <td>{category.amountCategoryProduct} ชิ้น</td>
+                <td>{category.amountCategoryProduct} อย่าง</td>
                 <td>{formatDate(category.created_at)}</td>
                 <td>{formatDate(category.updated_at)}</td>
                 <td className="text-center">{category.created_by}</td>
@@ -81,7 +81,7 @@ const categoey = () => {
               <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.product_category_id}>
                 <div className="small text-secondary">
                   <p className="mb-1">ประเภท: {category.category_name}</p>
-                  <p className="mb-1">จำนวนสินค้า: {category.amountCategoryProduct} ชิ้น</p>
+                  <p className="mb-1">จำนวนสินค้า: {category.amountCategoryProduct} อย่าง</p>
                   <p className="mb-1">วันที่สร้าง: {formatDate(category.created_at)}</p>
                   <p className="mb-1">วันที่เเก้ไข: {formatDate(category.updated_at)}</p>
                   <p className="mb-1">สร้างโดย: {category.created_by}</p>
