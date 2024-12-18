@@ -258,7 +258,7 @@ const detailProfit = async (totalPrice, profit, orderId) => {
 const updateStatusCartProduct = async (cartItemId) => {
     const resultsFindstatusCart = await new Promise((resolve, reject) => {
         db.query(
-            "SELECT status_cart_id FROM Status_cart WHERE status_name LIKE ?",
+            "SELECT status_cart_id FROM status_cart WHERE status_name LIKE ?",
             ["ทำรายการ%"],
             (err, result) => {
                 if (err) return reject(err);

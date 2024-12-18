@@ -78,6 +78,7 @@ const orders = () => {
   useEffect(() => {
     const getshippingRate = async() => {
       try {
+        setIsLoading(true);
         const response = await shippingRate(totalWeight)
         console.log(response);
         setdeliveryRate(response.data[0] || 0) //ถ้าไม่มีไรส่งมีให้เป็น 0 เพราะถ้าปิดใช้งาน shipping_rate ตัวนั้น

@@ -200,8 +200,8 @@ export const createDataTable = async (req, res) => {
                     FOREIGN KEY (cartId) REFERENCES cart(cartId)
                     );
 
-                    CREATE TABLE orders_address (
-                    orders_address_id VARCHAR(40) PRIMARY KEY,
+                    CREATE TABLE order_address (
+                    order_address_id VARCHAR(40) PRIMARY KEY,
                     orders_id VARCHAR(40),
                     houseNo VARCHAR(50),
                     province_id VARCHAR(40),
