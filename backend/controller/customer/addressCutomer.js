@@ -24,7 +24,7 @@ export const getAllAddressCustomer = async(req, res) => {
         console.log(results);
         return res.status(200).json(results)
     } catch (error) {
-        
+        return res.status(400).json({ message: "Error get all adress", error });
     }
 }
 
@@ -50,7 +50,7 @@ export const getAddressByAddressId = async(req, res) => {
         console.log(results);
         return res.status(200).json(results)
     } catch (error) {
-        
+        return res.status(400).json({ message: "Error get address by id address", error });
     }
 }
 
@@ -105,7 +105,7 @@ export const updateAddressByAddressId = async(req, res) => {
         console.log(results);
         return res.status(200).json(results)
     } catch (error) {
-        
+        return res.status(400).json({ message: "Error update address by id address", error });
     }
 }
 
@@ -123,5 +123,6 @@ export const deleteAddressCustomer = async(req, res) => {
         return res.status(200).json(results)
     } catch (error) {
         console.log(error);
+        return res.status(400).json({ message: "Error delete address", error });
     }
 }

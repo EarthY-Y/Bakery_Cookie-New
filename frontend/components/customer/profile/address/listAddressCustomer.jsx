@@ -12,8 +12,10 @@ const listAddressCustomer = () => {
         setIsLoading(true);
         const res = await getAllAddressCustomer();
         console.log(res.data);
+        setIsLoading(false);
         setListAddress(res.data);
       } catch (err) {
+        setIsLoading(false);
         console.error("Error fetching data:", err);
       }finally{
         setIsLoading(false);
