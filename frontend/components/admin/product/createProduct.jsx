@@ -4,6 +4,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import { listMaterialService } from '../../../API/admin/materialService';
 import { createProductService, listProductPackageService } from '../../../API/admin/productService';
 import TooltipUntils from '../../untils/popUp/tooltip';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({}) //
@@ -12,19 +13,34 @@ const CreateProduct = () => {
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   // ฟังก์ชันสำหรับคำนวณต้นทุนรวม
-  const calculateCostMaterial = () => {
-    return (formData.ingredients || []).reduce((totalCost, ingredient) => {
+  const calculateTotalCost = () => {
+    // คำนวณต้นทุนวัตถุดิบ
+    const ingredientCost = (formData.ingredients || []).reduce((totalCost, ingredient) => {
       const material = listMaterials.find((mat) => mat.material_id === ingredient.material_id);
       const quantity = parseFloat(ingredient.quantity || 0);
       if (material && !isNaN(quantity)) {
-        return totalCost + material.cost_per_quantity * quantity;
+        return totalCost + (material.cost_per_quantity * quantity);
       }
       return totalCost;
     }, 0);
+  
+    // คำนวณต้นทุนบรรจุภัณฑ์
+    const packagingCost = (formData.packaging || []).reduce((totalCost, packaging) => {
+      const selectedPackage = listPackage.find((pack) => pack.package_id === packaging.package_id);
+      if (selectedPackage) {
+        return totalCost + selectedPackage.cost_per_quantity;
+      }
+      return totalCost;
+    }, 0);
+  
+    // รวมต้นทุนวัตถุดิบและบรรจุภัณฑ์
+    return ingredientCost + packagingCost;
   };
+  
 
   const handleInputChange = (index, options, event) => {
     const values = [...(formData.ingredients || [])];
@@ -147,14 +163,14 @@ const CreateProduct = () => {
   }, []);
   //หาต้นทุนต่อชิ้น
   useEffect(() => {
-    const totalCost = calculateCostMaterial();
+    const totalCost = calculateTotalCost();
     if ((formData.ingredients || []).length > 0 && formData.quantityPerTime) {
         const costPerQuantity =  totalCost / parseFloat(formData.quantityPerTime || 1); // หลีกเลี่ยงการหารด้วย 0
         setpricePreQuantity(costPerQuantity.toFixed(2));
     }
     const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
     setTotalCost(hiddenCosts.toFixed(2))
-  }, [formData.ingredients, formData.quantityPerTime]);
+  }, [formData.ingredients, formData.quantityPerTime, formData.packaging]);
   
   useEffect(() => {
     if (formData.price && formData.quantityPerTime) {
@@ -164,7 +180,7 @@ const CreateProduct = () => {
   }, [formData.price, formData.quantityPerTime]);
 
   useEffect(() => {
-    if (formData.quantityPerTime && formData.ingredients) {
+    if (formData.quantityPerTime && formData.ingredients || formData.packaging) {
       let totalWeight = 0
       for (const item of formData.ingredients) {
         totalWeight =+ parseFloat(item.quantity);
@@ -175,32 +191,28 @@ const CreateProduct = () => {
           weightPerPiece: (weightPiece ? parseFloat(weightPiece.toFixed(2)) : 0)
         }));
     }
-  }, [formData.ingredients, formData.quantityPerTime]);
+  }, [formData.ingredients, formData.quantityPerTime, formData.packaging]);
 
   useEffect(() => {
-    const getMaterial = async () => {
+    const fechData = async () => {
         try {
-            const response = await listMaterialService();
-            console.log(response.data);
-            setListMaterials(response.data);
+          setIsLoading(true)
+          const [
+            getlistMaterialById,
+            getListProductPackage
+          ] = await Promise.all([
+            listMaterialService(),
+            listProductPackageService(),
+          ])
+          setListMaterials(getlistMaterialById.data)
+          setListPackage(getListProductPackage.data);
         } catch (error) {
             console.error("Error fetching materials:", error);
+        }finally{
+          setIsLoading(false)
         }
     };
-    getMaterial();
-  }, []);
-
-  useEffect(() => {
-    const getPackage = async () => {
-        try {
-            const response = await listProductPackageService();
-            console.log(response.data);
-            setListPackage(response.data);
-        } catch (error) {
-            console.error("Error fetching materials:", error);
-        }
-    };
-    getPackage();
+    fechData();
   }, []);
 
   const options = listPackage.map((packages) => ({
@@ -215,19 +227,17 @@ const CreateProduct = () => {
     event.preventDefault();
     console.log(formData); // Log formData for debugging
     try {
+        setIsLoading(true)
         const res = await createProductService(formData);
         console.log(res);
         navigate(-1);
     } catch (error) {
         console.log(error); // แสดงข้อผิดพลาด
+    }finally{
+      setIsLoading(false)
     }
   };
-
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      รวมต้นทุนเเฝงอีก 10 % เช่น ค่าน้ำ ค่าไฟ ค่าเเก๊ส เเละค่าบรรจุภัฑณ์
-    </Tooltip>
-  ); 
+ 
   return (
     <form onSubmit={handleSubmitProductMaterial}>
       <div className="container mt-5 p-3">
@@ -308,7 +318,7 @@ const CreateProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
             <div className="row col-sm-5">
-              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateCostMaterial().toFixed(2)} readOnly/>
+              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost().toFixed(2)} readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -369,6 +379,10 @@ const CreateProduct = () => {
             <button type="submit" className="btn btn-success mt-3 px-4 ms-5" > เพิ่มสินค้า </button>
           </div>
         </div>
+        <LoadingPopup
+          isLoading = {isLoading}
+        />
+        {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       </div>
     </form>
   );

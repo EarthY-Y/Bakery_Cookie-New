@@ -41,18 +41,22 @@ const orders = () => {
           console.log(addressCustomer.data);
           setAddress(addressCustomer.data)
         }else{
+          setIsLoading(false);
           navigate('/create/address')
         }
         if(porductCart){
           console.log(porductCart.data);
           setProductCart(porductCart.data)
         }else{
+          setIsLoading(false)
           navigate('/home')
         }
       } catch (error) {
         console.error("Error fetching data:", error);
         alert(error.message);
-      } 
+      }finally{
+        setIsLoading(false)
+      }
     };
     fetchData();
 
