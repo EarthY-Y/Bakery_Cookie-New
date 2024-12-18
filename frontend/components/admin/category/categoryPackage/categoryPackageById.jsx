@@ -63,7 +63,7 @@ const CategoryPackageById = () => {
         <div className="row">
           <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold">สร้างโดย</label>
-            <p className="border p-2 rounded bg-white">{listCategoryPackage[0]?.created_by}</p>
+            <p className="border p-2 rounded bg-white">{listCategoryPackage[0]?.created_by || ""}</p>
           </div>
           <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold">วันเวลาที่สร้าง</label>
@@ -73,11 +73,11 @@ const CategoryPackageById = () => {
         <div className="mb-3 row">
           <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold">เเก้ไขโดย</label>
-            <p className="border p-2 rounded bg-white">{listCategoryPackage[0]?.updated_by}</p>
+            <p className="border p-2 rounded bg-white">{listCategoryPackage[0]?.updated_by || "ยังไม่มีผู้เเก้ไข"}</p>
           </div>
           <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold">วันเวลาที่เเก้ไข</label>
-            <p className="border p-2 rounded bg-white">{formatDate(listCategoryPackage[0]?.updated_at)}</p>
+            <p className="border p-2 rounded bg-white">{formatDate(listCategoryPackage[0]?.updated_at) || ""}</p>
           </div>
         </div>
         {/* <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>

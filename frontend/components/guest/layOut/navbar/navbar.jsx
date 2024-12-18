@@ -45,7 +45,7 @@ const Navbar = () => {
                 <button className="btn btn-outline text-white rounded-pill mx-1"><Link className="dropdown-item" to="/">หน้าหลัก</Link></button>
                 <div className="dropdown d-inline">
                   <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-                  <ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                  <ul className="dropdown-menu mt-0" aria-labelledby="dropdownMenuButton1">
                     {categoryList.map((item, index)=>(
                       <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
                     ))}
