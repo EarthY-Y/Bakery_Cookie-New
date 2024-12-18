@@ -206,7 +206,7 @@ const EditProduct = () => {
   
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+    setIsLoading(true)
     const updatedData = {};
     const formDataToSend = new FormData();
 

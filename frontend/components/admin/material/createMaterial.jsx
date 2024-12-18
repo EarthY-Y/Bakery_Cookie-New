@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createMaterialService } from '../../../API/admin/materialService';
 import { Link } from 'react-router-dom';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const createMaterial = () => {
   const [MaterialName, setMaterial_name] = useState("");
@@ -10,11 +11,13 @@ const createMaterial = () => {
   const [Costes, setCost] = useState("");
   const [CostesPerQuantities, setCostesPerQuantities] = useState("");
   const [Picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setIsLoading(true)
       const formData = new FormData();  // ใช้ formData แทน fromData
       formData.append('material_name', MaterialName);
       formData.append('quantity', Quantities);
@@ -23,10 +26,15 @@ const createMaterial = () => {
       formData.append('file', Picture); // ต้องตรงกับชื่อที่ server ใช้
       console.log("Selected file:", Picture);
       const res = await createMaterialService(formData); //จะส่งไปเป็น formData เเบบนี้ได้ต้องผ่าน multer ก่อน
-      navigate('/material');
+      if(res){
+        setIsLoading(false);
+        navigate(-1);
+      }
       console.log(res);
     } catch (err) {
       console.log(err);
+    }finally{
+      setIsLoading(false);
     }
   }
 
@@ -115,6 +123,10 @@ const createMaterial = () => {
           </div>
         </form>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

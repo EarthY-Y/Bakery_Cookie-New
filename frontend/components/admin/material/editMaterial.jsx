@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { updateMaterialService, listMaterialByIdService } from '../../../API/admin/materialService';
 import { Link, useParams } from 'react-router-dom';
-
+import LoadingPopup from '../../untils/popUp/loading';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_MATERIAL
 
 const EditMaterial = () => {
@@ -16,11 +16,13 @@ const EditMaterial = () => {
   const [Picture, setPicture] = useState(null); // เก็บทั้งรูปที่ดึงจากฐานข้อมูลและรูปใหม่ที่อัพโหลด
   const navigate = useNavigate();
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   
   // useEffect สำหรับดึงข้อมูลวัตถุดิบ
   useEffect(() => {
     const getlistMaterialById = async () => {
       try {
+        setIsLoading(true)
         const response = await listMaterialByIdService(id);
         if (!response.data) {
           throw new Error("ไม่มีข้อมูล");
@@ -35,6 +37,8 @@ const EditMaterial = () => {
         setPicture(response.data[0].materialpic_name); // ตั้งค่าให้ Picture เป็นชื่อไฟล์รูปจากฐานข้อมูล
       } catch (error) {
         alert(error);
+      }finally{
+        setIsLoading(false)
       }
     };
     getlistMaterialById();
@@ -43,9 +47,9 @@ const EditMaterial = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setIsLoading(true)
       const updatedData = {};
       const formData = new FormData();
-      
       if (MaterialName !== materialMyId.material_name) updatedData.material_name = MaterialName;
       if (Quantities !== materialMyId.quantity) updatedData.quantity = Quantities;
       if (Costes !== materialMyId.cost) updatedData.cost = Costes;
@@ -71,10 +75,15 @@ const EditMaterial = () => {
       
       // ส่งข้อมูลไป Backend
       const res = await updateMaterialService(formData, id);
-      navigate('/material');
+      if(res){
+        setIsLoading(false);
+        navigate(-1);
+      }
       console.log(res);
     } catch (err) {
       console.log(err);
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -170,6 +179,10 @@ const EditMaterial = () => {
           </div>
         </form>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

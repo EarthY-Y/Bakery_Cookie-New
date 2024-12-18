@@ -1,8 +1,7 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import { passToken } from "../../middleware/passAuth.js";
-import fs from 'fs';
-import path from 'path';
+import {handleDelete} from '../../middleware/deleteUpload/image/deleteUpload.js'
 
 export const getMaterial = async (req, res) => {
     try {
@@ -90,10 +89,7 @@ export const updateMaterial = async (req, res) => {
 
         // ลบรูปภาพเก่าถ้ามีการอัปโหลดไฟล์ใหม่
         if (req.file && oldPicture) {
-            const oldPicturePath = path.join('picture', oldPicture); // พาธของไฟล์เก่า
-            if (fs.existsSync(oldPicturePath)) { // ตรวจสอบว่าไฟล์มีอยู่จริง
-                fs.unlinkSync(oldPicturePath); // ลบไฟล์
-            }
+            await handleDelete(oldPicture)
         }
         if (req.file) {
             materialpic_name = req.file.key; // เก็บ URL ของไฟล์ที่อัปโหลด

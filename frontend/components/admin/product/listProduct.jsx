@@ -4,22 +4,27 @@ import { formatDate } from '../../untils/frommatters/datetime';
 import { Table, Button } from 'react-bootstrap';
 import { listProductService, deleteProductByIdService } from '../../../API/admin/productService';
 import Search from '../../untils/fucntion/search';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const listProduct = () => {
   const [products, setProducts] = useState([]);
   const [productsSearch, setProductsSearch] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
     const getPosts = async () => {
       try {
+        setIsLoading(true);
         const res = await listProductService()
         console.log(res.data);
-        
+                
         setProducts(res.data);
       } catch (err) {
         console.error("Error data:", err);
+      }finally{
+        setIsLoading(false);
       }
     };
 
@@ -30,14 +35,6 @@ const listProduct = () => {
     setProductsSearch(results);
   };
 
-  const handleDelete = (id) => {
-    deleteProductByIdService(id)
-      .then(() => {
-        // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
-        setProducts(prevProduct => prevProduct.filter(product => product.product_id !== id))
-      })
-      .catch(err => console.log(err))
-  }
 
   return (
     <div className="container mt-5">
@@ -114,6 +111,10 @@ const listProduct = () => {
           </div>
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
 
   );

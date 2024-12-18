@@ -4,16 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { listProductByIdService } from '../../../API/admin/productService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const listMaterialById = () => {
   const {id} = useParams();
   const [ productMyId, setproductMyId] = useState([])
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getlistMaterialById = async()=> {
       try {
+        setIsLoading(true);
         const response = await listProductByIdService(id)
         console.log(response);
         if(!response.data){
@@ -21,9 +24,10 @@ const listMaterialById = () => {
         }
         setproductMyId(response.data)
       }
-      
       catch (error) {
         alert(error)
+      }finally{
+        setIsLoading(false)
       }
     }
     getlistMaterialById()
@@ -117,8 +121,11 @@ const listMaterialById = () => {
           {/* <Link to={`/material/edit/${productMyId.material_id}`} className="text-center mt-3 px-4 btn btn-outline-warning"><i className="bi bi-pencil"></i> แก้ไข </Link> */}
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
-
   );
 };
 

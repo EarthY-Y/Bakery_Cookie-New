@@ -2,7 +2,7 @@ import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
-import { resolve } from "path";
+import {handleDelete} from '../../middleware/deleteUpload/image/deleteUpload.js'
 import {createCart} from "./product.js"
 
 //ส่งออก Function getCustomer ด้วย export
@@ -83,6 +83,19 @@ export const updateCustomer = async (req, res) => {
         let customerPic = null;
         console.log(authToken.customerId, formData);
     
+        const oldPictureQuery = "SELECT customerpic FROM customer WHERE customer_id = ? LIMIT 1";
+        const oldPicture = await new Promise((resolve, reject) => {
+            db.query(oldPictureQuery, [id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0]?.customerpic); // ได้ชื่อไฟล์รูปภาพเก่า
+            });
+        });
+
+        // ลบรูปภาพเก่าถ้ามีการอัปโหลดไฟล์ใหม่
+        if (req.file && oldPicture) {
+            await handleDelete(oldPicture)
+        }
+
         if (req.file) {
             customerPic = req.file.key; 
             console.log(customerPic);  
