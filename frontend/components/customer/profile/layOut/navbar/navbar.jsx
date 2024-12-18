@@ -125,7 +125,7 @@ function Navbar() {
       {!isScrolled && (
         <div className="container text-center my-4 d-none d-lg-block">
           <img
-            src="https://example.com/logo.png" // เปลี่ยน URL เป็นโลโก้ของคุณ
+            src="../../../../../src/assets/LogoCN1.PNG" // เปลี่ยน URL เป็นโลโก้ของคุณ
             alt="Bakery Cookie New Happy Family"
             style={{ width: '150px' }}
           />
