@@ -13,7 +13,7 @@ const layOutComponent = ({children}) => {
             <Navbar />
           </div>
           <div >
-            <main className="d-flex flex-column min-vh-100" style={{ paddingTop: '150px' }}>{children}</main>
+            <main className="d-flex flex-column min-vh-100" style={{ paddingTop: '270px' }}>{children}</main>
           </div>
         </div>
       </CartProvider>

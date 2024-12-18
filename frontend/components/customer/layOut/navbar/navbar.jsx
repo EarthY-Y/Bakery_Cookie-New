@@ -129,7 +129,7 @@ const Navbar = memo(() => {
       {/* Navbar ส่วนล่าง */}
       {!isScrolled && (
         <div className="container text-center my-4 d-none d-lg-block">
-          <img src="../../../../src/assets/LogoCN.PNG" alt="Bakery Cookie New Happy Family" style={{ width: "100px" }} />
+          <img src="../../../../src/assets/LogoCN1.PNG" alt="Bakery Cookie New Happy Family" style={{ width: "150px" }} />
           <nav className="container text-center col-9 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: "#C40C0C" }}>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
             <div className="dropdown d-inline">
