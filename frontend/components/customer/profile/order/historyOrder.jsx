@@ -164,6 +164,10 @@ const OrderTracking = () => {
         handleCancelOrder={handleCancelOrder} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

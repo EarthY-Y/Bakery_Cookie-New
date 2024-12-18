@@ -53,6 +53,7 @@ const orders = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         alert(error.message);
+        navigate('/create/address')
       }finally{
         setIsLoading(false)
       }
