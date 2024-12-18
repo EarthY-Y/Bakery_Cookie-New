@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { listProductCategoryService } from '../../../API/customer/productService';
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 import LoadingPopup from '../../untils/popUp/loading';
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
+
 const categoryProductList = () => {
   const [productsCategory, setProductsCategory] = useState([]);
   const {id} = useParams()
