@@ -25,7 +25,7 @@ const categoryProductList = () => {
         <div className="row g-4 justify-content-start card-container">
         {productsCategory.map((product) => (
           <div key={product.product_id} className="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center" style={{ cursor: "pointer" }}>
-              <Link to={`/product/${product.product_id}`} className="card shadow-sm" 
+              <Link to={`/Cookie&New/${product.product_id}`} className="card shadow-sm" 
                 style={{ textDecoration: "none",color: "inherit",width: "100%",maxWidth: "300px", // จำกัดความกว้างของ 
                   cardminHeight: "350px", // ล็อคความสูงของ card ให้เท่ากัน
                 }}>
