@@ -19,11 +19,14 @@ const s3 = new S3Client({
   },
 });
 
-const deleteParams = (oldPicture) => ({
-  Bucket: bucketName, // ชื่อ Bucket
-  Key: oldPicture,    // ชื่อไฟล์ที่ต้องการลบ
-});
-
+const deleteParams = (oldPicture) => {
+  // การเข้ารหัสชื่อไฟล์เพื่อรองรับภาษาไทยและอักขระพิเศษ
+  const encodedKey = encodeURIComponent(oldPicture);
+  return {
+    Bucket: bucketName, // ชื่อ Bucket
+    Key: encodedKey,    // ชื่อไฟล์ที่ต้องการลบ
+  };
+};
 export const handleDelete = async (oldPicture) => {
   try {
     const params = deleteParams(oldPicture);
