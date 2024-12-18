@@ -194,7 +194,7 @@ const CreateProduct = () => {
   }, [formData.ingredients, formData.quantityPerTime, formData.packaging]);
 
   useEffect(() => {
-    const fechData = async () => {
+    const fetchData = async () => {
         try {
           setIsLoading(true)
           const [
@@ -212,7 +212,7 @@ const CreateProduct = () => {
           setIsLoading(false)
         }
     };
-    fechData();
+    fetchData();
   }, []);
 
   const options = listPackage.map((packages) => ({

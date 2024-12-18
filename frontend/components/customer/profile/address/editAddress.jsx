@@ -3,7 +3,7 @@ import axios from 'axios'
 import { getProvice, getAmphure, getTambon, createAddressCustomer } from '../../../../API/customer/addressService';
 import { getAddressById, updateAddressById } from '../../../../API/customer/addressCustomerService'
 import { Link, useNavigate, useParams } from 'react-router-dom';
-
+import LoadingPopup from '../../../untils/popUp/loading';
 const CreateAddress = () => {
   const {id} = useParams()
   const [provinces, setProvinces] = useState([]);
@@ -18,132 +18,123 @@ const CreateAddress = () => {
   const [provincesId, setProvincesId] = useState("");
   const [amphuresId, setAmphuresId] = useState("");
   const [tambonsId, setTambonsId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getProviceCustomer = async() => {
-        try {
-            const response = await getProvice()
-            if(!response.data){
-              throw new Error("ไม่มีข้อมูล")
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+  
+        // เรียก API หลักทั้งหมดพร้อมกัน
+        const [provinceResponse, addressResponse] = await Promise.all([
+          getProvice(),
+          getAddressById(id),
+        ]);
+  
+        if (!provinceResponse.data || !addressResponse.data) {
+          throw new Error("ไม่มีข้อมูล");
+        }
+  
+        // ตั้งค่าข้อมูลจังหวัด
+        setProvinces(provinceResponse.data);
+  
+        // ตั้งค่าข้อมูลที่อยู่ของลูกค้า
+        const address = addressResponse.data[0];
+        setAddressById(address);
+        setHouseNo(address?.houseNo);
+  
+        // ตั้งค่าข้อมูลจังหวัดที่ตรงกับที่อยู่
+        const matchedProvince = provinceResponse.data.find(
+          (province) => province.province_id === address.province_id
+        );
+        if (matchedProvince) {
+          setSelectedProvince(matchedProvince.province_id);
+  
+          // ดึงข้อมูลอำเภอหลังจากตั้งค่าจังหวัดเสร็จ
+          const amphureResponse = await getAmphure(matchedProvince.province_id);
+          setAmphures(amphureResponse.data || []);
+  
+          // ตั้งค่าอำเภอที่ตรงกับที่อยู่
+          const matchedAmphure = amphureResponse.data.find(
+            (amphure) => amphure.amphure_id === address.amphure_id
+          );
+          if (matchedAmphure) {
+            setSelectedAmphure(matchedAmphure.amphure_id);
+  
+            // ดึงข้อมูลตำบลหลังจากตั้งค่าอำเภอเสร็จ
+            const tambonResponse = await getTambon(matchedAmphure.amphure_id);
+            setTambons(tambonResponse.data || []);
+  
+            // ตั้งค่าตำบลที่ตรงกับที่อยู่
+            const matchedTambon = tambonResponse.data.find(
+              (tambon) => tambon.tambon_id === address.tambon_id
+            );
+            if (matchedTambon) {
+              setSelectedTambon(matchedTambon.tambon_id);
+              setPostCode(matchedTambon.zip_code);
             }
-            console.log(response.data);
-            setProvinces(response.data)
           }
-          catch (error) {
-            alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
-          }
+        }
+      } catch (error) {
+        alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
-    getProviceCustomer()
+    };
+  
+    fetchData();
   }, []);
-
-    //* set ข้อมูลใน DropDown
-  useEffect(() => {
-    const getProviceCustomer = async() => {
-        try {
-          if (selectedProvince) {
-            const responseAmphures = await getAmphure(selectedProvince);
-            setAmphures(responseAmphures.data || []);
-          }
-          if (selectedAmphure) {
-            const responseTambons = await getTambon(selectedAmphure);
-            setTambons(responseTambons.data || []);
-          }
-
-        } catch (error) {
-          console.error("Error loading data:", error);
-        }
-      }
-    getProviceCustomer()
-  }, [selectedProvince, selectedAmphure]);
-
-  //! find หาข้อมูลที่ตรงกับ addressById เพื่อเป็นไกด์ไลน์เลือกข้อมูลเก่าให้ก่อนจะเปลี่ยนเเปลง
-  useEffect(() => {
-    if (selectedTambon) {
-      const selected = tambons.find((tambon) => tambon.tambon_id === selectedTambon);
-      setPostCode(selected?.zip_code || "");
-    }
-  }, [selectedTambon, tambons]);
-
-  useEffect(() => {
-    if (addressById.province_id && provinces.length > 0) {
-      const matchedProvince = provinces.find(province => province.province_id === addressById.province_id);//ให้ Function find เพื่อหข้อมูลที่ตรงกับ addressById.province_id
-      if (matchedProvince) { //ซึ่งถ้ามีตรงกันจะนำมาใส่ลงใน set
-        setSelectedProvince(matchedProvince.province_id); //เพื่อเอาไปเลือก
-        // setProvincesId(matchedProvince.province_id); //เพื่อส่งข้อมูลไปอัปเดต
-      }
-    }
-  }, [addressById, provinces]);
+  
   
   useEffect(() => {
-    if (addressById.amphure_id && amphures.length > 0) {
-      const matchedAmphure = amphures.find(amphure => amphure.amphure_id === addressById.amphure_id);
-      if (matchedAmphure && !selectedAmphure) { // เพิ่ม !selectedAmphure
-        setSelectedAmphure(matchedAmphure.amphure_id);
-      }
-      if(!matchedAmphure){
-        setTambons([]);
-        setSelectedTambon(null);
-        setPostCode("");
-        setHouseNo("")
-      }
-    }
-  }, [addressById, amphures, selectedAmphure]);
+    const fetchDependentData = async () => {
+      try {
+        // เรียก API อำเภอและตำบลพร้อมกัน
+        const [amphureResponse, tambonResponse] = await Promise.all([
+          selectedProvince ? getAmphure(selectedProvince) : Promise.resolve({ data: [] }),
+          selectedAmphure ? getTambon(selectedAmphure) : Promise.resolve({ data: [] })
+        ]);
   
-  useEffect(() => {
-    if (addressById.tambon_id && tambons.length > 0) {
-      const matchedTambon = tambons.find(tambon => tambon.tambon_id === addressById.tambon_id);
-      if (matchedTambon) {
-        setSelectedTambon(matchedTambon.tambon_id);
-        // setTambonsId(matchedTambon.tambon_id);
-        setPostCode(matchedTambon.zip_code);
-      }
-    }
-  }, [addressById, tambons]);
+        // ตั้งค่าอำเภอและตำบล
+        setAmphures(amphureResponse.data || []);
+        setTambons(tambonResponse.data || []);
   
-  // !
-  useEffect(() => {
-    if (selectedProvince) {
-      setSelectedAmphure(null);
-      setAmphures([]);
-      setSelectedTambon(null);
-      setTambons([]);
-      setPostCode("");
-      setAmphuresId(""); // เพิ่มรีเซ็ต ID อำเภอ
-      setTambonsId("");
-    }
-  }, [selectedProvince]);
-
-  useEffect(() => {
-    const getCustomerAddressById = async() => {
-        try {
-          const response = await getAddressById(id)
-          if(!response.data){
-            throw new Error("ไม่มีข้อมูล")
+        // ตั้งค่าข้อมูลตำบลที่ตรงกับ addressById
+        if (addressById.tambon_id && tambonResponse.data.length > 0) {
+          const matchedTambon = tambonResponse.data.find(
+            (tambon) => tambon.tambon_id === addressById.tambon_id
+          );
+          if (matchedTambon) {
+            setSelectedTambon(matchedTambon.tambon_id);
+            setPostCode(matchedTambon.zip_code);
           }
-          console.log(response.data);
-          setAddressById(response.data[0])
-          setHouseNo(response.data[0]?.houseNo)
         }
-        catch (error) {
-          alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
-        }
+      } catch (error) {
+        console.error("Error loading dependent data:", error);
       }
-      getCustomerAddressById()
-  }, []);
+    };
+  
+    fetchDependentData();
+  }, [selectedProvince, selectedAmphure, addressById]);
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        console.log(tambonsId, amphuresId, provincesId, houseNo, postCode);
-        if(tambonsId.length===0 && amphuresId.length===0 && provincesId.length===0 && houseNo.length===0 && postCode.length===0){ //เเต่ถ้าลูกค้ากรอกข้อมูลเดิมมาก็จะไม่เข้าเพราะมีข้อมูล
-          alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
-          return;
-        }
-        const res = await updateAddressById(tambonsId, amphuresId, provincesId, houseNo, postCode, id);
-        navigate(-1); //-1 เพื่อย้อนกลับไปหน้าก่อนหน้านี้
+      setIsLoading(true);
+      console.log(tambonsId, amphuresId, provincesId, houseNo, postCode);
+      if(tambonsId.length===0 && amphuresId.length===0 && provincesId.length===0 && houseNo.length===0 && postCode.length===0){ //เเต่ถ้าลูกค้ากรอกข้อมูลเดิมมาก็จะไม่เข้าเพราะมีข้อมูล
+        alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
+        return;
+      }
+      const res = await updateAddressById(tambonsId, amphuresId, provincesId, houseNo, postCode, id);
+      navigate(-1); //-1 เพื่อย้อนกลับไปหน้าก่อนหน้านี้
     } catch (err) {
         console.log(err);
+    }finally{
+      setIsLoading(false);
     }
   }
   return (
@@ -220,6 +211,10 @@ const CreateAddress = () => {
           </div>
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

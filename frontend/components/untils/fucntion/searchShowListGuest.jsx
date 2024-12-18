@@ -14,7 +14,7 @@ const searchShowListGuest = ({ name, itemKeys }) => {
   }), [products]); //เเต่จะถูก reder เมื่อ data ถูกเปลี่ยนเเปลงจริงๆ
 
   useEffect(() => {
-    const fechData = async () => {
+    const fetchData = async () => {
       try {
         const [
           getListProduct,
@@ -27,7 +27,7 @@ const searchShowListGuest = ({ name, itemKeys }) => {
         alert(error);
       }
     };
-    fechData();
+    fetchData();
   }, []);
 
   useEffect(() => {

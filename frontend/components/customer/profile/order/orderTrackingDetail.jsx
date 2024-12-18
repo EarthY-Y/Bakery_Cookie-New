@@ -5,6 +5,7 @@ import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { goBackOrHome } from '../../../untils/fucntion/backFuction';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
+import LoadingPopup from '../../../untils/popUp/loading';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const OrderTracking = () => {
@@ -18,6 +19,7 @@ const OrderTracking = () => {
   const [showCanCel, setShowCanCel] = useState(true); 
   const [showStep ,setShowStep] = useState(true); 
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // สถานะที่ต้องการแสดงบน Progress Bar
   const statusSteps = [
     { name: "ชำระเงินเรียบร้อย", icon: "bi bi-cash" },
@@ -26,52 +28,46 @@ const OrderTracking = () => {
     { name: "จัดส่งสำเร็จ", icon: "bi bi-truck" },
   ];
   useEffect(() => {
-    const getOrders = async () => {
+    const fetchOrders = async () => {
       try {
-        const res = await orderDetailById(id);
-        console.log(res.data);
-        setOrdersDetail(res.data[0]);
-        res.data[0]?.status === "รอการชำระเงิน" ? setShowBtnPay(true) : ""; 
-        if (res.data[0]?.status === "จัดส่งสำเร็จ") {
-          setShowCanCel(false)
-        }else if(res.data[0]?.status === "ยกเลิก") {
-          setShowCanCel(false)
-          setShowStep(false)
+        setIsLoading(true);
+        const [detailResponse, historyResponse, productResponse] = await Promise.all([
+          orderDetailById(id),
+          orderHistoryById(id),
+          orderProductById(id),
+        ]);
+  
+        // ตั้งค่าข้อมูลคำสั่งซื้อ
+        console.log("Order Details:", detailResponse.data);
+        console.log("Order History:", historyResponse.data);
+        console.log("Order Products:", productResponse.data);
+  
+        // จัดการข้อมูลที่ดึงมา
+        const detailData = detailResponse.data[0];
+        setOrdersDetail(detailData);
+        if (detailData?.status === "รอการชำระเงิน") setShowBtnPay(true);
+        if (detailData?.status === "จัดส่งสำเร็จ") setShowCanCel(false);
+        if (detailData?.status === "ยกเลิก") {
+          setShowCanCel(false);
+          setShowStep(false);
         }
-        
+  
+        const historyData = historyResponse.data;
+        setOrdersHistory(historyData);
+        if (historyData.length === 0) setShowBtnPay(true);
+  
+        const productData = productResponse.data;
+        setOrdersProduct(productData);
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error fetching orders data:", err);
+      }finally{
+        setIsLoading(false);
       }
     };
-    getOrders();
-  }, []);
-
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const res = await orderHistoryById(id);
-        console.log(res.data);
-        setOrdersHistory(res.data);
-        res.data.length === 0 ? setShowBtnPay(true) : "";
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-    getOrders();
-  }, []);
-
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const res = await orderProductById(id);
-        console.log(res.data);
-        setOrdersProduct(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-    getOrders();
-  }, []);
+  
+    fetchOrders();
+  }, [id]);
+  
 
   const isCompleted = (stepName) => {
     return ordersHistory.some((status) => status.status_name === stepName);
@@ -234,6 +230,10 @@ const OrderTracking = () => {
         handleCancelOrder={handleCancelOrder} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

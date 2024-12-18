@@ -4,6 +4,7 @@ import { getlistOrdersWaitPayment, getlistOrdersprocess, cancelOrder } from '../
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
+import LoadingPopup from '../../../untils/popUp/loading';
 
 const OrderTracking = () => {
   const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
@@ -14,32 +15,32 @@ const OrderTracking = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [orderId, setOrderId] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    const getOrders = async () => {
+    const fetchOrders = async () => {
       try {
-        const res = await getlistOrdersWaitPayment();
-        console.log(res.data);
-        setOrdersWaitStatement(res.data);
+        setIsLoading(true);
+        const [waitPaymentResponse, processResponse] = await Promise.all([
+          getlistOrdersWaitPayment(),
+          getlistOrdersprocess(),
+        ]);
+  
+        // ตั้งค่าข้อมูลคำสั่งซื้อ
+        console.log("Orders Wait Payment:", waitPaymentResponse.data);
+        console.log("Orders Process:", processResponse.data);
+  
+        setOrdersWaitStatement(waitPaymentResponse.data);
+        setOrdersCheckOut(processResponse.data);
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error fetching orders data:", err);
+      }finally{
+        setIsLoading(false);
       }
     };
-    getOrders();
+  
+    fetchOrders();
   }, []);
-
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const res = await getlistOrdersprocess();
-        console.log(res.data);
-        setOrdersCheckOut(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-    getOrders();
-  }, []);
+  
 
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage; //sum 10
@@ -168,6 +169,10 @@ const OrderTracking = () => {
         handleCancelOrder={handleCancelOrder} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

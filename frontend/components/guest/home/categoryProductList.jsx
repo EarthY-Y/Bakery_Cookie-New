@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { listProductCategoryService } from '../../../API/guest/guestProductService';
+import LoadingPopup from '../../untils/popUp/loading';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const categoryProductList = () => {
   const [productsCategory, setProductsCategory] = useState([]);
   const {id} = useParams()
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const getProducts = async () => {
       try {
+        setIsLoading(true);
         const res = await listProductCategoryService(id)
         console.log(res);
         setProductsCategory(res.data);
       } catch (err) {
         console.error("Error data:", err);
+      }finally{
+        setIsLoading(false)
       }
     };
 
@@ -38,6 +43,10 @@ const categoryProductList = () => {
             </div>
           ))}
         </div>
+        <LoadingPopup
+          isLoading = {isLoading}
+        />
+        {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       </div>
 
   );

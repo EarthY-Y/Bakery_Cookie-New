@@ -45,7 +45,6 @@ const profile = () => {
       liff.login() //ทำการ login ผ่าน Line
       return false
     }
-    
   }
 
   useEffect(() => {
@@ -78,6 +77,7 @@ const profile = () => {
 
   const handleSubmit = async(event) =>{
     event.preventDefault();
+    setIsLoading(true)
     const updatedData = {};
     const formData = new FormData();
     
@@ -106,7 +106,6 @@ const profile = () => {
         console.log(`${key}:`, value);
     }
     try {
-      setIsLoading(true)
       const response = await updateInfoCustomer(detailCustomer.customer_id,formData)
     } catch (error) {
       setError(error)
