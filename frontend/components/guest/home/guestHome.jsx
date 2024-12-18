@@ -44,7 +44,7 @@ const Home = () => {
   return(
     <div className="container">
       <div id="productCarousel" className="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="3000">
-        <div className="carousel-inner w-100 overflow-hidden" style={{ height: "50vh" }}>
+        <div className="carousel-inner w-100 overflow-hidden" style={{ height: "100%" }}>
           {products.map((product, index) => (
             <div key={product.product_id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
               <img src={API_URL_PICTURE + product.productpic_name} className="d-block w-100" alt={product.product_name} style={{ width: "100%", height: "100%", objectFit: "cover",}}/>
