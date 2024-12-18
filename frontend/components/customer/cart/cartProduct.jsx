@@ -99,7 +99,7 @@ const cartProduct = () => {
               <div className="row align-items-center pb-3 pt-3 border-bottom rounded bg-white" key={item.cart_product_id}>
                 <div className="col-12 col-md-8 d-flex align-items-center">
                   <img
-                    src={`${API_URL_PICTURE}/${item.productpic_name}`}
+                    src={`${API_URL_PICTURE} + ${item.productpic_name}`}
                     alt={item.product_name}
                     className="img-fluid rounded"
                     style={{ width: '120px', height: '80px' }}
