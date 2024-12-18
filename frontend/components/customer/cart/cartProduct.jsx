@@ -98,12 +98,7 @@ const cartProduct = () => {
             productCart.map((item) => (
               <div className="row align-items-center pb-3 pt-3 border-bottom rounded bg-white" key={item.cart_product_id}>
                 <div className="col-12 col-md-8 d-flex align-items-center">
-                  <img
-                    src={`${API_URL_PICTURE} + ${item.productpic_name}`}
-                    alt={item.product_name}
-                    className="img-fluid rounded"
-                    style={{ width: '120px', height: '80px' }}
-                  />
+                  <img src={API_URL_PICTURE + item.productpic_name} alt={item.product_name} className="img-fluid rounded" style={{ width: '120px', height: '80px' }} />
                   <span className="ms-3">{item.product_name}</span>
                 </div>
                 <div className="col-4 col-md-1 text-center text-sm">
