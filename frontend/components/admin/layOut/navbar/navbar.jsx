@@ -20,13 +20,11 @@ function Navbaradmin() {
         </div>
 
         {/* โลโก้ */}
-        <a className="navbar-brand" href="/" style={{ height: '100%' }}>
-          <img
-            src="../../../../src/assets/LogoCN.PNG"
-            alt="Logo"
-            style={{ height: '50px' }}
-          />
-        </a>
+        <img
+          src="../../../../src/assets/Logo.png"
+          alt="Logo"
+          style={{ height: '80px' }}
+        />
 
         {/* ปุ่มออกจากระบบ */}
         <button 

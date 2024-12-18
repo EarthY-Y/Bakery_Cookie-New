@@ -3,20 +3,24 @@ import { Link } from 'react-router-dom'
 import { listMaterialService, deleteMaterialByIdService } from '../../../API/admin/materialService'
 import { formatDate } from '../../untils/frommatters/datetime'
 import Search from '../../untils/fucntion/search'
+import LoadingPopup from '../../untils/popUp/loading'
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const ListMaterial = () => {
   const [materials, setMaterials] = useState([])
   const [materialsSearch, setMaterialsSearch] = useState([])
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const getMaterials = async () => {
       try {
+        setIsLoading(true)
         const res = await listMaterialService()
         console.log(res.data)
         setMaterials(res.data)
       } catch (err) {
         console.error("Error fetching materials:", err)
+      }finally{
+        setIsLoading(false);
       }
     };
 
@@ -27,14 +31,14 @@ const ListMaterial = () => {
     setMaterialsSearch(results);
   };
 
-  const handleDelete = (id) => {
-    deleteMaterialByIdService(id)
-      .then(() => {
-        // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
-        setMaterials(prevMaterials => prevMaterials.filter(material => material.material_id !== id))
-      })
-      .catch(err => console.log(err))
-  }
+  // const handleDelete = (id) => {
+  //   deleteMaterialByIdService(id)
+  //     .then(() => {
+  //       // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
+  //       setMaterials(prevMaterials => prevMaterials.filter(material => material.material_id !== id))
+  //     })
+  //     .catch(err => console.log(err))
+  // }
 
   return (
     <div className="container mt-5">
@@ -59,10 +63,10 @@ const ListMaterial = () => {
               <th style={{ width: '10%' }}>ปริมาณ</th>
               <th style={{ width: '10%' }}>ต้นทุน</th>
               <th style={{ width: '10%' }}>ต้นทุน/ปริมาณ</th>
-              <th style={{ width: '10%' }}>วันที่สร้าง</th>
+              <th style={{ width: '15%' }}>วันที่สร้าง</th>
               <th style={{ width: '5%' }}>ดู</th>
               <th style={{ width: '5%' }}>แก้ไข</th>
-              <th style={{ width: '5%' }}>ลบ</th>
+              {/* <th style={{ width: '5%' }}>ลบ</th> */}
             </tr>
           </thead>
           <tbody>
@@ -76,7 +80,7 @@ const ListMaterial = () => {
                 <td>{formatDate(material.created_at)}</td>
                 <td><Link to={`view/${material.material_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${material.material_id}`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
-                <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td>
+                {/* <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td> */}
               </tr>
             ))}
           </tbody>
@@ -111,6 +115,10 @@ const ListMaterial = () => {
           </div>
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };
