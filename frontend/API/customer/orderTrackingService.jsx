@@ -15,6 +15,7 @@ export const getlistOrdersWaitPayment = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -32,6 +33,7 @@ export const getlistOrdersprocess = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -49,6 +51,7 @@ export const getlistOrdersCancel = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -66,6 +69,7 @@ export const getlistOrdersFinish = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -83,6 +87,7 @@ export const orderDetailById = async(id) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -100,6 +105,7 @@ export const orderHistoryById = async(id) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -117,6 +123,7 @@ export const orderProductById = async(id) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -134,6 +141,7 @@ export const cancelOrder = async(id,reason) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 

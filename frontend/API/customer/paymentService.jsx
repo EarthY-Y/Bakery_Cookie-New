@@ -16,6 +16,7 @@ export const validateAddressCustomer = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -34,6 +35,7 @@ export const getAddressCustomer = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -51,6 +53,7 @@ export const shippingRate = async(weight) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -69,6 +72,7 @@ export const createOrder = async(productCart, totalPrice, totalPriceProduct, pri
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -86,6 +90,7 @@ export const getOrdersService = async(id) => {
     return response
   }catch (error) {
     console.error("Error listProductService:", error);
+    throw error;
   }
 }
 
@@ -102,5 +107,6 @@ export const updatePaymentOrder = async(formData, id) => {
     return response
   }catch (error) {
     console.error("Error listProductService:", error);
+    throw error;
   }
 }

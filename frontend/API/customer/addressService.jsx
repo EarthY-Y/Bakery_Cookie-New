@@ -15,6 +15,7 @@ export const getProvice = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -32,6 +33,7 @@ export const getAmphure = async(provinceId) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -49,6 +51,7 @@ export const getTambon = async(amphureId) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -68,5 +71,6 @@ export const createAddressCustomer = async(tambonsId, amphuresId, provincesId, h
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }

@@ -14,6 +14,7 @@ export const getDeatialCustomerService = async() => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
@@ -30,6 +31,7 @@ export const updateInfoCustomer = async(id, formData) => {
     return response
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
+    throw error;
   }
 }
 
