@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar ,Container ,Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Logoeiei from '../../../../src/assets/Logoeiei.png'
+import Logo from '../../../../src/assets/Logo.png'
 import Sidebaradmin from '../sidebar/sidebaradmin';
 import { Link, NavLink } from "react-router-dom"
 import { logoutAdmin } from '../../../../API/authService';
@@ -21,12 +21,14 @@ function Navbaradmin() {
         </div>
 
         {/* โลโก้ */}
-        <a className="navbar-brand" href="/" style={{ height: '100%' }}>
-          <img
-            src={Logoeiei}
-            alt="Logo"
-            style={{ height: '40px' }}
-          />
+        <a className="navbar-brand" href="/" style={{ height: '100%', textAlign: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <img
+              src={Logo}
+              alt="Logo"
+              style={{ height: '80px' }}
+            />
+          </div>
         </a>
 
         {/* ปุ่มออกจากระบบ */}
