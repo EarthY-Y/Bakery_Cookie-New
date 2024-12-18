@@ -5,7 +5,7 @@ import { getCategoryService } from "../../../../API/customer/productService"
 const Footer = () => {
   const [categoryList, setCategoryList] = useState([]);
   useEffect(() => {
-    const fechData = async () => {
+    const fetchData = async () => {
       try {
         const [         
           getCategory,
@@ -17,7 +17,7 @@ const Footer = () => {
         alert(error);
       }
     };
-    fechData();
+    fetchData();
   }, []);
   return (
     <footer className="text-white py-5 d-flex align-items-end flex-column ">
@@ -39,7 +39,7 @@ const Footer = () => {
               </button>
               <ul className="dropdown-menu mb-4" aria-labelledby="dropdownMenuButton" style={{ position: "absolute", bottom: "100%", left: "0" }}>
                 {categoryList.map((item, index)=>(
-                  <li key={index}><Link className="dropdown-item" to="#">{item.category_name}</Link></li>
+                  <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
                 ))}
               </ul>
             </div>

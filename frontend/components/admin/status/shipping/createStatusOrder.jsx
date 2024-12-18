@@ -11,7 +11,7 @@ const createStatusOrder = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(statusId,statusName);      
+      console.log(statusName);      
       const res = await CreateStatusCartService(statusName,"order"); //จะส่งไปเป็น formData ได้ต้องผ่าน multer ก่อน
       navigate(-1);
       console.log(res);

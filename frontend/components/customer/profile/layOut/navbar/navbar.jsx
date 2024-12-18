@@ -14,7 +14,7 @@ function Navbar() {
   const [productsSearch, setProductsSearch] = useState([]);
 
   useEffect(() => {
-    const fechData = async () => {
+    const fetchData = async () => {
       try {
         const [
           getCart,
@@ -33,7 +33,7 @@ function Navbar() {
         alert(error);
       }
     };
-    fechData();
+    fetchData();
   }, []);
 
   const calculateTotalPrice = () => {

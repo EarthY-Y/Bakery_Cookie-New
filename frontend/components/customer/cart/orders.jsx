@@ -41,18 +41,22 @@ const orders = () => {
           console.log(addressCustomer.data);
           setAddress(addressCustomer.data)
         }else{
+          setIsLoading(false);
           navigate('/create/address')
         }
         if(porductCart){
           console.log(porductCart.data);
           setProductCart(porductCart.data)
         }else{
+          setIsLoading(false)
           navigate('/home')
         }
       } catch (error) {
         console.error("Error fetching data:", error);
         alert(error.message);
-      } 
+      }finally{
+        setIsLoading(false)
+      }
     };
     fetchData();
 
@@ -104,6 +108,7 @@ const orders = () => {
 
   const handleSubmmit = async(event) => {
     event.preventDefault();
+    setIsLoading(true);
     let selectedAddress;
     if (address.length === 1) {
       selectedAddress = address[0];
@@ -130,6 +135,7 @@ const orders = () => {
         selectedAddress.zip_code
       );
       if(response.data){
+        setIsLoading(false);
         navigate("/payment/"+id)
       }else {
         throw new Error("เกิดข้อผิดพลาดบ้างอย่าง")
@@ -138,6 +144,8 @@ const orders = () => {
     } catch (error) {
       console.log(error);
       alert(error)
+    }finally{
+      setIsLoading(false);
     }
   }
 

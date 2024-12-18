@@ -2,30 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllAddressCustomer, deleteAddressById } from '../../../../API/customer/addressCustomerService';
 import { formatDate } from '../../../untils/frommatters/datetime';
-
+import LoadingPopup from '../../../untils/popUp/loading';
 const listAddressCustomer = () => {
   const [listAddress, setListAddress] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const getCategoryList = async () => {
       try {
+        setIsLoading(true);
         const res = await getAllAddressCustomer();
         console.log(res.data);
         setListAddress(res.data);
       } catch (err) {
         console.error("Error fetching data:", err);
+      }finally{
+        setIsLoading(false);
       }
     };
     getCategoryList();
   }, []);
 
-    const handleDeleteAddress = async(addressId) => {
-      deleteAddressById(addressId)
-      .then(() => {
-        setListAddress(prevListAddress => prevListAddress.filter(listAddress => listAddress.addressId !== addressId))
-      })
-      .catch(err => console.log(err))
-    }
+  const handleDeleteAddress = async(addressId) => {
+    setIsLoading(true);
+    deleteAddressById(addressId)
+    .then(() => {
+      setListAddress(prevListAddress => prevListAddress.filter(listAddress => listAddress.addressId !== addressId))
+    })
+    .catch(err => console.log(err))
+    .finally(() => {
+      setIsLoading(false)
+    })
+  }
 
   return (
     <div className="container mt-5">
@@ -60,6 +67,10 @@ const listAddressCustomer = () => {
             </div>
             </div>
         ))}
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
 
   );

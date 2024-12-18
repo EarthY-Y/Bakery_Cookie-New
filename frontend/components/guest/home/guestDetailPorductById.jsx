@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService } from '../../../API/guest/guestProductService';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -11,6 +12,7 @@ const detailPorductById = () => {
   const [CartId, setCartId] = useState()
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false);
   console.log(id);
   
   const handleIncreaseQuantity = () => {
@@ -27,6 +29,7 @@ const detailPorductById = () => {
   useEffect(() => {
     const detailProduct = async()=> {
       try {
+        setIsLoading(true);
         const response = await detailProductByIdService(id)
         if(!response.data){
           throw new Error("ไม่มีข้อมูล")
@@ -36,7 +39,9 @@ const detailPorductById = () => {
       }
       
       catch (error) {
-        alert(error)
+        console.log(error)
+      }finally{
+        setIsLoading(false)
       }
     }
     detailProduct()
@@ -110,6 +115,10 @@ const detailPorductById = () => {
           </div>
         </div>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

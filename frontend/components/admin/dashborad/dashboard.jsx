@@ -50,9 +50,9 @@ const Dashboard = () => {
   
         setAmountOrder(getAmoutOrders.data[0]?.countOrders || 0); 
         setNewCustomer(currentNewCustomerMonthData ? currentNewCustomerMonthData.total_new_customer : 0);
-        setSalesDataLine(getAllSales.data)
-        setGrowthUpPersent(getGrowthUpSales.data[0].growth_percentage)
-        setSalesPerMonth(getSalesPerMonth.data[0]?.total_sales)
+        setSalesDataLine(getAllSales.data || [])
+        setGrowthUpPersent(getGrowthUpSales.data[0].growth_percentage || 0)
+        setSalesPerMonth(getSalesPerMonth.data[0]?.total_sales || 0)
         setSalesRankPerMonth(getSalesRankPerMonth.data || 0)
       } catch (error) {
         console.error(error);

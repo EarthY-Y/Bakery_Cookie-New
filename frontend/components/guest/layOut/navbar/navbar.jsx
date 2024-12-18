@@ -7,7 +7,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
     useEffect(() => {
-      const fechData = async () => {
+      const fetchData = async () => {
         try {
           const [        
             getCategory,
@@ -20,7 +20,7 @@ const Navbar = () => {
           alert(error);
         }
       };
-      fechData();
+      fetchData();
     }, []);
   useEffect(() => {
     const handleScroll = () => {
