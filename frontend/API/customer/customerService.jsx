@@ -85,3 +85,20 @@ export const changePasswordService = async(newPassword, confirmNewPassword) => {
     throw error
   }
 }
+
+export const getProfileCustomerService = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/profile/customer", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
