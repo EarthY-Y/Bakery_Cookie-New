@@ -2,14 +2,18 @@ import React, { useState, useEffect, memo } from "react";
 import { Link } from "react-router-dom";
 import { getCartService, getPorductCartService } from "../../../../API/customer/productService";
 import { getCategoryService } from "../../../../API/customer/productService"
+import { getProfileCustomerService } from "../../../../API/customer/customerService";
 import { logout } from "../../../../API/authService";
 import { useCart } from "./CartContext";
 import SearchShowList from '../../../untils/fucntion/searchShowList';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_LOGO
 
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+
 const Navbar = memo(() => {
   const [productCart, setProductCart] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
+  const [proflieCustomer, setProflieCustomer] = useState([]);
   const [totalPriceCart, setTotalPriceCrat] = useState(0);
   const [cartId, setCartId] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,8 +21,9 @@ const Navbar = memo(() => {
   const [productsSearch, setProductsSearch] = useState([]);
 
   const handleLogout = () => {
-    logout();
-  };
+    logout()
+    location.reload()
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,16 +32,19 @@ const Navbar = memo(() => {
           getCart,
           getPorductCart,
           getCategory,
+          getProfileCustomer,
         ] = await Promise.all([
           getCartService(),
           getPorductCartService(),
           getCategoryService(),
+          getProfileCustomerService(),
         ])
         console.log(getCategory);
         
         setCartId(getCart.data[0].cartId);
         setProductCart(getPorductCart.data);
         setCategoryList(getCategory.data)
+        setProflieCustomer(getProfileCustomer.data[0])
       } catch (error) {
         alert(error);
       }
@@ -99,9 +107,9 @@ const Navbar = memo(() => {
                     <i className="bi bi-basket3 fs-3 text-light me-3"></i>
                   </li>
                   <li className="nav-item dropdown ms-auto d-flex align-items-center position-relative">
-                    <button className="btn d-flex align-items-center caret-off mb-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
-                      <img src="https://example.com/profile.jpg" alt="Profile" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
-                      <span>ชื่อโปรไฟล์</span>
+                    <button className="btn d-flex dropdown-toggle align-items-center caret-off mb-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
+                      <img src={API_URL_PICTURE + proflieCustomer.customerpic} alt="Profile" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
+                      <span>{proflieCustomer.username}</span>
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end mt-0" aria-labelledby="profileDropdown">
                       <li><Link className="dropdown-item" to="/profile">โปรไฟล์ของฉัน</Link></li>

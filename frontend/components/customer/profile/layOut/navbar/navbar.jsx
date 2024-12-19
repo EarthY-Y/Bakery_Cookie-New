@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Link, NavLink } from "react-router-dom"
 import { getCartService, getPorductCartService } from '../../../../../API/customer/productService';
 import { getCategoryService } from "../../../../../API/customer/productService"
+import { getProfileCustomerService } from "../../../../../API/customer/customerService";
 import { logout } from '../../../../../API/authService';
 import SearchShowList from '../../../../untils/fucntion/searchShowList';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_LOGO
 
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+
 function Navbar() {
   const [productCart, setproductCart] = useState([])
   const [categoryList, setCategoryList] = useState([]);
+  const [proflieCustomer, setProflieCustomer] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartId, setCartId] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,15 +25,18 @@ function Navbar() {
           getCart,
           getProductCart,          
           getCategory,
+          getProfileCustomer,
         ] = await Promise.all([
           getCartService(),
           getPorductCartService(),
           getCategoryService(),
+          getProfileCustomerService(),
         ])
         // console.log(getListProduct.data);
         setCartId(getCart.data[0].cartId)
         setproductCart(getProductCart.data)
         setCategoryList(getCategory.data)
+        setProflieCustomer(getProfileCustomer.data[0])
       } catch (error) {
         alert(error);
       }
@@ -57,6 +64,7 @@ function Navbar() {
 
   const handleLogout = () => {
     logout()
+    location.reload()
   }
   return (
     <div> {/* เปลี่ยนพื้นหลังคอนเทนต์หลัก */}
@@ -94,12 +102,12 @@ function Navbar() {
                   <li className="nav-item">
                     <i className="bi bi-basket3 fs-3 text-light me-3"></i>
                   </li>
-                  <li className="nav-item dropdown ms-auto d-flex align-items-center position-relative">
-                    <button className="btn d-flex align-items-center caret-off mb-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
-                      <img src="https://example.com/profile.jpg" alt="Profile" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
-                      <span>ชื่อโปรไฟล์</span>
+                  <li className="nav-item dropdown ms-auto d-flex align-items-start position-relative">
+                    <button className="btn dropdown-toggle d-flex align-items-center caret-off mb-0" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
+                      <img src={API_URL_PICTURE + proflieCustomer.customerpic} alt="" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
+                      <span>{proflieCustomer.username}</span>
                     </button>
-                    <ul className="dropdown-menu dropdown-menu-end mt-0" aria-labelledby="profileDropdown">
+                    <ul className="dropdown-menu dropdown-menu-start mt-0" aria-labelledby="profileDropdown">
                       <li><Link className="dropdown-item" to="/profile">โปรไฟล์ของฉัน</Link></li>
                       {/* <li><Link className="dropdown-item" to="/settings">การตั้งค่า</Link></li> */}
                       <li><hr className="dropdown-divider" /></li>

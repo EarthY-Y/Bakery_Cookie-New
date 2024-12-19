@@ -4,6 +4,7 @@ import liff from '@line/liff'
 import { getDeatialCustomerService, updateInfoCustomer, createConnectionLineIDService, checkConnectionLineIDService } from '../../../../API/customer/customerService';
 import LoadingPopup from '../../../untils/popUp/loading';
 import ErrorPopup from '../../../error/errorPopup';
+import { logout } from '../../../../API/authService';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_CUSTOMER
 const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
@@ -45,6 +46,10 @@ const profile = () => {
       liff.login() //ทำการ login ผ่าน Line
       return false
     }
+  }
+  const handleLogout = () => {
+    logout()
+    location.reload()
   }
 
   useEffect(() => {
@@ -179,7 +184,10 @@ const profile = () => {
           </select>
         </div>
       </div>*/}
-      <div className='row justify-content-between mt-4'>
+      <div className='row mt-4 d-flex flex-row-reverse'>
+        <div className="col-12 col-md-3 mt-2 mb-4">
+          <button type="submit" className="btn btn-danger col-12">บันทึก</button>
+        </div>
         <div className='col-12 col-md-9'>
           <label className="form-label col-4 col-md-2 small">เชื่อมต่อ</label>
           {checkLoginLine.provider_login_id ? (
@@ -192,8 +200,11 @@ const profile = () => {
             </button>
           )}
         </div>
-        <div className="col-12 col-md-3 mt-2 mt-md-0">
-          <button type="submit" className="btn btn-danger col-12">บันทึก</button>
+      </div>
+      <div className='d-block d-lg-none text-align-center mt-4'>
+        <div className='row'>
+          <p className='col-4 col-sm-3 small'>ออกจากระบบ</p>
+          <button type="button" className="btn btn-primary col-2 small bi bi-box-arrow-left" onClick={handleLogout}></button>
         </div>
       </div>
 
