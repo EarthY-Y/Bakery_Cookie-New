@@ -279,7 +279,7 @@ const CreateProduct = () => {
                   value={optionsMaterial.find((option) => option.value === ingredient.material_id) ||  ""}
                   onChange={(options) => handleInputChange(index, options, '')}
                   isSearchable={true}
-                  placeholder="เลือกบรรจุภัณฑ์"
+                  placeholder="เลือกวัตถุดิบ"
                 />
               </div>
               <div className="col-sm-1 mb-2">
