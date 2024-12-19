@@ -82,7 +82,7 @@ const Navbar = memo(() => {
                   </ul>
                 </div>
                 <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
-                <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
+                <Link className="btn btn-outline text-white rounded-pill mx-1" to="/contact">ติดต่อสอบถาม</Link>
               </div>
             )}
             <div className="text-end d-flex justify-content-center">
@@ -141,7 +141,7 @@ const Navbar = memo(() => {
               </ul>
             </div>
             <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
-            <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
+            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/contact">ติดต่อสอบถาม</Link>
           </nav>
         </div>
       )}

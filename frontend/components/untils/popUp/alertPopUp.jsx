@@ -1,27 +1,42 @@
 import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const AlertPopUp = ({ showModal, handleClose, handleConfirm, text }) => {
+const ErrorPopup = ({ onClose, handleConfirm, message, title }) => {
+  const [showModal, setShowModal] = useState(true);
 
-  const handleSubmit = () => {
-    handleConfirm(); // ส่งเหตุผลไปยัง parent
-    handleClose(); // ปิด modal
+  const handleClose = () => {
+    setShowModal(false);
+    if (onClose) onClose();
+  };
+
+  const handleConfirmation = () => {
+    setShowModal(false);
+    if (handleConfirm) handleConfirm();
   };
 
   return (
-    <div className={`modal fade ${showModal ? "show" : ""}`} tabIndex="-1" style={{ display: showModal ? 'block' : 'none' }} aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" style={{ display: showModal ? 'block' : 'none', backgroundColor: 'rgba(0, 0, 0, 0.5)' }} 
+      aria-labelledby="errorModalLabel" aria-hidden="true" >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="cancelOrderModalLabel">เหตุผลในการยกเลิกคำสั่งซื้อ</h5>
-            <button type="button" className="btn-close" onClick={handleClose}></button>
+        <div className="modal-content border-danger">
+          <div className="modal-header bg-danger text-white">
+            <h5 className="modal-title" id="errorModalLabel">
+              <i className="bi bi-exclamation-triangle-fill me-2"></i>
+              {title || 'Error'}
+            </h5>
+            <button type="button" className="btn-close btn-close-white" onClick={handleClose} aria-label="Close" ></button>
           </div>
-          <div className="modal-body">
-            {/*value ข้อมูลที่จะส่งไป*/}
-            <p className='text-danger'><b>{text}</b></p>
+          <div className="modal-body text-center">
+            <p className="text-danger fs-5">{message || 'Something went wrong. Please try again later.'}</p>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={handleClose}>ยกเลิก</button>
-            <button type="button" className="btn btn-danger" onClick={handleSubmit}>ยืนยัน</button>
+            <button type="button" className="btn btn-secondary" onClick={handleClose}>Close</button>
+            {handleConfirm && (
+              <button type="button" className="btn btn-danger" onClick={handleConfirmation}>
+                Confirm
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -29,4 +44,4 @@ const AlertPopUp = ({ showModal, handleClose, handleConfirm, text }) => {
   );
 };
 
-export default AlertPopUp;
+export default ErrorPopup;

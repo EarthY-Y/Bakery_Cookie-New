@@ -68,6 +68,8 @@ import EditShippingCost from '../page/admin-page/shippingCost-page/editShippingC
 import CreateShippingCost from '../page/admin-page/shippingCost-page/createShippingCost-page'
 import ManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustomer-page';
 import EditManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustomerById-page';
+import LineOA from '../page/customer-page/communicate-page/lineOA-page';
+import GuestLineOA from '../page/guest/lineOA-page';
 
 const router = createBrowserRouter([
   {
@@ -122,6 +124,10 @@ const router = createBrowserRouter([
                 ),
               },
             ],
+          },
+          {
+            path: "guest-contact",
+            element: <GuestLineOA />,
           },
         ]
       },  
@@ -395,6 +401,10 @@ const router = createBrowserRouter([
           {
             path: "/home",
             element: <Home />,
+          },
+          {
+            path: "/contact",
+            element: <LineOA />,
           },
           {
             path: "/product/:id",

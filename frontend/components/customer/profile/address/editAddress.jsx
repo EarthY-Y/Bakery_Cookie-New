@@ -146,8 +146,8 @@ const CreateAddress = () => {
               <h3 className="mb-4 card-title text-center">เพิ่มที่อยู่</h3>
               <form onSubmit={handleSubmit} encType="multipart/form-data">
                <div className="row mb-4">
-                <label htmlFor="subdistrict" className="col-3 col-auto col-form-label">จังหวัด</label>
-                <div className="col-8">
+                <label htmlFor="subdistrict" className="col-12 col-sm-3 col-auto col-form-label">จังหวัด</label>
+                <div className="col-12 col-sm-8">
                   <select value={selectedProvince || ''}  onChange={(e) => {setSelectedProvince(e.target.value); setProvincesId(e.target.value)}} className="form-select">
                     <option value="" disabled></option>
                     {provinces.map((province) => (
@@ -160,8 +160,8 @@ const CreateAddress = () => {
                </div>
 
                <div className="row mb-4">
-                  <label htmlFor="district" className="col-3 col-auto col-form-label">เขต/อำเภอ</label>
-                  <div className="col-8">
+                  <label htmlFor="district" className="col-12 col-sm-3 col-auto col-form-label">เขต/อำเภอ</label>
+                  <div className="col-12 col-sm-8">
                     <select value={selectedAmphure || ''} onChange={(e) => {setSelectedAmphure(e.target.value); setAmphuresId(e.target.value)}} className="form-select" disabled={!selectedProvince}>
                       <option value="" disabled>Select Amphure</option>
                       {amphures.map((amphure) => (
@@ -174,8 +174,8 @@ const CreateAddress = () => {
                </div>
 
                <div className="row mb-4">
-                  <label htmlFor="province" className="col-3 col-auto col-form-label">แขวง/ตำบล</label>
-                  <div className="col-8">
+                  <label htmlFor="province" className="col-12 col-sm-3 col-auto col-form-label">แขวง/ตำบล</label>
+                  <div className="col-12 col-sm-8">
                     <select value={selectedTambon || ''} className="form-select" onChange={(e) => {setSelectedTambon(e.target.value); setTambonsId(e.target.value)}} disabled={!selectedAmphure}>
                     <option value="" disabled >Select Tambon</option>
                       {tambons.map((tambon) => (
@@ -188,20 +188,20 @@ const CreateAddress = () => {
                </div>
 
                <div className="row mb-4">
-                 <label htmlFor="postal code" className="col-3 col-auto col-form-label">รหัสไปรษณีย์</label>
-                 <div className="col-8">
+                 <label htmlFor="postal code" className="col-12 col-sm-3 col-auto col-form-label">รหัสไปรษณีย์</label>
+                 <div className="col-12 col-sm-8">
                    <input name='postCode' type="text" value={postCode} onChange={(e) => {setPostCode(e.target.value)}}  className="form-control" id="postalCode" placeholder="รหัสไปรษณีย์"/>
                  </div>
                </div>
                <div className="row mb-4">
-                  <label htmlFor="home number" className="col-3 col-auto col-form-label">รายละเอียด</label>
-                  <div className="col-8">
+                  <label htmlFor="home number" className="col-12 col-sm-3 col-auto col-form-label">รายละเอียด</label>
+                  <div className="col-12 col-sm-8">
                     <input name='homeNumber' type="text" value={houseNo} onChange={(e) => {setHouseNo(e.target.value)}} className="form-control" id="homeNumber" placeholder="บ้านเลขที่,หมุ่ที่,เเยก,ถนน"/>
                   </div>
                </div>
 
                <div className="mb-4 row justify-content-center">
-                  <div className="col-5">
+                  <div className="col-12 col-sm-5">
                     <button style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">เพิ่มรายละเอีดที่อยู่</button>
                   </div>
                 </div>

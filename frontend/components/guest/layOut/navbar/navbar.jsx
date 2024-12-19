@@ -52,7 +52,7 @@ const Navbar = () => {
                   </ul>
                 </div>
                 <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
-                <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
+            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guest-contact">ติดต่อสอบถาม</Link>
               </div>
             )}
               <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
@@ -92,7 +92,7 @@ const Navbar = () => {
               </ul>
             </div>
             <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
-            <button className="btn btn-outline text-white rounded-pill mx-1">ติดต่อสอบถาม</button>
+            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guest-contact">ติดต่อสอบถาม</Link>
           </nav>
         </div>
       )}

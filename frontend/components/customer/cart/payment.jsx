@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { validateAddressCustomer, getAddressCustomer, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../error/errorPopup';
 
 const cartProduct = () => {
   const id = useParams().id //เพราะว่ามันส่งมาจาก navigate ของหน้า orders เลยมาเป็น object ทำให้เกิดปัญหากับหลังบ้านเลยต้อง .id ในกรณีที่ไม่ใส่ {id}
@@ -12,7 +13,7 @@ const cartProduct = () => {
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); 
   const [totalPrice, setTotalPrice] = useState(0); 
   const [Picture, setPicture] = useState(null);
-
+  const [error, setError] = useState(null);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const cartProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      alert(error)
+      setError(error)
     }finally{
       setIsLoading(false);
     }
@@ -153,6 +154,9 @@ const cartProduct = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </form>
   );
 };
