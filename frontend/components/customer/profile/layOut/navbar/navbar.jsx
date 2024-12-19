@@ -133,7 +133,7 @@ function Navbar() {
       {/* Navbar ส่วนล่าง */}
       {!isScrolled && (
         <div className="container text-center my-4 d-none d-lg-block">
-          <img src={API_URL_PICTUREPROFILE + "LogoCN1.PNG"} alt="Bakery Cookie New Happy Family" style={{ width: '150px' }}/>
+          <img src={API_URL_PICTURE + "LogoCN1.PNG"} alt="Bakery Cookie New Happy Family" style={{ width: '150px' }}/>
           <nav className="container text-center col-9 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: '#C40C0C' }}>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
             {/* Dropdown menu สำหรับหมวดหมู่ */}
