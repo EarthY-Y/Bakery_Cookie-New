@@ -8,7 +8,7 @@ import { useCart } from "./CartContext";
 import SearchShowList from '../../../untils/fucntion/searchShowList';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_LOGO
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
+const API_URL_PICTUREPROFILE = import.meta.env.VITE_API_Port_PICTURE_PROFILE
 
 const Navbar = memo(() => {
   const [productCart, setProductCart] = useState([]);
@@ -108,7 +108,7 @@ const Navbar = memo(() => {
                   </li>
                   <li className="nav-item dropdown ms-auto d-flex align-items-center position-relative">
                     <button className="btn d-flex dropdown-toggle align-items-center caret-off mb-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
-                      <img src={API_URL_PICTURE + proflieCustomer.customerpic} alt="Profile" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
+                      <img src={API_URL_PICTUREPROFILE + proflieCustomer.customerpic} alt="Profile" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
                       <span>{proflieCustomer.username}</span>
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end mt-0" aria-labelledby="profileDropdown">
@@ -138,7 +138,7 @@ const Navbar = memo(() => {
       {/* Navbar ส่วนล่าง */}
       {!isScrolled && (
         <div className="container text-center my-4 d-none d-lg-block">
-          <img src={API_URL_PICTURE + "LogoCN1.PNG"}  alt="Bakery Cookie New Happy Family" style={{ width: "150px" }} />
+          <img src={API_URL_PICTUREPROFILE + "LogoCN1.PNG"}  alt="Bakery Cookie New Happy Family" style={{ width: "150px" }} />
           <nav className="container text-center col-9 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: "#C40C0C" }}>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
             <div className="dropdown d-inline">
