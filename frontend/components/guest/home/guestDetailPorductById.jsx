@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService } from '../../../API/guest/guestProductService';
 import LoadingPopup from '../../untils/popUp/loading';
+import AlertPopUp from '../../untils/popUp/alertPopUp';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -13,7 +14,7 @@ const detailPorductById = () => {
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
-  console.log(id);
+  const [error, setError] = useState(null);
   
   const handleIncreaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -46,6 +47,9 @@ const detailPorductById = () => {
     }
     detailProduct()
   },[])
+  const handelErrorAddCart = async() => {
+    setError("กรุณาสมัครบัญชีเเละเช้าสู่ระบบก่อนสั่งซื้อสินค้า")
+  }
 
   return (    
     <div className="container my-5">
@@ -97,9 +101,7 @@ const detailPorductById = () => {
 
             {/* ปุ่มเพิ่มสินค้า */}
             <div className="gap-3 mt-3 text-center" style={{ flexWrap: 'nowrap' }}>
-              <button className="btn btn-success" style={{ padding: '10px 20px', width: '160px', whiteSpace: 'nowrap' }} >
-                เพิ่มไปยังตะกร้า
-              </button>
+              <button className="btn btn-success" style={{ padding: '10px 20px', width: '160px', whiteSpace: 'nowrap' }} onClick={handelErrorAddCart}>เพิ่มไปยังตะกร้า</button>
             </div>
           </div>
         </div>
@@ -119,6 +121,9 @@ const detailPorductById = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <AlertPopUp message={error} title="ไม่พบบัญชีผู้ใช้" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

@@ -98,11 +98,11 @@ const OrderTracking = () => {
       <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
-      <div className='d-flex justify-content-between align-items-center'>
-        <div>
-          <h3 className="mb-4">สถานะคำสั่งซื้อ</h3>
+      <div className='align-items-center row mb-4'>
+        <div className='col-12 col-sm-6'>
+          <h3>สถานะคำสั่งซื้อ</h3>
         </div>
-        <div>
+        <div className='col-12 col-sm-6 text-end'>
           <span >รหัสคำสั่งซื้อ: {ordersDetail.orders_id}</span>
         </div>
       </div>
@@ -192,7 +192,7 @@ const OrderTracking = () => {
                 <div className="col-md-2">
                   <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 mt-3">
                   <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
                 </div>
                 <div className="col-md-3">

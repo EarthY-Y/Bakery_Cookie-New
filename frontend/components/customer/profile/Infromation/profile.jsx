@@ -143,7 +143,7 @@ const profile = () => {
           <input type="text" className="form-control" placeholder="ใส่ชื่อ" value={customerLName} onChange={(e) => setCustomerLName(e.target.value)} />
         </div>
       </div>
-      <Link type="botton" className="btn btn-danger col-3 mb-2" to="changePassword">เปลี่ยนรหัสผ่าน</Link>
+      <Link type="botton" className="btn btn-danger col-12 col-sm-3 mb-2" to="changePassword">เปลี่ยนรหัสผ่าน</Link>
       <div className="mb-3">
         <label className="form-label">หมายเลขโทรศัพท์</label>
         <input type="text" className="form-control" value={customerPhoneNumber} onChange={(e) => setCustomerPhoneNumber(e.target.value)} />
