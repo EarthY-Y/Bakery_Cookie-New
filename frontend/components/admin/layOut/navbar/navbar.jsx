@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Sidebaradmin from '../sidebar/sidebaradmin';
 import { Link, NavLink } from "react-router-dom"
 import { logoutAdmin } from '../../../../API/authService';
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_LOGO
 
 function Navbaradmin() {
 
@@ -20,11 +21,7 @@ function Navbaradmin() {
         </div>
 
         {/* โลโก้ */}
-        <img
-          src="../../../../src/assets/Logo.png"
-          alt="Logo"
-          style={{ height: '80px' }}
-        />
+        <img src={API_URL_PICTURE + "Logo.png"} alt="Logo" style={{ height: '80px' }} />
 
         {/* ปุ่มออกจากระบบ */}
         <button 

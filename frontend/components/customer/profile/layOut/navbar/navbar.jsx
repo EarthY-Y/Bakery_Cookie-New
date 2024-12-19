@@ -4,6 +4,7 @@ import { getCartService, getPorductCartService } from '../../../../../API/custom
 import { getCategoryService } from "../../../../../API/customer/productService"
 import { logout } from '../../../../../API/authService';
 import SearchShowList from '../../../../untils/fucntion/searchShowList';
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_LOGO
 
 function Navbar() {
   const [productCart, setproductCart] = useState([])
@@ -124,14 +125,9 @@ function Navbar() {
       {/* Navbar ส่วนล่าง */}
       {!isScrolled && (
         <div className="container text-center my-4 d-none d-lg-block">
-          <img
-            src="../../../../../src/assets/LogoCN1.PNG" // เปลี่ยน URL เป็นโลโก้ของคุณ
-            alt="Bakery Cookie New Happy Family"
-            style={{ width: '150px' }}
-          />
+          <img src={API_URL_PICTURE + "LogoCN1.PNG"} alt="Bakery Cookie New Happy Family" style={{ width: '150px' }}/>
           <nav className="container text-center col-9 mt-3 border rounded-pill p-1 border-dark" style={{ backgroundColor: '#C40C0C' }}>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
-
             {/* Dropdown menu สำหรับหมวดหมู่ */}
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1 " data-bs-toggle="dropdown" aria-expanded="false" >หมวดหมู่</button>
