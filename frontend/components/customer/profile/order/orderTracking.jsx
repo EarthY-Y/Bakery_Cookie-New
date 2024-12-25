@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { getlistOrdersWaitPayment, getlistOrdersprocess, cancelOrder } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
+import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
+import {AlertWithProgressBar} from '../../../untils/fucntion/alert';
 
 const OrderTracking = () => {
   const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
@@ -16,6 +18,8 @@ const OrderTracking = () => {
   const [cancelReason, setCancelReason] = useState("");
   const [orderId, setOrderId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(null);
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -40,7 +44,6 @@ const OrderTracking = () => {
   
     fetchOrders();
   }, []);
-  
 
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage; //sum 10
@@ -71,6 +74,10 @@ const OrderTracking = () => {
     .catch(err => console.log(err))
   }
 
+  const handleCopy = async (orders_id) => {
+    const result = await copyToClipboard(orders_id);
+    setShowAlert(result); // จะแสดงข้อความที่ได้จาก copyToClipboard
+  }
 
   return (
     <div className="container mt-5">
@@ -82,7 +89,7 @@ const OrderTracking = () => {
           <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
             <div className="card border-secondary">
               <div className="card-header d-flex justify-content-between">
-                <span>รหัสคำสั่งซื้อ: {order.orders_id}</span>
+                <span>รหัสคำสั่งซื้อ: {order.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
                 <span className="badge bg-warning text-dark">{order.status_name}</span>
               </div>
               <div className="card-body">
@@ -124,7 +131,7 @@ const OrderTracking = () => {
           <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
             <div className="card border-secondary">
               <div className="card-header d-flex justify-content-between">
-                <span>รหัสคำสั่งซื้อ: {order.orders_id}</span>
+                <span>รหัสคำสั่งซื้อ: {order.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
                 <span className="badge bg-warning text-dark">{order.status_name}</span>
               </div>
               <div className="card-body">
@@ -173,6 +180,14 @@ const OrderTracking = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {showAlert !== null && (
+        <AlertWithProgressBar
+          message={showAlert ? "คัดลอกสำเร็จ" : "คัดลอกไม่สำเร็จ"}
+          duration={3000}
+          onClose={() => setShowAlert(null)} // ปิด alert เมื่อปิด
+          status={showAlert ? 'bg-success' : 'bg-danger'} // ใช้ bg-success หรือ bg-danger ตาม showAlert
+        />
+      )}
     </div>
   );
 };

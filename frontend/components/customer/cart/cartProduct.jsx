@@ -2,10 +2,10 @@ import React, { useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { getPorductCartService,deletePorductCartService, upadateCartService } from '../../../API/customer/productService';
-import { formatDate } from '../../untils/frommatters/datetime';
-import { goBackOrHome } from '../../untils/fucntion/backFuction';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
+import AlertPopUp from '../../untils/popUp/alertPopUp';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
@@ -15,6 +15,7 @@ const cartProduct = () => {
   const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getCart = async()=> {
@@ -27,7 +28,7 @@ const cartProduct = () => {
         setProductCart(response.data)
       }
       catch (error) {
-        alert(error)
+        setError(error)
       }finally{
         setIsLoading(false)
       }
@@ -52,7 +53,7 @@ const cartProduct = () => {
       const response = await upadateCartService(cart_product_id, status, value);
       if (!response.data) throw new Error('ไม่มีข้อมูล');
     } catch (error) {
-      alert(error.message);
+      setError(error);
     }
   };
 
@@ -88,7 +89,7 @@ const cartProduct = () => {
           <h2 className="mb-2 text-center">ตะกร้าสินค้าของคุณ</h2>
           <hr className="d-none d-md-block my-4 border-secondary"/>
           <div className="col-12 col-md-8 d-none d-md-block text-secondary">สินค้า</div>
-          <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">ราคาต่อชุด</div>
+          <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">ราคาต่อชิ้น</div>
           <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">จำนวน</div>
           <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">ราคารวม</div>
           <div className="col-4 col-md-1 text-center d-none d-md-block text-secondary">ลบสินค้า</div>
@@ -107,7 +108,7 @@ const cartProduct = () => {
                   <span className="ms-3">{item.product_name}</span>
                 </div>
                 <div className="col-4 col-md-1 text-center text-sm">
-                  <span className="text-secondary d-block d-md-none">ราคาต่อชุด</span>
+                  <span className="text-secondary d-block d-md-none">ราคาต่อชิ้น</span>
                   <strong>{numberGrouping(item.selling_price_per_quantity)} ฿</strong>
                 </div>
                 <div className="input-group-sm col-3 col-md-1 text-center cart-item-quantity d-flex align-items-center justify-content-center">
@@ -134,8 +135,9 @@ const cartProduct = () => {
             <p className="row bg-white p-3 justify-content-center align-items-center">ไม่มีสินค้าในตะกร้า</p>
           )}
         </div>
-        <div className="row bg-light p-3 border rounded text-end fw-bold">
+        <div className="row bg-light p-3 border rounded text-end">
           <h4>ราคารวม: {numberGrouping(totalPrice)} ฿</h4>
+          <span className='text-danger'>ราคานี้ไม่รวมค่าจัดส่งเเละค่าบรรจุภัณฑ์</span>
         </div>
         <div className="d-flex flex-row-reverse bd-highlight mt-4">
           <button className="btn btn-success btn-lg" disabled={isPaymentDisabled}>
@@ -147,6 +149,12 @@ const cartProduct = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {!isLoading && error && (
+        <ErrorPopup message={error} onClose={() => setError(null)} />
+      )}
+      {!isLoading && isPaymentDisabled ? (
+        <AlertPopUp message={"กรุณาสั่งซื้อขั้นต่ำ 250 บาท"} title="ยอดคำสั่งซื้อไม่ถึงที่กำหนด" onClose={() => setError(null)} />
+      ): ("")}
     </div>
   );
 };

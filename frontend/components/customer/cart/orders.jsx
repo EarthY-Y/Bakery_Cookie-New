@@ -119,8 +119,9 @@ const orders = () => {
       selectedAddress = selectAddress;
     }
     try {
-      console.log(productCart, parseFloat(totalPrice), totalPriceProduct , deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, totalQuantity, deliveryRate.shipping_rate_id, selectedAddress.houseNo,selectedAddress.tambon_nameTH,selectedAddress.amphure_nameTH,selectedAddress.province_nameTH,selectedAddress.zip_code);
+      console.log( address[0]?.phone_number, productCart, parseFloat(totalPrice), totalPriceProduct , deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, totalQuantity, deliveryRate.shipping_rate_id, selectedAddress.houseNo,selectedAddress.tambon_nameTH,selectedAddress.amphure_nameTH,selectedAddress.province_nameTH,selectedAddress.zip_code);
       const response = await createOrder(
+        address[0]?.phone_number,
         productCart,
         parseFloat(totalPrice) || 0,
         totalPriceProduct || 0,

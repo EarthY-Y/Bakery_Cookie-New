@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService } from '../../../API/guest/guestProductService';
 import LoadingPopup from '../../untils/popUp/loading';
-import AlertPopUp from '../../untils/popUp/alertPopUp';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -122,7 +122,7 @@ const detailPorductById = () => {
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       {error && (
-        <AlertPopUp message={error} title="ไม่พบบัญชีผู้ใช้" onClose={() => setError(null)} />
+        <ErrorPopup message={error} title="ไม่พบบัญชีผู้ใช้" onClose={() => setError(null)} />
       )}
     </div>
   );

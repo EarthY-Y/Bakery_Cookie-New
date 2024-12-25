@@ -2,6 +2,7 @@ import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import { passToken } from "../../middleware/passAuth.js";
 import {createCart} from "./product.js"
+import { generateOrderId } from "../function/genOrderId.js";
 
 export const validateCustomerAddress = async (req, res) => {
     try {
@@ -115,13 +116,13 @@ export const createOrders = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         console.log(req.body);
-        const orderId = uuidv4()
         let cartItem = req.body.productCart;
         console.log(cartItem);
         
-        const {totalPrice, totalPriceProduct, shippingRate, cost_package_per_quantity ,totalQuantity, shipping_rate_id, houseNo, tambon, amphure, province, zip_code} = req.body
+        const {phone_number ,totalPrice, totalPriceProduct, shippingRate, cost_package_per_quantity ,totalQuantity, shipping_rate_id, houseNo, tambon, amphure, province, zip_code} = req.body
         console.log(totalPrice, totalPriceProduct, shippingRate, cost_package_per_quantity,totalQuantity, shipping_rate_id, houseNo, tambon, amphure, province, zip_code);
         
+        const orderId = await generateOrderId(phone_number)
         if (typeof cartItem === 'string') {
             cartItem = JSON.parse(cartItem);
         }

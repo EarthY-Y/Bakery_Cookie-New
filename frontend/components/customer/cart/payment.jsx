@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { validateAddressCustomer, getAddressCustomer, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
-import ErrorPopup from '../../error/errorPopup';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 import orders from './orders';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 

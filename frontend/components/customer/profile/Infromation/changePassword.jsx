@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import liff from "@line/liff";
 import { changePasswordService } from "../../../../API/customer/customerService";
 import LoadingPopup from "../../../untils/popUp/loading";
-import ErrorPopup from "../../../error/errorPopup";
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 
 const changePassword = () => {
   const [newPassword, setNewPassword] = useState("");

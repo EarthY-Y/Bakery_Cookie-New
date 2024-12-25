@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginAdmin } from '../../../API/authService';
-import ErrorPopup from '../../error/errorPopup';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const Login = () => {
   const [userName, setuserName] = useState("");
