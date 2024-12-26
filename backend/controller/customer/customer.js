@@ -45,6 +45,17 @@ export const createCustomer = async (req, res) => {
     console.log(req.body);
     
     const {phone_number, username, password, confPassword, f_name, l_name} = req.body;
+
+    const resultsAdmin = await new Promise((resolve, reject) => {
+        db.query("SELECT admin_id, userName, passWord, is_active FROM admin WHERE userName = ?", username, (err, resultsAdmin) => {
+            if (err) return reject(err);
+            resolve(resultsAdmin);
+        });
+    });
+
+    if(resultsAdmin.length !== 0){
+        return res.status(404).json({ message: "มีชื่อผู้ใช้นี้เเล้ว" });
+    }
     
     if(password !== confPassword) return res.status(400).json({message: "Password not match"});
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2

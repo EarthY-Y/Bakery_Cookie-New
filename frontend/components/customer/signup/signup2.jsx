@@ -2,8 +2,11 @@ import React ,{useContext,useState, useEffect}from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormContext } from '../../../API/signUpService';
 import { createCustomer } from '../../../API/signUpService';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const Signup2 = () => {
+  const [error, setError] = useState(null);
+
   const { formData, setFormData } = useContext(FormContext);
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -22,8 +25,7 @@ const Signup2 = () => {
       }
     } catch (error) {
       console.log('Error submitting form:', error);
-      alert('Error submitting form');
-      navigate('/Login');
+      setError(error);
     }
   }
   return (
@@ -76,6 +78,9 @@ const Signup2 = () => {
           </div>
         </div>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เข้าสู่ระบบล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

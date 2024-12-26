@@ -33,12 +33,16 @@ const Login = () => {
     try {
       const res = await login(userName, passWord); 
       console.log(res.data);
-      localStorage.setItem('token', res.data.token);
+      res.data.token ? localStorage.setItem('token' , res.data.token) : localStorage.setItem('tokenAdmin' , res.data.tokenAdmin);
       const userRole = res.data.role;
       if (userRole === 'user') {
         setIsLoading(false)
         navigate("/home");
-      } else {
+      }
+      if(userRole === 'admin'){
+        setIsLoading(false)
+        navigate("/dashboard");
+      }else {
         setIsLoading(false)
         navigate("");
       }

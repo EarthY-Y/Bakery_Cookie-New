@@ -28,16 +28,6 @@ export const loginLINE = async (profile) => {
     throw error; // ส่ง error ออกไปให้ component จัดการ
   }
 };
-export const loginAdmin = async (userName, passWord) => {
-  try {
-    const res = await axios.post(API_URL+'/login/admin', { userName, passWord });
-    console.log(res);
-    return res;
-  } catch (error) {
-    console.error("Error during login:", error);
-    throw error; // ส่ง error ออกไปให้ component จัดการ
-  }
-};
 
 export const logout = async () => {
   try {
@@ -101,7 +91,7 @@ export const ProtectedRouteAdmin = () => {
   }
 
   if (!token || !isAdmin) {
-    return <Navigate to="/login/admin" />;
+    return <Navigate to="/" />;
   }
 
   return <Outlet />;//จะเเสดง Route ลูกที่ Function นี้ครอบไว้ใน App.jsx

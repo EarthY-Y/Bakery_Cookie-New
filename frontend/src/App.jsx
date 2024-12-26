@@ -4,7 +4,6 @@ import {ProtectedRouteAdmin ,ProtectedRouteCustomer, CheckRouteCustomer, CheckRo
 import Dashboard from '../page/admin-page/dashboard-page/dashboard-page'
 import Login from '../page/login-page/login-page'
 import LoginLine from '../page/login-page/loginLine-page';
-import LoginAdmin from '../page/login-page/loginAdmin-page';
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
 import EditPorductById from '../page/admin-page/product-page/EditProduct-page'
@@ -77,7 +76,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorFallback />,
     children: [
       {
-        element: <CheckRouteCustomer/>,
+        // element: <CheckRouteCustomer/>,
         children: [
           {
             path: "",
@@ -130,18 +129,8 @@ const router = createBrowserRouter([
             element: <GuestLineOA />,
           },
         ]
-      },  
-      {
-        element: <CheckRouteAdmin/>,
-        children: [
-          {
-            path: "/login/admin",
-            element: <LoginAdmin />,
-          }
-        ]
-      },
+      }, 
       
-    
       //route Admin
       {
         element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่

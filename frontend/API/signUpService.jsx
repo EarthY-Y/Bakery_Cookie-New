@@ -12,7 +12,7 @@ export const createCustomer = async(fromData) => {
 
   } catch (error) {
     console.log("Error signUp:", error);
-    return error
+    throw error;
   }
 }
 
