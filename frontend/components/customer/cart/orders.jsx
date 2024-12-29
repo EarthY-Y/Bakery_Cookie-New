@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { validateAddressCustomer, getOrderAddress, createOrder, shippingRate } from '../../../API/customer/paymentService';
+import { validateAddressCustomer, getOrderAddressCustomer, createOrder, shippingRate } from '../../../API/customer/paymentService';
 import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
@@ -34,7 +34,7 @@ const orders = () => {
           addressCustomer,
         ] = await Promise.all([
           getPorductCartService(),
-          getOrderAddress(),
+          getOrderAddressCustomer(),
 
         ]);
         if(addressCustomer.data.length !== 0 ){

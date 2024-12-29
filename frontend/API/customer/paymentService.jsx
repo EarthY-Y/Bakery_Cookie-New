@@ -20,6 +20,25 @@ export const validateAddressCustomer = async() => {
   }
 }
 
+export const getOrderAddressCustomer = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+  
+    const response = await axios.get(API_URL + "/get/customer/address", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+ 
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
 export const getOrderAddress = async(id) => {
   try {
     const authToken = localStorage.getItem('token')
