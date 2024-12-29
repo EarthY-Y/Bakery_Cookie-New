@@ -20,11 +20,11 @@ export const validateAddressCustomer = async() => {
   }
 }
 
-export const getAddressCustomer = async() => {
+export const getOrderAddress = async(id) => {
   try {
     const authToken = localStorage.getItem('token')
   
-    const response = await axios.get(API_URL + "/get/customer/address", 
+    const response = await axios.get(API_URL + "/get/order/address/"+id, 
       {
         headers: {
           'authorization': `Bearer ${authToken}`

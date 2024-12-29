@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SelectBox = ({ showModal, handleClose, data, handleSelect }) => {
+const SelectAddress = ({ showModal, handleClose, data, handleSelect }) => {
   const [selectedAddress, setSelectedAddress] = useState(null); 
 
   const handleSubmit = () => {
@@ -26,7 +26,7 @@ const SelectBox = ({ showModal, handleClose, data, handleSelect }) => {
                     <input className="form-check-input" type="radio" name="address" id={`address-${index}`} onChange={() => setSelectedAddress(item)}/>
                     <label className="form-check-label" htmlFor={`address-${index}`} >
                       <strong>
-                        {item.f_name} {item.l_name} | โทร: 0{item.phone_number}
+                        {item.f_name} {item.l_name} | โทร: {item.phone_number}
                       </strong>
                       <br />
                       {item.houseNo} ตำบล {item.tambon_nameTH} อำเภอ{" "}
@@ -48,4 +48,4 @@ const SelectBox = ({ showModal, handleClose, data, handleSelect }) => {
   );
 };
 
-export default SelectBox;
+export default SelectAddress;

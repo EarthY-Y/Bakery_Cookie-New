@@ -160,6 +160,7 @@ export const CheckRouteCustomer = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
+        location.reload();
         autoRemoveToken(token)
         return;
       }else {
@@ -209,6 +210,7 @@ export const CheckRouteAdmin = () => {
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
+        location.reload();
         autoRemoveTokenAdmin(token)
         return;
       }
@@ -243,7 +245,7 @@ export const CheckRouteAdmin = () => {
     return LoadingPopup(loading);
   }
 
-  return <Outlet />;
+  return <Outlet />; //ถ้าทุกอย่างถูกต้อง เเล้วจะเเสดง Route ลูกที่ Function นี้ครอบไว้ใน App.jsx
 };
 
 

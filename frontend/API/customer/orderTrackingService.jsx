@@ -127,6 +127,24 @@ export const orderProductById = async(id) => {
   }
 }
 
+export const orderTrackingAddressService = async(id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/order/address/tracking/by/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
 export const cancelOrder = async(id,reason) => {
   try {
     const authToken = localStorage.getItem('token')

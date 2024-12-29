@@ -89,7 +89,11 @@ const profile = () => {
     if (customerName !== detailCustomer.username) updatedData.username = customerName;
     if (customerFName !== detailCustomer.f_name) updatedData.f_name = customerFName;
     if (customerLName !== detailCustomer.l_name) updatedData.l_name = customerLName;
-    if (customerPhoneNumber !== detailCustomer.phone_number ) updatedData.phone_number = customerPhoneNumber;
+    if (customerPhoneNumber !== detailCustomer.phone_number ){ 
+      const phoneNumber = customerPhoneNumber.padStart(10, '0'); //เพิ่ม 0 ข้างหน้าเบอร์โทรศัพท์
+      updatedData.phone_number = phoneNumber;
+      
+    }
 
     if (Picture instanceof File) {
       updatedData.file = Picture;
@@ -151,7 +155,16 @@ const profile = () => {
       <Link type="botton" className="btn btn-danger col-12 col-sm-3 mb-2" to="changePassword">เปลี่ยนรหัสผ่าน</Link>
       <div className="mb-3">
         <label className="form-label">หมายเลขโทรศัพท์</label>
-        <input type="text" className="form-control" value={customerPhoneNumber} onChange={(e) => setCustomerPhoneNumber(e.target.value)} />
+        <input type="number" min={1} onInput={(e) => { // type number นั้นไม่ได้ถูกออกเเบบมาให้ใช้กับเลข 0 เลยไม่สามารถเช็คความยาวได้ถ้าใส่เลข 0 ลงใน input
+            if (e.target.value.length > 10) {
+              e.target.value = e.target.value.slice(0, 10);
+            }else if(e.target.value.length !== 10){
+              e.target.setCustomValidity('กรุณากรอกเฉพาะตัวเลข 10 หลัก');
+            }else{
+              e.target.setCustomValidity('');
+            }
+          }} 
+        className="form-control" value={customerPhoneNumber} onChange={(e) => setCustomerPhoneNumber(e.target.value)} />
       </div>
       {/* <div className="mb-3">
         <label className="form-label">เพศ</label>

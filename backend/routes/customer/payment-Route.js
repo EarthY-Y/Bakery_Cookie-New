@@ -1,7 +1,7 @@
 import express from "express";
 import {
     validateCustomerAddress,
-    getCustomerAddress,
+    getOrderAddress,
     getPorductCart,
     getShippingRate,
     createOrders,
@@ -15,7 +15,7 @@ const router = express()
 router.use(express.json());
 
 router.get('/customers/validate/customer/address',verifyCustomerMid, validateCustomerAddress);
-router.get('/customers/get/customer/address',verifyCustomerMid, getCustomerAddress);
+router.get('/customers/get/order/address/:id',verifyCustomerMid, getOrderAddress);
 router.post('/customers/get/payment/shipping/rate',verifyCustomerMid, getShippingRate);
 router.post('/customers/create/order',verifyCustomerMid, createOrders);
 router.get('/customers/get/orderscart/payment/:id',verifyCustomerMid, getPaymentOrders);

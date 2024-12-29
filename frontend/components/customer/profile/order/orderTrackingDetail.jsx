@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { orderDetailById, orderHistoryById, orderProductById, cancelOrder } from '../../../../API/customer/orderTrackingService';
+import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, orderTrackingAddressService } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { goBackOrHome } from '../../../untils/fucntion/backFuction';
@@ -14,7 +14,7 @@ const OrderTracking = () => {
   const [ordersDetail, setOrdersDetail] = useState([]);
   const [ordersHistory, setOrdersHistory] = useState([]);
   const [ordersProduct, setOrdersProduct] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0); 
+  const [address, setAddress] = useState([]) 
   const [showBtnPay, setShowBtnPay] = useState(false); 
   const [showCanCel, setShowCanCel] = useState(true); 
   const [showStep ,setShowStep] = useState(true); 
@@ -31,16 +31,18 @@ const OrderTracking = () => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
-        const [detailResponse, historyResponse, productResponse] = await Promise.all([
+        const [detailResponse, historyResponse, productResponse, orderAddress] = await Promise.all([
           orderDetailById(id),
           orderHistoryById(id),
           orderProductById(id),
+          orderTrackingAddressService(id),
         ]);
   
         // ตั้งค่าข้อมูลคำสั่งซื้อ
         console.log("Order Details:", detailResponse.data);
         console.log("Order History:", historyResponse.data);
         console.log("Order Products:", productResponse.data);
+        console.log("Order Address:", orderAddress.data);
   
         // จัดการข้อมูลที่ดึงมา
         const detailData = detailResponse.data[0];
@@ -58,6 +60,8 @@ const OrderTracking = () => {
   
         const productData = productResponse.data;
         setOrdersProduct(productData);
+
+        setAddress(orderAddress.data[0])
       } catch (err) {
         console.error("Error fetching orders data:", err);
       }finally{
@@ -94,7 +98,7 @@ const OrderTracking = () => {
   };
 
   return (
-    <div className="container mt-2 mb-5">
+    <div className="container mt-1  mb-5">
       <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
@@ -105,6 +109,9 @@ const OrderTracking = () => {
         <div className='col-12 col-sm-6 text-end'>
           <span >รหัสคำสั่งซื้อ: {ordersDetail.orders_id}</span>
         </div>
+      </div>
+      <div className='col-12 mb-2 text-start'>
+        <span >ปลายทาง: {address.house_no} ตำบล {address.tambon_name} อำเภอ {address.amphure_name} จังหวัด {address.province_name} {address.zip_code}</span>
       </div>
       <div className="card">
         <div className={`card-body ${showStep ? 'd-block' : 'd-none'}`}>

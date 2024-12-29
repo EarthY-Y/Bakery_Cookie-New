@@ -50,6 +50,27 @@ export const getCustomerAddress = async (req, res) => {
     }
 }
 
+export const getOrderAddress = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT oa.house_no, oa.zip_code, c.phone_number, c.f_name, c.l_name, oa.province_name, oa.amphure_name, oa.tambon_name FROM order_address oa
+                      LEFT JOIN orders o ON o.orders_id = oa.orders_id
+                      LEFT JOIN customer c ON c.customer_id = o.customer_id
+                      where o.cartId = ? `,[id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get order address:", error);
+        res.status(400).json({ message: "Error get order address", error });
+    }
+}
+
 export const getPorductCart = async (req, res) => {
     try {
         // console.log("im here getPricePorductCart");
