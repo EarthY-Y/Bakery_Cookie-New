@@ -163,12 +163,12 @@ export const getGrowthUpSales = async (req, res) => {
                     FROM orders o 
                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                     LEFT JOIN status_order so ON so.status_order_id = o.status
-                    WHERE MONTH(o.created_at) = MONTH(NOW()) AND so.status_name NOT LIKE "ยกเลิก%" AND so.status_name NOT LIKE "รอ%"
+                    WHERE so.status_name NOT LIKE "ยกเลิก%" AND so.status_name NOT LIKE "รอ%" AND o.created_at >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01')
                     GROUP BY DATE_FORMAT(o.created_at, '%m') #//! ข้อมูลที่ได้จะเรียงจาก น้อยไปมาก 
                 )
                 SELECT ms1.sale_month, ms1.total_sales,
                 ms2.total_sales AS previous_month_sales,
-                ROUND(((ms1.total_sales - COALESCE(ms2.total_sales, 0)) / COALESCE(ms2.total_sales, 1)) * 100, 2) AS growth_percentage #//!COALESCE เพื่อจัดการกับค่า Null ให้เอาอีกค่ามาเเทน เเละ ROUND คือการปัดเศษทศนิยม
+                ROUND((COALESCE(ms2.total_sales, 0) / COALESCE(ms1.total_sales, 1)) * 100, 2) AS growth_percentage #//!COALESCE เพื่อจัดการกับค่า Null ให้เอาอีกค่ามาเเทน เเละ ROUND คือการปัดเศษทศนิยม
                 FROM monthly_sales ms1 #//!CAST(... AS UNSIGNED) แปลง string เป็น ตัวเลข เอามาบวกกันเเพื่อไปเอาข้อมูลก่อนหน้าที่ได้จาก CTE เช่น ms1 = 10,11,12 เเต่ ms2 จะได้ 9,10,11 เพราะเป็นข้อมูลก่อนหน้าของ ms1 เเล้วเเปลงกลับมาเป็น CHAR 
                 LEFT JOIN monthly_sales ms2 ON ms1.sale_month = LPAD(CAST(CAST(ms2.sale_month AS UNSIGNED) + 1 AS CHAR), 2, '0') #//!LPAD จะเติสข้อมูลทางซ้ายสุดตามตำเเหน่งที่เรากำหนดในที่นี้คือ 2 โดยเอา 0 ไปเติม
                 ORDER BY ms1.sale_month DESC;`, 

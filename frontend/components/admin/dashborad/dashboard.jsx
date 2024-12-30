@@ -76,7 +76,7 @@ const Dashboard = () => {
           <StatCard name="ยอดขายรายเดือน" icon="bi bi-bag" value={salesPerMonth > 0 ? numberGrouping(salesPerMonth) + ` บาท`: 0} color="success" />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
-          <StatCard name="การเติบโตของยอดขาย" icon="bi bi-graph-up" value={growthUpPersent > 0 ? `${growthUpPersent} %`: 0} color="danger" />
+          <StatCard name="การเติบโตของยอดขาย" icon="bi bi-graph-up" value={growthUpPersent > 0 ? `${numberGrouping(growthUpPersent)} %`: 0} color="danger" />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
           <StatCard name="ผู้ใช้ใหม่" icon="bi bi-person-plus" value={newCustomer > 0 ? numberGrouping(newCustomer): 0}  color="warning" />
