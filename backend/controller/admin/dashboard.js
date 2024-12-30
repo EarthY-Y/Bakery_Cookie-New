@@ -5,12 +5,16 @@ import argon2 from "argon2";
 export const getAmountOrders = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
-            db.query(`SELECT  DATE_FORMAT(created_at, '%Y-%m') AS sale_month,
-                      COUNT(*) as countOrders FROM orders
-                      WHERE DATE_FORMAT(created_at, '%m') = MONTH(NOW());`, (err, result) => {
+            db.query(`SELECT  DATE_FORMAT(o.created_at, '%Y-%m') AS sale_month,
+                      COUNT(*) as countOrders FROM  orders o
+                      LEFT JOIN status_order so ON so.status_order_id = o.status
+                      WHERE DATE_FORMAT(o.created_at, '%m') = MONTH(NOW())
+                      AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?;`,['ยกเลิก%', 'รอ%'],
+                (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
-            }) 
+                }
+            ) 
         })
         // console.log(results)
         return res.status(200).json(results);
@@ -24,12 +28,14 @@ export const getSales = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => { //DATE_FORMAT(o.created_at, '%Y-%m') คำสั่ง Format วันเดือนปี
             db.query(`SELECT DATE_FORMAT(o.created_at, '%Y-%m') AS sale_month,
-                    SUM(o.total_price_product + ocd.cost_shipping + ocd.cost_package) AS total_sales,
-                    SUM(ocd.total_cost + ocd.cost_shipping + ocd.cost_package) as total_cost,
+                    SUM(op.selling_price) AS total_sales,
+                    SUM(op.selling_price - op.profit) as total_cost,
                     SUM(op.profit) as profit_month FROM orders o 
                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                     LEFT JOIN order_profit op ON op.orders_id = o.orders_id
-                    GROUP BY DATE_FORMAT(o.created_at, '%Y-%m') ORDER BY sale_month;`, 
+                    LEFT JOIN status_order so ON so.status_order_id = o.status
+                    WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?
+                    GROUP BY DATE_FORMAT(o.created_at, '%Y-%m') ORDER BY sale_month;`,['ยกเลิก%', 'รอ%'],
                 (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
@@ -54,7 +60,8 @@ export const getSalesRankPerMonth = async (req, res) => {
                         LEFT JOIN cart c ON c.cartId = o.cartId
                         LEFT JOIN cart_product cp ON cp.cartId = c.cartId
                         LEFT JOIN product p ON p.product_id = cp.product_id
-                        WHERE o.created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                        LEFT JOIN status_order so ON so.status_order_id = o.status
+                        WHERE o.created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND so.status_name NOT LIKE "ยกเลิก%" AND so.status_name NOT LIKE "รอ%"
                         GROUP BY p.product_name
                     ),
                     ranked_sales AS (
@@ -112,7 +119,8 @@ export const getSalesPerMonth = async (req, res) => {
                     SUM(op.profit) as profit_month FROM orders o 
                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                     LEFT JOIN order_profit op ON op.orders_id = o.orders_id
-                    WHERE MONTH(o.created_at) = MONTH(NOW());`, 
+                    LEFT JOIN status_order so ON so.status_order_id = o.status
+                    WHERE MONTH(o.created_at) = MONTH(NOW()) AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?;`,['ยกเลิก%', 'รอ%'], 
                 (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
@@ -154,6 +162,8 @@ export const getGrowthUpSales = async (req, res) => {
                     SUM(o.total_price_product + ocd.cost_shipping + ocd.cost_package) AS total_sales
                     FROM orders o 
                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                    LEFT JOIN status_order so ON so.status_order_id = o.status
+                    WHERE MONTH(o.created_at) = MONTH(NOW()) AND so.status_name NOT LIKE "ยกเลิก%" AND so.status_name NOT LIKE "รอ%"
                     GROUP BY DATE_FORMAT(o.created_at, '%m') #//! ข้อมูลที่ได้จะเรียงจาก น้อยไปมาก 
                 )
                 SELECT ms1.sale_month, ms1.total_sales,
