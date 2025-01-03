@@ -8,7 +8,7 @@ export const getAmountOrders = async (req, res) => {
             db.query(`SELECT  DATE_FORMAT(o.created_at, '%Y-%m') AS sale_month,
                       COUNT(*) as countOrders FROM  orders o
                       LEFT JOIN status_order so ON so.status_order_id = o.status
-                      WHERE DATE_FORMAT(o.created_at, '%m') = MONTH(NOW())
+                      WHERE MONTH(o.created_at) = MONTH(NOW()) AND YEAR(o.created_at) = YEAR(NOW())
                       AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?;`,['ยกเลิก%', 'รอ%'],
                 (err, result) => {
                 if (err) return reject(err)
@@ -120,7 +120,7 @@ export const getSalesPerMonth = async (req, res) => {
                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                     LEFT JOIN order_profit op ON op.orders_id = o.orders_id
                     LEFT JOIN status_order so ON so.status_order_id = o.status
-                    WHERE MONTH(o.created_at) = MONTH(NOW()) AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?;`,['ยกเลิก%', 'รอ%'], 
+                    WHERE MONTH(o.created_at) = MONTH(NOW()) AND YEAR(o.created_at) = YEAR(NOW()) AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?;`,['ยกเลิก%', 'รอ%'], 
                 (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
@@ -158,20 +158,32 @@ export const getGrowthUpSales = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject) => {
             db.query(`WITH monthly_sales AS (
-                    SELECT DATE_FORMAT(o.created_at, '%m') AS sale_month,
-                    SUM(o.total_price_product + ocd.cost_shipping + ocd.cost_package) AS total_sales
-                    FROM orders o 
-                    LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
-                    LEFT JOIN status_order so ON so.status_order_id = o.status
-                    WHERE so.status_name NOT LIKE "ยกเลิก%" AND so.status_name NOT LIKE "รอ%" AND o.created_at >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01')
-                    GROUP BY DATE_FORMAT(o.created_at, '%m') #//! ข้อมูลที่ได้จะเรียงจาก น้อยไปมาก 
-                )
-                SELECT ms1.sale_month, ms1.total_sales,
-                ms2.total_sales AS previous_month_sales,
-                ROUND((COALESCE(ms2.total_sales, 0) / COALESCE(ms1.total_sales, 1)) * 100, 2) AS growth_percentage #//!COALESCE เพื่อจัดการกับค่า Null ให้เอาอีกค่ามาเเทน เเละ ROUND คือการปัดเศษทศนิยม
-                FROM monthly_sales ms1 #//!CAST(... AS UNSIGNED) แปลง string เป็น ตัวเลข เอามาบวกกันเเพื่อไปเอาข้อมูลก่อนหน้าที่ได้จาก CTE เช่น ms1 = 10,11,12 เเต่ ms2 จะได้ 9,10,11 เพราะเป็นข้อมูลก่อนหน้าของ ms1 เเล้วเเปลงกลับมาเป็น CHAR 
-                LEFT JOIN monthly_sales ms2 ON ms1.sale_month = LPAD(CAST(CAST(ms2.sale_month AS UNSIGNED) + 1 AS CHAR), 2, '0') #//!LPAD จะเติสข้อมูลทางซ้ายสุดตามตำเเหน่งที่เรากำหนดในที่นี้คือ 2 โดยเอา 0 ไปเติม
-                ORDER BY ms1.sale_month DESC;`, 
+                        SELECT 
+                            DATE_FORMAT(o.created_at, '%Y-%m') AS sale_month,
+                            SUM(o.total_price_product + ocd.cost_shipping + ocd.cost_package) AS total_sales
+                        FROM orders o 
+                        LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                        LEFT JOIN status_order so ON so.status_order_id = o.status
+                        WHERE so.status_name NOT LIKE "ยกเลิก%" 
+                        AND so.status_name NOT LIKE "รอ%" 
+                        AND o.created_at >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR), '%Y-01-01')
+                        GROUP BY DATE_FORMAT(o.created_at, '%Y-%m')
+                    ),
+                    comparison_data AS (
+                        SELECT 
+                            ms1.sale_month, 
+                            ms1.total_sales,
+                            ms2.total_sales AS previous_month_sales,
+                            ROUND(((COALESCE(ms1.total_sales, 0) - COALESCE(ms2.total_sales, 0)) / COALESCE(ms2.total_sales, 1)) * 100, 2) AS growth_percentage #//!จะได้รู้ยอดของเดือนนี้ว่าโตจากเดือนที่เเล้วเท่าไหร่เลยต้องหาความเเตกต่างเเลยเอาไปหารของเดือนนี้
+                        FROM monthly_sales ms1
+                        LEFT JOIN monthly_sales ms2 ON (
+                            (ms1.sale_month = CONCAT(YEAR(NOW()), '-01') AND ms2.sale_month = CONCAT(YEAR(NOW()) -1, '-12')) 
+                            OR 
+                            ms1.sale_month = DATE_FORMAT(DATE_SUB(STR_TO_DATE(ms2.sale_month, '%Y-%m'), INTERVAL -1 MONTH), '%Y-%m')
+                            )
+                    )
+                SELECT * FROM comparison_data
+                ORDER BY sale_month DESC;`, 
                 (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
