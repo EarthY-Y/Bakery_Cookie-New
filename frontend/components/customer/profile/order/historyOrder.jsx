@@ -4,7 +4,6 @@ import { getlistOrdersCancel, getlistOrdersFinish, cancelOrder } from '../../../
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';
-import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
 import {AlertWithProgressBar} from '../../../untils/fucntion/alert';
 
@@ -14,8 +13,6 @@ const OrderTracking = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCheckOut, setCurrentPageCheckOut] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [orderId, setOrderId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(null);
 
@@ -63,14 +60,6 @@ const OrderTracking = () => {
 
   const handlePageChangeCheckOut = (pageNumber) => {
     setCurrentPageCheckOut(pageNumber);
-  };
-
-  const handleCancelOrder = async(reason) => {
-    console.log("เหตุผลในการยกเลิก:", reason, orderId);
-    const response = await cancelOrder(orderId, reason)
-    if(response){
-      setShowCancelModal(false)
-    }
   };
 
   const handleCopy = async (orders_id) => {
@@ -167,12 +156,6 @@ const OrderTracking = () => {
           </li>
         </ul>
       </nav>
-      <CancelOrderModal
-        showModal={showCancelModal}
-        handleClose={() => setShowCancelModal(false)}
-        handleCancelOrder={handleCancelOrder} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
-      />
-      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       <LoadingPopup
         isLoading = {isLoading}
       />

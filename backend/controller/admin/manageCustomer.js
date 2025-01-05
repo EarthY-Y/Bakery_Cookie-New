@@ -6,7 +6,7 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getListCustomer = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT customer_id, phone_number, f_name, l_name, username, is_active, created_at FROM customer`,
+            db.query(`SELECT customer_id, phone_number, f_name, l_name, CONCAT(f_name, ' ' ,l_name) as full_name, username, is_active, created_at FROM customer`,
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

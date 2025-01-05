@@ -3,9 +3,12 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, orderTrackingAddressService } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
+import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';
 import { goBackOrHome } from '../../../untils/fucntion/backFuction';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
+import {AlertWithProgressBar} from '../../../untils/fucntion/alert';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const OrderTracking = () => {
@@ -20,6 +23,8 @@ const OrderTracking = () => {
   const [showStep ,setShowStep] = useState(true); 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(null);
+
   // สถานะที่ต้องการแสดงบน Progress Bar
   const statusSteps = [
     { name: "ชำระเงินเรียบร้อย", icon: "bi bi-cash" },
@@ -97,6 +102,11 @@ const OrderTracking = () => {
     }
   };
 
+  const handleCopy = async (orders_id) => {
+    const result = await copyToClipboard(orders_id);
+    setShowAlert(result); // จะแสดงข้อความที่ได้จาก copyToClipboard
+  };
+
   return (
     <div className="container mt-1  mb-5">
       <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
@@ -107,7 +117,7 @@ const OrderTracking = () => {
           <h3>สถานะคำสั่งซื้อ</h3>
         </div>
         <div className='col-12 col-sm-6 text-end'>
-          <span >รหัสคำสั่งซื้อ: {ordersDetail.orders_id}</span>
+          <span >รหัสคำสั่งซื้อ: {ordersDetail.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(ordersDetail.orders_id)}></button></span>
         </div>
       </div>
       <div className='col-12 mb-2 text-start'>
@@ -199,13 +209,13 @@ const OrderTracking = () => {
                 <div className="col-md-2">
                   <img src={`${API_URL_PICTURE}/${order.productpic_name}`} alt="Product" className="img-fluid" />
                 </div>
-                <div className="col-md-3 mt-3">
+                <div className="col-md-3 col-6">
                   <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 col-6 text-end">
                   <p className="mb-0"><strong>ชิ้นละ:</strong> {order.productCartPrice} บาท</p>
                 </div>
-                <div className="col-md-4 text-end">
+                <div className="col-md-4 col-12 text-end">
                   <p className="mb-0"><strong>รวมเป็น:</strong> {numberGrouping(order.productCartPrice * order.productCartQuantity)} บาท</p>
                 </div>
               </div>
@@ -241,6 +251,15 @@ const OrderTracking = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+
+      {showAlert !== null && (
+        <AlertWithProgressBar
+          message={showAlert ? "คัดลอกสำเร็จ" : "คัดลอกไม่สำเร็จ"}
+          duration={3000}
+          onClose={() => setShowAlert(null)} // ปิด alert เมื่อปิด
+          status={showAlert ? 'bg-success' : 'bg-danger'} // ใช้ bg-success หรือ bg-danger ตาม showAlert
+        />
+      )}
     </div>
   );
 };
