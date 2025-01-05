@@ -6,6 +6,7 @@ import { formatDate } from '../../untils/frommatters/datetime';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -19,7 +20,7 @@ const orderById = () => {
   const [status, setStatus] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [totalCost, setTotalCost] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const orderById = () => {
         setStatusOrder(getStatusOrder.data)
         setOrderAddress(getOrderAddress.data[0])
       } catch (error) {
-        
+        setError(error)
       }finally{
         setIsLoading(false);
       }
@@ -309,6 +310,10 @@ const orderById = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
 
   );

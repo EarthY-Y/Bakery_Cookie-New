@@ -22,8 +22,8 @@ export const getOrderslistWaitStatement = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -48,8 +48,8 @@ export const getOrderslistCheckOut = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 export const getOrderslistCancel = async (req, res) => {
@@ -73,8 +73,8 @@ export const getOrderslistCancel = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 export const getOrderslistFinish = async (req, res) => {
@@ -98,8 +98,8 @@ export const getOrderslistFinish = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -127,8 +127,8 @@ export const getOrdersTrackingById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -147,8 +147,8 @@ export const getOrdersTrackingHistoryById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -169,8 +169,8 @@ export const getStatusOrdersTrackingById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -192,8 +192,8 @@ export const getOrdersProductTrackingById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -250,7 +250,7 @@ export const cancleOrder = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }

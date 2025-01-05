@@ -166,8 +166,8 @@ export const createAddress = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -228,8 +228,8 @@ export const checkConnectLineID = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -257,8 +257,8 @@ export const changePassword = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -282,7 +282,7 @@ export const getProfileCustomer = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }

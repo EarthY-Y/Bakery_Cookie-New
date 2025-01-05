@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listOrderWaitStatementService, listOrderCheckOutService } from '../../../API/admin/ordersService';
+import LoadingPopup from '../../untils/popUp/loading';
 import { formatDate } from '../../untils/frommatters/datetime';
 import Search from '../../untils/fucntion/search';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const ListOrders = () => {
   const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
@@ -12,31 +14,31 @@ const ListOrders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCheckOut, setCurrentPageCheckOut] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getOrders = async () => {
+    setIsLoading(true);
+    const fetchData = async () => {
       try {
-        const res = await listOrderWaitStatementService();
-        console.log(res.data);
-        setOrdersWaitStatement(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
+        const [
+          getlistOrderWaitStatement,
+          getlistOrderCheckOut,
+        ] = await Promise.all([
+          listOrderWaitStatementService(),
+          listOrderCheckOutService(),
+        ])
+  
+        setOrdersCheckOut(getlistOrderCheckOut.data);
+        setOrdersWaitStatement(getlistOrderWaitStatement.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(error);
+      }finally{
+        setIsLoading(false);
       }
-    };
-    getOrders();
-  }, []);
-
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const res = await listOrderCheckOutService();
-        console.log(res.data);
-        setOrdersCheckOut(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-    getOrders();
+    }
+    fetchData();
   }, []);
 
 
@@ -77,15 +79,23 @@ const ListOrders = () => {
       </div>
       <h4>พร้อมดำเนินการ</h4>
       <div className='row'>
-        <div className="col-md-6 col-12">
+        <div className="col-md-4 col-12">
+          <Search 
+            data={orderCheckOut}
+            handleSearch={handleSearchCheckOut}
+            name="รหัสคำสั่งซื้อ"
+            itemKeys={["orders_id"]}
+          />
+        </div>
+        <div className="col-md-4 col-12">
           <Search 
             data={orderCheckOut}
             handleSearch={handleSearchCheckOut}
             name="ชื่อลูกค้า"
-            itemKeys={["username"]}
+            itemKeys={["fullname"]}
           />
         </div>
-        <div className="col-md-6 col-12">
+        <div className="col-md-4 col-12">
           <Search 
             data={orderCheckOut}
             handleSearch={handleSearchCheckOut}
@@ -93,13 +103,13 @@ const ListOrders = () => {
             itemKeys={["status_name"]}
           />
         </div>
-
       </div>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '15%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '25%' }}>ชื่อผู้สั่ง</th>
               <th style={{ width: '10%' }}>ปริมาณ</th>
               <th style={{ width: '10%' }}>ราคารวม</th>
               <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
@@ -112,6 +122,7 @@ const ListOrders = () => {
             {currentOrdersCheckOut.map((order) => (
               <tr key={order.orders_id}>
                 <td>{order.orders_id}</td>
+                <td>{order.fullname}</td>
                 <td>{order.quantity} ชิ้น</td>
                 <td>{order.price} บาท</td>
                 <td>{formatDate(order.created_at)}</td>
@@ -129,9 +140,10 @@ const ListOrders = () => {
         <div className="row gy-4">
           <div className="px-3 card-body">
             {currentOrdersCheckOut.map((order) => (
-              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
-                <div className="small text-secondary">
+              <div className="col-12 border rounded p-3 shadow-sm bg-light mb-2" key={order.orders_id}>
+                <div className="small ">
                   <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
+                  <p className="mb-1">ชื่อผู้สั่ง: {order.fullname}</p>
                   <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
                   <p className="mb-1">ราคารวม: {order.price} บาท</p>
                   <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
@@ -170,17 +182,30 @@ const ListOrders = () => {
       </nav>
 
       <h4>รอการชำระเงิน</h4>
-      <Search 
-        data={orderWaitStatement}
-        handleSearch={handleSearchWaitStatement}
-        name="ชื่อลูกค้า"
-        itemKeys={["username"]}
-      />
+      <div className='row'>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderWaitStatement}
+            handleSearch={handleSearchWaitStatement}
+            name="รหัสคำสั่งซื้อ"
+            itemKeys={["orders_id"]}
+          />
+        </div>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderWaitStatement}
+            handleSearch={handleSearchWaitStatement}
+            name="ชื่อลูกค้า"
+            itemKeys={["fullname"]}
+          />
+        </div>
+      </div>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '15%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '25%' }}>ชื่อผู้สั่ง</th>
               <th style={{ width: '10%' }}>ปริมาณ</th>
               <th style={{ width: '10%' }}>ราคารวม</th>
               <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
@@ -193,6 +218,7 @@ const ListOrders = () => {
             {currentOrders.map((order) => (
               <tr key={order.orders_id}>
                 <td>{order.orders_id}</td>
+                <td>{order.fullname}</td>
                 <td>{order.quantity} ชิ้น</td>
                 <td>{order.price} บาท</td>
                 <td>{formatDate(order.created_at)}</td>
@@ -210,9 +236,10 @@ const ListOrders = () => {
         <div className="row gy-4">
           <div className="px-3 card-body">
             {currentOrders.map((order) => (
-              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
-                <div className="small text-secondary">
+              <div className="col-12 border rounded p-3 shadow-sm bg-light mb-2" key={order.orders_id}>
+                <div className="small ">
                   <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
+                  <p className="mb-1">ชื่อผู้สั่ง: {order.fullname}</p>
                   <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
                   <p className="mb-1">ราคารวม: {order.price} บาท</p>
                   <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
@@ -249,6 +276,14 @@ const ListOrders = () => {
           </li>
         </ul>
       </nav>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

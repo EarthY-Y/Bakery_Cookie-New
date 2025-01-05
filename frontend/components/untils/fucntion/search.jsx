@@ -3,7 +3,6 @@ import Fuse from 'fuse.js';
 
 const Search = ({ data, handleSearch, name, itemKeys }) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState(data);
     //useMemo เพื่อเก็บ instance ของ Fuse ช่วยลดการสร้างตัวแปรใหม่ทุกครั้งที่ component render หรือ data เปลี่ยนแปลง
     const fuse = useMemo(() => new Fuse(data, {
         keys: [itemKeys], //ได้เเค่ Array
@@ -14,9 +13,7 @@ const Search = ({ data, handleSearch, name, itemKeys }) => {
         if (searchTerm) {
           const results = fuse.search(searchTerm).map((result) => result.item);
           handleSearch(results)
-          setFilteredProducts(results);
         } else {
-          setFilteredProducts(data);
           handleSearch(data)
         }
       }, [searchTerm, data]);

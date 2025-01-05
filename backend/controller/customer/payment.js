@@ -21,8 +21,8 @@ export const validateCustomerAddress = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -45,8 +45,8 @@ export const getCustomerAddress = async (req, res) => {
         console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -101,8 +101,8 @@ export const getPorductCart = async (req, res) => {
         
         res.status(200).json(resultsFindProductCart)
     }catch(error){
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -123,8 +123,8 @@ export const getShippingRate = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -192,7 +192,7 @@ export const createOrders = async (req, res) => {
             return res.status(400).json({ message: "Error create order" });
         }
     } catch (error) {
-        console.error("Error get product:", error);
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
         res.status(400).json({ message: "Error createOrders", error });
     }
 }
@@ -332,8 +332,8 @@ export const getPaymentOrders = async (req, res) => {
         
         res.status(200).json(resultsFindOrders)
     }catch(error){
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -384,8 +384,8 @@ export const updatePaymentOrder = async (req, res) => {
         })
         res.status(200).json(resultsInsertHistory)
     }catch(error){
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 

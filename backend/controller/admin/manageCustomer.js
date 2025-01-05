@@ -14,8 +14,8 @@ export const getListCustomer = async (req, res) => {
         })
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -36,8 +36,8 @@ export const getListCustomerById = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -61,8 +61,8 @@ export const getListCustomerAddressById = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -87,8 +87,8 @@ export const updateCustomerActiveById = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
