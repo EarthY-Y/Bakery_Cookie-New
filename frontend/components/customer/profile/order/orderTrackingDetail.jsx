@@ -24,6 +24,8 @@ const OrderTracking = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(null);
+  const [showInputPostCode, setShowInputPostCode] = useState(false);
+  const [postCode, setPostCode] = useState("");
 
   // สถานะที่ต้องการแสดงบน Progress Bar
   const statusSteps = [
@@ -58,7 +60,8 @@ const OrderTracking = () => {
           setShowCanCel(false);
           setShowStep(false);
         }
-  
+        setPostCode(detailResponse.data[0]?.post_code || "")
+
         const historyData = historyResponse.data;
         setOrdersHistory(historyData);
         if (historyData.length === 0) setShowBtnPay(true);
@@ -102,9 +105,9 @@ const OrderTracking = () => {
     }
   };
 
-  const handleCopy = async (orders_id) => {
-    const result = await copyToClipboard(orders_id);
-    setShowAlert(result); // จะแสดงข้อความที่ได้จาก copyToClipboard
+  const handleCopy = async (copyText) => {
+    const result = await copyToClipboard(copyText);
+    setShowAlert(result); // แสดง Alert หากคัดลอกสำเร็จ result ที่ส่งมาจาก copyToClipboard จะเป็น true กับ false
   };
 
   return (
@@ -113,16 +116,22 @@ const OrderTracking = () => {
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </button>
       <div className='align-items-center row mb-4'>
-        <div className='col-12 col-sm-6'>
+        <div className='col-12 col-lg-6'>
           <h3>สถานะคำสั่งซื้อ</h3>
         </div>
-        <div className='col-12 col-sm-6 text-end'>
-          <span >รหัสคำสั่งซื้อ: {ordersDetail.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(ordersDetail.orders_id)}></button></span>
+        <div className='col-12 col-lg-6 text-lg-end'>
+          <span ><b>รหัสคำสั่งซื้อ:</b> {ordersDetail.orders_id}<button className="btn bi bi-copy" onClick={() => handleCopy(ordersDetail.orders_id)}></button></span>
         </div>
+        <div className='col-12 col-lg-8 mb-2 text-start'>
+          <span ><b>ปลายทาง:</b> {address.house_no} ตำบล {address.tambon_name} อำเภอ {address.amphure_name} จังหวัด {address.province_name} {address.zip_code}</span>
+        </div>
+        {postCode && (
+          <div className='col-12 col-lg-4 mb-2 text-lg-end'>
+            <span ><b>รหัสไปรษณีย์:</b> {postCode}<button className="btn bi bi-copy" onClick={() => handleCopy(postCode)}></button></span>
+          </div>
+        )}
       </div>
-      <div className='col-12 mb-2 text-start'>
-        <span >ปลายทาง: {address.house_no} ตำบล {address.tambon_name} อำเภอ {address.amphure_name} จังหวัด {address.province_name} {address.zip_code}</span>
-      </div>
+
       <div className="card">
         <div className={`card-body ${showStep ? 'd-block' : 'd-none'}`}>
           <div className={`progress-container d-flex justify-content-between align-items-center `} >

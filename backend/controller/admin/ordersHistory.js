@@ -13,7 +13,8 @@ export const getOrderslistSuccessStatement = async (req, res) => {
                 INNER JOIN status_order so ON so.status_order_id = o.status
                 LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
                 WHERE so.status_name LIKE ?
-                GROUP BY o.orders_id;`, ["%สำเร็จ%"],
+                GROUP BY o.orders_id
+                ORDER BY o.created_at DESC;`, ["%สำเร็จ%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -37,7 +38,8 @@ export const getOrderslistHistoryCancel = async (req, res) => {
                 INNER JOIN status_order so ON so.status_order_id = o.status
                 LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
                 WHERE so.status_name LIKE ?
-                GROUP BY o.orders_id;`, ["ยกเลิก%"],
+                GROUP BY o.orders_id
+                ORDER BY o.created_at DESC;`, ["ยกเลิก%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -56,7 +58,7 @@ export const getOrdersById = async (req, res) => {
         const id = req.params.id
         const results = await new Promise((resolve, reject)=> {
             db.query("SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, o.updated_by,"+
-                    " o.updated_at, o.status, o.statement_picture, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name, "+
+                    " o.updated_at, o.status, o.statement_picture, o.post_code, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name, "+
                     " cpd.cost_product, ocd.total_cost, op.profit, p.selling_price_per_quantity FROM orders o"+
                     " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
                     " LEFT JOIN order_profit op ON op.orders_id = o.orders_id"+

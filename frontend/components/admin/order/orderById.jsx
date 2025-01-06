@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
-import { getOrderByIdService, getStatusOrderListService, updateStatusOrderService, getOrderHistoryByIdService, getOrderAddressService } from '../../../API/admin/ordersService';
+import { getOrderByIdService, getStatusOrderListService, updateStatusOrderService, getOrderHistoryByIdService, getOrderAddressService, updatePostCodeOrderService } from '../../../API/admin/ordersService';
 import { formatDate } from '../../untils/frommatters/datetime';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
@@ -21,6 +21,8 @@ const orderById = () => {
   const [errorMsg, setErrorMsg] = useState("")
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [error, setError] = useState(null);
+  const [showInputPostCode, setShowInputPostCode] = useState(false);
+  const [postCode, setPostCode] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +43,7 @@ const orderById = () => {
         console.log(getOrderById,getOrderHistoryById,getStatusOrder,getOrderAddress);
         
         setOrderById(getOrderById.data)
+        setPostCode(getOrderById.data[0]?.post_code || "")
         setStatus(getOrderById.data[0]?.status)
         setStatusOrderHistoryById(getOrderHistoryById.data)
         setStatusOrder(getStatusOrder.data)
@@ -90,18 +93,45 @@ const orderById = () => {
     }
   };
 
+  useEffect(()=> {
+    console.log(status);
+    const statusName = statusOrders.find((statusOrder) => statusOrder.status_order_id === status)?.status_name
+    if(statusName === "อยู่ระหว่างการจัดส่ง"){
+      setShowInputPostCode(true)
+    }
+  },[status])
+
+  const handlePostCode = async () => {
+    setIsLoading(true);
+    try {
+      if (postCode.trim() === "") {
+        throw new Error("กรุณากรอกรหัสไปรษณีย์");
+      }if (postCode.length !== 13) {
+        throw new Error("กรุณากรอกรหัสไปรษณีย์ให้ครบ 13 หลัก");
+      }else{
+        const response = await updatePostCodeOrderService(id, postCode)
+        console.log(response);
+      }
+    } catch (error) {
+      setError(error.message); // เก็บข้อความผิดพลาดเเบบนี้จะช่วยให้ใช้ component ของ ErrorPopup ได้
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+
   return (
     <div className="container mt-5 p-3">
       <Link to="/orderslist" className="btn btn-outline-secondary mb-4">
         <i className="bi bi-arrow-left"></i> ย้อนกลับ
       </Link>
-      <div className="mb-4 card col-md-12 px-40 rounded shadow border bg-light card-body">
-        <div className='row'>
-          <div className="mb-3 col-md-8 col-12">
+      <div className="card col-md-12 px-40 rounded shadow border bg-light card-body">
+        <div className='row mb-3'>
+          <div className="col-md-8 col-12">
               <label className="form-label fw-bold">รหัสคำสั่งซื้อ</label>
               <p className="border p-2 rounded bg-white">{orderById[0]?.orders_id}</p>
           </div>
-          <div className="mb-3 col-md-4 col-12">
+          <div className="col-md-4 col-12 mb-3">
             <label className="form-label fw-bold">สถานะ</label>
             {/* {orderById[0]?.status === "รอการชำระเงิน" ? (
               // แสดงข้อความธรรมดา
@@ -126,6 +156,21 @@ const orderById = () => {
               // placeholder="เลือกบรรจุภัณฑ์"
             />
           </div>
+          {/* ที่ใส่ postCode มาด้วยเพราะถ้าเปลี่ยนสถานะไป step ต่อไปที่ไม่ใช้อยู่ระหว่างการจัดส่งจะได้เห็น input นี้ เเต่ต้องกรอกรหัสพัสดุตั้งเเต่ step อยู่ระหว่างการจัดส่ง เป็นการเเก้ปัญหาจะได้ไม่ต้องเช็คหลายสถานะ */}
+          {showInputPostCode || postCode ? (  
+              <div className="row">
+                <label className="form-label fw-bold">รหัสไปรษณีย์</label>
+                <div className='col-md-4 col-8'>
+                  <input type="text" className="form-control" placeholder="รหัสไปรษณีย์"
+                    value={postCode}
+                    onChange={(e) => setPostCode(e.target.value)} />
+                </div>
+                <div className='col-4'>
+                  <button className="btn btn-success" type="button" onClick={handlePostCode}>บันทึก</button>
+                </div>
+              </div>
+              
+          ): null}
         </div>
         <div className="d-none d-md-block">
         <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>

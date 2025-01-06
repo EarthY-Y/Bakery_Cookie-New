@@ -226,9 +226,24 @@ export const updateStatusOrderServiceById = async (id, statusName, active) => {
 
 export const updateStatusOrderService = async (value, id, skip) => {
   try {
-
     const authToken = localStorage.getItem('tokenAdmin')
     const response = await axios.patch(API_URL + "/update/status/" + id, { status: value, skip: skip },
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );
+    return response
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updatePostCodeOrderService = async (id, postCode) => {
+  try {
+    const authToken = localStorage.getItem('tokenAdmin')
+    const response = await axios.patch(API_URL + "/update/postCode/order/" + id, { postCode: postCode },
       {
         headers: {
           'authorization': `Bearer ${authToken}`

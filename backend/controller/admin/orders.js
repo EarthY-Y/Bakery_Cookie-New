@@ -13,7 +13,8 @@ export const getOrderslistWaitStatement = async (req, res) => {
                      LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
                      LEFT JOIN customer c ON c.customer_id = o.customer_id
                      WHERE so.status_name LIKE ?
-                     GROUP BY o.orders_id;`, ["รอ%"],
+                     GROUP BY o.orders_id
+                     ORDER BY o.created_at DESC;`, ["รอ%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -38,7 +39,8 @@ export const getOrderslistCheckOut = async (req, res) => {
                      LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
                      LEFT JOIN customer c ON c.customer_id = o.customer_id
                      WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ?
-                     GROUP BY o.orders_id;`, ["รอ%", "ยกเลิก%", "%สำเร็จ"],
+                     GROUP BY o.orders_id
+                     ORDER BY o.created_at DESC;`, ["รอ%", "ยกเลิก%", "%สำเร็จ"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -74,8 +76,9 @@ export const getOrdersById = async (req, res) => {
         const id = req.params.id
         const results = await new Promise((resolve, reject)=> {
             db.query(`SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, o.updated_by,
-                     o.updated_at, o.status, o.statement_picture, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name, 
-                     cpd.cost_product, ocd.total_cost, op.profit, p.selling_price_per_quantity FROM orders o
+                     o.updated_at, o.status, o.statement_picture, o.post_code, so.status_name, cp.quantity as productCartQuantity, 
+                     p.product_name, pp.productpic_name, cpd.cost_product, ocd.total_cost, op.profit, p.selling_price_per_quantity FROM orders o
+                     LEFT JOIN status_order so ON so.status_order_id = o.status
                      LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                      LEFT JOIN order_profit op ON op.orders_id = o.orders_id
                      LEFT JOIN cost_product_detaails cpd ON cpd.order_cost_details_id = ocd.order_cost_details_id
@@ -130,6 +133,25 @@ export const getOrdersAddressById = async (req, res) => {
                      LEFT JOIN orders o ON o.orders_id = ra.orders_id
                      LEFT JOIN customer c ON c.customer_id = o.customer_id 
                      WHERE ra.orders_id = ?`, [id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
+    }
+}
+
+export const updatePostCodeOrder = async (req, res) => {
+    try {
+        const id = req.params.id
+        const postCode = req.body.postCode
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`UPDATE orders SET post_code = ? WHERE orders_id = ?`, [postCode, id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
