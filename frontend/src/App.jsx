@@ -50,6 +50,10 @@ import ListCategoryPackage from '../page/admin-page/category/categoryPackge/list
 import CreateCategoryPackage from '../page/admin-page/category/categoryPackge/createCategoryPackage-page'
 import EditCategoryPackage from '../page/admin-page/category/categoryPackge/editCategoryPackage-page';
 import CategoryByIdPackage from '../page/admin-page/category/categoryPackge/categoryPackgeById-page'
+import ListCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/listCategoryStatusOrder-page';
+import CreateCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/createCategoryStatusOrder-page'
+import EditCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/editCategoryStatusOrder-page';
+import CategoryByIdStatusOrder from '../page/admin-page/category/categoryStatusOrder/categoryStatusOrderById-page'
 import Profile from '../page/customer-page/profile-page/profile-page';
 import ChangePassword from '../page/customer-page/profile-page/changePassword-page';
 import ListAddress from '../page/customer-page/profile-page/listAddress-page'
@@ -224,6 +228,28 @@ const router = createBrowserRouter([
                   {
                     path: "edit/:id",
                     element: <EditCategoryPackage />,
+                  },
+                ],
+              },
+
+              {
+                path: "statusOrder",
+                children: [
+                  {
+                    path: "",
+                    element: <ListCategoryStatusOrder />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <CategoryByIdStatusOrder />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateCategoryStatusOrder />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditCategoryStatusOrder />,
                   },
                 ],
               },

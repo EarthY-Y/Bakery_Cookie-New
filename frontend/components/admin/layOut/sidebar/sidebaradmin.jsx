@@ -30,6 +30,7 @@ function Sidebaradmin() {
                 <div className="accordion-body">
                   <Link className="nav-link text-dark" to="/category/prduct">ประเภทสินค้า</Link>
                   <Link className="nav-link text-dark" to="/category/package">ประเภทบรรจุภัณฑ์</Link>
+                  <Link className="nav-link text-dark" to="/category/statusOrder">ประเภทสถานะคำสั่งซื้อ</Link>
                 </div>
               </div>
             </div>
@@ -99,6 +100,7 @@ function Sidebaradmin() {
                 <div className="accordion-body">
                   <Link className="nav-link text-dark" to="/category/prduct">ประเภทสินค้า</Link>
                   <Link className="nav-link text-dark" to="/category/package">ประเภทบรรจุภัณฑ์</Link>
+                  <Link className="nav-link text-dark" to="/category/statusOrder">ประเภทสถานะคำสั่งซื้อ</Link>
                 </div>
               </div>
             </div>
