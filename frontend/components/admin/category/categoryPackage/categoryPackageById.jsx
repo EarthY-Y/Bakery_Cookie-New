@@ -19,8 +19,6 @@ const CategoryPackageById = () => {
         console.log(response.data);
         setListCategoryPackage(response.data)
         setCategoryName(response.data[0]?.package_category_name || '')
-        const initialSelected = response.data.map((item) => item.package_id); //map เอาเเค่ package_id
-        setSelectedPackages(initialSelected);
       } catch (error) {
         
       }

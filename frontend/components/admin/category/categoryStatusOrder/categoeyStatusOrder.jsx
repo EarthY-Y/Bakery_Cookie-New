@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getListCategoryService, deleteCategoryPackageService } from '../../../../API/admin/categoryPackageService';
+import { getListCategoryOrderStatusService } from '../../../../API/admin/categoryOrderStatusService';
 import { formatDate } from '../../../untils/frommatters/datetime';
-import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
+import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 
 const CategoeyStatusOrder = () => {
-  const [listCategory, setListCategory] = useState([]);
+  const [listCategoryOrderStatus, setListCategoryOrderStatus] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [idCategoryPackage, setIdCategoryPackage] = useState("")
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getCategoryList = async () => {
       try {
-        const res = await getListCategoryService();
+        const res = await getListCategoryOrderStatusService();
         console.log(res.data);
-        setListCategory(res.data);
+        setListCategoryOrderStatus(res.data);
       } catch (err) {
         console.error("Error fetching data:", err);
+        setError(err);
+      }finally{
+        setIsLoading(false);
       }
     };
     getCategoryList();
@@ -28,30 +32,13 @@ const CategoeyStatusOrder = () => {
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrders = listCategory.slice(indexOfFirstItem, indexOfLastItem);
+  const currentOrderStatus = listCategoryOrderStatus.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(listCategory.length / itemsPerPage);
+  const totalPages = Math.ceil(listCategoryOrderStatus.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  const hadleDelete = async(id) => {
-    setIdCategoryPackage(id)
-    setShowCancelModal(true)
-
-  }
-
-  const handleConfirm = async() => {
-    try {
-      const response = await deleteCategoryPackageService(idCategoryPackage, 'skip')
-      console.log(response);
-      setListCategory(prev => prev.filter(categorPackage => categorPackage.package_category_id !== idCategoryPackage))
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -72,26 +59,22 @@ const CategoeyStatusOrder = () => {
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
               <th style={{ width: '5%' }}>รายละเอียด</th>
               <th style={{ width: '5%' }}>แก้ไข</th>
-              <th style={{ width: '5%' }}>ลบ</th>
             </tr>
           </thead>
           <tbody>
-            {currentOrders.map((category) => (
-              <tr key={category.package_category_id}>
-                <td>{category.package_category_name}</td>
-                <td>{category.amountCategoryPackage} อย่าง</td>
-                <td>{formatDate(category.created_at)}</td>
-                <td>{formatDate(category.updated_at)}</td>
-                <td className="text-center">{category.created_by}</td>
-                <td className="text-center">{category.updated_by}</td>
+            {currentOrderStatus.map((orderStatus) => (
+              <tr key={orderStatus.category_status_order_id}>
+                <td>{orderStatus.category_status_order_name}</td>
+                <td>{orderStatus.amountStatusOrders} อย่าง</td>
+                <td>{formatDate(orderStatus.created_at || 0)}</td>
+                <td>{formatDate(orderStatus.updated_at || 0)}</td>
+                <td className="text-center">{orderStatus.created_by}</td>
+                <td className="text-center">{orderStatus.updated_by}</td>
                 <td className="text-center">
-                  <Link to={`view/${category.package_category_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
+                  <Link to={`view/${orderStatus.category_status_order_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>
                 <td className="text-center">
-                  <Link to={`edit/${category.package_category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
-                </td>
-                <td className="text-center">
-                  <button className="btn btn-danger" onClick={() => hadleDelete(category.package_category_id)} ><i className="bi bi-trash"></i></button>
+                  <Link to={`edit/${orderStatus.category_status_order_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
                 </td>
               </tr>
             ))}
@@ -101,22 +84,21 @@ const CategoeyStatusOrder = () => {
       <div className="d-block d-md-none pb-3">
         <div className="row gy-4">
           <div className="px-3 card-body">
-            {currentOrders.map((category) => (
-              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.package_category_id}>
+            {currentOrderStatus.map((orderStatus) => (
+              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={orderStatus.category_status_order_id}>
                 <div className="small text-secondary">
                   <div className="d-flex justify-content-between mt-3">
-                    <p className="mb-1">ประเภท: {category.package_category_name}</p>                   
-                    <Link to={`edit/${category.package_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                    <p className="mb-1">ประเภท: {orderStatus.category_status_order_name}</p>                   
+                    <Link to={`edit/${orderStatus.category_status_order_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                   </div>
-                  <p className="mb-1">จำนวนบรรจุภัณฑ์: {category.amountCategoryPackage} อย่าง</p>
-                  <p className="mb-1">วันที่สร้าง: {formatDate(category.created_at)}</p>
-                  <p className="mb-1">วันที่เเก้ไข: {formatDate(category.updated_at)}</p>
-                  <p className="mb-1">สร้างโดย: {category.created_by}</p>
-                  <p className="mb-1">เเก้ไขโดย: {category.updated_by}</p>
+                  <p className="mb-1">จำนวนบรรจุภัณฑ์: {orderStatus.amountStatusOrders} อย่าง</p>
+                  <p className="mb-1">วันที่สร้าง: {formatDate(orderStatus.created_at)}</p>
+                  <p className="mb-1">วันที่เเก้ไข: {formatDate(orderStatus.updated_at)}</p>
+                  <p className="mb-1">สร้างโดย: {orderStatus.created_by}</p>
+                  <p className="mb-1">เเก้ไขโดย: {orderStatus.updated_by}</p>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
-                  <button className="btn btn-danger" onClick={() => hadleDelete(category.package_category_id)} ><i className="bi bi-trash"></i></button>
-                  <Link to={`view/${category.package_category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
+                  <Link to={`view/${orderStatus.category_status_order_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
                 </div>
               </div>
             ))}
@@ -145,13 +127,14 @@ const CategoeyStatusOrder = () => {
           </li>
         </ul>
       </nav>
-      <ConfirmPopUpModal
-        showModal={showCancelModal}
-        handleClose={() => setShowCancelModal(false)}
-        handleConfirm={handleConfirm}
-        text="ต้องการลบประเภทบรรจุภัณฑ์นี้จริงๆใช่ไหม ?"
+      <LoadingPopup
+        isLoading = {isLoading}
       />
-      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

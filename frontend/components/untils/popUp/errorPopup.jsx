@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const ErrorPopup = ({ onClose, handleConfirm, message, text }) => {
-  const errorMessage = message?.response?.data?.message || message || 'มีบางอย่างผิดพลาดกรุณา รีหน้าเว็บใหม่';
+  const errorMessage = message?.response?.data?.message || message?.message || 'มีบางอย่างผิดพลาดกรุณา รีหน้าเว็บใหม่';
   const [showModal, setShowModal] = useState(true);
 
   const handleClose = () => {

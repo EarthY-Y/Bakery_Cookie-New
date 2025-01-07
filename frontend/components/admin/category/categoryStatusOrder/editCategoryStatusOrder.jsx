@@ -1,24 +1,31 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { updateCategoryPackageService, getListPackageService, getCategoryPackageByIdService } from '../../../../API/admin/categoryPackageService';
+import { updateCategoryOrderStatusService, getListOrderStatusService, getCategoryOrderStatusByIdService } from '../../../../API/admin/categoryOrderStatusService';
+import { getStatusOrderListService } from '../../../../API/admin/ordersService';
 import { formatDate } from '../../../untils/frommatters/datetime';
+import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const EditCategoryStatusOrder = () => {
   const {id} = useParams()
   const [categoryName, setCategoryName] = useState("");
-  const [listPackage, setListPackage] = useState([]);
-  const [listCategoryPackage, setListCategoryPackage] = useState([]);
-  const [selectedPackages, setSelectedPackages] = useState([]);
+  const [listOrderStatus, setListOrderStatus] = useState([]);
+  const [listCategoryOrderStatus, setListCategoryOrderStatus] = useState([]);
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const initialSelected = listCategoryPackage.map((item) => item.package_id);
-    const addedPackages = selectedPackages.filter((id) => !initialSelected.includes(id));
-    const removedPackages = initialSelected.filter((id) => !selectedPackages.includes(id));
-    const isNameChanged = categoryName !== listCategoryPackage[0]?.category_name;
-    const hasChanges = isNameChanged || addedPackages.length > 0 || removedPackages.length > 0;
+    setIsLoading(true)
+    const initialSelected = listCategoryOrderStatus.map((item) => item.status_order_id);
+    const addedOrderStatuss = selectedOrderStatus.filter((id) => !initialSelected.includes(id));
+    const removedOrderStatuss = initialSelected.filter((id) => !selectedOrderStatus.includes(id));
+    const isNameChanged = categoryName !== listCategoryOrderStatus[0]?.category_name;
+    const hasChanges = isNameChanged || addedOrderStatuss.length > 0 || removedOrderStatuss.length > 0;
     if (!hasChanges) {
       console.log("ไม่มีการเปลี่ยนแปลง ไม่จำเป็นต้องส่งข้อมูล");
       return;
@@ -26,45 +33,60 @@ const EditCategoryStatusOrder = () => {
     try {
       const changes = {
         ...(isNameChanged && { category_name: categoryName }),
-        added: addedPackages.map((id) => ({ package_id: id })),
-        removed: removedPackages.map((id) => ({ package_id: id })),
+        added: addedOrderStatuss.map((id) => ({ status_order_id: id })),
+        removed: removedOrderStatuss.map((id) => ({ status_order_id: id })),
       };
       console.log('การเปลี่ยนแปลง:', changes);
-      const res = await updateCategoryPackageService(id, changes);
-      navigate(-1);
+      const res = await updateCategoryOrderStatusService(id, changes);
+      if(res){
+        setIsLoading(false)
+        navigate(-1);
+      }
     } catch (err) {
       console.error('Error:', err);
+    }finally{
+      setIsLoading(false)
     }
   };
-  
-  useEffect(() => {
-    const getlistPackage = async() => {
-      try {
-        const response = await getListPackageService()
-        console.log(response.data);
-        setListPackage(response.data)
-      } catch (error) {
-        
-      }
-    }
-    getlistPackage()
-  },[])
 
   useEffect(() => {
-    const getCategoryById = async() => {
+    const fetchData = async () => {
+      setIsLoading(true); // ตั้งค่า loading ก่อนเริ่ม
       try {
-        const response = await getCategoryPackageByIdService(id)
-        console.log(response.data);
-        setListCategoryPackage(response.data)
-        setCategoryName(response.data[0]?.package_category_name || '')
-        const initialSelected = response.data.map((item) => item.package_id); //map เอาเเค่ package_id
-        setSelectedPackages(initialSelected);
+        const [
+          getStatusOrderList,
+          getCategoryOrderStatusById,
+        ] = await Promise.all([
+          getStatusOrderListService(),
+          getCategoryOrderStatusByIdService(id),
+        ]);
+  
+        const categoryOrderStatusData = getCategoryOrderStatusById.data || [];
+        const statusOrderData = getStatusOrderList.data || [];
+  
+        // ตั้งค่าชื่อหมวดหมู่
+        setListCategoryOrderStatus(categoryOrderStatusData);
+        setCategoryName(categoryOrderStatusData[0]?.category_status_order_name || '');
+  
+        // กรอง status_order_id ที่ต้องการ
+        const filterListOrderStatus = statusOrderData.filter((item) => //filter เพื่อกรองข้อมูล map เพื่อเลือกเอาข้อมูลเฉพาะ Key
+          categoryOrderStatusData.some((orderStatusItem) => orderStatusItem.status_order_id === item.status_order_id || item.category_status_order_id == null) //some ทำหน้าที่เหมือน Where
+        );
+        setListOrderStatus(filterListOrderStatus);
+  
+        // Map status_order_id สำหรับการเลือกเบื้องต้น
+        const initialSelected = categoryOrderStatusData.map((item) => item.status_order_id);
+        setSelectedOrderStatus(initialSelected);
+  
       } catch (error) {
-        
+        setError(error); // ตั้งค่า error
+      } finally {
+        setIsLoading(false); // ปิด loading
       }
-    }
-    getCategoryById()
-  },[])
+    };
+  
+    fetchData();
+  }, [id]); // เพิ่ม id เป็น dependency
   
   return (
     <div className="container mt-5 p-3">
@@ -88,30 +110,25 @@ const EditCategoryStatusOrder = () => {
               <thead>
                 <tr className="table-success">
                   <th className="text-center align-middle" style={{ width: '25%' }} >เลือก</th>
-                  <th className="text-center align-middle" style={{ width: '25%' }} >รูปบรรจุภัณฑ์</th>
-                  <th className="text-center align-middle" style={{ width: '25%' }} >ชื่อบรรจุภัณฑ์</th>
+                  <th className="text-center align-middle" style={{ width: '25%' }} >ชื่อประเภทสถานะคำสั่งซื้อ</th>
                 </tr>
               </thead>
               <tbody>
-                {listPackage.map((packages) => (
-                  <tr key={packages.package_id}>
+                {listOrderStatus.map((orderStatus) => (
+                  <tr key={orderStatus.status_order_id}>
                     <td className="text-center align-middle">
-                      <input type="checkbox" value={packages.package_id} className='form-check-large' style={{width:'20px', height:'20px'}}
+                      <input type="checkbox" value={orderStatus.status_order_id} className='form-check-large' style={{width:'20px', height:'20px'}}
                         onChange={(e) => {
-                          const packageId = e.target.value; //เก็บค่าที่มีการเปลี่ยนเเปลง
-                          setSelectedPackages(prev => //setSelect 
-                              prev.includes(packageId) //ตรวจสอบค่าที่อยู่ใน Array productId ปัจจุบันด้วยการใช้ prev
-                                  ? prev.filter(id => id !== packageId) //ถ้าถ้าเคยมีเเล้วเพิ่มเข้ามาให้จะลบออก เป็นเหมือนการทำงานของ checkbox
-                                  : [...prev, packageId]
+                          const categoryStatusOrderId = e.target.value; //เก็บค่าที่มีการเปลี่ยนเเปลง
+                          setSelectedOrderStatuss(prev => //setSelect 
+                              prev.includes(categoryStatusOrderId) //ตรวจสอบค่าที่อยู่ใน Array productId ปัจจุบันด้วยการใช้ prev
+                                  ? prev.filter(id => id !== categoryStatusOrderId) //ถ้าถ้าเคยมีเเล้วเพิ่มเข้ามาให้จะลบออก เป็นเหมือนการทำงานของ checkbox
+                                  : [...prev, categoryStatusOrderId]
                           );
                         }}
-                        checked={selectedPackages.includes(packages.package_id)} //ตรวยสอบค่า ถ้ามี id นี้จะ check
+                        checked={selectedOrderStatus.includes(orderStatus.status_order_id)} //ตรวยสอบค่า ถ้ามี id นี้จะ check
                       /></td>
-                    <td><img src={API_URL_PICTURE + packages.package_pic } className="img-fluid rounded" alt={packages.package_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
-                    <td>{packages.package_name}</td>
-                    {/* <td className="text-center">
-                      <Link to={`view/detail/packages/${packages.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
-                    </td> */}
+                    <td>{orderStatus.status_name}</td>
                   </tr>
                 ))}
               </tbody>
@@ -123,6 +140,14 @@ const EditCategoryStatusOrder = () => {
           </div>
         </form>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

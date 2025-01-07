@@ -1,45 +1,56 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { createCategoryPackageService, getListPackageService } from '../../../../API/admin/categoryPackageService';
-import { Link } from 'react-router-dom';
-import { formatDate } from '../../../untils/frommatters/datetime';
+import { createCategoryOrderStatusService, getListOrderStatusService } from '../../../../API/admin/categoryOrderStatusService';
+import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const CreateCategoryStatusOrder = () => {
   const [categoryName, setCategoryName] = useState("");
-  const [listPackage, setListPackage] = useState([]);
-  const [selectedPackages, setSelectedPackages] = useState([]);
+  const [listOrderStatus, setListOrderStatus] = useState([]);
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const selectedPackagesMap = selectedPackages.map(packageId => {
+      setIsLoading(true)
+      const selectedOrderStatusMap = selectedOrderStatus.map(statusOrderId => {
         // หาข้อมูลของสินค้าโดยใช้ PackageId
-        const packages = listPackage.find(item => item.package_id === packageId);
+        const orderStatus = listOrderStatus.find(item => item.status_order_id === statusOrderId);
         return {
-          package_id: packages.package_id,
-          // Package_name: Package.Package_name
+          status_order_id: orderStatus.status_order_id,
         }
       })
-      console.log(categoryName,selectedPackagesMap);      
-      const res = await createCategoryPackageService(categoryName,selectedPackagesMap);
-      navigate(-1);
-      console.log(res);
+      console.log(categoryName,selectedOrderStatusMap);      
+      const res = await createCategoryOrderStatusService(categoryName,selectedOrderStatusMap);
+      if(res){
+        setIsLoading(false)
+        navigate(-1);
+        console.log(res);
+      }
     } catch (err) {
       console.log(err);
+      setError(err);
+    }finally{
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
+    setIsLoading(true)
     const getlistPackage = async() => {
       try {
-        const response = await getListPackageService()
+        const response = await getListOrderStatusService()
         console.log(response.data);
-        setListPackage(response.data)
+        setListOrderStatus(response.data)
       } catch (error) {
-        
+        setError(error)
+      }finally{
+        setIsLoading(false)
       }
     }
     getlistPackage()
@@ -67,29 +78,24 @@ const CreateCategoryStatusOrder = () => {
               <thead>
                 <tr className="table-success">
                   <th className="text-center align-middle" style={{ width: '25%' }} >เลือก</th>
-                  <th className="text-center align-middle" style={{ width: '25%' }} >รูปบรรจุภัณฑ์</th>
-                  <th className="text-center align-middle" style={{ width: '25%' }} >ชื่อบรรจุภัณฑ์</th>
+                  <th className="text-center align-middle" style={{ width: '25%' }} >ชื่อสถานะคำสั่งซื้อ</th>
                 </tr>
               </thead>
               <tbody>
-                {listPackage.map((packages) => (
-                  <tr key={packages.package_id}>
+                {listOrderStatus.map((orderStatus) => (
+                  <tr key={orderStatus.status_order_id}>
                     <td className="text-center align-middle">
-                      <input type="checkbox" value={packages.package_id} className='form-check-large' style={{width:'20px', height:'20px'}}
+                      <input type="checkbox" value={orderStatus.status_order_id} className='form-check-large' style={{width:'20px', height:'20px'}}
                         onChange={(e) => {
-                          const packageId = e.target.value; //เก็บค่าที่มีการเปลี่ยนเเปลง
-                          setSelectedPackages(prev => //setSelect 
-                              prev.includes(packageId) //ตรวจสอบค่าที่อยู่ใน Array PackageId ปัจจุบันด้วยการใช้ prev
-                                  ? prev.filter(id => id !== packageId) //ถ้าถ้าเคยมีเเล้วเพิ่มเข้ามาให้จะลบออก เป็นเหมือนการทำงานของ checkbox
-                                  : [...prev, packageId]
+                          const statusOrderId = e.target.value; //เก็บค่าที่มีการเปลี่ยนเเปลง
+                          setSelectedOrderStatus(prev => //setSelect 
+                              prev.includes(statusOrderId) //ตรวจสอบค่าที่อยู่ใน Array PackageId ปัจจุบันด้วยการใช้ prev
+                                  ? prev.filter(id => id !== statusOrderId) //ถ้าถ้าเคยมีเเล้วเพิ่มเข้ามาให้จะลบออก เป็นเหมือนการทำงานของ checkbox
+                                  : [...prev, statusOrderId]
                           );
                         }}
                       /></td>
-                    <td><img src={API_URL_PICTURE + packages.package_pic } className="img-fluid rounded" alt={packages.package_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
-                    <td>{packages.package_name}</td>
-                    {/* <td className="text-center">
-                      <Link to={`view/detail/packages/${packages.orders_id}`} className="btn btn-outline-warning text-black">View</Link>
-                    </td> */}
+                    <td>{orderStatus.status_name}</td>
                   </tr>
                 ))}
               </tbody>
@@ -101,6 +107,14 @@ const CreateCategoryStatusOrder = () => {
           </div>
         </form>
       </div>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };
