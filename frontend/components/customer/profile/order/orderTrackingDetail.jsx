@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, orderTrackingAddressService } from '../../../../API/customer/orderTrackingService';
+import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, getStatusListForCancelOrdersService, orderTrackingAddressService } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';
 import { goBackOrHome } from '../../../untils/fucntion/backFuction';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 import {AlertWithProgressBar} from '../../../untils/fucntion/alert';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
@@ -24,7 +25,7 @@ const OrderTracking = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(null);
-  const [showInputPostCode, setShowInputPostCode] = useState(false);
+  const [error, setError] = useState(null);
   const [postCode, setPostCode] = useState("");
 
   // สถานะที่ต้องการแสดงบน Progress Bar
@@ -38,11 +39,18 @@ const OrderTracking = () => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
-        const [detailResponse, historyResponse, productResponse, orderAddress] = await Promise.all([
+        const [
+          detailResponse, 
+          historyResponse, 
+          productResponse, 
+          orderAddress,
+          getStatusListForCancelOrders,
+        ] = await Promise.all([
           orderDetailById(id),
           orderHistoryById(id),
           orderProductById(id),
           orderTrackingAddressService(id),
+          getStatusListForCancelOrdersService(),
         ]);
   
         // ตั้งค่าข้อมูลคำสั่งซื้อ
@@ -50,6 +58,7 @@ const OrderTracking = () => {
         console.log("Order History:", historyResponse.data);
         console.log("Order Products:", productResponse.data);
         console.log("Order Address:", orderAddress.data);
+        console.log("getStatusListForCancelOrders:", getStatusListForCancelOrders.data);
   
         // จัดการข้อมูลที่ดึงมา
         const detailData = detailResponse.data[0];
@@ -60,6 +69,8 @@ const OrderTracking = () => {
           setShowCanCel(false);
           setShowStep(false);
         }
+        const isCancelable = getStatusListForCancelOrders.data.some((status) => status.status_name === detailData.status);
+        setShowCanCel(isCancelable)
         setPostCode(detailResponse.data[0]?.post_code || "")
 
         const historyData = historyResponse.data;
@@ -72,6 +83,7 @@ const OrderTracking = () => {
         setAddress(orderAddress.data[0])
       } catch (err) {
         console.error("Error fetching orders data:", err);
+        setError(err)
       }finally{
         setIsLoading(false);
       }
@@ -247,7 +259,7 @@ const OrderTracking = () => {
         </div>
       </div>
       <div className="card-footer d-flex justify-content-between mt-4">
-      <button className="btn btn-danger" onClick={() => setShowCancelModal(true)} style={{ display: showCanCel ? 'block' : 'none' }}> ยกเลิกคำสั่งซื้อ</button> 
+        <button className="btn btn-danger" onClick={() => setShowCancelModal(true)} style={{ display: showCanCel ? 'block' : 'none' }}> ยกเลิกคำสั่งซื้อ</button> 
         <Link  to={`/payment/${ordersDetail.cartId}`}  className="btn btn-primary" style={{ display: showBtnPay ? 'block' : 'none' }}> ชำระเงิน</Link>
       </div>
       <CancelOrderModal
@@ -268,6 +280,9 @@ const OrderTracking = () => {
           onClose={() => setShowAlert(null)} // ปิด alert เมื่อปิด
           status={showAlert ? 'bg-success' : 'bg-danger'} // ใช้ bg-success หรือ bg-danger ตาม showAlert
         />
+      )}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
       )}
     </div>
   );

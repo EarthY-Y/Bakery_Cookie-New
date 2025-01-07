@@ -8,6 +8,7 @@ import {
     getOrdersTrackingHistoryById,
     getOrdersProductTrackingById,
     getOrderTrackingAddress,
+    getStatusListForCancelOrders,
     cancleOrder
 } from "../../controller/customer/ordersTracking.js"
 
@@ -24,5 +25,6 @@ router.get('/customers/get/detail/order/by/:id', verifyCustomerMid, getOrdersTra
 router.get('/customers/get/history/order/by/:id', verifyCustomerMid, getOrdersTrackingHistoryById);
 router.get('/customers/get/order/product/by/:id', verifyCustomerMid, getOrdersProductTrackingById);
 router.get('/customers/get/order/address/tracking/by/:id', verifyCustomerMid, getOrderTrackingAddress);
+router.get('/customers/get/status/list/for/cancel/orders', verifyCustomerMid, getStatusListForCancelOrders);
 router.patch('/customers/cancle/order/product/by/:id', verifyCustomerMid, cancleOrder);
 export default router

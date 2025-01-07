@@ -190,6 +190,23 @@ export const getOrderAddressService = async (id) => {
   }
 }
 
+export const getStatusListForChangeOrder = async () => {
+  try {
+    const authToken = localStorage.getItem('tokenAdmin');
+    const response = await axios.get(API_URL + "/get/status/list/for/changeOrders",
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );
+    return response
+  } catch (error) {
+    console.error("Error listMaterialService:", error);
+    throw error;
+  }
+}
+
 export const updateStatusCartServiceById = async (id, statusName, active) => {
   try {
     const authToken = localStorage.getItem('tokenAdmin');

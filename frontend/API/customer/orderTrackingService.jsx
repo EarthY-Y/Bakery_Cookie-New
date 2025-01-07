@@ -145,6 +145,24 @@ export const orderTrackingAddressService = async(id) => {
   }
 }
 
+export const getStatusListForCancelOrdersService = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/status/list/for/cancel/orders", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
 export const cancelOrder = async(id,reason) => {
   try {
     const authToken = localStorage.getItem('token')

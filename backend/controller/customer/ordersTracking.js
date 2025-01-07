@@ -222,6 +222,25 @@ export const getOrderTrackingAddress = async (req, res) => {
     }
 }
 
+export const getStatusListForCancelOrders = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT so.status_name FROM status_order so 
+                     LEFT JOIN category_status_order cso ON cso.category_status_order_id = so.category_status_order_id
+                     WHERE so.is_active = 1 AND cso.category_status_order_name LIKE ?`, ["รอ%"],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
+    }
+}
+
 export const cancleOrder = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];

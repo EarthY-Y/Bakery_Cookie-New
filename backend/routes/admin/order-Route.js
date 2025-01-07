@@ -6,6 +6,7 @@ import {
     getOrdersHistoryById,
     getOrdersAddressById,
     getStatusOrderslist,
+    getStatusListForChangeOrders,
     updatePostCodeOrder,
     // updateStatusOrder,
 } from "../../controller/admin/orders.js"
@@ -20,6 +21,7 @@ router.get('/admin/get/orders/list/checkout', verifyAdminMid, getOrderslistCheck
 router.get('/admin/get/status/orders/list', verifyAdminMid, getStatusOrderslist);
 router.get('/admin/view/detail/order/:id', verifyAdminMid, getOrdersById);
 router.get('/admin/view/detail/order/history/:id', verifyAdminMid, getOrdersHistoryById);
+router.get('/admin/get/status/list/for/changeOrders', verifyAdminMid, getStatusListForChangeOrders);
 router.get('/admin/get/order/address/:id', verifyAdminMid, getOrdersAddressById);
 router.patch('/admin/update/postCode/order/:id', verifyAdminMid, updatePostCodeOrder);
 // router.patch('/admin/upadate/status/order/:id', verifyAdminMid, updateStatusOrder);
