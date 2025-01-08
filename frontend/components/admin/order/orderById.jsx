@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
-import { getOrderByIdService, getStatusOrderListService, updateStatusOrderService, getOrderHistoryByIdService, getOrderAddressService, updatePostCodeOrderService } from '../../../API/admin/ordersService';
+import { getOrderByIdService, getStatusListForChangeOrder, updateStatusOrderService, getOrderHistoryByIdService, getOrderAddressService, updatePostCodeOrderService } from '../../../API/admin/ordersService';
 import { formatDate } from '../../untils/frommatters/datetime';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
@@ -37,7 +37,7 @@ const orderById = () => {
         ] = await Promise.all([
           getOrderByIdService(id),
           getOrderHistoryByIdService(id),
-          getStatusOrderListService(),
+          getStatusListForChangeOrder(),
           getOrderAddressService(id),
         ]);
         console.log(getOrderById,getOrderHistoryById,getStatusOrder,getOrderAddress);
@@ -348,6 +348,7 @@ const orderById = () => {
         showModal={showCancelModal}
         handleClose={() => setShowCancelModal(false)}
         handleConfirm={handleConfirm}
+        title="เหตุผลในการยกเลิกคำสั่งซื้อ"
         text={errorMsg + ' ต้องการยืนยันใช้สถานะซ้ำไหม'}
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}

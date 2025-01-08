@@ -165,12 +165,35 @@ export const getOrdersAddressById = async (req, res) => {
     }
 }
 
-export const updatePostCodeOrder = async (req, res) => {
+export const updateStatusOrder = async (req, res) => {
     try {
+        const authHeader = req.headers['authorization'];
+        const token = await passToken(authHeader);
         const id = req.params.id
-        const postCode = req.body.postCode
+        const {status, skip} = req.body
+        if(!skip){ //ถ้าหน้าส่ง skip มาก็จะไม่ตรวจสอบ duplicate
+            const resultsDupilcateHistory = await new Promise((resolve, reject)=> {
+                db.query("SELECT history_id FROM order_status_history WHERE orders_id = ? AND status_order_id = ? AND changed_by = ?",[id, status, token.admin_id],
+                        (err, result) => { 
+                    if (err) return reject(err)
+                    resolve(result)
+                })
+            })
+            console.log(resultsDupilcateHistory);
+            
+            if(resultsDupilcateHistory[0]?.history_id){
+                return res.status(400).json({ message: "เคยใช้สถานะนี้เเล้ว"})
+            }
+        }
         const results = await new Promise((resolve, reject)=> {
-            db.query(`UPDATE orders SET post_code = ? WHERE orders_id = ?`, [postCode, id],
+            db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        const resultsInsertHistory = await new Promise((resolve, reject)=> {
+            db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), id, status, token.admin_id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -184,30 +207,65 @@ export const updatePostCodeOrder = async (req, res) => {
     }
 }
 
-// export const updateStatusOrder = async (req, res) => {
-//     try {
-//         const authHeader = req.headers['authorization'];
-//         const token = await passToken(authHeader);
-//         const id = req.params.id
-//         const {status} = req.body
-//         const results = await new Promise((resolve, reject)=> {
-//             db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
-//                     (err, result) => { 
-//                 if (err) return reject(err)
-//                 resolve(result)
-//             })
-//         })
-//         const resultsInsertHistory = await new Promise((resolve, reject)=> {
-//             db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), id, status, authToken.admin_id],
-//                     (err, result) => { 
-//                 if (err) return reject(err)
-//                 resolve(result)
-//             })
-//         })
-//         console.log("results",results);
-//         return res.status(200).json(results);
-//     } catch (error) {
-//         console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
-//         res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
-//     }
-// }
+export const updatePostCodeOrder = async (req, res) => {
+    try {
+        const id = req.params.id
+        const postCode = req.body.postCode
+        await updatePostCodeHistoryStatusOrder(req, res)
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`UPDATE orders SET post_code = ? WHERE orders_id = ?`, [postCode, id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        return res.status(200).json(results);
+
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
+    }
+}
+
+export const updatePostCodeHistoryStatusOrder = async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const  authToken = await passToken(authHeader);
+        const id = req.params.id
+
+        console.log("updatePostCodeHistoryStatusOrder: " , id);
+        const { postCode } = req.body
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`WITH check_postCode AS (
+                        SELECT 1 AS exists_flag
+                        FROM orders
+                        WHERE orders_id = ? AND post_code IS NULL
+                    )
+                    SELECT status_order_id FROM status_order
+                    WHERE 
+                        (EXISTS (SELECT 1 FROM check_postCode) AND status_name LIKE 'เพิ่มรหัส%') #EXISTS ถ้ามีข้อมูลอยู่จะเป็น True
+                        OR 
+                        (NOT EXISTS (SELECT 1 FROM check_postCode) AND status_name LIKE 'แก้ไขรหัส%');`, [id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        if(results[0]?.status_order_id !== undefined){
+            let statusId = results[0]?.status_order_id
+            console.log(results);
+            console.log("statusId: ",statusId);
+            
+            const resultsInsertHistory = await new Promise((resolve, reject)=> {
+                db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by, note) VALUES (?, ?, ?, ?, ?)",[uuidv4(), id, statusId, authToken.admin_id, postCode],
+                        (err, result) => { 
+                    if (err) return reject(err)
+                    resolve(result)
+                })
+            })
+        }
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        throw error
+    }
+}

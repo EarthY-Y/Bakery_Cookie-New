@@ -8,7 +8,7 @@ import {
     getStatusOrderslist,
     getStatusListForChangeOrders,
     updatePostCodeOrder,
-    // updateStatusOrder,
+    updateStatusOrder,
 } from "../../controller/admin/orders.js"
 
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
@@ -24,5 +24,5 @@ router.get('/admin/view/detail/order/history/:id', verifyAdminMid, getOrdersHist
 router.get('/admin/get/status/list/for/changeOrders', verifyAdminMid, getStatusListForChangeOrders);
 router.get('/admin/get/order/address/:id', verifyAdminMid, getOrdersAddressById);
 router.patch('/admin/update/postCode/order/:id', verifyAdminMid, updatePostCodeOrder);
-// router.patch('/admin/upadate/status/order/:id', verifyAdminMid, updateStatusOrder);
+router.patch('/admin/update/status/order/:id', verifyAdminMid, updateStatusOrder);
 export default router

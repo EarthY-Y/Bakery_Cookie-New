@@ -104,30 +104,3 @@ export const getStatusOrdersHistoryById = async (req, res) => {
         res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
-// export const updateStatusOrder = async (req, res) => {
-//     try {
-//         const authHeader = req.headers['authorization'];
-//         const token = await passToken(authHeader);
-//         const id = req.params.id
-//         const {status} = req.body
-//         const results = await new Promise((resolve, reject)=> {
-//             db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
-//                     (err, result) => { 
-//                 if (err) return reject(err)
-//                 resolve(result)
-//             })
-//         })
-//         const resultsInsertHistory = await new Promise((resolve, reject)=> {
-//             db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), id, status, authToken.admin_id],
-//                     (err, result) => { 
-//                 if (err) return reject(err)
-//                 resolve(result)
-//             })
-//         })
-//         console.log("results",results);
-//         return res.status(200).json(results);
-//     } catch (error) {
-//         console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
-//         res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
-//     }
-// }

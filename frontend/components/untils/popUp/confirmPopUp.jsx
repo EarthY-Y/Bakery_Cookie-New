@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const confirmPopUpModal = ({ showModal, handleClose, handleConfirm, text }) => {
+const ConfirmPopUpModal = ({ showModal, handleClose, handleConfirm, title, text }) => {
 
   const handleSubmit = () => {
     handleConfirm(); // ส่งเหตุผลไปยัง parent
@@ -12,7 +12,7 @@ const confirmPopUpModal = ({ showModal, handleClose, handleConfirm, text }) => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="cancelOrderModalLabel">เหตุผลในการยกเลิกคำสั่งซื้อ</h5>
+            <h5 className="modal-title" id="cancelOrderModalLabel">{title}</h5>
             <button type="button" className="btn-close" onClick={handleClose}></button>
           </div>
           <div className="modal-body">
@@ -29,4 +29,4 @@ const confirmPopUpModal = ({ showModal, handleClose, handleConfirm, text }) => {
   );
 };
 
-export default confirmPopUpModal;
+export default ConfirmPopUpModal;

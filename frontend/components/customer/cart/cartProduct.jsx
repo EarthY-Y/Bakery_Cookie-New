@@ -6,6 +6,8 @@ import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
 import ErrorPopup from '../../untils/popUp/errorPopup';
 import AlertPopUp from '../../untils/popUp/alertPopUp';
+import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const cartProduct = () => {
@@ -15,7 +17,9 @@ const cartProduct = () => {
   const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
   const [isLoading, setIsLoading] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [error, setError] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("")
 
   useEffect(() => {
     const getCart = async()=> {
@@ -82,6 +86,23 @@ const cartProduct = () => {
     setTotalPrice(total);
   }, [productCart]);
 
+  const handleConfirm = async() => {
+    try {
+      navigate('/orders/'+id)
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    }
+  };
+  const handleConditionNotification = async() => {
+    try {
+      setShowCancelModal(true)
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    }
+  };
+
   return (
     <div className="container my-5">
       <div className="px-3 card-body">
@@ -140,9 +161,7 @@ const cartProduct = () => {
           <span className='text-danger'>ราคานี้ไม่รวมค่าจัดส่งเเละค่าบรรจุภัณฑ์</span>
         </div>
         <div className="d-flex flex-row-reverse bd-highlight mt-4">
-          <button className="btn btn-success btn-lg" disabled={isPaymentDisabled}>
-            <Link className="text-light" to={`/orders/${id}`}>สั่งซื้อ</Link>
-          </button>
+          <button className="btn btn-success btn-lg" disabled={isPaymentDisabled} type='button' onClick={handleConditionNotification}>สั่งซื้อ</button>
         </div>
       </div>
       <LoadingPopup
@@ -155,6 +174,20 @@ const cartProduct = () => {
       {!isLoading && isPaymentDisabled ? (
         <AlertPopUp message={"กรุณาสั่งซื้อขั้นต่ำ 250 บาท"} title="ยอดคำสั่งซื้อไม่ถึงที่กำหนด" onClose={() => setError(null)} />
       ): ("")}
+
+      <ConfirmPopUpModal
+        showModal={showCancelModal}
+        handleClose={() => setShowCancelModal(false)}
+        handleConfirm={handleConfirm}
+        title={'เงื่อนไขการสั่งซื้อ'}
+        text={<>
+            <p>1) ราคาที่เห็นยังไม่รวมค่าขนส่งเเบบ EMS เเละกล่องพัสดุ</p>
+            <p>2) กรุณาตรวจสอบรายการสินค้าให้ถูกต้องก่อนสั่งซื้อ</p>
+            <p>3) ทางร้านจะไม่คืนเงินทุกกรณีหากคำสั่งซื้ออยู่ในรหว่างการผลิต</p>
+          </>
+        }
+      />
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

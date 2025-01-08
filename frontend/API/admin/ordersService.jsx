@@ -244,7 +244,7 @@ export const updateStatusOrderServiceById = async (id, statusName, active) => {
 export const updateStatusOrderService = async (value, id, skip) => {
   try {
     const authToken = localStorage.getItem('tokenAdmin')
-    const response = await axios.patch(API_URL + "/update/status/" + id, { status: value, skip: skip },
+    const response = await axios.patch(API_URL + "/update/status/order/" + id, { status: value, skip: skip },
       {
         headers: {
           'authorization': `Bearer ${authToken}`
