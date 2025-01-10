@@ -124,9 +124,6 @@ const OrderTracking = () => {
 
   return (
     <div className="container mt-1  mb-5">
-      <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </button>
       <div className='align-items-center row mb-4'>
         <div className='col-12 col-lg-6'>
           <h3>สถานะคำสั่งซื้อ</h3>

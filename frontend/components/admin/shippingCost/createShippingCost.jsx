@@ -47,9 +47,6 @@ const createShipping = () => {
   })) || [];
   return (
     <div className="container mt-5 p-3">
-      <Link className="btn btn-outline-secondary mb-4" to="/shipping">
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
       <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h4>เพิ่มการขนส่ง</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -99,10 +96,8 @@ const createShipping = () => {
               <Select options={options} value={options.find((option) => option.value === packageId) || null} onChange={(selectedOption) => setPackageId(selectedOption ? selectedOption.value : null)} isSearchable={true} placeholder="เลือกบรรจุภัณฑ์" />
             </div>
           </div>
-
-
+          
           <div className="d-flex justify-content-center gap-3 my-4">
-            <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
             <button className="btn btn-success mt-3 px-4 ms-5" type="submit">เพิ่ม</button>
           </div>
         </form>

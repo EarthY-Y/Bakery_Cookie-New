@@ -19,6 +19,44 @@
     left: 0;             /* จัด dropdown ให้ตรงกับปุ่ม */
     transform: none !important;  /* ปิดการใช้ transform ของ Bootstrap (ถ้ามีการใช้) */
   }
+  
+  /* ซ่อนลูกศรของ Scrollbar */
+::-webkit-scrollbar-button {
+  display: none; /* ซ่อนลูกศร */
+}
+
+/* ปรับขนาดและลักษณะของ Scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* ความกว้างของ Scrollbar */
+  height: 8px; /* ความสูงของ Scrollbar */
+}
+
+/* ปรับแต่งแทร็กของ Scrollbar */
+::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #f0f0f0, #e6e6e6); /* สีและลวดลายของแทร็ก */
+  border-radius: 10px; /* ความโค้งมนของแทร็ก */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* เงาภายใน */
+}
+
+/* ปรับแต่ง Scrollbar */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #888, #555); /* สีและลวดลายของแถบ */
+  border-radius: 10px; /* ความโค้งมนของแถบ */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* เงาของแถบ */
+}
+
+/* Scrollbar เมื่อ Hover */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #555, #333); /* สีของแถบเมื่อ Hover */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* เงาเพิ่มเติม */
+}
+
+/* สำหรับ Firefox */
+* {
+  scrollbar-width: thin; /* ทำให้ Scrollbar บาง */
+  scrollbar-color: #888 #f0f0f0; /* สีแถบและแทร็ก */
+}
+
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

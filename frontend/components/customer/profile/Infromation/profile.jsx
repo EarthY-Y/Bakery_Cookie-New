@@ -128,7 +128,7 @@ const profile = () => {
     <h4>ข้อมูลของฉัน</h4>
     <form onSubmit={handleSubmit} encType="multipart/form-data">
       <div className="mb-3 text-center">
-        <div className="position-relative" style={{margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div className="position-relative" style={{margin: '2%', width: '250px', height: '250px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
           {Picture ? (
             <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
@@ -136,6 +136,7 @@ const profile = () => {
           )}
           <input type="file"className="position-absolute top-0 start-0 w-100 h-100"style={{ opacity: 0, cursor: 'pointer' }}onChange={(e) => {  const file = e.target.files[0];  setPicture(file);}}/>
         </div>
+        <p className='text-danger'>กรุณาเลือกรูปภาพที่มีขนาดน้อยกว่า 1 MB</p>
       </div>
 
       <div className="mb-3">

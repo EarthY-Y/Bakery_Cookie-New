@@ -53,15 +53,8 @@ const detailPorductById = () => {
 
   return (    
     <div className="container my-5">
-
       {/* กรอบพื้นหลังคลุมทั้งหมด */}
       <div className="bg-light p-4 rounded shadow">
-
-        {/* ปุ่มย้อนกลับ */}
-        <div className="mb-4">
-          <button className="btn btn-outline-secondary border rounded px-4 py-2" onClick={() => navigate(-1)}><i className="bi bi-arrow-left"></i> ย้อนกลับ</button>
-        </div>
-
         {/* แถวข้อมูลสินค้า */}
         <div className="row g-4">
 

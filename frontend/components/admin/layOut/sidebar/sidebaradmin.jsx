@@ -18,7 +18,7 @@ function Sidebaradmin() {
 
       {/* Sidebar สำหรับหน้าจอใหญ่ อธิบาย d-lg-block อยู่ในหมวด display ใช้ ซ่อนหรือโชว์ element ในขน้าหน้าจอต่างๆ*/}
       <div className="d-none d-lg-block bg-light p-3 col-2 min-vh-100 shadow overflow-y-auto" style={{height: '100vh', position: 'fixed' }}>
-        <nav className="nav flex-column navbar-expand-lg">
+        <nav className="nav flex-column navbar-expand-lg " style={{marginBottom: '70px'}}>
           <Link className="nav-link text-dark" to="/dashboard">สถิติ</Link>
           <Link className="nav-link text-dark" to="/product">สินค้าหน้าร้าน</Link>
           <div className="accordion mt-2 shadow-sm" id="accordionExample">
@@ -96,7 +96,7 @@ function Sidebaradmin() {
               <h2 className="accordion-header">
                 <button className="accordion-button collapsed explan" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">ประเภท</button>
               </h2>
-              <div id="collapseCategory" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div id="collapseCategory" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div className="accordion-body">
                   <Link className="nav-link text-dark" to="/category/prduct">ประเภทสินค้า</Link>
                   <Link className="nav-link text-dark" to="/category/package">ประเภทบรรจุภัณฑ์</Link>
