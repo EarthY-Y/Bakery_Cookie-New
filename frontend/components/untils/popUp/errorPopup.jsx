@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const ErrorPopup = ({ onClose, handleConfirm, message, text }) => {
-  const errorMessage = message?.response?.data?.message || message?.message || 'มีบางอย่างผิดพลาดกรุณา รีหน้าเว็บใหม่';
+  const errorMessage = message?.response?.data?.message || message?.message || message || 'มีบางอย่างผิดพลาดกรุณา รีหน้าเว็บใหม่';
   const [showModal, setShowModal] = useState(true);
 
   const handleClose = () => {
@@ -16,7 +16,7 @@ const ErrorPopup = ({ onClose, handleConfirm, message, text }) => {
 
   return (
     <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" style={{ display: showModal ? 'block' : 'none', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-      aria-labelledby="errorModalLabel" aria-hidden="true" >
+      aria-labelledby="errorModalLabel" aria-modal="true" >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content border-danger">
           <div className="modal-header bg-danger text-white">

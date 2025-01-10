@@ -77,9 +77,7 @@ const Signup = () => {
 
                 <div className="mb-4 row justify-content-center">
                   <div className="col-5">
-                    <Link to="/Login">
-                      <button style={{ backgroundColor: '#F2EEB0' }} type="button" className="btn btn-outline-dark w-100">ย้อนกลับ</button>
-                    </Link>
+                    <button style={{ backgroundColor: '#F2EEB0' }} onClick={() => navigate(-1)} type="button" className="btn btn-outline-dark w-100">ย้อนกลับ</button>
                   </div>
                   <div className="col-5">
                     <button

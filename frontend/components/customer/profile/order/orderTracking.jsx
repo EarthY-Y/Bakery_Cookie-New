@@ -100,7 +100,7 @@ const OrderTracking = () => {
             <div className="card border-secondary">
               <div className="card-header d-flex justify-content-between">
                 <span>รหัสคำสั่งซื้อ: {order.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
-                <span className="badge bg-warning text-dark">{order.status_name}</span>
+                <p className="badge bg-warning text-dark">{order.status_name}</p>
               </div>
               <div className="card-body">
                 <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
@@ -147,7 +147,7 @@ const OrderTracking = () => {
                 รหัสคำสั่งซื้อ: {order.orders_id}
                 <button className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button>
               </span>
-              <span className="badge bg-warning text-dark">{order.status_name}</span>
+              <p className="badge bg-warning text-dark">{order.status_name}</p>
             </div>
             <div className="card-body">
               <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>

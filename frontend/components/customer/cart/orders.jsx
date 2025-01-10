@@ -5,6 +5,7 @@ import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
 import SelectAddress from '../../untils/popUp/selectAddress'
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -21,6 +22,7 @@ const orders = () => {
   const [deliveryRate,  setdeliveryRate] = useState(0); 
   const [toatalShippingRate,  setToatalShippingRate] = useState(0); 
   const [showSelectModal, setShowSelectModal] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -53,7 +55,7 @@ const orders = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        alert(error.message);
+        setError(error.message);
       }finally{
         setIsLoading(false)
       }
@@ -113,7 +115,7 @@ const orders = () => {
     if (address.length === 1) {
       selectedAddress = address[0];
     } else if (!isNaN(selectAddress)) {
-      alert("กรุณาเลือกที่อยู่ก่อนทำการสั่งซื้อ");
+      setError("กรุณาเลือกที่อยู่ก่อนทำการสั่งซื้อ");
       return;
     } else {
       selectedAddress = selectAddress;
@@ -144,7 +146,7 @@ const orders = () => {
       
     } catch (error) {
       console.log(error);
-      alert(error)
+      setError(error)
     }finally{
       setIsLoading(false);
     }
@@ -241,6 +243,9 @@ const orders = () => {
         handleSelect={handleSelect} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
       />
       {showSelectModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <ErrorPopup message={error} title="ไม่พบบัญชีผู้ใช้" onClose={() => setError(null)} />
+      )}
     </form>
   );
 };

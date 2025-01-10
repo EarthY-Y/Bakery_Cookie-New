@@ -45,7 +45,7 @@ const cartProduct = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        alert(error.message);
+        setError(error);
       }finally {
         setIsLoading(false);
       }

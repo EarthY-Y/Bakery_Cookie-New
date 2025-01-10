@@ -202,7 +202,7 @@ const CreateAddress = () => {
 
                <div className="mb-4 row justify-content-center">
                   <div className="col-12 col-lg-5">
-                    <button style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">เพิ่มรายละเอีดที่อยู่</button>
+                    <button style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">เพิ่มรายละเอียดที่อยู่</button>
                   </div>
                 </div>
               </form>
