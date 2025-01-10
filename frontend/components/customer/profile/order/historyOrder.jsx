@@ -159,10 +159,6 @@ const OrderTracking = () => {
       <LoadingPopup
         isLoading = {isLoading}
       />
-      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
-      <LoadingPopup
-        isLoading = {isLoading}
-      />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       {showAlert !== null && (
         <AlertWithProgressBar

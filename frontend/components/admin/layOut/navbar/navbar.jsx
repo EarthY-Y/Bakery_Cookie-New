@@ -21,7 +21,7 @@ function Navbaradmin() {
         </div>
 
         {/* โลโก้ */}
-        <img src={API_URL_PICTURE + "LogoCN1.PNG"} alt="Logo" style={{ height: '80px' }} />
+        <img src={API_URL_PICTURE + "LogoCN1.PNG"} alt="Logo" style={{ height: '50px' }} />
 
         {/* ปุ่มออกจากระบบ */}
         <button className="btn btn-outline-danger text-white" style={{border: '1.5px solid #000',borderRadius: '10px',padding: '5px 10px',}} 
