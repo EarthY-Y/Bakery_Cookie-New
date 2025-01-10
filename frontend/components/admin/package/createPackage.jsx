@@ -53,9 +53,6 @@ const CreatePackage = () => {
   return (
     <form onSubmit={handleSubmitpackagePackage}>
       <div className="container mt-5 p-3">
-        <Link className="btn btn-outline-secondary mb-4" to="/package">
-          <i className="bi bi-arrow-left"></i>ย้อนกลับ
-        </Link>
         <div className="mb-4 card col-md-12 px-40 bg-light card-body">
           <h4>เพิ่มบรรจุภัณฑ์</h4>
 
@@ -109,7 +106,6 @@ const CreatePackage = () => {
           </div>
 
           <div className="d-flex justify-content-center gap-3 my-4">
-            <button type="button" className="btn btn-secondary mt-3 px-4 me-5" onClick={() => { handleReset() }}>ล้าง</button>
             <button type="submit" className="btn btn-success mt-3 px-4 ms-5"> เพิ่มบรรจุภัณฑ์ </button>
           </div>
         </div>

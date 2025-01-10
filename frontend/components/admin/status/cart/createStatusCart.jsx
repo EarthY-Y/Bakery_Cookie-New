@@ -36,7 +36,6 @@ const createStatusCart = () => {
           </div>
 
           <div className="d-flex justify-content-center gap-3 my-4">
-            <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
             <button className="btn btn-success mt-3 px-4 ms-5" type="submit">เพิ่ม</button>
           </div>
         </form>

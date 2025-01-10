@@ -20,11 +20,30 @@ export const validateAddressCustomer = async() => {
   }
 }
 
-export const getAddressCustomer = async() => {
+export const getOrderAddressCustomer = async() => {
   try {
     const authToken = localStorage.getItem('token')
   
     const response = await axios.get(API_URL + "/get/customer/address", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+ 
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
+export const getOrderAddress = async(id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+  
+    const response = await axios.get(API_URL + "/get/order/address/"+id, 
       {
         headers: {
           'authorization': `Bearer ${authToken}`
@@ -57,10 +76,10 @@ export const shippingRate = async(weight) => {
   }
 }
 
-export const createOrder = async(productCart, totalPrice, totalPriceProduct, price, cost_per_quantity, totalQuantity, shipping_rate_id, houseNo, tambon_nameTH, amphure_nameTH, province_nameTH, zip_code) => {
+export const createOrder = async(phone_number, productCart, totalPrice, totalPriceProduct, price, cost_per_quantity, totalQuantity, shipping_rate_id, houseNo, tambon_nameTH, amphure_nameTH, province_nameTH, zip_code) => {
   try {
     const authToken = localStorage.getItem('token')
-    const response = await axios.post(API_URL + "/create/order",{productCart:productCart, totalPrice: totalPrice, totalQuantity: totalQuantity, shipping_rate_id: shipping_rate_id,
+    const response = await axios.post(API_URL + "/create/order",{phone_number:phone_number ,productCart:productCart, totalPrice: totalPrice, totalQuantity: totalQuantity, shipping_rate_id: shipping_rate_id,
       totalPriceProduct: totalPriceProduct, shippingRate: price, cost_package_per_quantity: cost_per_quantity,
       houseNo: houseNo, tambon: tambon_nameTH, amphure: amphure_nameTH, province: province_nameTH, zip_code: zip_code},
       {

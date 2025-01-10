@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import liff from '@line/liff'
 import { getDeatialCustomerService, updateInfoCustomer, createConnectionLineIDService, checkConnectionLineIDService } from '../../../../API/customer/customerService';
 import LoadingPopup from '../../../untils/popUp/loading';
-import ErrorPopup from '../../../error/errorPopup';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 import { logout } from '../../../../API/authService';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_CUSTOMER
@@ -89,7 +89,11 @@ const profile = () => {
     if (customerName !== detailCustomer.username) updatedData.username = customerName;
     if (customerFName !== detailCustomer.f_name) updatedData.f_name = customerFName;
     if (customerLName !== detailCustomer.l_name) updatedData.l_name = customerLName;
-    if (customerPhoneNumber !== detailCustomer.phone_number ) updatedData.phone_number = customerPhoneNumber;
+    if (customerPhoneNumber !== detailCustomer.phone_number ){ 
+      const phoneNumber = customerPhoneNumber.padStart(10, '0'); //เพิ่ม 0 ข้างหน้าเบอร์โทรศัพท์
+      updatedData.phone_number = phoneNumber;
+      
+    }
 
     if (Picture instanceof File) {
       updatedData.file = Picture;
@@ -124,7 +128,7 @@ const profile = () => {
     <h4>ข้อมูลของฉัน</h4>
     <form onSubmit={handleSubmit} encType="multipart/form-data">
       <div className="mb-3 text-center">
-        <div className="position-relative" style={{margin: '2%', width: '100px', height: '100px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div className="position-relative" style={{margin: '2%', width: '250px', height: '250px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
           {Picture ? (
             <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
@@ -132,6 +136,7 @@ const profile = () => {
           )}
           <input type="file"className="position-absolute top-0 start-0 w-100 h-100"style={{ opacity: 0, cursor: 'pointer' }}onChange={(e) => {  const file = e.target.files[0];  setPicture(file);}}/>
         </div>
+        <p className='text-danger'>กรุณาเลือกรูปภาพที่มีขนาดน้อยกว่า 1 MB</p>
       </div>
 
       <div className="mb-3">
@@ -151,7 +156,16 @@ const profile = () => {
       <Link type="botton" className="btn btn-danger col-12 col-sm-3 mb-2" to="changePassword">เปลี่ยนรหัสผ่าน</Link>
       <div className="mb-3">
         <label className="form-label">หมายเลขโทรศัพท์</label>
-        <input type="text" className="form-control" value={customerPhoneNumber} onChange={(e) => setCustomerPhoneNumber(e.target.value)} />
+        <input type="number" min={1} onInput={(e) => { // type number นั้นไม่ได้ถูกออกเเบบมาให้ใช้กับเลข 0 เลยไม่สามารถเช็คความยาวได้ถ้าใส่เลข 0 ลงใน input
+            if (e.target.value.length > 10) {
+              e.target.value = e.target.value.slice(0, 10);
+            }else if(e.target.value.length !== 10){
+              e.target.setCustomValidity('กรุณากรอกเฉพาะตัวเลข 10 หลัก');
+            }else{
+              e.target.setCustomValidity('');
+            }
+          }} 
+        className="form-control" value={customerPhoneNumber} onChange={(e) => setCustomerPhoneNumber(e.target.value)} />
       </div>
       {/* <div className="mb-3">
         <label className="form-label">เพศ</label>

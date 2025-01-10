@@ -38,7 +38,7 @@ const Dashboard = () => {
           salesPankPerMonthService(),
         ]);
         // console.log(getAmoutOrders.data, getAllSales.data, getNewCustomer.data);
-        // console.log(getGrowthUpSales.data);
+        console.log('getGrowthUpSales: '+ getGrowthUpSales.data[0].growth_percentage);
         console.log(getAllSales.data);
         console.log(getSalesRankPerMonth.data);
         
@@ -73,10 +73,10 @@ const Dashboard = () => {
           <StatCard name="จำนวนคำสั่งซื้อ" icon="bi bi-cart" value={amountOrder > 0 ? `${amountOrder} คำสั่งซื้อ`: `0 คำสั่งซื้อ`} color="primary" />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
-          <StatCard name="ยอดขายรายเดือน" icon="bi bi-bag" value={salesPerMonth > 0 ? numberGrouping(salesPerMonth): 0} color="success" />
+          <StatCard name="ยอดขายรายเดือน" icon="bi bi-bag" value={salesPerMonth > 0 ? numberGrouping(salesPerMonth) + ` บาท`: 0} color="success" />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
-          <StatCard name="การเติบโตของยอดขาย" icon="bi bi-graph-up" value={growthUpPersent > 0 ? `${growthUpPersent} %`: 0} color="danger" />
+          <StatCard name="การเติบโตของยอดขาย" icon="bi bi-graph-up" value={!isNaN(growthUpPersent) ? `${numberGrouping(growthUpPersent)} %`: 0} color="danger" />
         </div>
         <div className="col-12 col-sm-6 col-xl-3">
           <StatCard name="ผู้ใช้ใหม่" icon="bi bi-person-plus" value={newCustomer > 0 ? numberGrouping(newCustomer): 0}  color="warning" />

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService } from '../../../API/guest/guestProductService';
 import LoadingPopup from '../../untils/popUp/loading';
-import AlertPopUp from '../../untils/popUp/alertPopUp';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
@@ -53,15 +53,8 @@ const detailPorductById = () => {
 
   return (    
     <div className="container my-5">
-
       {/* กรอบพื้นหลังคลุมทั้งหมด */}
       <div className="bg-light p-4 rounded shadow">
-
-        {/* ปุ่มย้อนกลับ */}
-        <div className="mb-4">
-          <button className="btn btn-outline-secondary border rounded px-4 py-2" onClick={() => navigate(-1)}><i className="bi bi-arrow-left"></i> ย้อนกลับ</button>
-        </div>
-
         {/* แถวข้อมูลสินค้า */}
         <div className="row g-4">
 
@@ -122,7 +115,7 @@ const detailPorductById = () => {
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       {error && (
-        <AlertPopUp message={error} title="ไม่พบบัญชีผู้ใช้" onClose={() => setError(null)} />
+        <ErrorPopup message={error} title="ไม่พบบัญชีผู้ใช้" onClose={() => setError(null)} />
       )}
     </div>
   );

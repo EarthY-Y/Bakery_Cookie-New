@@ -6,7 +6,7 @@ import { passToken } from "../../middleware/passAuth.js";
 export const getListCustomer = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT customer_id, phone_number, f_name, l_name, username, is_active, created_at FROM customer`,
+            db.query(`SELECT customer_id, phone_number, f_name, l_name, CONCAT(f_name, ' ' ,l_name) as full_name, username, is_active, created_at FROM customer`,
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -14,8 +14,8 @@ export const getListCustomer = async (req, res) => {
         })
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -36,8 +36,8 @@ export const getListCustomerById = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -61,8 +61,8 @@ export const getListCustomerAddressById = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -87,8 +87,8 @@ export const updateCustomerActiveById = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product_category:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล_category:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 

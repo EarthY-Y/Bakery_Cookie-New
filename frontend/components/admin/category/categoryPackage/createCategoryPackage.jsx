@@ -47,9 +47,6 @@ const CreateCategoryPackge = () => {
   
   return (
     <div className="container mt-5 p-3">
-      <button className="btn btn-outline-secondary mb-4" onClick={() => {navigate(-1)}}>
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </button>
       <div className="mb-4 card col-md-12 px-40 bg-light card-body">
         <h4>เพิ่มสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -96,7 +93,6 @@ const CreateCategoryPackge = () => {
             </table>
           </div>
           <div className="d-flex justify-content-center gap-3 my-4">
-            <button className="btn btn-secondary mt-3 px-4 me-5" type="button">ล้าง</button>
             <button className="btn btn-success mt-3 px-4 ms-5" type="submit">เพิ่ม</button>
           </div>
         </form>

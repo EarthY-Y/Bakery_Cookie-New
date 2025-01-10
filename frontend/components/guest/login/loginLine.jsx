@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import liff from '@line/liff'
 import { Link, useNavigate } from 'react-router-dom';
 import { login, loginLINE } from '../../../API/authService';
-import ErrorPopup from '../../error/errorPopup';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 import LoadingPopup from '../../untils/popUp/loading';
 
 const API_LINE_LOGIN = import.meta.env.LINE_LOGIN

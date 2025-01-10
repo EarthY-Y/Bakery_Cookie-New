@@ -19,21 +19,21 @@ const ErrorPopup = ({ onClose, handleConfirm, message, title }) => {
     <div className={`modal fade ${showModal ? 'show' : ''}`} tabIndex="-1" style={{ display: showModal ? 'block' : 'none', backgroundColor: 'rgba(0, 0, 0, 0.5)' }} 
       aria-labelledby="errorModalLabel" aria-hidden="true" >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content border-danger">
-          <div className="modal-header bg-danger text-white">
+        <div className="modal-content border-warning">
+          <div className="modal-header text-black" style={{backgroundColor: '#FDDE55' }} >
             <h5 className="modal-title" id="errorModalLabel">
               <i className="bi bi-exclamation-triangle-fill me-2"></i>
-              {title || 'Error'}
+              {title || 'เเจ้งเตือนข้อผิดพลาด'}
             </h5>
-            <button type="button" className="btn-close btn-close-white" onClick={handleClose} aria-label="Close" ></button>
+            <button type="button" className="btn-close btn-close-black" onClick={handleClose} aria-label="Close" ></button>
           </div>
           <div className="modal-body text-center">
-            <p className="text-danger fs-5">{message || 'Something went wrong. Please try again later.'}</p>
+            <p className="text-black fs-5">{message || 'มีบางอย่างผิดพลาด กรุณารีหน้าเว็บใหม่.'}</p>
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={handleClose}>Close</button>
             {handleConfirm && (
-              <button type="button" className="btn btn-danger" onClick={handleConfirmation}>
+              <button type="button" className="btn btn-warning" onClick={handleConfirmation}>
                 Confirm
               </button>
             )}

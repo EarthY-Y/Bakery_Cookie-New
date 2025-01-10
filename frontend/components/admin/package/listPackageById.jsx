@@ -31,9 +31,6 @@ const ListPackageById = () => {
 
   return (
     <div className="container mt-5 p-3">
-      <Link to="/package" className="btn btn-outline-secondary mb-4">
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
       <div className="mb-4 card col-md-12 px-40 rounded shadow border bg-light card-body">
         <div className="text-center mb-4">
           <img

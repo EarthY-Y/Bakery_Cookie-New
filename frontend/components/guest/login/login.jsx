@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import liff from '@line/liff'
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../../API/authService';
-import ErrorPopup from '../../error/errorPopup';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 import LoadingPopup from '../../untils/popUp/loading';
 
 const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
@@ -33,12 +33,16 @@ const Login = () => {
     try {
       const res = await login(userName, passWord); 
       console.log(res.data);
-      localStorage.setItem('token', res.data.token);
+      res.data.token ? localStorage.setItem('token' , res.data.token) : localStorage.setItem('tokenAdmin' , res.data.tokenAdmin);
       const userRole = res.data.role;
       if (userRole === 'user') {
         setIsLoading(false)
         navigate("/home");
-      } else {
+      }
+      if(userRole === 'admin'){
+        setIsLoading(false)
+        navigate("/dashboard");
+      }else {
         setIsLoading(false)
         navigate("");
       }

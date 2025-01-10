@@ -18,6 +18,7 @@ import StatusShippingRoute from "./routes/admin/statusOrder-Route.js"
 import StatusCartRoute from './routes/admin/statusCart-Route.js'
 import CategoryRoute from "./routes/admin/category-Route.js"
 import CategoryPackageRoute from "./routes/admin/categoryPackage-Route.js"
+import CategoryOrderStatus from "./routes/admin/categoryOrderStatus-Route.js"
 import AddressCustomerRoute from "./routes/customer/addressCustomer-Route.js"
 import OrderTrackingRoute from './routes/customer/orderTracking-Route.js';
 import PackageRoute from './routes/admin/package-Route.js'
@@ -88,6 +89,7 @@ app.use(StatusShippingRoute)
 app.use(StatusCartRoute)
 app.use(CategoryRoute)
 app.use(CategoryPackageRoute);
+app.use(CategoryOrderStatus)
 app.use(OrderTrackingRoute);
 app.use(OrderHistoryRoute)
 app.use(productCustomerRoute);

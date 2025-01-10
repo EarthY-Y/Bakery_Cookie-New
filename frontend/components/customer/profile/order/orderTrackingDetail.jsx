@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { orderDetailById, orderHistoryById, orderProductById, cancelOrder } from '../../../../API/customer/orderTrackingService';
+import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, getStatusListForCancelOrdersService, orderTrackingAddressService } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
+import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';
 import { goBackOrHome } from '../../../untils/fucntion/backFuction';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
+import {AlertWithProgressBar} from '../../../untils/fucntion/alert';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const OrderTracking = () => {
@@ -14,12 +18,16 @@ const OrderTracking = () => {
   const [ordersDetail, setOrdersDetail] = useState([]);
   const [ordersHistory, setOrdersHistory] = useState([]);
   const [ordersProduct, setOrdersProduct] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0); 
+  const [address, setAddress] = useState([]) 
   const [showBtnPay, setShowBtnPay] = useState(false); 
   const [showCanCel, setShowCanCel] = useState(true); 
   const [showStep ,setShowStep] = useState(true); 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(null);
+  const [error, setError] = useState(null);
+  const [postCode, setPostCode] = useState("");
+
   // สถานะที่ต้องการแสดงบน Progress Bar
   const statusSteps = [
     { name: "ชำระเงินเรียบร้อย", icon: "bi bi-cash" },
@@ -31,16 +39,26 @@ const OrderTracking = () => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
-        const [detailResponse, historyResponse, productResponse] = await Promise.all([
+        const [
+          detailResponse, 
+          historyResponse, 
+          productResponse, 
+          orderAddress,
+          getStatusListForCancelOrders,
+        ] = await Promise.all([
           orderDetailById(id),
           orderHistoryById(id),
           orderProductById(id),
+          orderTrackingAddressService(id),
+          getStatusListForCancelOrdersService(),
         ]);
   
         // ตั้งค่าข้อมูลคำสั่งซื้อ
         console.log("Order Details:", detailResponse.data);
         console.log("Order History:", historyResponse.data);
         console.log("Order Products:", productResponse.data);
+        console.log("Order Address:", orderAddress.data);
+        console.log("getStatusListForCancelOrders:", getStatusListForCancelOrders.data);
   
         // จัดการข้อมูลที่ดึงมา
         const detailData = detailResponse.data[0];
@@ -51,15 +69,21 @@ const OrderTracking = () => {
           setShowCanCel(false);
           setShowStep(false);
         }
-  
+        const isCancelable = getStatusListForCancelOrders.data.some((status) => status.status_name === detailData.status);
+        setShowCanCel(isCancelable)
+        setPostCode(detailResponse.data[0]?.post_code || "")
+
         const historyData = historyResponse.data;
         setOrdersHistory(historyData);
         if (historyData.length === 0) setShowBtnPay(true);
   
         const productData = productResponse.data;
         setOrdersProduct(productData);
+
+        setAddress(orderAddress.data[0])
       } catch (err) {
         console.error("Error fetching orders data:", err);
+        setError(err)
       }finally{
         setIsLoading(false);
       }
@@ -93,19 +117,30 @@ const OrderTracking = () => {
     }
   };
 
+  const handleCopy = async (copyText) => {
+    const result = await copyToClipboard(copyText);
+    setShowAlert(result); // แสดง Alert หากคัดลอกสำเร็จ result ที่ส่งมาจาก copyToClipboard จะเป็น true กับ false
+  };
+
   return (
-    <div className="container mt-2 mb-5">
-      <button className="btn btn-light text-dark mb-4" onClick={() => {goBackOrHome(navigate)}}> {/*ไม่ต้องใส่ () เพราะมันจะถูกทำงานทุกครั้งที่ component render*/}
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </button>
+    <div className="container mt-1  mb-5">
       <div className='align-items-center row mb-4'>
-        <div className='col-12 col-sm-6'>
+        <div className='col-12 col-lg-6'>
           <h3>สถานะคำสั่งซื้อ</h3>
         </div>
-        <div className='col-12 col-sm-6 text-end'>
-          <span >รหัสคำสั่งซื้อ: {ordersDetail.orders_id}</span>
+        <div className='col-12 col-lg-6 text-lg-end'>
+          <span ><b>รหัสคำสั่งซื้อ:</b> {ordersDetail.orders_id}<button className="btn bi bi-copy" onClick={() => handleCopy(ordersDetail.orders_id)}></button></span>
         </div>
+        <div className='col-12 col-lg-8 mb-2 text-start'>
+          <span ><b>ปลายทาง:</b> {address.house_no} ตำบล {address.tambon_name} อำเภอ {address.amphure_name} จังหวัด {address.province_name} {address.zip_code}</span>
+        </div>
+        {postCode && (
+          <div className='col-12 col-lg-4 mb-2 text-lg-end'>
+            <span ><b>รหัสไปรษณีย์:</b> {postCode}<button className="btn bi bi-copy" onClick={() => handleCopy(postCode)}></button></span>
+          </div>
+        )}
       </div>
+
       <div className="card">
         <div className={`card-body ${showStep ? 'd-block' : 'd-none'}`}>
           <div className={`progress-container d-flex justify-content-between align-items-center `} >
@@ -192,13 +227,13 @@ const OrderTracking = () => {
                 <div className="col-md-2">
                   <img src={API_URL_PICTURE + order.productpic_name} alt="Product" className="img-fluid" />
                 </div>
-                <div className="col-md-3 mt-3">
+                <div className="col-md-3 col-6">
                   <p className="mb-0"><strong>ปริมาณ:</strong> {order.productCartQuantity} ชิ้น</p>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 col-6 text-end">
                   <p className="mb-0"><strong>ชิ้นละ:</strong> {order.productCartPrice} บาท</p>
                 </div>
-                <div className="col-md-4 text-end">
+                <div className="col-md-4 col-12 text-end">
                   <p className="mb-0"><strong>รวมเป็น:</strong> {numberGrouping(order.productCartPrice * order.productCartQuantity)} บาท</p>
                 </div>
               </div>
@@ -221,7 +256,7 @@ const OrderTracking = () => {
         </div>
       </div>
       <div className="card-footer d-flex justify-content-between mt-4">
-      <button className="btn btn-danger" onClick={() => setShowCancelModal(true)} style={{ display: showCanCel ? 'block' : 'none' }}> ยกเลิกคำสั่งซื้อ</button> 
+        <button className="btn btn-danger" onClick={() => setShowCancelModal(true)} style={{ display: showCanCel ? 'block' : 'none' }}> ยกเลิกคำสั่งซื้อ</button> 
         <Link  to={`/payment/${ordersDetail.cartId}`}  className="btn btn-primary" style={{ display: showBtnPay ? 'block' : 'none' }}> ชำระเงิน</Link>
       </div>
       <CancelOrderModal
@@ -234,6 +269,18 @@ const OrderTracking = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+
+      {showAlert !== null && (
+        <AlertWithProgressBar
+          message={showAlert ? "คัดลอกสำเร็จ" : "คัดลอกไม่สำเร็จ"}
+          duration={3000}
+          onClose={() => setShowAlert(null)} // ปิด alert เมื่อปิด
+          status={showAlert ? 'bg-success' : 'bg-danger'} // ใช้ bg-success หรือ bg-danger ตาม showAlert
+        />
+      )}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

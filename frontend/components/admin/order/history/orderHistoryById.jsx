@@ -8,6 +8,7 @@ import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PAYMENT
 
@@ -21,7 +22,10 @@ const orderHistoryById = () => {
   const [status, setStatus] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [totalCost, setTotalCost] = useState(false);
+  const [error, setError] = useState(null);
+  const [showInputPostCode, setShowInputPostCode] = useState(false);
+  const [postCode, setPostCode] = useState("");
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,11 +47,12 @@ const orderHistoryById = () => {
         
         setOrderById(getOrderById.data)
         setStatus(getOrderById.data[0]?.status)
+        setPostCode(getOrderById.data[0]?.post_code || "")
         setStatusOrderHistoryById(getStatusOrderHistoryById.data)
         setStatusOrder(getStatusOrder.data)
         setOrderAddress(getOrderAddress.data[0])
       } catch (error) {
-        
+        setError(error)
       }finally{
         setIsLoading(false);
       }
@@ -91,6 +96,14 @@ const orderHistoryById = () => {
     }
   };
 
+  useEffect(()=> {
+    console.log(status);
+    const statusName = statusOrders.find((statusOrder) => statusOrder.status_order_id === status)?.status_name
+    if(statusName === "จัดส่งสำเร็จ"){
+      setShowInputPostCode(true)
+    }
+  },[status])
+
   return (
     <div className="container mt-5 p-4 ">
       <div className="mb-4 card col-md-12 px-40 rounded shadow border bg-light card-body">
@@ -122,7 +135,17 @@ const orderHistoryById = () => {
           ):(
             <div className=""></div>
           ) }
-
+          {showInputPostCode && postCode ? (
+              <div className="row">
+                <label className="form-label fw-bold">รหัสไปรษณีย์</label>
+                <div className='col-md-4 col-8'>
+                  <input type="text" className="form-control" placeholder="รหัสไปรษณีย์"
+                    value={postCode}
+                    onChange={(e) => setPostCode(e.target.value)} />
+                </div>
+              </div>
+              
+          ): null}
         </div>
         <label className="form-label fw-bold">รายการคำสั่งซื้อ</label>
         {/*หน้าจอใหญ่*/}
@@ -310,6 +333,10 @@ const orderHistoryById = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
 
   );

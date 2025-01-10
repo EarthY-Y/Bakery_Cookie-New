@@ -1,9 +1,9 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { validateAddressCustomer, getAddressCustomer, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
+import { validateAddressCustomer, getOrderAddress, updatePaymentOrder, getOrdersService } from '../../../API/customer/paymentService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
-import ErrorPopup from '../../error/errorPopup';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const cartProduct = () => {
   const id = useParams().id //เพราะว่ามันส่งมาจาก navigate ของหน้า orders เลยมาเป็น object ทำให้เกิดปัญหากับหลังบ้านเลยต้อง .id ในกรณีที่ไม่ใส่ {id}
@@ -27,7 +27,7 @@ const cartProduct = () => {
           addressCustomer,
         ] = await Promise.all([
           getOrdersService(id),
-          getAddressCustomer(),
+          getOrderAddress(id),
 
         ]);
         if(orders){
@@ -90,10 +90,10 @@ const cartProduct = () => {
           <h3>ที่อยู่ที่ใช้ในการจัดส่ง</h3>
           <p>
             <strong>
-              {address.f_name} {address.l_name} | โทร: 0{address.phone_number}
+              {address.f_name} {address.l_name} | โทร: {address.phone_number}
             </strong>
             <br />
-            {address.houseNo} ตำบล {address.tambon_nameTH} อำเภอ {address.amphure_nameTH} จังหวัด {address.province_nameTH} {address.zip_code}
+            {address.house_no} ตำบล {address.tambon_name} อำเภอ {address.amphure_name} จังหวัด {address.province_name} {address.zip_code}
           </p>
         </div>
         <div className="row flex-column align-items-center p-3 border rounded bg-light mt-3">

@@ -4,7 +4,6 @@ import {ProtectedRouteAdmin ,ProtectedRouteCustomer, CheckRouteCustomer, CheckRo
 import Dashboard from '../page/admin-page/dashboard-page/dashboard-page'
 import Login from '../page/login-page/login-page'
 import LoginLine from '../page/login-page/loginLine-page';
-import LoginAdmin from '../page/login-page/loginAdmin-page';
 import ListProduct from '../page/admin-page/product-page/listProduct-page'
 import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
 import EditPorductById from '../page/admin-page/product-page/EditProduct-page'
@@ -51,6 +50,10 @@ import ListCategoryPackage from '../page/admin-page/category/categoryPackge/list
 import CreateCategoryPackage from '../page/admin-page/category/categoryPackge/createCategoryPackage-page'
 import EditCategoryPackage from '../page/admin-page/category/categoryPackge/editCategoryPackage-page';
 import CategoryByIdPackage from '../page/admin-page/category/categoryPackge/categoryPackgeById-page'
+import ListCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/listCategoryStatusOrder-page';
+import CreateCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/createCategoryStatusOrder-page'
+import EditCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/editCategoryStatusOrder-page';
+import CategoryByIdStatusOrder from '../page/admin-page/category/categoryStatusOrder/categoryStatusOrderById-page'
 import Profile from '../page/customer-page/profile-page/profile-page';
 import ChangePassword from '../page/customer-page/profile-page/changePassword-page';
 import ListAddress from '../page/customer-page/profile-page/listAddress-page'
@@ -77,7 +80,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorFallback />,
     children: [
       {
-        element: <CheckRouteCustomer/>,
+        // element: <CheckRouteCustomer/>,
         children: [
           {
             path: "",
@@ -130,18 +133,8 @@ const router = createBrowserRouter([
             element: <GuestLineOA />,
           },
         ]
-      },  
-      {
-        element: <CheckRouteAdmin/>,
-        children: [
-          {
-            path: "/login/admin",
-            element: <LoginAdmin />,
-          }
-        ]
-      },
+      }, 
       
-    
       //route Admin
       {
         element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
@@ -235,6 +228,28 @@ const router = createBrowserRouter([
                   {
                     path: "edit/:id",
                     element: <EditCategoryPackage />,
+                  },
+                ],
+              },
+
+              {
+                path: "statusOrder",
+                children: [
+                  {
+                    path: "",
+                    element: <ListCategoryStatusOrder />,
+                  },
+                  {
+                    path: "view/:id",
+                    element: <CategoryByIdStatusOrder />,
+                  },
+                  {
+                    path: "create",
+                    element: <CreateCategoryStatusOrder />,
+                  },
+                  {
+                    path: "edit/:id",
+                    element: <EditCategoryStatusOrder />,
                   },
                 ],
               },

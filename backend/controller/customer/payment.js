@@ -2,6 +2,7 @@ import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import { passToken } from "../../middleware/passAuth.js";
 import {createCart} from "./product.js"
+import { generateOrderId } from "../function/genOrderId.js";
 
 export const validateCustomerAddress = async (req, res) => {
     try {
@@ -20,8 +21,8 @@ export const validateCustomerAddress = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -44,8 +45,29 @@ export const getCustomerAddress = async (req, res) => {
         console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
+    }
+}
+
+export const getOrderAddress = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT oa.house_no, oa.zip_code, c.phone_number, c.f_name, c.l_name, oa.province_name, oa.amphure_name, oa.tambon_name FROM order_address oa
+                      LEFT JOIN orders o ON o.orders_id = oa.orders_id
+                      LEFT JOIN customer c ON c.customer_id = o.customer_id
+                      where o.cartId = ? `,[id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get order address:", error);
+        res.status(400).json({ message: "Error get order address", error });
     }
 }
 
@@ -79,8 +101,8 @@ export const getPorductCart = async (req, res) => {
         
         res.status(200).json(resultsFindProductCart)
     }catch(error){
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -101,8 +123,8 @@ export const getShippingRate = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -115,13 +137,13 @@ export const createOrders = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         console.log(req.body);
-        const orderId = uuidv4()
         let cartItem = req.body.productCart;
         console.log(cartItem);
         
-        const {totalPrice, totalPriceProduct, shippingRate, cost_package_per_quantity ,totalQuantity, shipping_rate_id, houseNo, tambon, amphure, province, zip_code} = req.body
+        const {phone_number ,totalPrice, totalPriceProduct, shippingRate, cost_package_per_quantity ,totalQuantity, shipping_rate_id, houseNo, tambon, amphure, province, zip_code} = req.body
         console.log(totalPrice, totalPriceProduct, shippingRate, cost_package_per_quantity,totalQuantity, shipping_rate_id, houseNo, tambon, amphure, province, zip_code);
         
+        const orderId = await generateOrderId(phone_number)
         if (typeof cartItem === 'string') {
             cartItem = JSON.parse(cartItem);
         }
@@ -170,7 +192,7 @@ export const createOrders = async (req, res) => {
             return res.status(400).json({ message: "Error create order" });
         }
     } catch (error) {
-        console.error("Error get product:", error);
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
         res.status(400).json({ message: "Error createOrders", error });
     }
 }
@@ -310,8 +332,8 @@ export const getPaymentOrders = async (req, res) => {
         
         res.status(200).json(resultsFindOrders)
     }catch(error){
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 
@@ -362,8 +384,8 @@ export const updatePaymentOrder = async (req, res) => {
         })
         res.status(200).json(resultsInsertHistory)
     }catch(error){
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error});
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
 

@@ -30,9 +30,6 @@ const listShippingById = () => {
 
   return (
     <div className="container mt-5 p-3">
-      <Link to="/shipping" className="btn btn-outline-secondary mb-4">
-              <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </Link>
       <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
         <div className="mb-3">
             <label className="form-label fw-bold">รหัสวัตถุดิบ</label>

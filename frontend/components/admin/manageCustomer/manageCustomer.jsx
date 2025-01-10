@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { manageCustomerListService } from '../../../API/admin/manageCustomerService';
 import { formatDate } from '../../untils/frommatters/datetime';
-import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 import LoadingPopup from '../../untils/popUp/loading';
+import Search from '../../untils/fucntion/search';
 
 const managerCustomer = () => {
   const [listCustomer, setListCustomer] = useState([]);
+  const [listCustomerSearch, setListCustomerSearch] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +26,7 @@ const managerCustomer = () => {
 
         setListCustomer(getListCustomer.data)
       } catch (err) {
-        setIsLoading(false);
+        setError(err);
         console.error("Error fetching data:", err);
       }finally{
         setIsLoading(false);
@@ -36,18 +39,32 @@ const managerCustomer = () => {
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentCustomer = listCustomer.slice(indexOfFirstItem, indexOfLastItem);
+  const currentCustomer = listCustomerSearch.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(listCustomer.length / itemsPerPage);
+  const totalPages = Math.ceil(listCustomerSearch.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleSearchCustomer = (results) => {
+    setListCustomerSearch(results)
   };
 
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>จัดการผู้ใช้</h2>
+      </div>
+      <div className='row'>
+        <div className="col-12">
+          <Search 
+            data={listCustomer}
+            handleSearch={handleSearchCustomer}
+            name="ชื่อจริง-นามสกุล"
+            itemKeys={["full_name"]}
+          />
+        </div>
       </div>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
@@ -123,6 +140,10 @@ const managerCustomer = () => {
           isLoading = {isLoading}
         />
         {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+
+        {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

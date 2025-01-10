@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom';
 import { getlistOrdersCancel, getlistOrdersFinish, cancelOrder } from '../../../../API/customer/orderTrackingService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
-import CancelOrderModal from '../../../untils/popUp/canclePopUp';
+import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';
 import LoadingPopup from '../../../untils/popUp/loading';
+import {AlertWithProgressBar} from '../../../untils/fucntion/alert';
+
 const OrderTracking = () => {
   const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
   const [orderCheckOut, setOrdersCheckOut] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCheckOut, setCurrentPageCheckOut] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [orderId, setOrderId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -61,12 +62,9 @@ const OrderTracking = () => {
     setCurrentPageCheckOut(pageNumber);
   };
 
-  const handleCancelOrder = async(reason) => {
-    console.log("เหตุผลในการยกเลิก:", reason, orderId);
-    const response = await cancelOrder(orderId, reason)
-    if(response){
-      setShowCancelModal(false)
-    }
+  const handleCopy = async (orders_id) => {
+    const result = await copyToClipboard(orders_id);
+    setShowAlert(result); // จะแสดงข้อความที่ได้จาก copyToClipboard
   };
 
   return (
@@ -79,7 +77,7 @@ const OrderTracking = () => {
           <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
             <div className="card border-secondary">
               <div className="card-header d-flex justify-content-between">
-                <span>รหัสคำสั่งซื้อ: {order.orders_id}</span>
+                <span>รหัสคำสั่งซื้อ: {order.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
                 <span className="badge bg-danger text-white">{order.status}</span>
               </div>
               <div className="card-body">
@@ -121,7 +119,7 @@ const OrderTracking = () => {
           <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
             <div className="card border-secondary">
               <div className="card-header d-flex justify-content-between">
-                <span>รหัสคำสั่งซื้อ: {order.orders_id}</span>
+                <span>รหัสคำสั่งซื้อ: {order.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
                 <span className="badge bg-success text-white">{order.status}</span>
               </div>
               <div className="card-body">
@@ -158,16 +156,22 @@ const OrderTracking = () => {
           </li>
         </ul>
       </nav>
-      <CancelOrderModal
-        showModal={showCancelModal}
-        handleClose={() => setShowCancelModal(false)}
-        handleCancelOrder={handleCancelOrder} //handleCancelOrder เก็บข้อมูล input ไว้อยู่
+      <LoadingPopup
+        isLoading = {isLoading}
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       <LoadingPopup
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {showAlert !== null && (
+        <AlertWithProgressBar
+          message={showAlert ? "คัดลอกสำเร็จ" : "คัดลอกไม่สำเร็จ"}
+          duration={3000}
+          onClose={() => setShowAlert(null)} // ปิด alert เมื่อปิด
+          status={showAlert ? 'bg-success' : 'bg-danger'} // ใช้ bg-success หรือ bg-danger ตาม showAlert
+        />
+      )}
     </div>
   );
 };

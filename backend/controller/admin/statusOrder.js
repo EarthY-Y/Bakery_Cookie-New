@@ -39,8 +39,8 @@ export const createStatus = async (req, res) => {
         }
 
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -59,8 +59,8 @@ export const getStatusOrder = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -87,8 +87,8 @@ export const updateStatusOrderName = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -105,49 +105,7 @@ export const getStatusOrderById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
-    }
-}
-
-export const updateStatusOrder = async (req, res) => {
-    try {
-        const authHeader = req.headers['authorization'];
-        const token = await passToken(authHeader);
-        const id = req.params.id
-        const {status, skip} = req.body
-        if(!skip){ //ถ้าหน้าส่ง skip มาก็จะไม่ตรวจสอบ duplicate
-            const resultsDupilcateHistory = await new Promise((resolve, reject)=> {
-                db.query("SELECT history_id FROM order_status_history WHERE orders_id = ? AND status_order_id = ? AND changed_by = ?",[id, status, token.admin_id],
-                        (err, result) => { 
-                    if (err) return reject(err)
-                    resolve(result)
-                })
-            })
-            console.log(resultsDupilcateHistory);
-            
-            if(resultsDupilcateHistory[0]?.history_id){
-                return res.status(400).json({ message: "เคยใช้สถานะนี้เเล้ว"})
-            }
-        }
-        const results = await new Promise((resolve, reject)=> {
-            db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [status, token.admin_id, id],
-                    (err, result) => { 
-                if (err) return reject(err)
-                resolve(result)
-            })
-        })
-        const resultsInsertHistory = await new Promise((resolve, reject)=> {
-            db.query("INSERT INTO order_status_history (history_id , orders_id, status_order_id, changed_by) VALUES (?, ?, ?, ?)",[uuidv4(), id, status, token.admin_id],
-                    (err, result) => { 
-                if (err) return reject(err)
-                resolve(result)
-            })
-        })
-        // console.log("results",results);
-        return res.status(200).json(results);
-    } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }

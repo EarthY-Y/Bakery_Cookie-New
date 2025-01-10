@@ -29,9 +29,6 @@ const CategoryById = () => {
   
   return (
     <div className="container mt-5 p-3">
-      <button className="btn btn-outline-secondary mb-4" onClick={() => {navigate(-1)}}>
-        <i className="bi bi-arrow-left"></i> ย้อนกลับ
-      </button>
       <div className="mb-4 card col-md-12 px-40 card-body bg-light shadow">
         <h4></h4>
         <div className="mb-4 ">
@@ -79,10 +76,6 @@ const CategoryById = () => {
             <p className="border p-2 rounded bg-white">{formatDate(listCategoryProduct[0]?.updated_at)}</p>
           </div>
         </div>
-        {/* <div className="d-md-flex justify-content-center" style={{margin:'5%'}}>
-          <button className="btn btn-secondary me-5" type="button" style={{ width: '100px', height: '40px' }}>ล้าง</button>
-          <button className="btn btn-primary ms-5" type="submit" style={{ width: '100px', height: '40px' }}>เพิ่ม</button>
-        </div> */}
       </div>
     </div>
   );

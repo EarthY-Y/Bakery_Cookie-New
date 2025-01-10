@@ -4,7 +4,6 @@ import {
     getOrderslistHistoryCancel,
     getOrdersById,
     getStatusOrdersHistoryById
-    // updateStatusOrder,
 } from "../../controller/admin/ordersHistory.js"
 
 import { verifyAdminMid } from "../../middleware/authAdmin.js"

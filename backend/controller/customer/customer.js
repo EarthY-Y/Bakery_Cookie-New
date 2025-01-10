@@ -45,6 +45,17 @@ export const createCustomer = async (req, res) => {
     console.log(req.body);
     
     const {phone_number, username, password, confPassword, f_name, l_name} = req.body;
+    const phoneNumber = phone_number.padStart(10, '0'); //padStart จะเพิ่มสิ่งที่เราต้องการเข้าไปเเละจะเติมเข้าไปจนกว่าจะครบตามที่เราต้องการในที่นี้คือ เติม 0 ไปจนครบ 10 ตัว
+    const resultsAdmin = await new Promise((resolve, reject) => {
+        db.query("SELECT admin_id, userName, passWord, is_active FROM admin WHERE userName = ?", username, (err, resultsAdmin) => {
+            if (err) return reject(err);
+            resolve(resultsAdmin);
+        });
+    });
+
+    if(resultsAdmin.length !== 0){
+        return res.status(404).json({ message: "มีชื่อผู้ใช้นี้เเล้ว" });
+    }
     
     if(password !== confPassword) return res.status(400).json({message: "Password not match"});
     //เข้ารหัส password กันโดนโจมตีด้วย lib argon2
@@ -53,7 +64,7 @@ export const createCustomer = async (req, res) => {
         const response = await new Promise((resolve, reject) => {
             db.query(
                 "INSERT INTO customer (customer_id, phone_number, f_name, l_name, username, password) VALUES( ?, ?, ?, ?, ?, ?)",
-                [id, phone_number, f_name, l_name, username, hashPassword],  (err, result) => {
+                [id, phoneNumber, f_name, l_name, username, hashPassword],  (err, result) => {
                     if (err) return reject(err);
                     resolve(result);
                 }
@@ -168,8 +179,8 @@ export const createAddress = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -230,8 +241,8 @@ export const checkConnectLineID = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -259,8 +270,8 @@ export const changePassword = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -284,7 +295,7 @@ export const getProfileCustomer = async (req, res) => {
         
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }

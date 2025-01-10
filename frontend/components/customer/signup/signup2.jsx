@@ -2,8 +2,11 @@ import React ,{useContext,useState, useEffect}from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormContext } from '../../../API/signUpService';
 import { createCustomer } from '../../../API/signUpService';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const Signup2 = () => {
+  const [error, setError] = useState(null);
+
   const { formData, setFormData } = useContext(FormContext);
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -22,8 +25,7 @@ const Signup2 = () => {
       }
     } catch (error) {
       console.log('Error submitting form:', error);
-      alert('Error submitting form');
-      navigate('/Login');
+      setError(error);
     }
   }
   return (
@@ -38,21 +40,21 @@ const Signup2 = () => {
                <div className="row mb-4">
                   <label htmlFor="user" className="col-3 col-auto col-form-label">ชื่อผู้ใช้</label>
                   <div className="col-8">
-                    <input name='username' type="text" onChange={handleChange} value={formData.username} required className="form-control" id="user" placeholder="ชื่อผู้ใช้"/>
+                    <input name='username' type="text" minLength={5} onChange={handleChange} value={formData.username} required className="form-control" id="user" placeholder="ชื่อผู้ใช้"/>
                   </div>
                </div>
 
                <div className="row mb-4">
                   <label htmlFor="password" className="col-3 col-auto col-form-label">รหัสผ่าน</label>
                   <div className="col-8">
-                    <input name='password' type="password" onChange={handleChange} value={formData.password} required className="form-control" id="password" placeholder="รหัสผ่าน"/>
+                    <input name='password' type="password" minLength={5} onChange={handleChange} value={formData.password} required className="form-control" id="password" placeholder="รหัสผ่าน"/>
                   </div>
                </div>
 
                <div className="row mb-4">
                  <label htmlFor="confirm password" className="col-3 col-auto col-form-label">ยืนยันรหัสผ่าน</label>
                  <div className="col-8">
-                   <input name='confPassword' type="password" onChange={handleChange} value={formData.confPassword} required className="form-control" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน"/>
+                   <input name='confPassword' type="password" minLength={5} onChange={handleChange} value={formData.confPassword} required className="form-control" id="confirmPassword" placeholder="ยืนยันรหัสผ่าน"/>
                  </div>
                </div>
                 
@@ -76,6 +78,9 @@ const Signup2 = () => {
           </div>
         </div>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เข้าสู่ระบบล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

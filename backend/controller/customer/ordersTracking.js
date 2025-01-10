@@ -13,7 +13,8 @@ export const getOrderslistWaitStatement = async (req, res) => {
                      INNER JOIN status_order so ON so.status_order_id = o.status
                      LEFT JOIN order_profit op ON op.orders_id = o.orders_id
                      WHERE so.status_name LIKE ? AND c.customer_id = ? 
-                     GROUP BY o.orders_id`, ["รอ%", token.customerId],
+                     GROUP BY o.orders_id
+                     ORDER BY o.created_at DESC`, ["รอ%", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -22,8 +23,8 @@ export const getOrderslistWaitStatement = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -39,7 +40,8 @@ export const getOrderslistCheckOut = async (req, res) => {
                      INNER JOIN status_order so ON so.status_order_id = o.status
                      LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
                      WHERE so.status_name NOT LIKE ? AND so.status_name NOT LIKE ? AND so.status_name NOT LIKE ? AND c.customer_id = ? 
-                     GROUP BY o.orders_id`, ["รอ%","ยกเลิก%", "จัดส่ง%", token.customerId],
+                     GROUP BY o.orders_id
+                     ORDER BY o.created_at DESC`, ["รอ%","ยกเลิก%", "จัดส่ง%", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -48,8 +50,8 @@ export const getOrderslistCheckOut = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 export const getOrderslistCancel = async (req, res) => {
@@ -64,7 +66,8 @@ export const getOrderslistCancel = async (req, res) => {
                  INNER JOIN status_order so ON so.status_order_id = o.status
                  LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
                  WHERE so.status_name LIKE ? AND c.customer_id = ? 
-                 GROUP BY o.orders_id`, ["ยกเลิก%", token.customerId],
+                 GROUP BY o.orders_id
+                 ORDER BY o.created_at DESC`, ["ยกเลิก%", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -73,8 +76,8 @@ export const getOrderslistCancel = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 export const getOrderslistFinish = async (req, res) => {
@@ -89,7 +92,8 @@ export const getOrderslistFinish = async (req, res) => {
                      INNER JOIN status_order so ON so.status_order_id = o.status
                      LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
                      WHERE so.status_name LIKE ? AND c.customer_id = ? 
-                     GROUP BY o.orders_id`, ["%สำเร็จ", token.customerId],
+                     GROUP BY o.orders_id
+                     ORDER BY o.created_at DESC`, ["%สำเร็จ", token.customerId],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -98,8 +102,8 @@ export const getOrderslistFinish = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -108,7 +112,7 @@ export const getOrdersTrackingById = async (req, res) => {
         const id = req.params.id
         const results = await new Promise((resolve, reject)=> {
             db.query(`SELECT o.orders_id, o.quantity, o.total_price_product as price, ocd.cost_shipping, ocd.cost_package, o.created_at, 
-                     o.updated_by, o.updated_at, o.statement_picture, so.status_name as status, osh.note,
+                     o.updated_by, o.updated_at, o.statement_picture, o.post_code, so.status_name as status, osh.note,
                      c.cartId, cp.quantity as productCartQuantity, p.product_name, pp.productpic_name FROM orders o
                      LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                      LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
@@ -127,8 +131,8 @@ export const getOrdersTrackingById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -147,8 +151,8 @@ export const getOrdersTrackingHistoryById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -169,8 +173,8 @@ export const getStatusOrdersTrackingById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -192,8 +196,48 @@ export const getOrdersProductTrackingById = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
+    }
+}
+
+export const getOrderTrackingAddress = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT oa.house_no, oa.zip_code, c.phone_number, c.f_name, c.l_name, oa.province_name, oa.amphure_name, oa.tambon_name FROM order_address oa
+                      LEFT JOIN orders o ON o.orders_id = oa.orders_id
+                      LEFT JOIN customer c ON c.customer_id = o.customer_id
+                      where o.orders_id = ? `,[id],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get order address:", error);
+        res.status(400).json({ message: "Error get order address", error });
+    }
+}
+
+export const getStatusListForCancelOrders = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT so.status_name FROM status_order so 
+                     LEFT JOIN category_status_order cso ON cso.category_status_order_id = so.category_status_order_id
+                     WHERE so.is_active = 1 AND cso.category_status_order_name LIKE ?`, ["รอ%"],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }
 
@@ -229,7 +273,7 @@ export const cancleOrder = async (req, res) => {
         // console.log("results",results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get product:", error);
-        res.status(400).json({ message: "Error get product", error });
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
     }
 }

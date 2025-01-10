@@ -1,10 +1,10 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { validateAddressCustomer, getAddressCustomer, createOrder, shippingRate } from '../../../API/customer/paymentService';
+import { validateAddressCustomer, getOrderAddressCustomer, createOrder, shippingRate } from '../../../API/customer/paymentService';
 import { getPorductCartService} from '../../../API/customer/productService';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
-import SelectBox from '../../untils/popUp/selectBox'
+import SelectAddress from '../../untils/popUp/selectAddress'
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
@@ -34,7 +34,7 @@ const orders = () => {
           addressCustomer,
         ] = await Promise.all([
           getPorductCartService(),
-          getAddressCustomer(),
+          getOrderAddressCustomer(),
         ]);
         if(addressCustomer.data.length !== 0 ){
           console.log(addressCustomer.data);
@@ -120,8 +120,9 @@ const orders = () => {
       selectedAddress = selectAddress;
     }
     try {
-      console.log(productCart, parseFloat(totalPrice), totalPriceProduct , deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, totalQuantity, deliveryRate.shipping_rate_id, selectedAddress.houseNo,selectedAddress.tambon_nameTH,selectedAddress.amphure_nameTH,selectedAddress.province_nameTH,selectedAddress.zip_code);
+      console.log( address[0]?.phone_number, productCart, parseFloat(totalPrice), totalPriceProduct , deliveryRate.price || 0, deliveryRate.cost_per_quantity || 0, totalQuantity, deliveryRate.shipping_rate_id, selectedAddress.houseNo,selectedAddress.tambon_nameTH,selectedAddress.amphure_nameTH,selectedAddress.province_nameTH,selectedAddress.zip_code);
       const response = await createOrder(
+        address[0]?.phone_number,
         productCart,
         parseFloat(totalPrice) || 0,
         totalPriceProduct || 0,
@@ -166,7 +167,7 @@ const orders = () => {
               {isNaN(selectAddress) ? (
                 <p>
                   <strong>
-                    {selectAddress.f_name} {selectAddress.l_name} | โทร: 0{selectAddress.phone_number}
+                    {selectAddress.f_name} {selectAddress.l_name} | โทร: {selectAddress.phone_number}
                   </strong>
                   <br />
                   {selectAddress.houseNo} ตำบล {selectAddress.tambon_nameTH} อำเภอ {selectAddress.amphure_nameTH} จังหวัด {selectAddress.province_nameTH} {selectAddress.zip_code}
@@ -179,7 +180,7 @@ const orders = () => {
           ) : (
             <p>
               <strong>
-                {address[0]?.f_name} {address[0]?.l_name} | โทร: 0{address[0]?.phone_number}
+                {address[0]?.f_name} {address[0]?.l_name} | โทร: {address[0]?.phone_number}
               </strong>
               <br />
               {address[0]?.houseNo} ตำบล {address[0]?.tambon_nameTH} อำเภอ {address[0]?.amphure_nameTH} จังหวัด {address[0]?.province_nameTH} {address[0]?.zip_code}
@@ -234,7 +235,7 @@ const orders = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
-      <SelectBox
+      <SelectAddress
         showModal={showSelectModal}
         handleClose={() => setShowSelectModal(false)}
         data={address}

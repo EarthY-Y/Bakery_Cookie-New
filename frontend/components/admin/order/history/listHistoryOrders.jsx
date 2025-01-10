@@ -1,48 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listOrderSuccessService, listOrderHistoryCancelService } from '../../../../API/admin/ordersHistoryService';
+import LoadingPopup from '../../../untils/popUp/loading';
 import { formatDate } from '../../../untils/frommatters/datetime';
+import Search from '../../../untils/fucntion/search';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 
 const listHistory = () => {
-  const [orderWaitStatement, setOrdersWaitStatement] = useState([]);
-  const [orderCheckOut, setOrdersCheckOut] = useState([]);
+  const [orderSuccess, setOrdersSuccess] = useState([]);
+  const [orderCancel, setOrdersCancel] = useState([]);
+  const [orderSuccessSearch, setOrdersSuccessSearch] = useState([]);
+  const [orderCancelSearch, setOrdersCancelSearch] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageCheckOut, setCurrentPageCheckOut] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getOrders = async () => {
+    setIsLoading(true);
+    const fecthData = async () => {
       try {
-        const res = await listOrderSuccessService();
-        console.log(res.data);
-        setOrdersWaitStatement(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
-    };
-    getOrders();
-  }, []);
+        const [
+          getlistOrderSuccess,
+          getlistOrderHistoryCancel,
+        ] = await Promise.all([
+          listOrderSuccessService(),
+          listOrderHistoryCancelService(),
+        ]);
 
-  useEffect(() => {
-    const getOrders = async () => {
-      try {
-        const res = await listOrderHistoryCancelService();
-        console.log(res.data);
-        setOrdersCheckOut(res.data);
-      } catch (err) {
-        console.error("Error fetching data:", err);
+        setOrdersSuccess(getlistOrderSuccess.data);
+        setOrdersCancel(getlistOrderHistoryCancel.data);
+      } catch (error) {
+        setError(error)
+      }finally{
+        setIsLoading(false);
       }
-    };
-    getOrders();
-  }, []);
+    }
+    fecthData();
+  }, [])
 
 
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrders = orderWaitStatement.slice(indexOfFirstItem, indexOfLastItem);
+  const currentOrders = orderSuccessSearch.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(orderWaitStatement.length / itemsPerPage);
+  const totalPages = Math.ceil(orderSuccessSearch.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -50,12 +54,19 @@ const listHistory = () => {
 
   const indexOfLastItemCheckOut = currentPageCheckOut * itemsPerPage;
   const indexOfFirstItemCheckOut = indexOfLastItemCheckOut - itemsPerPage;
-  const currentOrdersCheckOut = orderCheckOut.slice(indexOfFirstItemCheckOut, indexOfLastItemCheckOut);
+  const currentOrdersCheckOut = orderCancelSearch.slice(indexOfFirstItemCheckOut, indexOfLastItemCheckOut);
 
-  const totalPagesCheckOut = Math.ceil(orderCheckOut.length / itemsPerPage);
+  const totalPagesCheckOut = Math.ceil(orderCancelSearch.length / itemsPerPage);
 
   const handlePageChangeCheckOut = (pageNumber) => {
     setCurrentPageCheckOut(pageNumber);
+  };
+
+  const handleSearchCancel = (results) => {
+    setOrdersCancelSearch(results);
+  };
+  const handleSearchSuccess = (results) => {
+    setOrdersSuccessSearch(results)
   };
 
   return (
@@ -64,11 +75,30 @@ const listHistory = () => {
         <h2>ประวัติการสั่งซื้อ</h2>
       </div>
       <h4>จัดส่งสำเร็จ</h4>
+      <div className='row'>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderSuccess}
+            handleSearch={handleSearchSuccess}
+            name="รหัสคำสั่งซื้อ"
+            itemKeys={["orders_id"]}
+          />
+        </div>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderSuccess}
+            handleSearch={handleSearchSuccess}
+            name="ชื่อลูกค้า"
+            itemKeys={["fullname"]}
+          />
+        </div>
+      </div>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '15%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '25%' }}>ชื่อผู้สั่ง</th>
               <th style={{ width: '10%' }}>ปริมาณ</th>
               <th style={{ width: '10%' }}>ราคารวม</th>
               <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
@@ -81,6 +111,7 @@ const listHistory = () => {
             {currentOrders.map((order) => (
               <tr key={order.orders_id}>
                 <td>{order.orders_id}</td>
+                <td>{order.fullname}</td>
                 <td>{order.quantity} ชิ้น</td>
                 <td>{order.price} บาท</td>
                 <td>{formatDate(order.created_at)}</td>
@@ -98,9 +129,10 @@ const listHistory = () => {
         <div className="row gy-4">
           <div className="px-3 card-body">
             {currentOrders.map((order) => (
-              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
-                <div className="small text-secondary">
+              <div className="col-12 border rounded p-3 shadow-sm bg-light mb-2" key={order.orders_id}>
+                <div className="small">
                   <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
+                  <p className="mb-1">ชื่อผู้สั่ง: {order.fullname}</p>
                   <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
                   <p className="mb-1">ราคารวม: {order.price} บาท</p>
                   <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
@@ -138,11 +170,30 @@ const listHistory = () => {
         </ul>
       </nav>
       <h4>ยกเลิก</h4>
+      <div className='row'>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderCancel}
+            handleSearch={handleSearchCancel}
+            name="รหัสคำสั่งซื้อ"
+            itemKeys={["orders_id"]}
+          />
+        </div>
+        <div className="col-md-6 col-12">
+          <Search 
+            data={orderCancel}
+            handleSearch={handleSearchCancel}
+            name="ชื่อลูกค้า"
+            itemKeys={["fullname"]}
+          />
+        </div>
+      </div>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{ width: '25%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '15%' }}>รหัสคำสั่งซื้อ</th>
+              <th style={{ width: '25%' }}>ชื่อผู้สั่ง</th>
               <th style={{ width: '10%' }}>ปริมาณ</th>
               <th style={{ width: '10%' }}>ราคารวม</th>
               <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
@@ -155,6 +206,7 @@ const listHistory = () => {
             {currentOrdersCheckOut.map((order) => (
               <tr key={order.orders_id}>
                 <td>{order.orders_id}</td>
+                <td>{order.fullname}</td>
                 <td>{order.quantity} ชิ้น</td>
                 <td>{order.price} บาท</td>
                 <td>{formatDate(order.created_at)}</td>
@@ -172,9 +224,10 @@ const listHistory = () => {
         <div className="row gy-4">
           <div className="px-3 card-body">
             {currentOrdersCheckOut.map((order) => (
-              <div className="col-12 border rounded p-3 shadow-sm bg-light" key={order.orders_id}>
-                <div className="small text-secondary">
+              <div className="col-12 border rounded p-3 shadow-sm bg-light mb-2" key={order.orders_id}>
+                <div className="small ">
                   <p className="mb-1">รหัสคำสั่งซื้อ: {order.orders_id}</p>
+                  <p className="mb-1">ชื่อผู้สั่ง: {order.fullname}</p>
                   <p className="mb-1">ปริมาณ: {order.quantity} ชิ้น</p>
                   <p className="mb-1">ราคารวม: {order.price} บาท</p>
                   <p className="mb-1">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
@@ -211,6 +264,14 @@ const listHistory = () => {
           </li>
         </ul>
       </nav>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };
