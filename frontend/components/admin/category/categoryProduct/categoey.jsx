@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getListCategoryService } from '../../../../API/admin/categoryService';
+import { getListCategoryService, deleteCategoryProductService } from '../../../../API/admin/categoryService';
 import { formatDate } from '../../../untils/frommatters/datetime';
+import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
+import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
 
 const categoey = () => {
   const [listCategory, setListCategory] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [idProductCategory, setIdProductCategory] = useState("")
 
   useEffect(() => {
     const getCategoryList = async () => {
@@ -16,11 +23,13 @@ const categoey = () => {
         setListCategory(res.data);
       } catch (err) {
         console.error("Error fetching data:", err);
+        setError(err)
+      }finally{
+        setIsLoading(false);
       }
     };
     getCategoryList();
   }, []);
-
 
   // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -31,6 +40,21 @@ const categoey = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const hadleDelete = async(id) => {
+    setIdProductCategory(id)
+    setShowCancelModal(true)
+  }
+
+  const handleConfirm = async() => {
+    try {
+      const response = await deleteCategoryProductService(idProductCategory, 'skip')
+      console.log(response);
+      setListCategory(prev => prev.filter(productCategory => productCategory.product_category_id !== idProductCategory))
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -50,8 +74,9 @@ const categoey = () => {
               <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
-              <th style={{ width: '10%' }}>รายละเอียด</th>
-              <th style={{ width: '10%' }}>แก้ไข</th>
+              <th style={{ width: '8%' }}>รายละเอียด</th>
+              <th style={{ width: '5%' }}>แก้ไข</th>
+              <th style={{ width: '5%' }}>ลบ</th>
             </tr>
           </thead>
           <tbody>
@@ -69,6 +94,9 @@ const categoey = () => {
                 <td className="text-center">
                   <Link to={`edit/${category.product_category_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
                 </td>
+                <td className="text-center">
+                  <button className="btn btn-danger" onClick={() => hadleDelete(category.product_category_id)} ><i className="bi bi-trash"></i></button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -80,7 +108,10 @@ const categoey = () => {
             {currentOrders.map((category) => (
               <div className="col-12 border rounded p-3 shadow-sm bg-light" key={category.product_category_id}>
                 <div className="small text-secondary">
-                  <p className="mb-1">ประเภท: {category.category_name}</p>
+                  <div className="d-flex justify-content-between mt-3">
+                    <p className="mb-1">ประเภท: {category.category_name}</p>                                   
+                    <Link to={`edit/${category.product_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                  </div>
                   <p className="mb-1">จำนวนสินค้า: {category.amountCategoryProduct} อย่าง</p>
                   <p className="mb-1">วันที่สร้าง: {formatDate(category.created_at)}</p>
                   <p className="mb-1">วันที่เเก้ไข: {formatDate(category.updated_at)}</p>
@@ -89,7 +120,7 @@ const categoey = () => {
                 </div>
                 <div className="d-flex justify-content-between mt-3">
                   <Link to={`view/${category.product_category_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
-                  <Link to={`edit/${category.product_category_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
+                  <button className="btn btn-danger" onClick={() => hadleDelete(category.product_category_id)} ><i className="bi bi-trash"></i></button>
                 </div>
               </div>
             ))}
@@ -118,7 +149,22 @@ const categoey = () => {
           </li>
         </ul>
       </nav>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
 
+      <ConfirmPopUpModal
+        showModal={showCancelModal}
+        handleClose={() => setShowCancelModal(false)}
+        handleConfirm={handleConfirm}
+        text="ต้องการลบประเภทของสินค้านี้จริงๆใช่ไหม ?"
+      />
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

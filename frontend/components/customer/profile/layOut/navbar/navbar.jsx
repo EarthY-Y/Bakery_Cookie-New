@@ -23,7 +23,7 @@ function Navbar() {
       try {
         const [
           getCart,
-          getProductCart,          
+          getProductCart,
           getCategory,
           getProfileCustomer,
         ] = await Promise.all([
@@ -35,7 +35,7 @@ function Navbar() {
         // console.log(getListProduct.data);
         setCartId(getCart.data[0].cartId)
         setproductCart(getProductCart.data)
-        setCategoryList(getCategory.data)
+        setCategoryList(getCategory.data || [])
         setProflieCustomer(getProfileCustomer.data[0])
       } catch (error) {
         alert(error);
@@ -81,13 +81,16 @@ function Navbar() {
                   <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
                   <div className="dropdown d-inline">
                     <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-                    <ul className="dropdown-menu mt-2">
-                      {categoryList.map((item, index)=>(
-                        <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
-                      ))}
-                  </ul>
+                    {categoryList.length !== 0 ? (
+                        <><ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                          {categoryList.map((item, index)=>(
+                            <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                          ))}
+                          </ul>
+                        </>
+                      ) : ("")}
                   </div>
-                  <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
+                  <Link className="btn btn-outline text-white rounded-pill mx-1" to="/userManual">ขั้นตอนการสั่งซื้อ</Link>
                   <Link className="btn btn-outline text-white rounded-pill mx-1" to="/contact">ติดต่อสอบถาม</Link>
                 </div>
               )}
@@ -139,14 +142,17 @@ function Navbar() {
             {/* Dropdown menu สำหรับหมวดหมู่ */}
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1 " data-bs-toggle="dropdown" aria-expanded="false" >หมวดหมู่</button>
-              <ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-                {categoryList.map((item, index)=>(
-                  <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
-                ))}
-              </ul>
+              {categoryList.length !== 0 ? (
+                  <><ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                    {categoryList.map((item, index)=>(
+                      <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                    ))}
+                    </ul>
+                  </>
+                ) : ("")}
             </div>
 
-            <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
+            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/userManual">ขั้นตอนการสั่งซื้อ</Link>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/contact">ติดต่อสอบถาม</Link>
           </nav>
         </div>

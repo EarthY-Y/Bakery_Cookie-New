@@ -77,9 +77,8 @@ const ListPackageById = () => {
             <p className="border p-2 rounded bg-white form-control">{formatDate(packageById.created_at)}</p>
           </div>
         </div>
-
         <div className="text-center mt-4">
-          {/* <Link to={`/material/edit/${packageById.material_id}`} className="text-center mt-3 px-4 btn btn-outline-warning text-black">Edit</Link> */}
+          <Link to={`/package/edit/${id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
     </div>

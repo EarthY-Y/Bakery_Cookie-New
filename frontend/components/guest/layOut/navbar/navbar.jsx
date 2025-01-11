@@ -52,8 +52,8 @@ const Navbar = () => {
                     ))}
                   </ul>
                 </div>
-                <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
-            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guest-contact">ติดต่อสอบถาม</Link>
+                <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guestManual">ขั้นตอนการสั่งซื้อ</Link>
+                <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guest-contact">ติดต่อสอบถาม</Link>
               </div>
             )}
               <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
@@ -86,13 +86,17 @@ const Navbar = () => {
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/">หน้าหลัก</Link>
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-              <ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
-                {categoryList.map((item, index)=>(
-                  <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
-                ))}
-              </ul>
+                {categoryList.length !== 0 ? (
+                  <><ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                    {categoryList.map((item, index)=>(
+                      <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                    ))}
+                    </ul>
+                  </>
+                ) : ("")}
+              
             </div>
-            <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
+            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guestManual">ขั้นตอนการสั่งซื้อ</Link>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guest-contact">ติดต่อสอบถาม</Link>
           </nav>
         </div>

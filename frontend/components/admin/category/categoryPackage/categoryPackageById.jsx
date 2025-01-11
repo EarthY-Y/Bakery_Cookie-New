@@ -1,5 +1,4 @@
 import React, { useEffect, useState} from 'react';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getListPackageService, getCategoryPackageByIdService } from '../../../../API/admin/categoryPackageService';
 import { Link } from 'react-router-dom';
@@ -74,6 +73,9 @@ const CategoryPackageById = () => {
             <label className="form-label fw-bold">วันเวลาที่เเก้ไข</label>
             <p className="border p-2 rounded bg-white">{formatDate(listCategoryPackage[0]?.updated_at) || ""}</p>
           </div>
+        </div>
+        <div className="text-center mt-4">
+          <Link to={`/category/package/edit/${id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
     </div>

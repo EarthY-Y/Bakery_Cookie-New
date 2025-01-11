@@ -59,7 +59,7 @@ const ListOrders = () => {
                 <td>{order.status_order_id}</td>
                 <td>{order.status_name}</td>
                 <td>{formatDate(order.created_at)}</td>
-                <td>{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
+                <td>{formatDate(order.updated_at) || ""}</td>
                 <td className="text-center">{order.created_by}</td>
                 <td className="text-center">{order.updated_by}</td>
                 {order.is_active === 1 ? <td className="text-center text-success">ใช้งาน</td> : <td className="text-center text-danger">ไม่ใช่งาน</td>}
@@ -80,7 +80,7 @@ const ListOrders = () => {
                   <p className="mb-1">รหัสสถานะ: {order.status_order_id}</p>
                   <p className="mb-1">ชื่อสถานะ: {order.status_name}</p>
                   <p className="mb-1">วันที่สร้าง: {formatDate(order.created_at)}</p>
-                  <p className="mb-1">วันที่เเก้ไข: {formatDate(order.updated_at) || `รอชำระเงิน`}</p>
+                  <p className="mb-1">วันที่เเก้ไข: {formatDate(order.updated_at) || ""}</p>
                   <p className="mb-1">สร้างโดย: {order.created_by}</p>
                   <p className="mb-1">เเก้ไขโดย: {order.updated_by}</p>
                   {order.is_active === 1 ? <p className="mb-1 text-success">ใช้งาน</p> : <p className="mb-1 text-danger">ไม่ใช้งาน</p>}

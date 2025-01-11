@@ -40,7 +40,7 @@ const Navbar = memo(() => {
           getProfileCustomerService(),
         ])
         console.log(getCategory);
-        
+
         setCartId(getCart.data[0].cartId);
         setProductCart(getPorductCart.data);
         setCategoryList(getCategory.data)
@@ -84,13 +84,16 @@ const Navbar = memo(() => {
                 <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
                 <div className="dropdown d-inline">
                   <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-                  <ul className="dropdown-menu mt-2">
-                    {categoryList.map((item, index)=>(
-                      <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
-                    ))}
-                  </ul>
+                  {categoryList.length !== 0 ? (
+                    <><ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                      {categoryList.map((item, index)=>(
+                        <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                      ))}
+                      </ul>
+                    </>
+                  ) : ("")}
                 </div>
-                <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
+                <Link className="btn btn-outline text-white rounded-pill mx-1" to="/userManual">ขั้นตอนการสั่งซื้อ</Link>
                 <Link className="btn btn-outline text-white rounded-pill mx-1" to="/contact">ติดต่อสอบถาม</Link>
               </div>
             )}
@@ -143,13 +146,16 @@ const Navbar = memo(() => {
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/home">หน้าหลัก</Link>
             <div className="dropdown d-inline">
               <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
-              <ul className="dropdown-menu mt-2">
-                {categoryList.map((item, index)=>(
-                  <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
-                ))}
-              </ul>
+              {categoryList.length !== 0 ? (
+                  <><ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                    {categoryList.map((item, index)=>(
+                      <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                    ))}
+                    </ul>
+                  </>
+                ) : ([])}
             </div>
-            <button className="btn btn-outline text-white rounded-pill mx-1">ขั้นตอนการสั่งซื้อ</button>
+            <Link className="btn btn-outline text-white rounded-pill mx-1" to="/userManual">ขั้นตอนการสั่งซื้อ</Link>
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/contact">ติดต่อสอบถาม</Link>
           </nav>
         </div>
