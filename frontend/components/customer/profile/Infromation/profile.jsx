@@ -6,8 +6,7 @@ import LoadingPopup from '../../../untils/popUp/loading';
 import ErrorPopup from '../../../untils/popUp/errorPopup';
 import { logout } from '../../../../API/authService';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_CUSTOMER
-const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PROFILE
 // console.log(API_LINE_LOGIN); //ใช้ .env ไม่ได้ได้ค่ามาเป็น undefine
 
 const profile = () => {
