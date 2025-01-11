@@ -73,6 +73,7 @@ import ManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustom
 import EditManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustomerById-page';
 import LineOA from '../page/customer-page/communicate-page/lineOA-page';
 import GuestLineOA from '../page/guest/lineOA-page';
+import StepByStep from '../page/guest/stepByStep-page';
 
 const router = createBrowserRouter([
   {
@@ -131,6 +132,10 @@ const router = createBrowserRouter([
           {
             path: "guest-contact",
             element: <GuestLineOA />,
+          },
+          {
+            path: "guestManual",
+            element: <StepByStep />,
           },
         ]
       }, 
@@ -420,6 +425,10 @@ const router = createBrowserRouter([
           {
             path: "/contact",
             element: <LineOA />,
+          },
+          {
+            path: "userManual",
+            element: <StepByStep />,
           },
           {
             path: "/product/:id",

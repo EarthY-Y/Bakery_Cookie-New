@@ -3,34 +3,42 @@ import { Link } from 'react-router-dom';
 import { getListCategoryService, deleteCategoryPackageService } from '../../../../API/admin/categoryPackageService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
+import LoadingPopup from '../../../untils/popUp/loading';
 
 const CategoeyPackage = () => {
   const [listCategory, setListCategory] = useState([]);
+  const [currentOrders, setCurrentOrders] = useState([]);
+  const [totalPages, setTotalPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [idCategoryPackage, setIdCategoryPackage] = useState("")
 
   useEffect(() => {
     const getCategoryList = async () => {
+      setIsLoading(true)
       try {
         const res = await getListCategoryService();
         console.log(res.data);
         setListCategory(res.data);
       } catch (err) {
         console.error("Error fetching data:", err);
+      }finally{
+        setIsLoading(false);
       }
     };
     getCategoryList();
   }, []);
 
+  useEffect(() => {
+    // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    setCurrentOrders(listCategory.slice(indexOfFirstItem, indexOfLastItem))
 
-  // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrders = listCategory.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(listCategory.length / itemsPerPage);
+    setTotalPages(Math.ceil(listCategory.length / itemsPerPage))
+  }, [listCategory])
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -39,7 +47,6 @@ const CategoeyPackage = () => {
   const hadleDelete = async(id) => {
     setIdCategoryPackage(id)
     setShowCancelModal(true)
-
   }
 
   const handleConfirm = async() => {
@@ -59,7 +66,6 @@ const CategoeyPackage = () => {
         <Link to="create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทบรรจุภัณฑ์ </Link>
         <Link to="create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทบรรจุภัณฑ์ </Link>
       </div>
-      <p>รอการชำระเงิน</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -70,7 +76,7 @@ const CategoeyPackage = () => {
               <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
-              <th style={{ width: '5%' }}>รายละเอียด</th>
+              <th style={{ width: '8%' }}>รายละเอียด</th>
               <th style={{ width: '5%' }}>แก้ไข</th>
               <th style={{ width: '5%' }}>ลบ</th>
             </tr>
@@ -145,6 +151,11 @@ const CategoeyPackage = () => {
           </li>
         </ul>
       </nav>
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+
       <ConfirmPopUpModal
         showModal={showCancelModal}
         handleClose={() => setShowCancelModal(false)}

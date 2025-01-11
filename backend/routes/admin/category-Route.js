@@ -5,6 +5,7 @@ import {
     craeteCategory,
     updateCategoryProduct,
     getCategoryById,
+    deleteCategoryProduct,
 } from "../../controller/admin/category.js"
 import { verifyAdminMid } from "../../middleware/authAdmin.js"
 import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
@@ -17,5 +18,6 @@ router.get('/admin/get/product/picture',verifyAdminMid, getProductPicture);
 router.get('/admin/get/category/:id',verifyAdminMid, getCategoryById);
 router.post('/admin/create/category',verifyAdminMid, craeteCategory);
 router.patch('/admin/edit/category/:id',verifyAdminMid, updateCategoryProduct);
+router.patch('/admin/delete/category/product/:id',verifyAdminMid, deleteCategoryProduct);
 
 export default router

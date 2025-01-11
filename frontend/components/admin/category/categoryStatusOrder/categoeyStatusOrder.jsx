@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getListCategoryOrderStatusService } from '../../../../API/admin/categoryOrderStatusService';
+import { getListCategoryOrderStatusService, deleteCategoryStatusService } from '../../../../API/admin/categoryOrderStatusService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import LoadingPopup from '../../../untils/popUp/loading';
 import ErrorPopup from '../../../untils/popUp/errorPopup';
+import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
 
 const CategoeyStatusOrder = () => {
   const [listCategoryOrderStatus, setListCategoryOrderStatus] = useState([]);
+  const [currentOrderStatus, setCurrentOrderStatus] = useState([]);
+  const [totalPages, setTotalPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [idCategoryStatus, setIdCategoryStatus] = useState("")
 
+  const dis_trash = ["กำลังดำเนินการ","รอดำเนินการ"]
   useEffect(() => {
     const getCategoryList = async () => {
       try {
@@ -28,17 +34,35 @@ const CategoeyStatusOrder = () => {
     getCategoryList();
   }, []);
 
-
-  // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrderStatus = listCategoryOrderStatus.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(listCategoryOrderStatus.length / itemsPerPage);
+  useEffect(() => {
+    // คำนวณข้อมูลที่จะแสดงในแต่ละหน้า
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    setCurrentOrderStatus(listCategoryOrderStatus.slice(indexOfFirstItem, indexOfLastItem))
+  
+    setTotalPages(Math.ceil(listCategoryOrderStatus.length / itemsPerPage))
+  },[listCategoryOrderStatus])
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  const hadleDelete = async(id) => {
+    setIdCategoryStatus(id)
+    setShowCancelModal(true)
+
+  }
+
+  const handleConfirm = async() => {
+    try {
+      const response = await deleteCategoryStatusService(idCategoryStatus, 'skip')
+      console.log(response);
+      setListCategoryOrderStatus(prev => prev.filter(categorStatus => categorStatus.category_status_order_id !== idCategoryStatus))
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -46,7 +70,6 @@ const CategoeyStatusOrder = () => {
         <Link to="create" className="btn btn-success d-none d-md-inline-block"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทสถานะคำสั่งซื้อ </Link>
         <Link to="create" className="btn btn-success btn-sm d-md-none"><i className="bi bi-plus-circle-fill"></i> เพิ่มประเภทสถานะคำสั่งซื้อ </Link>
       </div>
-      <p>รอการชำระเงิน</p>
       <div className="d-none d-md-block">
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
@@ -57,8 +80,9 @@ const CategoeyStatusOrder = () => {
               <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
-              <th style={{ width: '5%' }}>รายละเอียด</th>
+              <th style={{ width: '10%' }}>รายละเอียด</th>
               <th style={{ width: '5%' }}>แก้ไข</th>
+              <th style={{ width: '5%' }}>ลบ</th>
             </tr>
           </thead>
           <tbody>
@@ -74,7 +98,14 @@ const CategoeyStatusOrder = () => {
                   <Link to={`view/${orderStatus.category_status_order_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>
                 <td className="text-center">
-                  <Link to={`edit/${orderStatus.category_status_order_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
+                {dis_trash.includes(orderStatus.category_status_order_name) ? (
+                  <button className="btn btn-warning" disabled={true}><i className="bi bi-pencil"></i></button>
+                ) : (<Link to={`edit/${orderStatus.category_status_order_id}`}className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
+                )}
+                </td>
+                <td className="text-center">
+                  <button className="btn btn-danger" disabled={dis_trash.includes(orderStatus.category_status_order_name)} //includes จะคืนค่ามาเป็น boolean ให้ไม่เหมือน map 
+                  onClick={() => hadleDelete(orderStatus.category_status_order_id)} ><i className="bi bi-trash"></i></button>
                 </td>
               </tr>
             ))}
@@ -98,6 +129,7 @@ const CategoeyStatusOrder = () => {
                   <p className="mb-1">เเก้ไขโดย: {orderStatus.updated_by}</p>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
+                  <button className="btn btn-danger" onClick={() => hadleDelete(orderStatus.category_status_order_id)} ><i className="bi bi-trash"></i></button>
                   <Link to={`view/${orderStatus.category_status_order_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
                 </div>
               </div>
@@ -135,6 +167,14 @@ const CategoeyStatusOrder = () => {
       {error && (
         <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
       )}
+
+      <ConfirmPopUpModal
+        showModal={showCancelModal}
+        handleClose={() => setShowCancelModal(false)}
+        handleConfirm={handleConfirm}
+        text="ต้องการลบประเภทสถานะคำสั่งซื้อนี้จริงๆใช่ไหม ?"
+      />
+      {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };

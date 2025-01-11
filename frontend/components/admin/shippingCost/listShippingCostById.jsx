@@ -87,7 +87,7 @@ const listShippingById = () => {
         </div>
 
         <div className="text-center mt-4">
-          <Link to={`/material/edit/${shippingMyId.material_id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
+          <Link to={`/shipping/edit/${id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
     </div>

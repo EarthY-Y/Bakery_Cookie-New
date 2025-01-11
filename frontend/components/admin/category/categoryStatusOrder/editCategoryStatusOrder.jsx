@@ -117,7 +117,7 @@ const EditCategoryStatusOrder = () => {
                       <input type="checkbox" value={orderStatus.status_order_id} className='form-check-large' style={{width:'20px', height:'20px'}}
                         onChange={(e) => {
                           const categoryStatusOrderId = e.target.value; //เก็บค่าที่มีการเปลี่ยนเเปลง
-                          setSelectedOrderStatuss(prev => //setSelect 
+                          setSelectedOrderStatus(prev => //setSelect 
                               prev.includes(categoryStatusOrderId) //ตรวจสอบค่าที่อยู่ใน Array productId ปัจจุบันด้วยการใช้ prev
                                   ? prev.filter(id => id !== categoryStatusOrderId) //ถ้าถ้าเคยมีเเล้วเพิ่มเข้ามาให้จะลบออก เป็นเหมือนการทำงานของ checkbox
                                   : [...prev, categoryStatusOrderId]

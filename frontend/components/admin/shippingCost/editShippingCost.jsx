@@ -61,7 +61,6 @@ const EditShipping = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      
       // ส่งข้อมูลไป Backend
       const res = await updateShippingService(carrierName, serviceType, weightRangeMin, weightRangeMax, price, deliveryDays, packageId, id, active);
       navigate(-1);

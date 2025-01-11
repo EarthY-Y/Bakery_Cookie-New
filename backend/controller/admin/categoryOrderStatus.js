@@ -7,8 +7,10 @@ export const getListCategoryOrderStatus = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query(`SELECT COUNT(so.category_status_order_id) as amountStatusOrders, cso.category_status_order_name, cso.category_status_order_id,
-                     cso.category_status_order_name, cso.created_by, cso.updated_at, cso.created_at, cso.updated_by FROM status_order so
+                     cso.category_status_order_name, a_created.userName as created_by, cso.updated_at, cso.created_at, a_updated.userName as updated_by FROM status_order so
                      LEFT JOIN category_status_order cso  ON cso.category_status_order_id = so.category_status_order_id
+                     LEFT JOIN admin a_created ON a_created.admin_id = cso.created_by
+                     LEFT JOIN admin a_updated ON a_updated.admin_id = cso.updated_by
                      WHERE so.category_status_order_id IS NOT NULL
                      GROUP BY so.category_status_order_id`,
                     (err, result) => { 
@@ -18,7 +20,7 @@ export const getListCategoryOrderStatus = async (req, res) => {
         })
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get ListCategoryPackage:", error);
+        console.error("Error get ListCategoryStatus:", error);
         res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
@@ -40,7 +42,7 @@ export const getStatusOrderslist = async (req, res) => {
     }
 }
 
-export const getCategoryPackageById = async (req, res) => {
+export const getCategoryStatusById = async (req, res) => {
     try {
         const id = req.params.id
 
@@ -49,7 +51,7 @@ export const getCategoryPackageById = async (req, res) => {
                      a_updated.userName as userNameUpdate, a_created.userName as userNameCreate FROM status_order so 
                      LEFT JOIN category_status_order cso ON cso.category_status_order_id = so.category_status_order_id
                      LEFT JOIN admin a_created ON a_created.admin_id = cso.created_by 
-                     LEFT JOIN admin a_updated ON a_updated.admin_id = cso.created_by 
+                     LEFT JOIN admin a_updated ON a_updated.admin_id = cso.updated_by 
                      WHERE so.is_active = 1 AND so.category_status_order_id = ? `,[id],
                 (err, result) => { 
                     if (err) return reject(err)
@@ -60,7 +62,7 @@ export const getCategoryPackageById = async (req, res) => {
         // console.log(results);
         return res.status(200).json(results);
     } catch (error) {
-        console.error("Error get CategoryPackageById:", error);
+        console.error("Error get CategoryStatusById:", error);
         res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
     }
 }
@@ -82,18 +84,18 @@ export const craetePacakageCategory = async (req, res) => {
         })
 
         if(results.lenght !== 0){
-            await createCategoryPackage(CategoryStatusOrderId, selectedorderStatus, token.admin_id)
+            await createCategoryStatus(CategoryStatusOrderId, selectedorderStatus, token.admin_id)
             return res.status(200).json(results);
         }
-        return res.status(200).json('create package successfully ');
+        return res.status(200).json('create Status successfully ');
 
     } catch (error) {
         console.error("Error create PacakageCategory:", error);
-        res.status(400).json({ message: "Error create package", error});
+        res.status(400).json({ message: "Error create Status", error});
     }
 }
 
-const createCategoryPackage = async (idCategory, selectedorderStatus, admin_id) => {
+const createCategoryStatus = async (idCategory, selectedorderStatus, admin_id) => {
     if (typeof selectedorderStatus === 'string') {
         selectedorderStatus = JSON.parse(selectedorderStatus);
     }
@@ -119,7 +121,7 @@ const createCategoryPackage = async (idCategory, selectedorderStatus, admin_id) 
     }
 };
 
-export const updateCategoryPackage = async (req, res) => {
+export const updateCategoryStatus = async (req, res) => {
     try {
         const idCategory = req.params.id
         const {changesCategoryProduct} = req.body
@@ -183,5 +185,38 @@ export const updateCategoryPackage = async (req, res) => {
     } catch (error) {
         console.error('Error inserting product into category_product:', error);
         res.status(400).json({ message: "Error edit category_product", error});
+    }
+};
+
+export const deleteCategoryStatus = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject) => {
+            db.query(
+                "UPDATE status_order SET category_status_order_id = NULL WHERE category_status_order_id = ?", [id], 
+                (err, result) => { 
+                    if (err) return reject(err);
+                    resolve(result);
+                }
+            );
+        });
+        console.log(results);
+        if(results){
+            const results = await new Promise((resolve, reject) => {
+                db.query(
+                    "DELETE FROM category_status_order WHERE category_status_order_id = ?", [id], 
+                    (err, result) => { 
+                        if (err) return reject(err);
+                        resolve(result);
+                    }
+                );
+            });
+            console.log(results);
+            return res.status(200).json(results)
+        }
+
+    } catch (error) {
+        console.error('Error delete category_product:', error);
+        res.status(400).json({ message: "ต้องการลบจริงๆใช่ไหม?", error});
     }
 };

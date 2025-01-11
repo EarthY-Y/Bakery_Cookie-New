@@ -251,19 +251,18 @@ export const CheckRouteAdmin = () => {
 
 // ฟังก์ชันในการลบ token
 function removeToken() {
+  location.reload(); 
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
   liff.init({liffId: '2006630207-4ENd2JnL', }) 
   if(liff.isLoggedIn()){
     liff.logout()
   }
   console.log('Token has been removed. Please log in again.');
-  location.reload(); 
 }
 
 // ฟังก์ชันในการตรวจสอบและลบ token อัตโนมัติ
 function autoRemoveToken(token) {
   if (!token) return;
-
   try {
     const tokenParts = JSON.parse(atob(token.split('.')[1])); // Decode token โดยไม่ต้องใช้กุญเเจที่เราตั้งได้เลย
     const now = Math.floor(Date.now() / 1000); // เวลาปัจจุบันเป็น Unix timestamp
@@ -284,13 +283,12 @@ function autoRemoveToken(token) {
 }
 
 function removeTokenAdmin() {
+  location.reload(); 
   localStorage.removeItem('tokenAdmin');
   console.log('Token has been removed. Please log in again.');
-  location.reload(); 
 }
 function autoRemoveTokenAdmin(token) {
   if (!token) return;
-
   try {
     const tokenParts = JSON.parse(atob(token.split('.')[1])); // Decode token โดยไม่ต้องใช้กุญเเจที่เราตั้งได้เลย
     const now = Math.floor(Date.now() / 1000); // เวลาปัจจุบันเป็น Unix timestamp

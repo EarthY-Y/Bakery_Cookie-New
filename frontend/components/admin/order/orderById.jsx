@@ -197,27 +197,27 @@ const orderById = () => {
           <tfoot>
             <tr>
               <td colSpan="5" className="text-end"><strong>ราคารวมสินค้ารวม</strong></td>
-              <td>{numberGrouping(orderById[0]?.price || 0)} บาท</td>
+              <td className="text-end">{numberGrouping(orderById[0]?.price || 0)} บาท</td>
             </tr>
             <tr>
               <td colSpan="5" className="text-end"><strong>ค่าส่ง</strong></td>
-              <td>{numberGrouping(orderById[0]?.cost_shipping || 0)} บาท</td>
+              <td className="text-end">{numberGrouping(orderById[0]?.cost_shipping || 0)} บาท</td>
             </tr>
             <tr>
               <td colSpan="5" className="text-end"><strong>ค่ากล่อง</strong></td>
-              <td>{numberGrouping(orderById[0]?.cost_package || 0)} บาท</td>
+              <td className="text-end">{numberGrouping(orderById[0]?.cost_package || 0)} บาท</td>
             </tr>
             <tr>
               <td colSpan="5" className="text-end"><strong>ยอดชำระ</strong></td>
-              <td>{numberGrouping(orderById[0]?.price + orderById[0]?.cost_package + orderById[0]?.cost_shipping || 0)} บาท</td>
+              <td className="text-end">{numberGrouping(orderById[0]?.price + orderById[0]?.cost_package + orderById[0]?.cost_shipping || 0)} บาท</td>
             </tr>
             <tr>
               <td colSpan="5" className="text-end"><strong>ต้นทุนคำสั่งซื้อ</strong></td>
-              <td>{numberGrouping(orderById[0]?.total_cost || 0)} บาท</td>
+              <td className="text-end">{numberGrouping(orderById[0]?.total_cost || 0)} บาท</td>
             </tr>
             <tr>
               <td colSpan="5" className="text-end"><strong>กำไร</strong></td>
-              <td>{numberGrouping(orderById[0]?.profit || 0)} บาท</td>
+              <td className="text-end">{numberGrouping(orderById[0]?.profit || 0)} บาท</td>
             </tr>
           </tfoot>
         </table>
@@ -271,8 +271,8 @@ const orderById = () => {
             <p className="border p-2 rounded bg-white">{ordersAddress.username}</p>
           </div>
           <div className="mb-3 col-md-6 col-12">
-            <label className="form-label fw-bold">นามสกุล</label>
-            <p className="border p-2 rounded bg-white">0{ordersAddress.phone_number}</p>
+            <label className="form-label fw-bold">เบอร์โทรศัพท์</label>
+            <p className="border p-2 rounded bg-white">{ordersAddress.phone_number}</p>
           </div>
         </div>
         <div className='row'>

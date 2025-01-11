@@ -188,3 +188,36 @@ export const getProductPicture = async (req, res) => {
         res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล picture", error});
     }
 }
+
+export const deleteCategoryProduct = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject) => {
+            db.query(
+                "DELETE FROM category_product WHERE product_category_id = ?", [id], 
+                (err, result) => { 
+                    if (err) return reject(err);
+                    resolve(result);
+                }
+            );
+        });
+        console.log(results);
+        if(results){
+            const results = await new Promise((resolve, reject) => {
+                db.query(
+                    "DELETE FROM product_category WHERE product_category_id = ?", [id], 
+                    (err, result) => { 
+                        if (err) return reject(err);
+                        resolve(result);
+                    }
+                );
+            });
+            console.log(results);
+            return res.status(200).json(results)
+        }
+
+    } catch (error) {
+        console.error('Error delete category_product:', error);
+        res.status(400).json({ message: "ต้องการลบจริงๆใช่ไหม?", error});
+    }
+};

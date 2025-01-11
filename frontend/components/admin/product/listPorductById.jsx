@@ -108,9 +108,8 @@ const listMaterialById = () => {
             <p className="border p-2 rounded bg-white">{formatDate(productMyId[0]?.created_at)}</p>
           </div>
         </div>
-
         <div className="text-center mt-4">
-          {/* <Link to={`/material/edit/${productMyId.material_id}`} className="text-center mt-3 px-4 btn btn-outline-warning"><i className="bi bi-pencil"></i> แก้ไข </Link> */}
+          <Link to={`/product/edit/${id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
     </div>

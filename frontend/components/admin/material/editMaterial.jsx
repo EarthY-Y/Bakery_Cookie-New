@@ -71,7 +71,7 @@ const EditMaterial = () => {
       
       // ส่งข้อมูลไป Backend
       const res = await updateMaterialService(formData, id);
-      navigate('/material');
+      navigate(-1);
       console.log(res);
     } catch (err) {
       console.log(err);
