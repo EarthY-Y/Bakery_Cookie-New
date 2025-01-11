@@ -74,6 +74,7 @@ import EditManagerCustomer from '../page/admin-page/manageCustomer-page/manageCu
 import LineOA from '../page/customer-page/communicate-page/lineOA-page';
 import GuestLineOA from '../page/guest/lineOA-page';
 import StepByStep from '../page/guest/stepByStep-page';
+import UserManual from '../page/customer-page/home/stepByStep-page';
 
 const router = createBrowserRouter([
   {
@@ -428,7 +429,7 @@ const router = createBrowserRouter([
           },
           {
             path: "userManual",
-            element: <StepByStep />,
+            element: <UserManual />,
           },
           {
             path: "/product/:id",
