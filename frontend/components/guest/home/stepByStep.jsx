@@ -41,14 +41,14 @@ const CategoryProductList = () => {
       </div>
       {steps.map((step, index) => (
         <div key={index} className="row align-items-center mb-5">
-          <div className="col-md-6 text-center">
+          <div className="col-md-8 text-center">
             <img
               src={`${API_URL_PICTURE}${step.imgName}`}
               alt={`ขั้นตอนที่ ${index + 1}`}
               className="img-fluid rounded shadow"
             />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <h4 className="text-primary">{step.title}</h4>
           </div>
         </div>
