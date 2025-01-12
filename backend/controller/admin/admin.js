@@ -27,7 +27,7 @@ export const getAdminById = async (req, res) => {
         console.log(UserName);
         
         const results = await new Promise((resolve, reject) => {
-            db.query("SELECT userName FROM Admin WHERE userName = ?", [UserName], (err, result) => {
+            db.query("SELECT userName FROM admin WHERE userName = ?", [UserName], (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
             })

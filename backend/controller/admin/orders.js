@@ -126,7 +126,7 @@ export const getOrdersHistoryById = async (req, res) => {
             db.query("SELECT o.orders_id, so.status_name, COALESCE(a.userName, c.username) AS username, osh.change_time FROM  order_status_history osh"+ //COALESCE เลือกเอาอันที่ไม่เป็น Null
                     " INNER JOIN orders o ON osh.orders_id = o.orders_id"+
                     " INNER JOIN status_order so ON osh.status_order_id = so.status_order_id"+
-                    " LEFT JOIN Admin a ON a.admin_id = osh.changed_by"+
+                    " LEFT JOIN admin a ON a.admin_id = osh.changed_by"+
                     " LEFT JOIN customer c ON c.customer_id = osh.changed_by"+
                     " WHERE o.orders_id = ?"+
                     " ORDER BY osh.change_time DESC", [id],
