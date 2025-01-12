@@ -62,7 +62,7 @@ export const getOrdersById = async (req, res) => {
                     " cpd.cost_product, ocd.total_cost, op.profit, p.selling_price_per_quantity FROM orders o"+
                     " LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id"+
                     " LEFT JOIN order_profit op ON op.orders_id = o.orders_id"+
-                    " LEFT JOIN cost_product_detaails cpd ON cpd.order_cost_details_id = ocd.order_cost_details_id"+
+                    " LEFT JOIN cost_product_details cpd ON cpd.order_cost_details_id = ocd.order_cost_details_id"+
                     " INNER JOIN cart c ON o.cartId = c.cartId"+
                     " INNER JOIN cart_product cp ON c.cartId = cp.cartId"+
                     " INNER JOIN product p ON p.product_id = cp.product_id"+

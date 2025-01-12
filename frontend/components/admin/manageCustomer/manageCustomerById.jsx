@@ -31,7 +31,7 @@ const manageCustomerById = () => {
         console.log(getCustomerById, getCustomerAddressById);
         
         setManageCustomerById(getCustomerById.data[0])
-        setPicture(getCustomerById.data[0]?.customerpic)
+        setPicture(getCustomerById.data[0]?.customerpic || "ไม่มีข้อมูลรูปภาพ")
         setStatusactive(getCustomerById.data[0].is_active)
 
         setManageCustomerAddressById(getCustomerAddressById.data)
@@ -64,7 +64,7 @@ const manageCustomerById = () => {
           <div className="position-relative bg-white" style={{margin: '2%', width: '250px', height: '250px', bcustomerAddress: '1px dashed #ccc', bcustomerAddressRadius: '5px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
             {Picture ? (
               // ถ้ามี Picture จะสร้าง URL สำหรับแสดงรูปที่ดึงจากฐานข้อมูลหรือรูปที่อัพโหลดใหม่
-              <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', bcustomerAddressRadius: '5px', height: '100%', objectFit: 'cover' }} />
+              <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt={Picture} style={{ width: '100%', bcustomerAddressRadius: '5px', height: '100%', objectFit: 'cover' }} />
             ) : (
               <span>ไม่มีรูปภาพ</span>
             )}

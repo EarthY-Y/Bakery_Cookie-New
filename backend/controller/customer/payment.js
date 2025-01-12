@@ -241,7 +241,7 @@ const detailCostProduct = async (req, cartItem, cartItemId, orderId, totalQuanti
             if (results) {
                 const costProductDetails = resultCalculateTotalCost.map( item =>[uuidv4(), orderCostDetailsId, item.product_id, item.costPerUnit, item.quantity, item.totalCostPerProduct])
                 const resultsInsertCostProductDeatails = await new Promise((resolve, reject) => {
-                    db.query("INSERT INTO cost_product_detaails (cost_product_detaails_id, order_cost_details_id, product_id, cost_product, quantity, total_product_cost) VALUES ?",
+                    db.query("INSERT INTO cost_product_details (cost_product_detaails_id, order_cost_details_id, product_id, cost_product, quantity, total_product_cost) VALUES ?",
                         [costProductDetails],
                         (err, result) => {
                             if (err) return reject(err);
