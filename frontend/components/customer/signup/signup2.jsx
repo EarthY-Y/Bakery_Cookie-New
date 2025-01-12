@@ -10,7 +10,7 @@ const Signup2 = () => {
   const { formData, setFormData } = useContext(FormContext);
   const navigate = useNavigate();
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value.trimStart() });
   };
   const handleSubmit = async (event) => {
     event.preventDefault(); //ต้องมี เพราะ ป้องกันการรีเฟรชหน้าเว็บของ form, ควบคุมการส่งข้อมูลเอง

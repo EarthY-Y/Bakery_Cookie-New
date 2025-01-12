@@ -53,7 +53,14 @@ export const createCustomer = async (req, res) => {
         });
     });
 
-    if(resultsAdmin.length !== 0){
+    const resultsCustomer = await new Promise((resolve, reject) => {
+        db.query("SELECT username FROM customer WHERE username = ?", username, (err, resultsAdmin) => {
+            if (err) return reject(err);
+            resolve(resultsAdmin);
+        });
+    });
+
+    if(resultsAdmin.length !== 0 || resultsCustomer.length !== 0){
         return res.status(404).json({ message: "มีชื่อผู้ใช้นี้เเล้ว" });
     }
     

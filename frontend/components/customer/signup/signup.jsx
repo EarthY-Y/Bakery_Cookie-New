@@ -7,7 +7,7 @@ const Signup = () => {
   const { formData, setFormData } = useContext(FormContext);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value }); //...formData อัปเดทเฉพาะฟิลด์นั้นๆ เรียกว่า Spread Operator
+    setFormData({ ...formData, [e.target.name]: e.target.value.trimStart() }); //...formData อัปเดทเฉพาะฟิลด์นั้นๆ เรียกว่า Spread Operator เเละ trimStart ทำให้ start ไม่ได้
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,13 +35,6 @@ const Signup = () => {
                     <input name='l_name' type="text" minLength={5} onChange={handleChange} value={formData.l_name} required className="form-control" id="sname" placeholder="นามสกุล" />
                   </div>
                 </div>
-
-                {/* <div className="row mb-4">
-                  <label htmlFor="email" className="col-3 col-auto col-form-label">อีเมล</label>
-                  <div className="col-8">
-                    <input type="email" onChange={handleChange} value={formData.username}  className="form-control" id="email" placeholder="อีเมล"/>
-                  </div>
-               </div> */}
 
                 <div className="row mb-4">
                   <label htmlFor="phone" className="col-3 col-auto col-form-label">เบอร์โทรศัพท์</label>

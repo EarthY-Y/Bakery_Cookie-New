@@ -59,11 +59,11 @@ const ListShipping = () => {
             {shipping.map((shipp) => (
               <tr key={shipp.shipping_rate_id }>
                 <td>{shipp.carrier_name}</td>
-                <td>{shipp.service_type}</td>
+                <td className='text-center'>{shipp.service_type}</td>
                 <td>{shipp.weight_range_min} กรัม - {shipp.weight_range_max} กรัม</td>
-                <td>{numberGrouping(shipp.price)} บาท</td>
-                <td>{numberGrouping(shipp.cost_per_quantity)} บาท</td>
-                <td>{shipp.estimated_delivery_days} วัน</td>
+                <td className='text-center'>{numberGrouping(shipp.price)} บาท</td>
+                <td className='text-center'>{numberGrouping(shipp.cost_per_quantity)} บาท</td>
+                <td className='text-center'>{shipp.estimated_delivery_days} วัน</td>
                 {shipp.is_active === 1 ? <td className="text-center text-success">ใช้งาน</td> : <td className="text-center text-danger">ไม่ใช่งาน</td>}
                 <td><Link to={`view/${shipp.shipping_rate_id }`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${shipp.shipping_rate_id }`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>

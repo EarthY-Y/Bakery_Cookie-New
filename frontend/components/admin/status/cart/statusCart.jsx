@@ -43,25 +43,25 @@ const ListOrders = () => {
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{ width: '20%' }}>รหัสสถานะ</th>
-              <th style={{ width: '10%' }}>ชื่อสถานะ</th>
+              {/* <th style={{ width: '20%' }}>รหัสสถานะ</th> */}
+              <th style={{ width: '20%' }}>ชื่อสถานะ</th>
               <th style={{ width: '15%' }}>วันที่สร้าง</th>
               <th style={{ width: '15%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
-              <th style={{ width: '10%' }}>สถานะการใช้งาน</th>
-              <th style={{ width: '15%' }}>เเก้ไข</th>
+              <th style={{ width: '15%' }}>สถานะการใช้งาน</th>
+              <th style={{ width: ' 5%' }}>เเก้ไข</th>
             </tr>
           </thead>
           <tbody>
             {currentStatusCart.map((order) => (
               <tr key={order.status_cart_id}>
-                <td>{order.status_cart_id}</td>
+                {/* <td>{order.status_cart_id}</td> */}
                 <td>{order.status_name}</td>
-                <td>{formatDate(order.created_at)}</td>
-                <td>{formatDate(order.updated_at) || ""}</td>
-                <td className="text-center">{order.created_by}</td>
-                <td className="text-center">{order.updated_by}</td>
+                <td className='text-center'>{formatDate(order.created_at)}</td>
+                <td className='text-center'>{formatDate(order.updated_at) || ""}</td>
+                <td>{order.created_by}</td>
+                <td>{order.updated_by}</td>
                 {order.is_active === 1 ? <td className="text-center text-success">ใช้งาน</td> : <td className="text-center text-danger">ไม่ใช่งาน</td>}
                 <td className="text-center">
                   <Link to={`edit/cart/${order.status_cart_id}`} className="btn btn-warning"><i className="bi bi-pencil"></i></Link>

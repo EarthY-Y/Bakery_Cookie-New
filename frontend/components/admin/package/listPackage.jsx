@@ -73,9 +73,9 @@ const ListPackage = () => {
               <tr key={index}>
                 <td><img src={API_URL_PICTURE + packges.package_pic} className="img-fluid rounded" style={{ maxHeight: '75px', maxWidth: '120px' }} /></td>
                 <td>{packges.package_name}</td>
-                <td>{packges.cost} บาท</td>
-                <td>{packges.quantity} ชิ้น</td>
-                <td>{packges.cost_per_quantity} บาท/ชิ้น</td>
+                <td className='text-center'>{packges.cost} บาท</td>
+                <td className='text-center'>{packges.quantity} ชิ้น</td>
+                <td className='text-center'>{packges.cost_per_quantity} บาท/ชิ้น</td>
                 {packges.is_active == 1 ? (<td className="text-center text-success">เปิดใช้งาน</td>):(<td className="text-center text-danger">ปิดการใช้งาน</td>)}
                 {/* <td>{formatDate(packges.created_at)}</td> */}
                 <td><Link to={`view/${packges.package_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>

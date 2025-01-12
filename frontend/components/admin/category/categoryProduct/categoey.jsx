@@ -70,8 +70,8 @@ const categoey = () => {
             <tr className="text-center align-middle">
               <th style={{ width: '15%' }}>ประเภท</th>
               <th style={{ width: '10%' }}>จำนวนสินค้า</th>
-              <th style={{ width: '10%' }}>วันที่สร้าง</th>
-              <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
+              <th style={{ width: '15%' }}>วันที่สร้าง</th>
+              <th style={{ width: '15%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
               <th style={{ width: '8%' }}>รายละเอียด</th>
@@ -83,11 +83,11 @@ const categoey = () => {
             {currentOrders.map((category) => (
               <tr key={category.product_category_id}>
                 <td>{category.category_name}</td>
-                <td>{category.amountCategoryProduct} อย่าง</td>
-                <td>{formatDate(category.created_at)}</td>
-                <td>{formatDate(category.updated_at)}</td>
-                <td className="text-center">{category.created_by}</td>
-                <td className="text-center">{category.updated_by}</td>
+                <td >{category.amountCategoryProduct} อย่าง</td>
+                <td className='text-center'>{formatDate(category.created_at)}</td>
+                <td className='text-center'>{formatDate(category.updated_at)}</td>
+                <td>{category.created_by}</td>
+                <td>{category.updated_by}</td>
                 <td className="text-center">
                   <Link to={`view/${category.product_category_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>

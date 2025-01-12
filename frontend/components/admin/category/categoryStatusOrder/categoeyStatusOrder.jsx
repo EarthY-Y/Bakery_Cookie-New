@@ -75,9 +75,9 @@ const CategoeyStatusOrder = () => {
           <thead className="table-success">
             <tr className="text-center align-middle">
               <th style={{ width: '10%' }}>ประเภท</th>
-              <th style={{ width: '10%' }}>จำนวนบรรจุภัณฑ์</th>
-              <th style={{ width: '10%' }}>วันที่สร้าง</th>
-              <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
+              <th style={{ width: '15%' }}>จำนวนบรรจุภัณฑ์</th>
+              <th style={{ width: '15%' }}>วันที่สร้าง</th>
+              <th style={{ width: '15%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
               <th style={{ width: '10%' }}>รายละเอียด</th>
@@ -90,10 +90,10 @@ const CategoeyStatusOrder = () => {
               <tr key={orderStatus.category_status_order_id}>
                 <td>{orderStatus.category_status_order_name}</td>
                 <td>{orderStatus.amountStatusOrders} อย่าง</td>
-                <td>{formatDate(orderStatus.created_at || 0)}</td>
-                <td>{formatDate(orderStatus.updated_at || 0)}</td>
-                <td className="text-center">{orderStatus.created_by}</td>
-                <td className="text-center">{orderStatus.updated_by}</td>
+                <td className='text-center'>{formatDate(orderStatus.created_at || 0)}</td>
+                <td className='text-center'>{formatDate(orderStatus.updated_at || 0)}</td>
+                <td>{orderStatus.created_by}</td>
+                <td>{orderStatus.updated_by}</td>
                 <td className="text-center">
                   <Link to={`view/${orderStatus.category_status_order_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>

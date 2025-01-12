@@ -109,23 +109,23 @@ const ListOrders = () => {
           <thead className="table-success">
             <tr className="text-center align-middle">
               <th style={{ width: '15%' }}>รหัสคำสั่งซื้อ</th>
-              <th style={{ width: '25%' }}>ชื่อผู้สั่ง</th>
+              <th style={{ width: '15%' }}>ชื่อผู้สั่ง</th>
               <th style={{ width: '10%' }}>ปริมาณ</th>
               <th style={{ width: '10%' }}>ราคารวม</th>
-              <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-              <th style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-              <th style={{ width: '10%' }}>สถานะ</th>
-              <th style={{ width: '10%' }}>รายละเอียด</th>
+              <th style={{ width: '15%' }}>วันที่สั่งซื้อ</th>
+              <th style={{ width: '15%' }}>วันที่ชำระเงิน</th>
+              <th style={{ width: '12%' }}>สถานะ</th>
+              <th style={{ width: '15%' }}>รายละเอียด</th>
             </tr>
           </thead>
           <tbody>
             {currentOrdersCheckOut.map((order) => (
               <tr key={order.orders_id}>
-                <td>{order.orders_id}</td>
+                <td className='text-center'>{order.orders_id}</td>
                 <td>{order.fullname}</td>
-                <td>{order.quantity} ชิ้น</td>
-                <td>{order.price} บาท</td>
-                <td>{formatDate(order.created_at)}</td>
+                <td className='text-center'>{order.quantity} ชิ้น</td>
+                <td className='text-center'>{order.price} บาท</td>
+                <td className='text-center'>{formatDate(order.created_at)}</td>
                 <td className="text-center">{formatDate(order.updated_at) || `รอชำระเงิน`}</td>
                 <td className="text-center">{order.status_name}</td>
                 <td className="text-center">
@@ -205,24 +205,22 @@ const ListOrders = () => {
           <thead className="table-success">
             <tr className="text-center align-middle">
               <th style={{ width: '15%' }}>รหัสคำสั่งซื้อ</th>
-              <th style={{ width: '25%' }}>ชื่อผู้สั่ง</th>
+              <th style={{ width: '15%' }}>ชื่อผู้สั่ง</th>
               <th style={{ width: '10%' }}>ปริมาณ</th>
               <th style={{ width: '10%' }}>ราคารวม</th>
-              <th style={{ width: '10%' }}>วันที่สั่งซื้อ</th>
-              <th style={{ width: '10%' }}>วันที่ชำระเงิน</th>
-              <th style={{ width: '10%' }}>สถานะ</th>
-              <th style={{ width: '10%' }}>รายละเอียด</th>
+              <th style={{ width: '15%' }}>วันที่สั่งซื้อ</th>
+              <th style={{ width: '12%' }}>สถานะ</th>
+              <th style={{ width: '15%' }}>รายละเอียด</th>
             </tr>
           </thead>
           <tbody>
             {currentOrders.map((order) => (
               <tr key={order.orders_id}>
-                <td>{order.orders_id}</td>
+                <td className='text-center'>{order.orders_id}</td>
                 <td>{order.fullname}</td>
-                <td>{order.quantity} ชิ้น</td>
-                <td>{order.price} บาท</td>
-                <td>{formatDate(order.created_at)}</td>
-                <td className="text-center">{`รอชำระเงิน`}</td>
+                <td className='text-center'>{order.quantity} ชิ้น</td>
+                <td className='text-center'>{order.price} บาท</td>
+                <td className='text-center'>{formatDate(order.created_at)}</td>
                 <td className="text-center">{order.status_name}</td>
                 <td className="text-center">
                   <Link to={`view/detail/order/${order.orders_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
