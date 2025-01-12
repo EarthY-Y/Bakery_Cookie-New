@@ -74,10 +74,10 @@ const ListMaterial = () => {
               <tr key={material.material_id}>
                 <td><img src={API_URL_PICTURE + material.materialpic_name} className="img-fluid rounded" alt={material.material_name} style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                 <td>{material.material_name}</td>
-                <td>{material.quantity} กรัม</td>
-                <td>{material.cost} บาท</td>
-                <td>{material.cost_per_quantity} บาท</td>
-                <td>{formatDate(material.created_at)}</td>
+                <td className='text-center'>{material.quantity} กรัม</td>
+                <td className='text-center'>{material.cost} บาท</td>
+                <td className='text-center'>{material.cost_per_quantity} บาท</td>
+                <td className='text-center'>{formatDate(material.created_at)}</td>
                 <td><Link to={`view/${material.material_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${material.material_id}`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
                 {/* <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td> */}

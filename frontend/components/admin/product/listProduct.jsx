@@ -57,7 +57,7 @@ const listProduct = () => {
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{width: '15%' }}>รูปภาพ</th>
+              <th style={{width: '10%' }}>รูปภาพ</th>
               <th style={{width: '20%' }}>ชื่อสินค้า</th>
               <th style={{width: '10%' }}>ต้นทุน</th>
               <th style={{width: '10%' }}>ราคาขาย/ชิ้น</th>
@@ -71,11 +71,11 @@ const listProduct = () => {
           <tbody>
             {productsSearch.map((products, index) => (
               <tr key={index}>
-                <td><img src={API_URL_PICTURE + products.productpic_name} className="img-fluid rounded text-center" style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
+                <td className='text-center'><img src={API_URL_PICTURE + products.productpic_name} className="img-fluid rounded text-center" style={{ maxHeight: '75px', maxWidth: '120px' }}/></td>
                 <td>{products.product_name}</td>
-                <td>{products.cost.toFixed(3)} บาท</td>
-                <td>{products.selling_price_per_quantity} บาท</td>
-                <td>{products.quantity_per_time} ชิ้น</td>
+                <td className='text-center'>{products.cost.toFixed(3)} บาท</td>
+                <td className='text-center'>{products.selling_price_per_quantity} บาท</td>
+                <td className='text-center'>{products.quantity_per_time} ชิ้น</td>
                 {/* <td>{formatDate(products.created_at)}</td> */}
                 {products.is_active === 1 ? <td className="text-center text-success">วางขาย</td> : <td className="text-center text-danger">เลิกขาย</td>}
                 <td><Link to={`view/${products.product_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>

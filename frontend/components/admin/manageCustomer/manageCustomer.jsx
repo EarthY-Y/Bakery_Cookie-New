@@ -84,7 +84,7 @@ const managerCustomer = () => {
                 <td>{customer.f_name}</td>
                 <td>{customer.l_name}</td>
                 <td>{customer.username}</td>
-                <td>{formatDate(customer.created_at)}</td>
+                <td className='text-center'>{formatDate(customer.created_at)}</td>
                 {customer.is_active == 1 ? (<td className="text-center text-success">เปิดใช้งาน</td>):(<td className="text-center text-danger">ปิดการใช้งาน</td>)}
                 <td className="text-center">
                   <Link to={`view/${customer.customer_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>

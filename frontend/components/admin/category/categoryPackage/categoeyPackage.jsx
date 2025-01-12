@@ -70,10 +70,10 @@ const CategoeyPackage = () => {
         <table className="table table-striped table-hover table-bordered rounded-3 overflow-hidden">
           <thead className="table-success">
             <tr className="text-center align-middle">
-              <th style={{ width: '10%' }}>ประเภท</th>
-              <th style={{ width: '10%' }}>จำนวนบรรจุภัณฑ์</th>
-              <th style={{ width: '10%' }}>วันที่สร้าง</th>
-              <th style={{ width: '10%' }}>วันที่เเก้ไข</th>
+              <th style={{ width: '15%' }}>ประเภท</th>
+              <th style={{ width: '15%' }}>จำนวนบรรจุภัณฑ์</th>
+              <th style={{ width: '15%' }}>วันที่สร้าง</th>
+              <th style={{ width: '15%' }}>วันที่เเก้ไข</th>
               <th style={{ width: '10%' }}>สร้างโดย</th>
               <th style={{ width: '10%' }}>เเก้ไขโดย</th>
               <th style={{ width: '8%' }}>รายละเอียด</th>
@@ -86,10 +86,10 @@ const CategoeyPackage = () => {
               <tr key={category.package_category_id}>
                 <td>{category.package_category_name}</td>
                 <td>{category.amountCategoryPackage} อย่าง</td>
-                <td>{formatDate(category.created_at)}</td>
-                <td>{formatDate(category.updated_at)}</td>
-                <td className="text-center">{category.created_by}</td>
-                <td className="text-center">{category.updated_by}</td>
+                <td className='text-center'>{formatDate(category.created_at)}</td>
+                <td className='text-center'>{formatDate(category.updated_at)}</td>
+                <td>{category.created_by}</td>
+                <td>{category.updated_by}</td>
                 <td className="text-center">
                   <Link to={`view/${category.package_category_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>
