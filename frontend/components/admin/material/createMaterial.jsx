@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createMaterialService } from '../../../API/admin/materialService';
 import { Link } from 'react-router-dom';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const createMaterial = () => {
   const [MaterialName, setMaterial_name] = useState("");
@@ -10,6 +11,7 @@ const createMaterial = () => {
   const [Costes, setCost] = useState("");
   const [CostesPerQuantities, setCostesPerQuantities] = useState("");
   const [Picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -27,6 +29,7 @@ const createMaterial = () => {
       console.log(res);
     } catch (err) {
       console.log(err);
+      setError(err)
     }
   }
 
@@ -111,6 +114,9 @@ const createMaterial = () => {
           </div>
         </form>
       </div>
+      {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
     </div>
   );
 };

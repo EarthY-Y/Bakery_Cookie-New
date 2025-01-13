@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { updateMaterialService, listMaterialByIdService } from '../../../API/admin/materialService';
 import { Link, useParams } from 'react-router-dom';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -14,6 +15,7 @@ const EditMaterial = () => {
   const [CostesPerQuantities, setCostesPerQuantities] = useState("");
   const [NewCostesPerQuantities, setNewCostesPerQuantities] = useState("");
   const [Picture, setPicture] = useState(null); // เก็บทั้งรูปที่ดึงจากฐานข้อมูลและรูปใหม่ที่อัพโหลด
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
   
@@ -34,7 +36,7 @@ const EditMaterial = () => {
         setCostesPerQuantities(response.data[0].cost_per_quantity)
         setPicture(response.data[0].materialpic_name); // ตั้งค่าให้ Picture เป็นชื่อไฟล์รูปจากฐานข้อมูล
       } catch (error) {
-        alert(error);
+        setError(error);
       }
     };
     getlistMaterialById();
@@ -166,6 +168,9 @@ const EditMaterial = () => {
           </div>
         </form>
       </div>
+      {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
     </div>
   );
 };
