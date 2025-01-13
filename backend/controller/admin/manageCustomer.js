@@ -22,11 +22,11 @@ export const getListCustomer = async (req, res) => {
 export const getListCustomerById = async (req, res) => {
     try {
         const id = req.params.id
-        // console.log(id);
+        console.log(id);
         
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT * FROM customer `,
-                    [id],
+            db.query(`SELECT * FROM customer WHERE customer_id = ?`, 
+                [id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

@@ -96,6 +96,9 @@ const CreateAddress = () => {
           selectedProvince ? getAmphure(selectedProvince) : Promise.resolve({ data: [] }),
           selectedAmphure ? getTambon(selectedAmphure) : Promise.resolve({ data: [] })
         ]);
+
+        console.log(amphureResponse.data, tambonResponse.data);
+        
   
         // ตั้งค่าอำเภอและตำบล
         setAmphures(amphureResponse.data || []);
