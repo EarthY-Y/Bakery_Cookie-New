@@ -48,7 +48,7 @@ const upload = multer({
     cb(null, true);
   },
   limits: {
-    fileSize: 1 * 1024 * 1024, // จำกัดขนาดไฟล์ 1MB
+    fileSize: 2 * 1024 * 1024, // จำกัดขนาดไฟล์ 1MB
   },
 });
 
