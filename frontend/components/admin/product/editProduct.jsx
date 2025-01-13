@@ -5,6 +5,7 @@ import { listProductByIdService, listProductPackageByIdService, listProductPacka
 import { listMaterialService } from '../../../API/admin/materialService';
 import { editProductService } from '../../../API/admin/productService';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 import TooltipUntils from '../../untils/popUp/tooltip';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
@@ -20,6 +21,7 @@ const EditProduct = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [active, setStatusactive] = useState("1");
   const { id } = useParams();
   const navigate = useNavigate();
@@ -76,7 +78,7 @@ const EditProduct = () => {
 
       } catch (error) {
         console.error("Error fetching data:", error);
-        alert(error.message);
+        setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -342,6 +344,9 @@ const EditProduct = () => {
       }
     } catch (error) {
       console.error('Error:', error);
+      setError(error)
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -539,6 +544,9 @@ const EditProduct = () => {
           isLoading = {isLoading}
         />
         {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+        {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
       </div>
     </form>
   );

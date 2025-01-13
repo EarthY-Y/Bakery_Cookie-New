@@ -4,6 +4,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import { listMaterialService } from '../../../API/admin/materialService';
 import { createProductService, listProductPackageService } from '../../../API/admin/productService';
 import TooltipUntils from '../../untils/popUp/tooltip';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 import LoadingPopup from '../../untils/popUp/loading';
 
 const CreateProduct = () => {
@@ -14,6 +15,7 @@ const CreateProduct = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   // ฟังก์ชันสำหรับคำนวณต้นทุนรวม
@@ -208,6 +210,7 @@ const CreateProduct = () => {
           setListPackage(getListProductPackage.data);
         } catch (error) {
             console.error("Error fetching materials:", error);
+            setError(error)
         }finally{
           setIsLoading(false)
         }
@@ -233,6 +236,7 @@ const CreateProduct = () => {
         navigate(-1);
     } catch (error) {
         console.log(error); // แสดงข้อผิดพลาด
+        setError(error);
     }finally{
       setIsLoading(false)
     }
@@ -378,6 +382,9 @@ const CreateProduct = () => {
           isLoading = {isLoading}
         />
         {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+        {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
       </div>
     </form>
   );

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createMaterialService } from '../../../API/admin/materialService';
 import { Link } from 'react-router-dom';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const createMaterial = () => {
   const [MaterialName, setMaterial_name] = useState("");
@@ -12,6 +13,7 @@ const createMaterial = () => {
   const [CostesPerQuantities, setCostesPerQuantities] = useState("");
   const [Picture, setPicture] = useState(null); //ใช้ null เพื่อเก็บไฟล์
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -35,6 +37,7 @@ const createMaterial = () => {
       console.log(err);
     }finally{
       setIsLoading(false);
+      setError(err)
     }
   }
 
@@ -123,6 +126,9 @@ const createMaterial = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
     </div>
   );
 };

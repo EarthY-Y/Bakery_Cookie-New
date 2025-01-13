@@ -106,7 +106,7 @@ const detailPorductById = () => {
 
                 {/* เส้นคั่นระหว่างข้อมูลสินค้าและรายละเอียด */}
                 <hr className="my-4" />
-            <p className="text-muted">{productById.description}</p>
+            <h5 className="text-muted">{productById.description}</h5>
           </div>
         </div>
       </div>
