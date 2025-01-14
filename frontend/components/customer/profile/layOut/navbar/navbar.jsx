@@ -110,7 +110,7 @@ function Navbar() {
                       <span>{proflieCustomer.username}</span>
                     </button>
                     <ul className="dropdown-menu dropdown-menu-start mt-0" aria-labelledby="profileDropdown">
-                      <li><Link className="dropdown-item" to="/profile">โปรไฟล์ของฉัน</Link></li>
+                      <li><Link className="dropdown-item" to="/profile">บัญชีของฉัน</Link></li>
                       {/* <li><Link className="dropdown-item" to="/settings">การตั้งค่า</Link></li> */}
                       <li><hr className="dropdown-divider" /></li>
                       <li><button type="button" className="dropdown-item btn" onClick={handleLogout}>ออกจากระบบ</button></li>
