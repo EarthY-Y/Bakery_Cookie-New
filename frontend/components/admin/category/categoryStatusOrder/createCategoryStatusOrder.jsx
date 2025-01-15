@@ -62,9 +62,9 @@ const CreateCategoryStatusOrder = () => {
         <h4>เพิ่มสถานะ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">ชื่อประเภทบรรจุภัณฑ์</label>
+            <label className="col-sm-2 col-form-label">ชื่อประเภทสถานะคำสั่งซื้อ</label>
             <div className="row col-sm-4">
-              <input type="text" className="form-control" required placeholder="เช่น ซองใส่คุกกี้ s, ซองใส่คุกกี้ m" 
+              <input type="text" className="form-control" required placeholder="เช่น กำลังดำเนินการ, รอดำเนินการ" 
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
               />

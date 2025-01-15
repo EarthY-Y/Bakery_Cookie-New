@@ -63,31 +63,31 @@ const createShipping = () => {
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ประเภทขนส่ง</label>
             <div className="row col-sm-4">
-              <input type="text" className="form-control" placeholder="เช่น EMS" value={serviceType}onChange={(e) => setserviceType(e.target.value)}/>
+              <input type="text" className="form-control" placeholder="เช่น EMS" value={serviceType}onChange={(e) => setserviceType(e.target.value)} required/>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">น้ำหนักน้อยสุด</label>
             <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="หน่วยเป็นกรัม" value={weightRangeMin} onChange={(e) => setWeightRangeMin(e.target.value)} />
+              <input type="number" className="form-control" placeholder="หน่วยเป็นกรัม" value={weightRangeMin} onChange={(e) => setWeightRangeMin(e.target.value)} required/>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">น้ำหนักมากสุด</label>
             <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="หน่วยเป็นกรัม" value={weightRangeMax} onChange={(e) => setWeightRangeMax(e.target.value)} />
+              <input type="number" className="form-control" placeholder="หน่วยเป็นกรัม" value={weightRangeMax} onChange={(e) => setWeightRangeMax(e.target.value)} required/>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาค่าส่ง</label>
             <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="59 (หน่วยเป็นบาท)" value={price} onChange={(e) => setPrice(e.target.value)} />
+              <input type="number" className="form-control" placeholder="59 (หน่วยเป็นบาท)" value={price} onChange={(e) => setPrice(e.target.value)} required/>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">เวลาที่ใช้</label>
             <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="หน่วยเป็นวัน" value={deliveryDays} onChange={(e) => setDeliveryDays(e.target.value)} />
+              <input type="number" className="form-control" placeholder="หน่วยเป็นวัน" value={deliveryDays} onChange={(e) => setDeliveryDays(e.target.value)} required/>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">

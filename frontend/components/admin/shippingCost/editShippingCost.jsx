@@ -141,7 +141,7 @@ const EditShipping = () => {
           </div>
 
           <div className="d-flex justify-content-center gap-3 my-4">
-            <button className="btn btn-success  mt-3 px-4 ms-5" type="submit">แก้ไข</button>
+            <button className="btn btn-success  mt-3 px-4 ms-5" type="submit">บันทึก</button>
           </div>
         </form>
       </div>

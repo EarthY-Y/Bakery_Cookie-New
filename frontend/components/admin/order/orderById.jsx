@@ -130,28 +130,28 @@ const orderById = () => {
           </div>
           <div className="col-md-4 col-12 mb-3">
             <label className="form-label fw-bold">สถานะ</label>
-            {/* {orderById[0]?.status === "รอการชำระเงิน" ? (
+            {orderById[0]?.status_name === "รอการชำระเงิน" ? (
               // แสดงข้อความธรรมดา
-              <p className="border p-2 rounded bg-white">{orderById[0]?.status}</p>
+              <p className="border p-2 rounded bg-white">{orderById[0]?.status_name}</p>
             ) : (
               // แสดง select box
-              <select className="form-select" value={orderById[0]?.status} onChange={(e) => handleInputChange(e.target.value)}>
-                  <option disabled>Select status</option>
-                  {statusOrders.map((statusOrder) => (
-                      <option key={statusOrder.status_order_id} value={statusOrder.status_order_id}>
-                          {statusOrder.status_name}
-                      </option>
-                  ))}
-              </select>
-            )} */}
-            <Select
+              <Select
+                options={optionStatusOrders}
+                name="material_id"
+                value={optionStatusOrders.find((option) => option.value === status) || status}
+                onChange={(option) => handleInputChange(option)}
+                isSearchable={true}
+                // placeholder="เลือกบรรจุภัณฑ์"
+              /> 
+            )}
+            {/* <Select
               options={optionStatusOrders}
               name="material_id"
               value={optionStatusOrders.find((option) => option.value === status) || status}
               onChange={(option) => handleInputChange(option)}
               isSearchable={true}
               // placeholder="เลือกบรรจุภัณฑ์"
-            />
+            /> */}
           </div>
           {/* ที่ใส่ postCode มาด้วยเพราะถ้าเปลี่ยนสถานะไป step ต่อไปที่ไม่ใช้อยู่ระหว่างการจัดส่งจะได้เห็น input นี้ เเต่ต้องกรอกรหัสพัสดุตั้งเเต่ step อยู่ระหว่างการจัดส่ง เป็นการเเก้ปัญหาจะได้ไม่ต้องเช็คหลายสถานะ */}
           {showInputPostCode || postCode ? (  

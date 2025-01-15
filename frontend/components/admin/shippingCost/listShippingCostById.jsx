@@ -34,11 +34,6 @@ const listShippingById = () => {
     <div className="container mt-5 p-3">
       <div className="mb-4 card col-md-12 px-40 rounded shadow-sm border bg-light card-body">
         <div className="mb-3">
-            <label className="form-label fw-bold">รหัสวัตถุดิบ</label>
-            <p className="border p-2 rounded bg-white">{shippingMyId.shipping_rate_id}</p>
-        </div>
-
-        <div className="mb-3">
             <label className="form-label fw-bold">ชื่อบริษัทข่นส่ง</label>
             <p className="border p-2 rounded bg-white">{shippingMyId.carrier_name}</p>
         </div>
@@ -86,8 +81,8 @@ const listShippingById = () => {
           </div>
         </div>
 
-        <div className="text-center mt-4">
-          <Link to={`/shipping/edit/${id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
+        <div className="text-center mt-2">
+          <Link to={`/shipping/edit/${id}`} className="text-center px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
     </div>

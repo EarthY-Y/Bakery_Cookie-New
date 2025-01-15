@@ -5,6 +5,7 @@ import { createMaterialService } from '../../../API/admin/materialService';
 import { Link, useParams } from 'react-router-dom';
 import { listMaterialByIdService } from '../../../API/admin/materialService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -12,6 +13,7 @@ const listMaterialById = () => {
   const {id} = useParams();
   const [materialMyId, setMaterialMyId] = useState([])
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getlistMaterialById = async()=> {
@@ -21,11 +23,11 @@ const listMaterialById = () => {
         if(!response.data){
           throw new Error("ไม่มีข้อมูล")
         }
-        setMaterialMyId(response.data[0])
+        setMaterialMyId(response.data[0] || [])
       }
       
       catch (error) {
-        alert(error)
+        setError(error)
       }
     }
     getlistMaterialById()
@@ -35,19 +37,13 @@ const listMaterialById = () => {
     <div className="container mt-5 p-3">
       <div className="mb-4 card col-md-12 px-40 rounded shadow border bg-light card-body">
         <div className="text-center mb-4">
-          <img
-            src={API_URL_PICTURE + materialMyId.materialpic_name}
-            height={250}
-            width={400}
-            alt="Material"
-            className="rounded img-fluid"
-          />
+          <img src={API_URL_PICTURE + materialMyId.materialpic_name} height={250} width={400} alt="Material" className="rounded img-fluid" />
         </div>
 
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <label className="form-label fw-bold">รหัสวัตถุดิบ</label>
           <p className="border p-2 rounded bg-white">{materialMyId.material_id}</p>
-        </div>
+        </div> */}
 
         <div className="mb-3">
           <label className="form-label fw-bold">ชื่อวัตถุดิบ</label>
@@ -67,7 +63,7 @@ const listMaterialById = () => {
         <div className="mb-3 row">
           <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold ">สร้างโดย</label>
-            <p className="border p-2 rounded bg-white">{materialMyId.userName}</p>
+            <p className="border p-2 rounded bg-white">{materialMyId.created_by}</p>
           </div>
           <div className='col-md-6 col-12 mt-3'>
             <label className="form-label fw-bold">เวลา</label>
@@ -75,12 +71,25 @@ const listMaterialById = () => {
           </div>
         </div>
 
+        <div className="mb-3 row">
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold ">สร้างโดย</label>
+            <p className="border p-2 rounded bg-white">{materialMyId.updated_by || "ไม่มีผู้แก้ไข"}</p>
+          </div>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">เวลา</label>
+            <p className="border p-2 rounded bg-white">{formatDate(materialMyId.updated_at)}</p>
+          </div>
+        </div>
+
         <div className="text-center mt-4">
           <Link to={`/material/edit/${materialMyId.material_id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
-
   );
 };
 

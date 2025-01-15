@@ -43,11 +43,6 @@ const ListPackageById = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label fw-bold">รหัสบรรจุภัณฑ์</label>
-          <p className="border p-2 rounded bg-white">{packageById.package_id}</p>
-        </div>
-
-        <div className="mb-3">
           <label className="form-label fw-bold">ชื่อบรรจุภัณฑ์</label>
           <p className="border p-2 rounded bg-white">{packageById.package_name}</p>
         </div>
