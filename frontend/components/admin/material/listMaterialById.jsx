@@ -17,7 +17,8 @@ const listMaterialById = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getlistMaterialById = async()=> {
+    setIsLoading(true)
+    const fetchData = async()=> {
       try {
         const [
           getlistMaterialById,
@@ -31,12 +32,13 @@ const listMaterialById = () => {
         setMaterialMyId(getlistMaterialById.data[0] || [])
         setMaterialProductMyId(getlistProductMaterialById.data)
       }
-      
       catch (error) {
         setError(error)
+      }finally{
+        setIsLoading(false)
       }
     }
-    getlistMaterialById()
+    fetchData()
   },[])
 
   return (
