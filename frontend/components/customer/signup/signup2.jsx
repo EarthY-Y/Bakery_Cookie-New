@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FormContext } from '../../../API/signUpService';
 import { createCustomer } from '../../../API/signUpService';
 import ErrorPopup from '../../untils/popUp/errorPopup';
+import LoadingPopup from '../../untils/popUp/loading';
 
 const Signup2 = () => {
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { formData, setFormData } = useContext(FormContext);
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ const Signup2 = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault(); //ต้องมี เพราะ ป้องกันการรีเฟรชหน้าเว็บของ form, ควบคุมการส่งข้อมูลเอง
+    setIsLoading(true);
     try {
       const response = await createCustomer(formData)
       console.log('Form Submitted:', response);
@@ -26,6 +29,8 @@ const Signup2 = () => {
     } catch (error) {
       console.log('Error submitting form:', error);
       setError(error);
+    }finally{
+      setIsLoading(false)
     }
   }
   return (
@@ -81,6 +86,10 @@ const Signup2 = () => {
       {error && (
         <ErrorPopup message={error} text="เข้าสู่ระบบล้มเหลว" onClose={() => setError(null)} />
       )}
+      <LoadingPopup
+        isLoading = {isLoading}
+      />
+      {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
     </div>
   );
 };
