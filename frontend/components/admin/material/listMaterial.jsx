@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { listMaterialService, deleteMaterialByIdService } from '../../../API/admin/materialService'
+import { listMaterialService, deleteMaterialByIdService, listProductMaterialService } from '../../../API/admin/materialService'
 import { formatDate } from '../../untils/frommatters/datetime'
 import Search from '../../untils/fucntion/search'
 import LoadingPopup from '../../untils/popUp/loading';
@@ -8,15 +8,25 @@ const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_MATERIAL
 
 const ListMaterial = () => {
   const [materials, setMaterials] = useState([])
+  const [materialsProduct, setMaterialsProduct] = useState([])
   const [materialsSearch, setMaterialsSearch] = useState([])
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const getMaterials = async () => {
       try {
         setIsLoading(true)
-        const res = await listMaterialService()
-        console.log(res.data)
-        setMaterials(res.data)
+        const [
+          materialsResponse,
+          productMaterialResponse,
+        ] = await Promise.all([
+          listMaterialService(),
+          listProductMaterialService(),
+        ])
+        console.log("materialsResponse",materialsResponse.data)
+        console.log("productMaterialResponse", productMaterialResponse.data);
+        
+        setMaterials(materialsResponse.data)
+        setMaterialsProduct(productMaterialResponse.data)
       } catch (err) {
         console.error("Error fetching materials:", err)
       }finally{
@@ -31,14 +41,14 @@ const ListMaterial = () => {
     setMaterialsSearch(results);
   };
 
-  // const handleDelete = (id) => {
-  //   deleteMaterialByIdService(id)
-  //     .then(() => {
-  //       // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
-  //       setMaterials(prevMaterials => prevMaterials.filter(material => material.material_id !== id))
-  //     })
-  //     .catch(err => console.log(err))
-  // }
+  const handleDelete = (id) => {
+    deleteMaterialByIdService(id)
+      .then(() => {
+        // ลบ item ที่มี id ตรงกันออกจาก materials โดยใช้ filter
+        setMaterials(prevMaterials => prevMaterials.filter(material => material.material_id !== id))
+      })
+      .catch(err => console.log(err))
+  }
 
   return (
     <div className="container mt-5">
@@ -66,7 +76,7 @@ const ListMaterial = () => {
               <th style={{ width: '15%' }}>วันที่สร้าง</th>
               <th style={{ width: '5%' }}>ดู</th>
               <th style={{ width: '5%' }}>แก้ไข</th>
-              {/* <th style={{ width: '5%' }}>ลบ</th> */}
+              <th style={{ width: '5%' }}>ลบ</th>
             </tr>
           </thead>
           <tbody>
@@ -80,7 +90,12 @@ const ListMaterial = () => {
                 <td className='text-center'>{formatDate(material.created_at)}</td>
                 <td><Link to={`view/${material.material_id}`} className="btn btn-info text-light d-grid mx-auto"><i className="bi bi-eye"></i></Link></td>
                 <td><Link to={`edit/${material.material_id}`} className="btn btn-warning d-grid mx-auto"><i className="bi bi-pencil"></i></Link></td>
-                {/* <td><button onClick={() => handleDelete(material.material_id)} className="btn btn-danger d-grid mx-auto"><i className="bi bi-trash"></i></button></td> */}
+                <td>
+                  <button onClick={() => handleDelete(material.material_id)} className="btn btn-danger d-grid mx-auto"
+                    disabled={materialsProduct.map(item => item.material_id).includes(material.material_id)}><i className="bi bi-trash"></i> 
+                    {/* map เพื่อเอา material_id ที่อยู่ใน materialsProduct */}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -107,7 +122,9 @@ const ListMaterial = () => {
                   <p className="mb-1">วันที่สร้าง: {formatDate(material.created_at)}</p>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
-                  <button onClick={() => handleDelete(material.material_id)} className="btn btn-danger btn-sm"><i className="bi bi-trash"></i> ลบ </button>
+                  <button onClick={() => handleDelete(material.material_id)} className="btn btn-danger btn-sm"
+                    disabled={materialsProduct.map(item => item.material_id).includes(material.material_id)}><i className="bi bi-trash"></i> ลบ 
+                  </button>
                   <Link to={`edit/${material.material_id}`} className="btn btn-warning btn-sm"><i className="bi bi-pencil"></i> แก้ไข </Link>
                 </div>
               </div>

@@ -79,7 +79,7 @@ const CreatePackage = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อบรรจุภัณฑ์</label>
             <div className="row col-sm-5">
-              <input type="text" name='package_name' className="form-control" placeholder="ชื่อบรรจุภัณฑ์" value={formData.package_name || ''} onChange={handleChange}/>
+              <input type="text" name='package_name' className="form-control" placeholder="ชื่อบรรจุภัณฑ์" value={formData.package_name || ''} onChange={handleChange} required/>
                 {/* formData.package_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
                 เเล้วไม่ได้ set ค่า เหมือนในหน้า signUp*/}
@@ -89,13 +89,13 @@ const CreatePackage = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">จำนวนทั้งหมด/ชุด</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantity' className="form-control" placeholder="จำนวน" value={formData.quantity || ''} onChange={handleChange}/>
+              <input type="text" name='quantity' className="form-control" placeholder="จำนวน" value={formData.quantity || ''} onChange={handleChange} required/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคา/ชุด</label>
             <div className="row col-sm-5">
-              <input type="text" name='cost' className="form-control" placeholder="ราคาที่ซื้อมาต่อชุด" value={formData.cost || ''} onChange={handleChange}/>
+              <input type="text" name='cost' className="form-control" placeholder="ราคาที่ซื้อมาต่อชุด" value={formData.cost || ''} onChange={handleChange} required/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">

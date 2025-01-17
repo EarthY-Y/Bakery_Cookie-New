@@ -21,12 +21,59 @@ export const getMaterial = async (req, res) => {
     }
 }
 
+export const getProductMaterial = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject) => {
+            db.query(`SELECT pm.material_id FROM material m
+                     LEFT JOIN product_material pm ON pm.material_id = m.material_id
+                     LEFT JOIN product p ON p.product_id = pm.product_id
+                     GROUP BY pm.material_id;`, 
+                (err, result) => {
+                    if(err) return reject(err)
+                    resolve(result)
+                }
+            )
+        })
+        // console.log('results material ', results)
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get material", error);
+        return res.status(400).json({ message: "Error get material", error });
+    }
+}
+
+export const getProductMaterialByIdMaterial = async (req, res) => {
+    const id = req.params.id
+    try {
+        const results = await new Promise((resolve, reject) => {
+            db.query(`SELECT pm.product_id, p.product_name, pp.productpic_name  FROM material m
+                     LEFT JOIN product_material pm ON pm.material_id = m.material_id
+                     LEFT JOIN product p ON p.product_id = pm.product_id
+                     LEFT JOIN productpicture pp ON pp.product_id = p.product_id 
+                     WHERE pm.material_id = ?`, [id], 
+                (err, result) => {
+                    if(err) return reject(err)
+                    resolve(result)
+                }
+            )
+        })
+        // console.log('results material ', results)
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get material", error);
+        return res.status(400).json({ message: "Error get material", error });
+    }
+}
+
 export const getMaterialById = async (req, res) => {
     const id = req.params.id
-
     try {
         const result = await new Promise((resolve, reject) => {
-            db.query("SELECT m.material_id, m.material_name, m.quantity, m.cost, m.cost_per_quantity, m.materialpic_name, m.created_by, m.created_at, a.userName FROM material m INNER JOIN admin a ON a.admin_id = m.created_by WHERE material_id = ?", [id], 
+            db.query(`SELECT m.material_id, m.material_name, m.quantity, m.cost, m.cost_per_quantity, m.materialpic_name, m.created_at, 
+                     a_created_by.userName as created_by, a_updated_by.userName as updated_by, m.updated_at FROM material m 
+                     LEFT JOIN admin a_created_by ON a_created_by.admin_id = m.created_by 
+                     LEFT JOIN admin a_updated_by ON a_updated_by.admin_id = m.updated_by
+                     WHERE material_id = ?`, [id], 
                 (err, result) => {
                     if(err) return reject(err)
                     resolve(result)
@@ -34,7 +81,8 @@ export const getMaterialById = async (req, res) => {
         })
         return res.status(200).json(result)
     } catch (error) {
-        
+        console.error("Error get material by id", error);
+        return res.status(400).json({ message: "Error get material", error });
     }
 }
 

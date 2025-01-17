@@ -49,7 +49,7 @@ const ListPackage = () => {
       <Search 
         data={packges}
         handleSearch = {handleSearch}
-        name = "ชื่อวัตถุดิบ"
+        name = "ชื่อบรรจุภัณฑ์"
         itemKeys = "package_name"
       />
       <p>จำนวน {packgesSearch.length} รายการ</p>

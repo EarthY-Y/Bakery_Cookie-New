@@ -3,6 +3,8 @@ import multer from 'multer'
 import {
     getMaterial, 
     getMaterialById, 
+    getProductMaterial,
+    getProductMaterialByIdMaterial,
     createMaterial, 
     updateMaterial, 
     deleteMaterial
@@ -15,6 +17,8 @@ router.use(express.json());
 
 router.get('/admin/material',verifyAdminMid, getMaterial);
 router.get('/admin/material/:id',verifyAdminMid, getMaterialById);
+router.get('/admin/get/product/material',verifyAdminMid, getProductMaterial);
+router.get('/admin/get/product/material/:id',verifyAdminMid, getProductMaterialByIdMaterial);
 router.post('/admin/material/create', verifyAdminMid, uploadSingle, (req, res) => { //upload.single(up) อัปโหลดไฟล์เดียว ผ่าน key ชื่อ up
     // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
     if (!req.file) {

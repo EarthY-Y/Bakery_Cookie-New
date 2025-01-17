@@ -30,7 +30,7 @@ const profile = () => {
       console.log(getDeatialCustomer);
       
       setDetailCustomer(getDeatialCustomer.data[0])
-      setPicture(getDeatialCustomer.data[0]?.customerpic)
+      setPicture(getDeatialCustomer.data[0]?.customerpic || "ไม่มีรูปภาพประจำตัว")
       setCustomerName(getDeatialCustomer.data[0]?.username)
       setCustomerFName(getDeatialCustomer.data[0]?.f_name)
       setCustomerLName(getDeatialCustomer.data[0]?.l_name)
@@ -102,7 +102,8 @@ const profile = () => {
 
     if (Object.keys(updatedData).length === 0) {
       console.log(updatedData);      
-      alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
+      setError('ไม่มีข้อมูลที่เปลี่ยนแปลง');
+      setIsLoading(false)
       return;
     }
     for (const key in updatedData) {
@@ -129,7 +130,7 @@ const profile = () => {
       <div className="mb-3 text-center">
         <div className="position-relative" style={{margin: '2%', width: '250px', height: '250px', border: '1px dashed #ccc', display: 'inline-flex', alignItems: 'center', justifyContent: 'center'}}>
           {Picture ? (
-            <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={typeof Picture === 'string' ? API_URL_PICTURE + Picture : URL.createObjectURL(Picture)} alt={Picture} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <span>อัปโหลดรูปประจำตัว</span>
           )}

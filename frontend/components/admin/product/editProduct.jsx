@@ -337,7 +337,6 @@ const EditProduct = () => {
   
     try {
       const res = await editProductService(formDataToSend, id);
-      setIsLoading(true)
       if(res){
         setIsLoading(false)
         navigate(-1);

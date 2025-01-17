@@ -37,6 +37,45 @@ export const listMaterialService = async() => {
         return response
     } catch (error) {
         console.error("Error listMaterialService:", error);
+        throw error; 
+    }
+}
+
+export const listProductMaterialService = async() => {
+    try {
+
+        const authToken = localStorage.getItem('tokenAdmin')
+        ;
+        const response = await axios.get(API_URL + "/get/product/material", 
+          {
+            headers: {
+              'authorization': `Bearer ${authToken}`
+            }
+          }
+        ); 
+        return response
+    } catch (error) {
+        console.error("Error listMaterialService:", error);
+        throw error; 
+    }
+}
+
+export const listProductMaterialByIdService = async(id) => {
+    try {
+
+        const authToken = localStorage.getItem('tokenAdmin')
+        ;
+        const response = await axios.get(API_URL + "/get/product/material/"+ id, 
+          {
+            headers: {
+              'authorization': `Bearer ${authToken}`
+            }
+          }
+        ); 
+        return response
+    } catch (error) {
+        console.error("Error listMaterialService:", error);
+        throw error; 
     }
 }
 
@@ -56,6 +95,7 @@ export const listMaterialByIdService = async(id) => {
         return response
     } catch (error) {
         console.error("Error listMaterialByIdService:", error);
+        throw error; 
     }
 }
 
@@ -95,5 +135,6 @@ export const deleteMaterialByIdService = async(id) => {
         return response
     } catch (error) {
         console.error("Error deleteMaterialByIdService:", error);
+        throw error; 
     }
 }
