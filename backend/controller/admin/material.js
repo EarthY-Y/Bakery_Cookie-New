@@ -2,7 +2,6 @@ import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import argon2 from "argon2";
 import { passToken } from "../../middleware/passAuth.js";
-import {uploadSingle} from '../../middleware/upload/pictureUpload.js'
 
 export const getMaterial = async (req, res) => {
     try {
@@ -22,9 +21,52 @@ export const getMaterial = async (req, res) => {
     }
 }
 
+export const getProductMaterial = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject) => {
+            db.query(`SELECT pm.material_id FROM material m
+                     LEFT JOIN product_material pm ON pm.material_id = m.material_id
+                     LEFT JOIN product p ON p.product_id = pm.product_id
+                     GROUP BY pm.material_id;`, 
+                (err, result) => {
+                    if(err) return reject(err)
+                    resolve(result)
+                }
+            )
+        })
+        // console.log('results material ', results)
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get material", error);
+        return res.status(400).json({ message: "Error get material", error });
+    }
+}
+
+export const getProductMaterialByIdMaterial = async (req, res) => {
+    const id = req.params.id
+    try {
+        const results = await new Promise((resolve, reject) => {
+            db.query(`SELECT pm.product_id, p.product_name, pp.productpic_name  FROM material m
+                     LEFT JOIN product_material pm ON pm.material_id = m.material_id
+                     LEFT JOIN product p ON p.product_id = pm.product_id
+                     LEFT JOIN productpicture pp ON pp.product_id = p.product_id 
+                     WHERE pm.material_id = ?`, [id], 
+                (err, result) => {
+                    if(err) return reject(err)
+                    resolve(result)
+                }
+            )
+        })
+        // console.log('results material ', results)
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("Error get material", error);
+        return res.status(400).json({ message: "Error get material", error });
+    }
+}
+
 export const getMaterialById = async (req, res) => {
     const id = req.params.id
-
     try {
         const result = await new Promise((resolve, reject) => {
             db.query(`SELECT m.material_id, m.material_name, m.quantity, m.cost, m.cost_per_quantity, m.materialpic_name, m.created_at, 

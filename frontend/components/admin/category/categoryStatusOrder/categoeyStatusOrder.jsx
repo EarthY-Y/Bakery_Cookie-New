@@ -129,7 +129,9 @@ const CategoeyStatusOrder = () => {
                   <p className="mb-1">เเก้ไขโดย: {orderStatus.updated_by}</p>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
-                  <button className="btn btn-danger" onClick={() => hadleDelete(orderStatus.category_status_order_id)} ><i className="bi bi-trash"></i></button>
+                  <button className="btn btn-danger" onClick={() => hadleDelete(orderStatus.category_status_order_id)} 
+                    disabled={dis_trash.includes(orderStatus.category_status_order_name)} ><i className="bi bi-trash"></i>
+                  </button>
                   <Link to={`view/${orderStatus.category_status_order_id}`} className="btn btn-info btn-sm text-light"><i className="bi bi-eye"></i> ดู </Link>
                 </div>
               </div>
