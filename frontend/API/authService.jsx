@@ -3,12 +3,17 @@ import axios from 'axios';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import LoadingPopup from '../components/untils/popUp/loading';
 import liff from '@line/liff'
+import { getTokenPostTH } from './postMan/thailandPost';
 
 const API_URL = import.meta.env.VITE_API_Port
 
 //ระบบ login
 export const login = async (userName, passWord) => {
   try {
+    const tokenPostManAPI = localStorage.getItem('tokenPostManAPI');
+    if (!tokenPostManAPI) {
+      await getTokenPostTH()
+    }
     const res = await axios.post(API_URL+'/login', { userName, passWord });
     console.log(res);
     return res;
@@ -52,9 +57,14 @@ export const ProtectedRouteAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const token = localStorage.getItem('tokenAdmin');
+  const tokenPostManAPI = localStorage.getItem('tokenPostManAPI');
   const navigate = useNavigate()
+
   useEffect(() => {
     const verifyToken = async () => {
+      if(!tokenPostManAPI){
+        getTokenPostTH()
+      }
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
@@ -101,9 +111,14 @@ export const ProtectedRouteCustomer = () => {
   const [loading, setLoading] = useState(true);
   const [isCustomer, setIsCustomer] = useState(false);
   const token = localStorage.getItem('token');
+  const tokenPostManAPI = localStorage.getItem('tokenPostManAPI');
   const navigate = useNavigate()
+
   useEffect(() => {
     const verifyToken = async () => {
+      if(!tokenPostManAPI){
+        getTokenPostTH()
+      }
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);

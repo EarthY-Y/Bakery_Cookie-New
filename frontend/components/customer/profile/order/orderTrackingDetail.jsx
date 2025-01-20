@@ -1,48 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, getStatusListForCancelOrdersService, orderTrackingAddressService } from '../../../../API/customer/orderTrackingService';
-import { formatDate } from '../../../untils/frommatters/datetime';
+import { getTracking } from '../../../../API/postMan/thailandPost'
+import { formatDate,formatDateThai } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';
-import { goBackOrHome } from '../../../untils/fucntion/backFuction';
 import CancelOrderModal from '../../../untils/popUp/canclePopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
 import ErrorPopup from '../../../untils/popUp/errorPopup';
-import {AlertWithProgressBar} from '../../../untils/fucntion/alert';
+import { AlertWithProgressBar } from '../../../untils/fucntion/alert';
+import DetailStatusModal from '../../../untils/popUp/detailStatusModal';
+import TrackingModal from '../../../untils/popUp/trackingModal';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const OrderTracking = () => {
-  const {id} = useParams()
+  const { id } = useParams()
   const navigate = useNavigate()
   const [ordersDetail, setOrdersDetail] = useState([]);
   const [ordersHistory, setOrdersHistory] = useState([]);
   const [ordersProduct, setOrdersProduct] = useState([]);
-  const [address, setAddress] = useState([]) 
-  const [showBtnPay, setShowBtnPay] = useState(false); 
-  const [showCanCel, setShowCanCel] = useState(true); 
-  const [showStep ,setShowStep] = useState(true); 
+  const [tracking, setTracking] = useState(null);
+  const [address, setAddress] = useState([])
+  const [showBtnPay, setShowBtnPay] = useState(false);
+  const [showCanCel, setShowCanCel] = useState(true);
+  const [showStep, setShowStep] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(null);
   const [error, setError] = useState(null);
   const [postCode, setPostCode] = useState("");
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [latestStatus, setLatestStatus] = useState([]);
+  const [showTrackingModal, setShowTrackingModal] = useState(false);
 
   // สถานะที่ต้องการแสดงบน Progress Bar
   const statusSteps = [
     { name: "ชำระเงินเรียบร้อย", icon: "bi bi-cash" },
     { name: "รับออร์เดอร์เเเล้ว", icon: "bi bi-check-circle" },
-    { name: "กำลังแพ็คสินค้า", icon: "bi bi-box" },
-    { name: "จัดส่งสำเร็จ", icon: "bi bi-truck" },
+    { name: "อยู่ในระหว่างการทำ", icon: "bi bi-box" },
+    { name: "อยู่ระหว่างการจัดส่ง", icon: "bi bi-truck" },
+    { name: "จัดส่งสำเร็จ", icon: "bi bi-check-circle" },
   ];
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         setIsLoading(true);
         const [
-          detailResponse, 
-          historyResponse, 
-          productResponse, 
+          detailResponse,
+          historyResponse,
+          productResponse,
           orderAddress,
           getStatusListForCancelOrders,
         ] = await Promise.all([
@@ -52,14 +59,14 @@ const OrderTracking = () => {
           orderTrackingAddressService(id),
           getStatusListForCancelOrdersService(),
         ]);
-  
+
         // ตั้งค่าข้อมูลคำสั่งซื้อ
         console.log("Order Details:", detailResponse.data);
         console.log("Order History:", historyResponse.data);
         console.log("Order Products:", productResponse.data);
         console.log("Order Address:", orderAddress.data);
         console.log("getStatusListForCancelOrders:", getStatusListForCancelOrders.data);
-  
+
         // จัดการข้อมูลที่ดึงมา
         const detailData = detailResponse.data[0];
         setOrdersDetail(detailData);
@@ -75,8 +82,9 @@ const OrderTracking = () => {
 
         const historyData = historyResponse.data;
         setOrdersHistory(historyData);
+        setLatestStatus(historyResponse.data[0] || [])
         if (historyData.length === 0) setShowBtnPay(true);
-  
+
         const productData = productResponse.data;
         setOrdersProduct(productData);
 
@@ -84,14 +92,30 @@ const OrderTracking = () => {
       } catch (err) {
         console.error("Error fetching orders data:", err);
         setError(err)
-      }finally{
+      } finally {
         setIsLoading(false);
       }
     };
-  
+
     fetchOrders();
   }, [id]);
-  
+
+  useEffect(() => {
+    const trackingData = async () => {
+      if (postCode) {
+        try {
+          const trackingData = await getTracking(postCode); // รอข้อมูลจาก API
+          console.log("trackingData:", trackingData.response.items[postCode]); // ดูข้อมูลใน console
+          setTracking(trackingData.response.items[postCode]); // ตั้งค่า state ด้วยข้อมูลที่ได้
+        } catch (error) {
+          console.error("Error fetching tracking data:", error); // จัดการกับ error
+        }
+      }
+    };
+
+    trackingData();
+  }, [postCode])
+
 
   const isCompleted = (stepName) => {
     return ordersHistory.some((status) => status.status_name === stepName);
@@ -108,10 +132,10 @@ const OrderTracking = () => {
   };
   const currentStep = getCurrentStep();
 
-  const handleCancelOrder = async(reason) => {
+  const handleCancelOrder = async (reason) => {
     console.log("เหตุผลในการยกเลิก:", reason, id);
     const response = await cancelOrder(id, reason)
-    if(response){
+    if (response) {
       setShowCancelModal(false)
       navigate(-1)
     }
@@ -122,6 +146,12 @@ const OrderTracking = () => {
     setShowAlert(result); // แสดง Alert หากคัดลอกสำเร็จ result ที่ส่งมาจาก copyToClipboard จะเป็น true กับ false
   };
 
+  const handleShowModal = () => setShowDetailModal(true);
+  const handleCloseModal = () => setShowDetailModal(false);
+
+  const handleShowTrackingModal = () => setShowTrackingModal(true);
+  const handleCloseTrackingModal = () => setShowTrackingModal(false);
+
   return (
     <div className="container mt-1  mb-5">
       <div className='align-items-center row mb-4'>
@@ -131,49 +161,61 @@ const OrderTracking = () => {
         <div className='col-12 col-lg-6 text-lg-end'>
           <span ><b>รหัสคำสั่งซื้อ:</b> {ordersDetail.orders_id}<button className="btn bi bi-copy" onClick={() => handleCopy(ordersDetail.orders_id)}></button></span>
         </div>
-        <div className='col-12 col-lg-8 mb-2 text-start'>
-          <span ><b>ปลายทาง:</b> {address.house_no} ตำบล {address.tambon_name} อำเภอ {address.amphure_name} จังหวัด {address.province_name} {address.zip_code}</span>
-        </div>
-        {postCode && (
-          <div className='col-12 col-lg-4 mb-2 text-lg-end'>
-            <span ><b>รหัสไปรษณีย์:</b> {postCode}<button className="btn bi bi-copy" onClick={() => handleCopy(postCode)}></button></span>
-          </div>
-        )}
       </div>
 
       <div className="card">
         <div className={`card-body ${showStep ? 'd-block' : 'd-none'}`}>
-          <div className={`progress-container d-flex justify-content-between align-items-center `} >
-            {statusSteps.map((step, index) => (
-              <div key={index} className="progress-step text-center">
-                <div
-                  className={`progress-icon ${
-                    isCompleted(step.name) ? "completed" : step.name === currentStep ? "current" : ""
-                  }`}
-                >
-                  <i className={step.icon}></i>
-                </div>
-                <div className="progress-label">{step.name}</div>
-                {isCompleted(step.name) && (
-                  <div className="progress-time">
-                    {formatDate(
-                      ordersHistory.find((status) => status.status_name === step.name)?.change_time
-                    )}
+          <div className="d-none d-lg-block">
+            <div className={`progress-container d-flex align-items-center `} >
+              {statusSteps.map((step, index) => (
+                <div key={index} className="progress-step text-center">
+                  <div className={`progress-icon ${isCompleted(step.name) ? "completed" : step.name === currentStep ? "current" : ""}`}>
+                    <i className={step.icon}></i>
                   </div>
-                )}
+                  <div className="progress-label">{step.name}</div>
+                  {isCompleted(step.name) && (
+                    <div className="progress-time">
+                      {formatDate(
+                        ordersHistory.find((status) => status.status_name === step.name)?.change_time
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="d-block d-lg-none">
+            <div className="progress-container d-flex flex-column align-items-center row">
+              {/* สถานะล่าสุด */}
+              <div className="progress-step text-center col-6">
+                {/* <div className={`progress-icon ${latestStatus ? "current" : "completed"  }`}>
+                  <i className={statusSteps.find((step) => step.name === currentStep)?.icon}></i>
+                </div> */}
+                <div className="progress-label">{latestStatus.status_name || "รอชำระเงิน"}</div>
+                <div className="progress-time">
+                  {latestStatus.change_time ? (formatDate(latestStatus.change_time)) : ("")}
+                </div>
               </div>
-            ))}
+              <button className="btn btn-primary mt-3 col-6" onClick={handleShowModal}>  ดูรายละเอียด</button>
+              {showDetailModal && (
+                <DetailStatusModal
+                  showModal={handleShowModal}
+                  handleCloseModal={() => handleCloseModal()}
+                  ordersHistory={ordersHistory}
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className={`card-body ${showStep ? 'd-none' : 'd-block'} bg-danger bg-opacity-10 pb-0`}>
-            <div className={`text-danger d-flex justify-content-between align-items-center`} >
-                <h3>{ordersDetail.status}</h3>
-                <p>{formatDate(ordersDetail.updated_at)}</p>
-            </div>
-            <div className="text-danger">
-                <p>เหตุผลในการยกเลิก: {ordersDetail.note}</p>
-            </div>
+          <div className={`text-danger d-flex justify-content-between align-items-center`} >
+            <h3>{ordersDetail.status}</h3>
+            <p>{formatDate(ordersDetail.updated_at)}</p>
           </div>
+          <div className="text-danger">
+            <p>เหตุผลในการยกเลิก: {ordersDetail.note}</p>
+          </div>
+        </div>
       </div>
 
       {/* CSS สำหรับ Progress Bar */}
@@ -216,6 +258,54 @@ const OrderTracking = () => {
           color: #6c757d;
         }
       `}</style>
+
+      <div className='align-items-center row mb-2 mt-3'>
+        <div className='col-12 col-lg-8 mb-2 text-start'>
+          <span ><b>ปลายทาง:</b> {address.house_no} ตำบล {address.tambon_name} อำเภอ {address.amphure_name} จังหวัด {address.province_name} {address.zip_code}</span>
+        </div>
+        {postCode && (
+          <div className='col-12 col-lg-4 mb-2 text-lg-end'>
+            <span ><b>รหัสไปรษณีย์:</b> {postCode}<button className="btn bi bi-copy" onClick={() => handleCopy(postCode)}></button></span>
+          </div>
+        )}
+      </div>
+      {tracking ? (
+        tracking.length !== 0 ? (
+            <>
+              <h5 className="modal-title">รายละเอียดสถานะ</h5>
+              <div className='card shadow-sm'>
+                <div className="card-body">
+                  <div className="ms-3">
+                    <div className='row'>
+                      <div className='col-12 col-lg-6'>
+                        <h6 className="fw-bold ">
+                          {tracking[tracking.length - 1].status_description} -{" "} <span className="text-muted">{tracking[tracking.length - 1].location}</span>
+                        </h6>
+                        <p className="mb-0 text-muted small">{formatDateThai(tracking[tracking.length - 1].status_date)} ({tracking[tracking.length - 1].postcode})</p>
+                        <p className="mb-0">{tracking[tracking.length - 1].status_detail}</p>
+                        {tracking[tracking.length - 1].delivery_description && (
+                          <p className="text-danger small">หมายเหตุ: {tracking[tracking.length - 1].delivery_description}</p>
+                        )}
+                        {/* {item.receiver_name && (<p className="text-success small">ผู้รับ: {item.receiver_name}</p>)} */}
+                        {/* {item.signature && (<img src={item.signature}alt="ลายเซ็น"style={{ width: "100px", marginTop: "10px" }}/>)} */}
+                      </div>
+                      <div className='col-12 col-lg-6 d-flex justify-content-end align-items-center '>
+                        <button className="btn btn-primary col-6" style={{ height: "50px" }} onClick={handleShowTrackingModal}>ดูรายละเอียด</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : ("")
+      ) : ("")}
+      {showTrackingModal && (
+        <TrackingModal
+          showModal={handleShowTrackingModal}
+          handleCloseModal={() => handleCloseTrackingModal()}
+          tracking={tracking}
+        />
+      )}
       <div className="card mt-5">
         {ordersProduct.map((order) => (
           <div key={order.product_name} className="col-md-12">
@@ -242,8 +332,8 @@ const OrderTracking = () => {
         ))}
         <div className="card-footer text-end d-flex justify-content-end">
           <div className='text-start me-2'>
-            <h5 className="mb-0 text-danger">ราคารวมสินค้า </h5> 
-            <h5 className="mb-0 text-danger">ค่าส่ง </h5> 
+            <h5 className="mb-0 text-danger">ราคารวมสินค้า </h5>
+            <h5 className="mb-0 text-danger">ค่าส่ง </h5>
             <h5 className="mb-0 text-danger">ค่ากล่อง </h5>
             <h5 className="mb-0 text-danger">ยอดชำระ </h5>
           </div>
@@ -251,13 +341,13 @@ const OrderTracking = () => {
             <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.price || 0)} บาท</h5>
             <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.cost_shipping || 0)} บาท</h5>
             <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.cost_package || 0)} บาท</h5>
-            <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.price + ordersDetail.cost_package + ordersDetail.cost_shipping  || 0)} บาท</h5>
+            <h5 className="mb-0 text-danger">: {numberGrouping(ordersDetail.price + ordersDetail.cost_package + ordersDetail.cost_shipping || 0)} บาท</h5>
           </div>
         </div>
       </div>
       <div className="card-footer d-flex justify-content-between mt-4">
-        <button className="btn btn-danger" onClick={() => setShowCancelModal(true)} style={{ display: showCanCel ? 'block' : 'none' }}> ยกเลิกคำสั่งซื้อ</button> 
-        <Link  to={`/payment/${ordersDetail.cartId}`}  className="btn btn-primary" style={{ display: showBtnPay ? 'block' : 'none' }}> ชำระเงิน</Link>
+        <button className="btn btn-danger" onClick={() => setShowCancelModal(true)} style={{ display: showCanCel ? 'block' : 'none' }}> ยกเลิกคำสั่งซื้อ</button>
+        <Link to={`/payment/${ordersDetail.cartId}`} className="btn btn-primary" style={{ display: showBtnPay ? 'block' : 'none' }}> ชำระเงิน</Link>
       </div>
       <CancelOrderModal
         showModal={showCancelModal}
@@ -266,7 +356,7 @@ const OrderTracking = () => {
       />
       {showCancelModal ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
       <LoadingPopup
-        isLoading = {isLoading}
+        isLoading={isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
 

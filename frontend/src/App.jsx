@@ -416,7 +416,7 @@ const router = createBrowserRouter([
       },
     
       //route User
-      {
+      { //ProtectedRouteCustomer จะถูกใช้งานเเค่รอบเดียวคือตอน render หน้าเว็บเเต่ถ้ามีการเปลี่ยน component ของในจะไม่ถูกเรียกใช้
         element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
         children: [
           {
