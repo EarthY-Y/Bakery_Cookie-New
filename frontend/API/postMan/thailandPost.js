@@ -19,8 +19,8 @@ export const getTokenPostTH = async () => {
     const { token, expires_in } = response.data;
     // คำนวณเวลาหมดอายุ
     const expirationTime = Date.now() + expires_in * 1000; // expires_in เป็นวินาที
-    localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(EXPIRATION_KEY, expirationTime.toString());
+    localStorage.setItem('TOKEN_KEY', token);
+    localStorage.setItem('EXPIRATION_KEY', expirationTime.toString());
 
   } catch (error) {
     console.error("Error getTokenPostTH:", error);
@@ -55,8 +55,8 @@ export const getTracking = async (id) => {
 };
 
 export const validateTokenPostTH = async () => {
-  const storedToken = localStorage.getItem(TOKEN_KEY);
-  const storedExpiration = localStorage.getItem(EXPIRATION_KEY);
+  const storedToken = localStorage.getItem('TOKEN_KEY');
+  const storedExpiration = localStorage.getItem('EXPIRATION_KEY');
 
   // ตรวจสอบว่า Token และเวลาหมดอายุถูกเก็บไว้หรือไม่
   if (storedToken && storedExpiration) {
