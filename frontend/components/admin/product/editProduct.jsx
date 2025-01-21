@@ -360,14 +360,15 @@ const EditProduct = () => {
 
   //หาต้นทุนต่อชิ้น
   useEffect(() => {
-    const totalCost = calculateTotalCost();
+    const totalCostOrigin = calculateTotalCost();
+    const hiddenCosts = totalCostOrigin + (totalCostOrigin * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
+    setTotalCost(hiddenCosts.toFixed(2))
     if (formData.ingredients || formData.packaging) {
-      console.log(totalCost);
-      const costPerQuantity =  parseFloat(totalCost) / parseFloat(formData.quantity_per_time || 1); // หลีกเลี่ยงการหารด้วย 0
+      console.log(totalCostOrigin);
+      const costPerQuantity =  parseFloat(hiddenCosts) / parseFloat(formData.quantity_per_time || 1); // หลีกเลี่ยงการหารด้วย 0
       setpricePreQuantity(costPerQuantity.toFixed(2));
     }
-    const hiddenCosts = totalCost + (totalCost * 10 /100) //ต้นทุนแฝง ค่าเเก๊ส ค่าไฟฟ้า ค่าถ่าน
-    setTotalCost(hiddenCosts.toFixed(2))
+
   }, [formData.ingredients, formData.quantity, formData.packaging]);
 
   useEffect(() => {
@@ -381,13 +382,14 @@ const EditProduct = () => {
     if (formData.quantity_per_time && formData.ingredients || formData.packaging) {
       let totalWeight = 0
       for (const item of formData.ingredients) {
-        totalWeight =+ parseFloat(item.quantity);
+        totalWeight += parseFloat(item.quantity);
       }
-        const weightPiece = totalWeight / formData.quantity_per_time
-        setFormData(prevData => ({
-          ...prevData,
-          weight_per_piece: (weightPiece ? parseFloat(weightPiece.toFixed(2)) : 0)
-        }));
+      console.log(totalWeight);
+      const weightPiece = totalWeight / formData.quantity_per_time
+      setFormData(prevData => ({
+        ...prevData,
+        weight_per_piece: (weightPiece ? parseFloat(weightPiece.toFixed(2)) : 0)
+      }));
     }
   }, [formData.ingredients, formData.quantity_per_time, formData.packaging]);
   
@@ -481,12 +483,6 @@ const EditProduct = () => {
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="number" name='pricePreQuantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity}  readOnly/>
-            </div>
-          </div>
-          <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนรวม
               <TooltipUntils 
                 text="รวมต้นทุนเเฝงอีก 10 % เช่น ค่าน้ำ ค่าไฟ ค่าเเก๊ส เเละค่าบรรจุภัฑณ์"
@@ -494,6 +490,12 @@ const EditProduct = () => {
             </label>
             <div className="row col-sm-5">
               <input type="number" name='totalCost'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
+            <div className="row col-sm-5">
+              <input type="number" name='pricePreQuantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity}  readOnly/>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
