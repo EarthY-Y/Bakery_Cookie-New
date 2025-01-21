@@ -2,11 +2,12 @@ import React, { useEffect, useState} from 'react';
 import { useNavigate, Link, useParams  } from 'react-router-dom';
 import Select from 'react-select';
 import { getOrderByIdService, getStatusListForChangeOrder, updateStatusOrderService, getOrderHistoryByIdService, getOrderAddressService, updatePostCodeOrderService } from '../../../API/admin/ordersService';
-import { formatDate } from '../../untils/frommatters/datetime';
+import { formatDate, formatDateThai } from '../../untils/frommatters/datetime';
 import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
 import LoadingPopup from '../../untils/popUp/loading';
 import ErrorPopup from '../../untils/popUp/errorPopup';
+import { getTracking } from '../../../API/postMan/thailandPost';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PAYMENT
 
@@ -23,6 +24,7 @@ const orderById = () => {
   const [error, setError] = useState(null);
   const [showInputPostCode, setShowInputPostCode] = useState(false);
   const [postCode, setPostCode] = useState("");
+  const [tracking, setTracking] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,6 +59,22 @@ const orderById = () => {
 
     fetchData()
   },[])
+
+  useEffect(() => {
+    const trackingData = async () => {
+      if (postCode) {
+        try {
+          const trackingData = await getTracking(postCode); // รอข้อมูลจาก API
+          console.log("trackingData:", trackingData.response.items[postCode]); // ดูข้อมูลใน console
+          setTracking(trackingData.response.items[postCode]); // ตั้งค่า state ด้วยข้อมูลที่ได้
+        } catch (error) {
+          console.error("Error fetching tracking data:", error); // จัดการกับ error
+        }
+      }
+    };
+
+    trackingData();
+  }, [postCode])
 
   const handleInputChange = (option) => {
     console.log(option.value);
@@ -123,12 +141,12 @@ const orderById = () => {
   return (
     <div className="container mt-5 p-3">
       <div className="card col-md-12 px-40 rounded shadow border bg-light card-body">
-        <div className='row mb-3'>
+        <div className='row mb-1'>
           <div className="col-md-8 col-12">
               <label className="form-label fw-bold">รหัสคำสั่งซื้อ</label>
               <p className="border p-2 rounded bg-white">{orderById[0]?.orders_id}</p>
           </div>
-          <div className="col-md-4 col-12 mb-3">
+          <div className="col-md-4 col-12 mb-1">
             <label className="form-label fw-bold">สถานะ</label>
             {orderById[0]?.status_name === "รอการชำระเงิน" ? (
               // แสดงข้อความธรรมดา
@@ -322,7 +340,28 @@ const orderById = () => {
             />
           </div>
         </div>
+        
         <div className="mb-3">
+        {tracking ? (
+            tracking.length !== 0 ? (
+              tracking.slice().reverse().map((item, index) => (
+                <div className="row mb-2" key={index}>
+                  <div className='col-4'>
+                    <label className="form-label fw-bold">สถานะที่ดำเนินการ</label>
+                    <p className="border p-2 rounded bg-white">{item.status_description || ""}</p>
+                  </div>
+                  <div className='col-4'>
+                    <label className="form-label fw-bold">วันที่ดำเนินการ</label>
+                    <p className="border p-2 rounded bg-white">{formatDateThai(item.status_date) || ""}</p>
+                  </div>
+                  <div className='col-4'>
+                    <label className="form-label fw-bold">หมายเหตุ</label>
+                    <p className="border p-2 rounded bg-white">{item.delivery_description || "ไม่มีหมายเหตุ"}</p>
+                  </div>
+                </div>
+              ))
+            ) : ("")
+          ) : ("")}
           {statusOrderHistoryById.map((order, index) => (
             <div key={index} className="row p-2">
               <div className='col-4'>
@@ -334,7 +373,7 @@ const orderById = () => {
                 <p className="border p-2 rounded bg-white">{formatDate(order.change_time ) || "ยังไม่มีคนรับออร์เดอร์"}</p>
               </div>
               <div className='col-4'>
-                <label className="form-label fw-bold">ชื่อผู้ดำเนินการ</label>
+                <label className="form-label fw-bold">ผู้ดำเนินการ</label>
                 <p className="border p-2 rounded bg-white">{order.username || "ยังไม่มีคนรับออร์เดอร์"}</p>
               </div>
             </div>

@@ -28,6 +28,7 @@ const listMaterialById = () => {
           listProductMaterialByIdService(id)
         ])
         console.log("getlistProductMaterialById", getlistProductMaterialById.data);
+        console.log("getlistMaterialById", getlistMaterialById.data);
         
         setMaterialMyId(getlistMaterialById.data[0] || [])
         setMaterialProductMyId(getlistProductMaterialById.data)
@@ -67,6 +68,12 @@ const listMaterialById = () => {
           <label className="form-label fw-bold">ปริมาณ</label>
           <p className="border p-2 rounded bg-white">{materialMyId.quantity}</p>
         </div>
+
+        <div className="mb-3">
+          <label className="form-label fw-bold">ต้นทุนต่อปริมาณ</label>
+          <p className="border p-2 rounded bg-white">{materialMyId.cost_per_quantity}</p>
+        </div>
+
         <div className="pb-4">
           <label className="form-label fw-bold">เป็นส่วนประกอบของ</label>
           <div className="row gy-4">

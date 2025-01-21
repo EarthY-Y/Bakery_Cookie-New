@@ -5,53 +5,53 @@ import { passToken } from "./passAuth.js";
 
 dotenv.config();
 //เป็นการเช็ค การร้องขอเข้าถึง API ในส่วนของหลังบ้านซึ่งจะนำไปใช้กับการทำ Route API หลังบ้าน
-export const verifyCustomer = async (req, res , next) => {
+export const verifyCustomer = async (req, res, next) => {
     //token with Local storage 
     try {
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
         const authToken = await passToken(authHeader)
 
-        db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
-            [authToken.customerId],
+        db.query("SELECT customer_id FROM customer WHERE customer_id = ? and is_active = ?",
+            [authToken.customerId, "1"],
             (err, results) => {
-            if (results.length === 0) {
-                console.log('in length = 0');
-                return res.status(404).json({ message: "User not found" });
-            }
-            return res.status(200).json({results, isCustomer: "customer" });
-        })  
+                if (results.length === 0) {
+                    console.log('in length = 0');
+                    return res.status(404).json({ message: "User not found" });
+                }
+                return res.status(200).json({ results, isCustomer: "customer" });
+            })
 
     } catch (err) {
-        console.log('Error',err)
+        console.log('Error', err)
         return res.status(500).send({ message: 'Server error' })
     }
 }
 
-export const verifyCustomerMid = async (req, res , next) => {
+export const verifyCustomerMid = async (req, res, next) => {
     //token with Local storage 
     try {
         const authHeader = req.headers['authorization'] //ส่ง token ผ่าน Header เเบบ Bearer 
         const authToken = await passToken(authHeader)
-        if(!authToken){
+        if (!authToken) {
             return res.status(404).json({ message: "User not found" });
         }
 
         db.query("SELECT customer_id FROM customer WHERE customer_id = ?",
             [authToken.customerId],
             (err, results) => {
-            if(err){
-                return res.status(422).json(err)
-            }
-            if (results.length === 0) {
-                console.log('in length = 0');
-                return res.status(404).json({ message: "User not found" });
-            }
-            next()
-        })
+                if (err) {
+                    return res.status(422).json(err)
+                }
+                if (results.length === 0) {
+                    console.log('in length = 0');
+                    return res.status(404).json({ message: "User not found" });
+                }
+                next()
+            })
 
-        
+
     } catch (err) {
-        console.log('Error',err)
+        console.log('Error', err)
         return res.status(500).send({ message: 'Server error' })
     }
 }
