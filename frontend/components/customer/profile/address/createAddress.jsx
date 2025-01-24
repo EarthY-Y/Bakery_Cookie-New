@@ -82,7 +82,7 @@ const CreateAddress = () => {
     try {
         console.log(tambonsId, amphuresId, provincesId, houseNo, postCode);
         const res = await createAddressCustomer(tambonsId, amphuresId, provincesId, houseNo, postCode);
-        navigate("/home"); //-1 เพื่อย้อนกลับไปหน้าก่อนหน้านี้
+        navigate(-1); //-1 เพื่อย้อนกลับไปหน้าก่อนหน้านี้
         console.log(res);
     } catch (err) {
         console.log(err);

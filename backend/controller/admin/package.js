@@ -24,9 +24,10 @@ export const getpackageById = async (req, res) => {
     const id = req.params.id
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query("SELECT p.*, a.userName as created_by FROM package p"+
-                    " INNER JOIN admin a ON a.admin_id = p.created_by"+
-                    " WHERE p.package_id = ?",[id], 
+            db.query(`SELECT p.*, a.userName as created_by, a_updated.userName as updated_by FROM package p
+                      LEFT JOIN admin a ON a.admin_id = p.created_by
+                      LEFT JOIN admin a_updated ON a_updated.admin_id = p.updated_by
+                      WHERE p.package_id = ?`,[id], 
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

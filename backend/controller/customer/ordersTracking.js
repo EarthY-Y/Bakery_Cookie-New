@@ -122,7 +122,8 @@ export const getOrdersTrackingById = async (req, res) => {
                      INNER JOIN product p ON p.product_id = cp.product_id
                      INNER JOIN productpicture pp ON pp.product_id = p.product_id
                      WHERE o.orders_id = ? 
-                     GROUP BY o.orders_id DESC;`,[id],
+                     GROUP BY o.orders_id
+                     ORDER BY o.orders_id DESC;`,[id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -143,7 +144,8 @@ export const getOrdersTrackingHistoryById = async (req, res) => {
             db.query(`SELECT osh.change_time, so.status_name FROM order_status_history osh
                      INNER JOIN status_order so ON so.status_order_id = osh.status_order_id
                      WHERE orders_id = ? 
-                     GROUP BY change_time DESC`,[id],
+                     GROUP BY change_time
+                     ORDER BY change_time DESC`,[id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
