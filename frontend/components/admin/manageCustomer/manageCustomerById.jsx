@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate,Link, useParams } from 'react-router-dom';
 import { manageCustomerServiceById, manageCustomerAddressServiceById, updateCustomerActiveServiceById } from '../../../API/admin/manageCustomerService';
 import { formatDate } from '../../untils/frommatters/datetime';

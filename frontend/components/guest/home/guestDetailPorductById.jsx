@@ -1,5 +1,4 @@
 import React, { useEffect, useState} from 'react';
-import axios from 'axios';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService } from '../../../API/guest/guestProductService';
 import LoadingPopup from '../../untils/popUp/loading';

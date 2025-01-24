@@ -1,5 +1,4 @@
 import React, { useEffect, useState} from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createCategoryOrderStatusService, getListOrderStatusService } from '../../../../API/admin/categoryOrderStatusService';
 import LoadingPopup from '../../../untils/popUp/loading';

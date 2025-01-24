@@ -1,5 +1,4 @@
 import React, { useEffect, useState} from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { createCategoryPackageService, getListPackageService } from '../../../../API/admin/categoryPackageService';
 import { Link } from 'react-router-dom';
