@@ -227,7 +227,7 @@ export const updateStatusCartServiceById = async (id, statusName, active) => {
 export const updateStatusOrderServiceById = async (id, statusName, active) => {
   try {
     const authToken = localStorage.getItem('tokenAdmin');
-    const response = await axios.patch(API_URL + "/update/status/order/" + id, { active: active, statusName: statusName },
+    const response = await axios.patch(API_URL + "/edit/status/order/" + id, { active: active, statusName: statusName },
       {
         headers: {
           'authorization': `Bearer ${authToken}`

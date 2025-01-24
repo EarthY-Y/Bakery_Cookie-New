@@ -16,6 +16,6 @@ router.use(express.json());
 router.get('/admin/get/status/order', verifyAdminMid, getStatusOrder);
 router.post('/admin/create/status', verifyAdminMid, createStatus);
 router.get('/admin/get/status/order/:id', verifyAdminMid, getStatusOrderById);
-router.patch('/admin/update/status/order/:id', verifyAdminMid, updateStatusOrderName);
+router.patch('/admin/edit/status/order/:id', verifyAdminMid, updateStatusOrderName);
 
 export default router
