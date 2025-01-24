@@ -37,7 +37,7 @@ const OrderTracking = () => {
   // สถานะที่ต้องการแสดงบน Progress Bar
   const statusSteps = [
     { name: "ชำระเงินเรียบร้อย", icon: "bi bi-cash" },
-    { name: "รับออร์เดอร์เเเล้ว", icon: "bi bi-check-circle" },
+    { name: "รับออร์เดอร์แล้ว", icon: "bi bi-check-circle" },
     { name: "อยู่ในระหว่างการทำ", icon: "bi bi-box" },
     { name: "อยู่ระหว่างการจัดส่ง", icon: "bi bi-truck" },
     { name: "จัดส่งสำเร็จ", icon: "bi bi-check-circle" },

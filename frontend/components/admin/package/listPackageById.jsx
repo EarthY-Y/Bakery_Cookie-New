@@ -72,6 +72,16 @@ const ListPackageById = () => {
             <p className="border p-2 rounded bg-white form-control">{formatDate(packageById.created_at)}</p>
           </div>
         </div>
+        <div className="mb-3 row">
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">สร้างโดย</label>
+            <p className="border p-2 rounded bg-white">{packageById.updated_by}</p>
+          </div>
+          <div className='col-md-6 col-12 mt-3'>
+            <label className="form-label fw-bold">เวลา</label>
+            <p className="border p-2 rounded bg-white form-control">{formatDate(packageById.updated_at)}</p>
+          </div>
+        </div>
         <div className="text-center mt-4">
           <Link to={`/package/edit/${id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
