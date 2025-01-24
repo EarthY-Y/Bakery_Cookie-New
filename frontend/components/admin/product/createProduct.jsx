@@ -170,11 +170,11 @@ const CreateProduct = () => {
     setTotalCost(hiddenCosts.toFixed(2))
     if (formData.ingredients || formData.packaging) {
       console.log(totalCostOrigin);
-      const costPerQuantity =  parseFloat(hiddenCosts) / parseFloat(formData.quantity_per_time || 1); // หลีกเลี่ยงการหารด้วย 0
+      const costPerQuantity =  parseFloat(hiddenCosts) / parseFloat(formData.quantityPerTime || 1); // หลีกเลี่ยงการหารด้วย 0
       setpricePreQuantity(costPerQuantity.toFixed(2));
     }
 
-  }, [formData.ingredients, formData.quantity, formData.packaging]);
+  }, [formData.ingredients, formData.quantity, formData.packaging, formData.quantityPerTime]);
   
   useEffect(() => {
     if (formData.price && formData.quantityPerTime) {
@@ -327,7 +327,7 @@ const CreateProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">จำนวนที่ทำต่อครั้ง</label>
             <div className="row col-sm-5">
-              <input type="text" name='quantityPerTime'className="form-control" placeholder="จำนวน" value={formData.quantityPerTime || ''} onChange={handleChange} />
+              <input type="number" name='quantityPerTime'className="form-control" placeholder="จำนวน" value={formData.quantityPerTime || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -355,7 +355,7 @@ const CreateProduct = () => {
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
             <div className="row col-sm-5">
-              <input type="text" name='price'className="form-control" placeholder="ราคาสินค้า" value={formData.price || ''} onChange={handleChange} />
+              <input type="number" name='price'className="form-control" placeholder="ราคาสินค้า" value={formData.price || ''} onChange={handleChange} />
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
