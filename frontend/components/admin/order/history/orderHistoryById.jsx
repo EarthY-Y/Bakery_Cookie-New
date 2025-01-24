@@ -154,7 +154,7 @@ const orderHistoryById = () => {
           )}
           {showInputPostCode && postCode ? (
             <div className="row">
-              <label className="form-label fw-bold">รหัสไปรษณีย์</label>
+              <label className="form-label fw-bold">รหัสพัสดุ</label>
               <div className='col-md-4 col-8'>
                 <input type="text" className="form-control" placeholder="รหัสไปรษณีย์"
                   value={postCode}
