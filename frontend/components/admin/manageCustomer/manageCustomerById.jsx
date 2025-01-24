@@ -5,7 +5,7 @@ import { manageCustomerServiceById, manageCustomerAddressServiceById, updateCust
 import { formatDate } from '../../untils/frommatters/datetime';
 import LoadingPopup from '../../untils/popUp/loading';
 
-const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_CUSTOMER
+const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PROFILE
 
 const manageCustomerById = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const manageCustomerById = () => {
   const [manageCustomerById, setManageCustomerById] = useState([])
   const [manageCustomerAddressById, setManageCustomerAddressById] = useState([])
   const [Picture, setPicture] = useState(null);
-  const [active, setStatusactive] = useState("1");
+  const [active, setStatusactive] = useState(null);
   const [isLoading, setIsLoading] = useState(false);;
   
   // useEffect สำหรับดึงข้อมูลวัตถุดิบ
