@@ -30,12 +30,13 @@ export const getProductById = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query(`SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.weight_per_piece, 
-                    p.description, p.created_by, p.updated_by, p.created_at, p.updated_at, p.is_active,
-                     pp.productpic_name, pm.quantity, m.material_id, m.material_name, m.cost_per_quantity, a.userName FROM product p 
-                     INNER JOIN admin a ON a.admin_id = p.created_by 
-                     INNER JOIN productpicture pp ON pp.product_id = p.product_id 
-                     INNER JOIN product_material pm ON pm.product_id = p.product_id 
-                     INNER JOIN material m ON m.material_id = pm.material_id WHERE p.product_id = ?`,
+                     p.description, p.created_at, p.updated_at, p.is_active, a_updated.userName as updated_by,
+                     pp.productpic_name, pm.quantity, m.material_id, m.material_name, m.cost_per_quantity, a.userName as created_by FROM product p 
+                     LEFT JOIN admin a ON a.admin_id = p.created_by 
+                     LEFT JOIN admin a_updated ON a_updated.admin_id = p.updated_by
+                     LEFT JOIN productpicture pp ON pp.product_id = p.product_id 
+                     LEFT JOIN product_material pm ON pm.product_id = p.product_id 
+                     LEFT JOIN material m ON m.material_id = pm.material_id WHERE p.product_id = ?`,
                      [id], 
                     (err, result) => { 
                 if (err) return reject(err)
@@ -302,12 +303,17 @@ export const updateProduct = async (req, res) => {
             updateValues.push(description);
         }
 
+        if (token.admin_id) {
+            updateQuery += "updated_by = ?, ";
+            updateValues.push(token.admin_id);
+        }
+
         updateQuery = updateQuery.slice(0, -2); // ลบคอมม่าออก
         updateQuery += " WHERE product_id = ?";
         updateValues.push(id);
         console.log("Final SQL:", updateQuery, updateValues);
 
-        if (product_name || quantity_per_time || selling_price_per_quantity  || weight_per_piece || description || quantity_per_time || is_active ) {
+        if (product_name || quantity_per_time || selling_price_per_quantity  || weight_per_piece || description || quantity_per_time || is_active || token.admin_id ) {
             await new Promise((resolve, reject) => {
                 db.query(updateQuery, updateValues, (err, result) => {
                     if (err) return reject(err);

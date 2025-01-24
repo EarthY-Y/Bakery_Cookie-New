@@ -101,11 +101,21 @@ const listMaterialById = () => {
         <div className="mb-3 row">
           <div className="col-md-6 col-12 mt-3">
             <label className="form-label fw-bold">สร้างโดย</label>
-            <p className="border p-2 rounded bg-white">{productMyId[0]?.userName}</p>
+            <p className="border p-2 rounded bg-white">{productMyId[0]?.created_by}</p>
           </div>
           <div className="col-md-6 col-12 mt-3">
             <label className="form-label fw-bold">เวลา</label>
             <p className="border p-2 rounded bg-white">{formatDate(productMyId[0]?.created_at)}</p>
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <div className="col-md-6 col-12 mt-3">
+            <label className="form-label fw-bold">สร้างโดย</label>
+            <p className="border p-2 rounded bg-white">{productMyId[0]?.updated_by || "ไม่มีผู้เเก้ไข"}</p>
+          </div>
+          <div className="col-md-6 col-12 mt-3">
+            <label className="form-label fw-bold">เวลา</label>
+            <p className="border p-2 rounded bg-white">{formatDate(productMyId[0]?.updated_at)}</p>
           </div>
         </div>
         <div className="text-center mt-4">
