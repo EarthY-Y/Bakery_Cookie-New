@@ -174,7 +174,7 @@ const orderById = () => {
           {/* ที่ใส่ postCode มาด้วยเพราะถ้าเปลี่ยนสถานะไป step ต่อไปที่ไม่ใช้อยู่ระหว่างการจัดส่งจะได้เห็น input นี้ เเต่ต้องกรอกรหัสพัสดุตั้งเเต่ step อยู่ระหว่างการจัดส่ง เป็นการเเก้ปัญหาจะได้ไม่ต้องเช็คหลายสถานะ */}
           {showInputPostCode || postCode ? (  
               <div className="row">
-                <label className="form-label fw-bold">รหัสไปรษณีย์</label>
+                <label className="form-label fw-bold">รหัสพัสดุ</label>
                 <div className='col-md-4 col-8'>
                   <input type="text" className="form-control" placeholder="รหัสไปรษณีย์"
                     value={postCode}

@@ -98,10 +98,11 @@ const CategoeyStatusOrder = () => {
                   <Link to={`view/${orderStatus.category_status_order_id}`} className="btn btn-info text-light"><i className="bi bi-eye"></i></Link>
                 </td>
                 <td className="text-center">
-                {dis_trash.includes(orderStatus.category_status_order_name) ? (
+                {/*dis_trash.includes(orderStatus.category_status_order_name) ? (
                   <button className="btn btn-warning" disabled={true}><i className="bi bi-pencil"></i></button>
                 ) : (<Link to={`edit/${orderStatus.category_status_order_id}`}className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
-                )}
+                )*/}
+                <Link to={`edit/${orderStatus.category_status_order_id}`}className="btn btn-warning"><i className="bi bi-pencil"></i></Link>
                 </td>
                 <td className="text-center">
                   <button className="btn btn-danger" disabled={dis_trash.includes(orderStatus.category_status_order_name)} //includes จะคืนค่ามาเป็น boolean ให้ไม่เหมือน map 
