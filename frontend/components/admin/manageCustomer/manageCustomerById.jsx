@@ -14,7 +14,7 @@ const manageCustomerById = () => {
   const [manageCustomerAddressById, setManageCustomerAddressById] = useState([])
   const [Picture, setPicture] = useState(null);
   const [active, setStatusactive] = useState("1");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   
   // useEffect สำหรับดึงข้อมูลวัตถุดิบ
   useEffect(() => {

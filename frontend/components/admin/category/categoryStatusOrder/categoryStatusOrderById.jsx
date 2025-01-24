@@ -11,7 +11,7 @@ const CategoryStatusOrderById = () => {
   const [categoryName, setCategoryName] = useState("");
   const [listCategoryOrderStatus, setListCategoryOrderStatus] = useState([]);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [error, setError] = useState(null);
 
   useEffect(() => {

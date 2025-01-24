@@ -12,7 +12,7 @@ const Login = () => {
   const [passWord, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
 
   useEffect(() => {
     const checkLoginLine = async() => {

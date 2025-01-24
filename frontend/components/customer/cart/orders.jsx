@@ -13,7 +13,7 @@ const orders = () => {
   const {id} = useParams();
   const [address, setAddress] = useState([])
   const [selectAddress, setSelectAddress] = useState([])
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [productCart, setProductCart] = useState([])
   const [totalPriceProduct, setTotalPriceProduct] = useState(0); ; 
   const [totalPrice, setTotalPrice] = useState(0); 

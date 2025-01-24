@@ -7,7 +7,7 @@ import LoadingPopup from '../../untils/popUp/loading';
 
 const Signup2 = () => {
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { formData, setFormData } = useContext(FormContext);
   const navigate = useNavigate();

@@ -20,7 +20,7 @@ const EditProduct = () => {
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [error, setError] = useState(null);
   const [active, setStatusactive] = useState("1");
   const { id } = useParams();

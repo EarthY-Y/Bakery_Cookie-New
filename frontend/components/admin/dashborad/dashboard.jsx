@@ -8,7 +8,7 @@ import CostAndProfitLine from './chart/costAndProfitLine';
 import SalesProductPieChart from './chart/salesProductPieChart';
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [amountOrder, setAmountOrder] = useState([]);
   const [salesDataLine, setSalesDataLine] = useState([]);
   const [salesRankPerMonth, setSalesRankPerMonth] = useState([]);

@@ -12,7 +12,7 @@ const CategoeyPackage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [idCategoryPackage, setIdCategoryPackage] = useState("")
 
   useEffect(() => {
