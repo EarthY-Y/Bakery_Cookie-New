@@ -14,7 +14,7 @@ const EditCategoryStatusOrder = () => {
   const [listOrderStatus, setListOrderStatus] = useState([]);
   const [listCategoryOrderStatus, setListCategoryOrderStatus] = useState([]);
   const [selectedOrderStatus, setSelectedOrderStatus] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 

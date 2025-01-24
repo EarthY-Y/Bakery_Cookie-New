@@ -17,7 +17,7 @@ const profile = () => {
   const [customerFName, setCustomerFName] = useState("")
   const [customerLName, setCustomerLName] = useState("")
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("")
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [checkLoginLine, setCheckLoginLine] = useState([])
   const [error, setError] = useState(null);
   useState(()=>{

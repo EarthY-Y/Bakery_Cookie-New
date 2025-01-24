@@ -15,7 +15,7 @@ const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const orderHistoryById = () => {
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);;
   const [orderById, setOrderById] = useState([])
   const [statusOrderHistoryById, setStatusOrderHistoryById] = useState([])
   const [statusOrders, setStatusOrder] = useState([])
