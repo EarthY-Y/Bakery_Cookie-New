@@ -59,7 +59,7 @@ const SearchShowList = ({ name, itemKeys }) => {
         </ul>
         )}
 
-      <input className="form-control me-2 mt-0 d-block d-lg-none " style={{ width: "90%" }} type="search" placeholder={name} aria-label="Search" onChange={(e) => setSearchTerm(e.target.value)} />
+      <input className="form-control me-2 mt-0 d-block d-lg-none " style={{ width: "80%" }} type="search" placeholder={name} aria-label="Search" onChange={(e) => setSearchTerm(e.target.value)} />
       {filteredProducts ? (
         <ul className="list-group position-absolute d-block d-md-none ms-0" style={{ zIndex: 1000, width: "60%" }}>
           {filteredProducts.map((item, index) => (
