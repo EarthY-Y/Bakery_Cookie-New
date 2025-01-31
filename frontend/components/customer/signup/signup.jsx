@@ -19,7 +19,7 @@ const Signup = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="px-5 card-body">
-              <h3 className="mb-4 card-title text-center">สมัครสมาชิก</h3>
+              <h3 className="mb-4 card-title text-center">ข้อมูลส่วนตัว</h3>
 
               <form onSubmit={handleSubmit}>
                 <div className="row mb-4">
@@ -73,9 +73,7 @@ const Signup = () => {
                     <button style={{ backgroundColor: '#F2EEB0' }} onClick={() => navigate(-1)} type="button" className="btn btn-outline-dark w-100">ย้อนกลับ</button>
                   </div>
                   <div className="col-5">
-                    <button
-                      style={{ backgroundColor: '#C1F2B0' }} type="submit" className="btn btn-outline-dark w-100">ยืนยัน
-                    </button>
+                    <button style={{ backgroundColor: '#FFE194' }} type="submit" className="btn btn-outline-dark w-100">ถัดไป (1/2)</button>
                   </div>
                 </div>
                 <div className="mt-3 text-center">
