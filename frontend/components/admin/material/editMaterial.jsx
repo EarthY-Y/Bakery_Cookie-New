@@ -98,10 +98,7 @@ const EditMaterial = () => {
               ) : (
                 <span>เพิ่มรูปวัตถุดิบ</span>
               )}
-              <input
-                type="file"
-                className="position-absolute top-0 start-0 w-100 h-100"
-                style={{ opacity: 0, cursor: 'pointer' }}
+              <input type="file" className="position-absolute top-0 start-0 w-100 h-100" style={{ opacity: 0, cursor: 'pointer' }}
                 onChange={(e) => {
                   const file = e.target.files[0];
                   setPicture(file);
@@ -111,55 +108,39 @@ const EditMaterial = () => {
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อวัตถุดิบ</label>
-            <div className="row col-sm-4">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="ชื่อวัตถุดิบ"
-                value={MaterialName}
-                onChange={(e) => setMaterialName(e.target.value)}
-              />
+            <div className="col-sm-4">
+              <input type="text" className="form-control" placeholder="ชื่อวัตถุดิบ" value={MaterialName} onChange={(e) => setMaterialName(e.target.value)} />
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ปริมาณวัตถุ</label>
-            <div className="row col-sm-4">
-              <input
-                type="number"
-                className="form-control"
-                placeholder="จำนวนวัตถุดิบ"
-                value={Quantities}
-                onChange={(e) => setQuantity(e.target.value)}
-              />
+            <div className=" col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" value={Quantities} onChange={(e) => setQuantity(e.target.value)} />
+                <span className="input-group-text">กรัม</span>
+              </div>
             </div>
           </div>
           {/* type="button" เพื่อไม่ให้ถูกตีว่าเป็นการกด submit */}
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบที่ซื้อมา</label>
-            <div className="row col-sm-4">
-              <input
-                type="number"
-                className="form-control"
-                placeholder="ต้นทุนวัตถุดิบ"
-                value={Costes}
-                onChange={(e) => setCost(e.target.value)}
-              />
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="ต้นทุนวัตถุดิบ" value={Costes} onChange={(e) => setCost(e.target.value)} />
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อปริมาณ</label>
-            <div className="row col-sm-4">
-              <input
-                type="number"
-                className="form-control"
-                placeholder={CostesPerQuantities}
-                value={NewCostesPerQuantities}
-                onChange={(e) => setCost(e.target.value)}
-                readOnly
-              />
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder={CostesPerQuantities} value={NewCostesPerQuantities} onChange={(e) => setCost(e.target.value)} readOnly />
+                <span className="input-group-text">บาทต่อกรัม</span>
+              </div>
             </div>
           </div>
 

@@ -30,10 +30,30 @@ export const getProductById = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
             db.query(`SELECT p.product_id, p.product_name, p.quantity_per_time, p.selling_price_per_quantity, p.weight_per_piece, 
-                     p.description, p.created_at, p.updated_at, p.is_active, a_updated.userName as updated_by,
-                     pp.productpic_name, pm.quantity, m.material_id, m.material_name, m.cost_per_quantity, a.userName as created_by FROM product p 
-                     LEFT JOIN admin a ON a.admin_id = p.created_by 
+                     p.description, p.created_at, p.updated_at, p.is_active, a_updated.userName as updated_by, a_created.userName as created_by,
+                     pp.productpic_name FROM product p 
+                     LEFT JOIN admin a_created ON a_created.admin_id = p.created_by 
                      LEFT JOIN admin a_updated ON a_updated.admin_id = p.updated_by
+                     LEFT JOIN productpicture pp ON pp.product_id = p.product_id 
+                     WHERE p.product_id = ?`,
+                     [id], 
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error});
+    }
+}
+
+export const getMaterialProductById = async (req, res) => {
+    const id = req.params.id
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT pm.quantity, m.material_id, m.material_name, m.cost_per_quantity FROM product p 
                      LEFT JOIN productpicture pp ON pp.product_id = p.product_id 
                      LEFT JOIN product_material pm ON pm.product_id = p.product_id 
                      LEFT JOIN material m ON m.material_id = pm.material_id WHERE p.product_id = ?`,

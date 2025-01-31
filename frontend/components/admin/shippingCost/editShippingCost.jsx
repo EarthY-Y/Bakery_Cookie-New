@@ -82,56 +82,68 @@ const EditShipping = () => {
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อบริษัทขนส่ง</label>
-            <div className="row col-sm-4">
+            <div className="col-sm-4">
               <input type="text" className="form-control" placeholder="ชื่อวัตถุดิบ" value={carrierName} onChange={(e) => setCarrierName(e.target.value)} />
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ประเภทขนส่ง</label>
-            <div className="row col-sm-4">
+            <div className="col-sm-4">
               <input type="text" className="form-control" placeholder="จำนวนวัตถุดิบ" value={serviceType} onChange={(e) => setServiceType(e.target.value)} />
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">น้ำหนักน้อยสุด</label>
-            <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" value={weightRangeMin} onChange={(e) => setWeightRangeMin(e.target.value)} />
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" value={weightRangeMin} onChange={(e) => setWeightRangeMin(e.target.value)} />
+                <span className="input-group-text">กรัม</span>
+              </div>
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">น้ำหนักมากสุด</label>
-            <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" value={weightRangeMax} onChange={(e) => setWeightRangeMax(e.target.value)} />
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" value={weightRangeMax} onChange={(e) => setWeightRangeMax(e.target.value)} />
+                <span className="input-group-text">กรัม</span>
+              </div>
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคา</label>
-            <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" value={price} onChange={(e) => setPrice(e.target.value)} />
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="จำนวนวัตถุดิบ" value={price} onChange={(e) => setPrice(e.target.value)} />
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">เวลาที่ใช้</label>
-            <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="ต้นทุนวัตถุดิบ" value={deliveryDays} onChange={(e) => setDeliveryDays(e.target.value)} />
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="ต้นทุนวัตถุดิบ" value={deliveryDays} onChange={(e) => setDeliveryDays(e.target.value)} />
+                <span className="input-group-text">วัน</span>
+              </div>
             </div>
           </div>
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">เลือกบรรจุภัณฑ์</label>
-            <div className="row col-sm-4">
+            <div className="col-sm-4">
               <Select options={options} value={options.find((option) => option.value === packageId) || null} 
               onChange={(selectedOption) => setPackageId(selectedOption ? selectedOption.value : null)} isSearchable={true} placeholder="เลือกบรรจุภัณฑ์" />
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">การใช้งาน</label>
-            <div className="row col-sm-4">
+            <div className="col-sm-4">
               <select className="form-select" onChange={(e) => setStatusactive(e.target.value)} value={active}  required aria-label="Default select example" placeholder="เลือก">
                 <option value="1">ใช้งาน</option>
                 <option value="0">ไม่ใช้งาน</option>

@@ -6,6 +6,7 @@ import { createProductService, listProductPackageService } from '../../../API/ad
 import TooltipUntils from '../../untils/popUp/tooltip';
 import ErrorPopup from '../../untils/popUp/errorPopup';
 import LoadingPopup from '../../untils/popUp/loading';
+import {numberGrouping} from '../../untils/frommatters/numberFormatting';
 
 const CreateProduct = () => {
   const [formData, setFormData] = useState({}) //
@@ -247,9 +248,10 @@ const CreateProduct = () => {
   return (
     <form onSubmit={handleSubmitProductMaterial}>
       <div className="container mt-5 p-3">
+
+        {/* ข้อมูลทั่วไปของสินค้า */}
         <div className="mb-4 card col-md-12 px-40 bg-light card-body">
-          <h4>เพิ่มสินค้า</h4>
-          
+          <h4>ข้อมูลทั่วไปของสินค้า</h4>
           <div className="mb-4 text-center">
             <div className="bg-white" style={{ width: '100px', height: '100px', border: '1px dashed #ccc', borderRadius: '5px', position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               {formData.file ? ( /* เป็นรูปเเบบการเขียน if-eles ที่เรียกว่า Ternary Operator ใช้กับใน JSX เเต่ถ้าต้องการนำกลับมาใช้ได้ต้องเขียนเป็น renderStatus*/
@@ -263,7 +265,7 @@ const CreateProduct = () => {
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
-            <div className="row col-sm-5">
+            <div className="col-sm-5">
               <input type="text" name='product_name'className="form-control" placeholder="ชื่อสินค้า" value={formData.product_name || ''} 
                 /* formData.product_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
@@ -272,10 +274,26 @@ const CreateProduct = () => {
               />
             </div>
           </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
+            <div className="col-sm-5">
+              <textarea className="form-control" name='description' placeholder="รายละเอียดสินค้า"
+                  value={formData.description || ''} 
+                  onChange={handleChange} 
+                  rows="3" // กำหนดความสูงของ textarea
+                  style={{ minWidth: '100%' }} // กำหนดความกว้างของ textarea
+                />
+            </div>
+          </div>
+        </div>
+
+        {/* ส่วนประกอบของสินค้า */}   
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
+          <h4>ส่วนประกอบของสินค้า</h4>
           {(formData.ingredients || []).map((ingredient, index) => (
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
               <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
-              <div className="col-sm-3">
+              <div className="col-sm-2">
                 <Select
                   options={optionsMaterial}
                   name="material_id"
@@ -285,8 +303,11 @@ const CreateProduct = () => {
                   placeholder="เลือกวัตถุดิบ"
                 />
               </div>
-              <div className="col-sm-1 mb-2">
-                <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
+              <div className="col-sm-2 mb-2">
+                <div className="input-group">
+                  <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
+                  <span className="input-group-text">กรัม</span>
+                </div>
               </div>
               <div className="col-sm-1">
                 <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}><i className="bi bi-trash"></i></button>
@@ -298,19 +319,19 @@ const CreateProduct = () => {
           </div>
           {(formData.packaging || []).map((packaging, index) => (
             <div key={index} className="row mb-3 justify-content-center">
-              <label className="col-sm-2 col-form-label ">บรรจุภัณฑ์ {index + 1}</label>
-              <div className="col-sm-4 mb-2">
+              <label className="col-sm-2 col-form-label ">บรรจุภัณฑ์ </label> {/* {index + 1} */}
+              <div className="col-sm-5 mb-2">
                 <Select
-                options={options}
-                value={options.find((option) => option.value === packaging.package_id) || null}
-                onChange={(option) => handlePackageChange(index, option)}
-                isSearchable={true}
-                placeholder="เลือกบรรจุภัณฑ์"
+                  options={options}
+                  value={options.find((option) => option.value === packaging.package_id) || null}
+                  onChange={(option) => handlePackageChange(index, option)}
+                  isSearchable={true}
+                  placeholder="เลือกบรรจุภัณฑ์"
                 />
               </div>
-              <div className="col-sm-1">
+              {/* <div className="col-sm-1">
                   <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}><i className="bi bi-trash"></i></button>
-              </div>
+              </div> */}
             </div>
           ))}
 
@@ -319,15 +340,36 @@ const CreateProduct = () => {
           </div> */}
 
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
-            <div className="row col-sm-5">
-              <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost().toFixed(2)} readOnly/>
+            <label className="col-sm-2 col-form-label">จำนวนชิ้นที่ทำต่อครั้ง</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='quantityPerTime'className="form-control" placeholder="จำนวน" value={formData.quantityPerTime || ''} onChange={handleChange} />
+                <span className="input-group-text">ชิ้น</span>
+              </div>
             </div>
           </div>
+
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวนที่ทำต่อครั้ง</label>
-            <div className="row col-sm-5">
-              <input type="number" name='quantityPerTime'className="form-control" placeholder="จำนวน" value={formData.quantityPerTime || ''} onChange={handleChange} />
+            <label className="col-sm-2 col-form-label">น้ำหนักต่อชิ้น</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='weightPerPiece'className="form-control" placeholder="ราคาสินค้า" value={formData.weightPerPiece } onChange={handleChange} />
+                <span className="input-group-text">กรัมต่อชิ้น</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ต้นทุนของสินค้า */}
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
+          <h4>ต้นทุน</h4>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบ</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="text" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost().toFixed(2)} readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -336,50 +378,51 @@ const CreateProduct = () => {
                 text="รวมต้นทุนเเฝงอีก 10 % เช่น ค่าน้ำ ค่าไฟ ค่าเเก๊ส เเละค่าบรรจุภัฑณ์"
               />
             </label>
-            <div className="row col-sm-5">
-              <input type="text" name='totalQuantity'className="form-control" placeholder="จำนวน" value={totalCost || 0} readOnly/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="text" name='totalQuantity'className="form-control" placeholder="จำนวน" value={totalCost || 0} readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity || 0} readOnly/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="text" name='quantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity || 0} readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>  
             </div>
-          </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">น้ำหนักต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="number" name='weightPerPiece'className="form-control" placeholder="ราคาสินค้า" value={formData.weightPerPiece } onChange={handleChange} />
-            </div>
-          </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="number" name='price'className="form-control" placeholder="ราคาสินค้า" value={formData.price || ''} onChange={handleChange} />
-            </div>
-          </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
-            <div className="row col-sm-5">
-              <input type="text" name='totalPrice'className="form-control" placeholder="ราคาสินค้า" value={totalPrice || 0} onChange={handleChange} readOnly/>
-            </div>
-          </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
-            <div className="row col-sm-5">
-              <textarea className="form-control" name='description' placeholder="รายละเอียดสินค้า"
-                  value={formData.description || ''} 
-                  onChange={handleChange} 
-                  rows="3" // กำหนดความสูงของ textarea
-                  style={{ minWidth: '100%' }} // กำหนดความกว้างของ textarea
-                />
-            </div>
-          </div>
-
-          <div className="d-flex justify-content-center gap-3 my-4">
-            <button type="submit" className="btn btn-success mt-3 px-4 ms-5" > เพิ่มสินค้า </button>
           </div>
         </div>
+
+        {/* ราคาขาย */}
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
+          <h4>ราคาขาย</h4>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='price'className="form-control" placeholder="ราคาสินค้า" value={formData.price || ''} onChange={handleChange} />
+                <span className="input-group-text">บาทต่อชิ้น</span>
+              </div>
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ราคารวมต่อการทำ 1 ครั้ง</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="text" name='totalPrice'className="form-control" placeholder="ราคาสินค้า" value={numberGrouping(totalPrice || 0)} onChange={handleChange} readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ปุ่มสำหรับส่งข้อมูล */}
+        <div className="d-flex justify-content-center gap-3 my-4">
+            <button type="submit" className="btn btn-success mt-3 px-4 ms-5" > เพิ่มสินค้า </button>
+          </div>
         <LoadingPopup
           isLoading = {isLoading}
         />

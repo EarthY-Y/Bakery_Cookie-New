@@ -2,6 +2,7 @@ import express from "express";
 import {
     getProduct, 
     getProductById, 
+    getMaterialProductById,
     getPackages,
     getProductPackageById,
     createProduct, 
@@ -18,6 +19,7 @@ router.use(express.json());
 router.get('/admin/product',verifyAdminMid, getProduct);
 router.get('/admin/product/get/packages',verifyAdminMid, getPackages);
 router.get('/admin/product/:id',verifyAdminMid, getProductById);
+router.get('/admin/product/material/:id',verifyAdminMid, getMaterialProductById);
 router.get('/admin/product/get/packages/:id',verifyAdminMid, getProductPackageById);
 router.post('/admin/product/create',verifyAdminMid, uploadSingle,(req, res) => {
     // เช็คว่าไฟล์ถูกอัปโหลดหรือไม่
