@@ -16,23 +16,29 @@ const Login = () => {
 
   useEffect(() => {
     const checkLoginLine = async() => {
-      await liff.init({liffId: '2006630207-4ENd2JnL' })
-      if(!liff.isLoggedIn()){
-        liff.login() //ทำการ login ผ่าน Line
-        return false
-      }
-      const profile = await liff.getProfile()
-      console.log(profile);
-      const LoginLine = await loginLINE(profile)
-      console.log(LoginLine);
-      localStorage.setItem('token', LoginLine.data.token);
-      const userRole = LoginLine.data.role;
-      if (userRole === 'user') {
-        setIsLoading(false);
-        navigate("/home");
-      } else {
-        setIsLoading(false);
-        navigate("");
+      setIsLoading(true)
+      try {
+        await liff.init({liffId: '2006630207-4ENd2JnL' })
+        if(!liff.isLoggedIn()){
+          liff.login() //ทำการ login ผ่าน Line
+          return false
+        }
+        const profile = await liff.getProfile()
+        console.log(profile);
+        const LoginLine = await loginLINE(profile)
+        console.log(LoginLine);
+        localStorage.setItem('token', LoginLine.data.token);
+        const userRole = LoginLine.data.role;
+        if (userRole === 'user') {
+          setIsLoading(false)
+          navigate("/home");
+        }
+      } catch (error) {
+        setIsLoading(false)
+        setError(error); //จะได้ใช้ก็ต่อเมื่อไม่ได้ navigate ไปหน้าอื่น
+        navigate("/login");
+      }finally{
+        setIsLoading(false)
       }
     }
     checkLoginLine()
