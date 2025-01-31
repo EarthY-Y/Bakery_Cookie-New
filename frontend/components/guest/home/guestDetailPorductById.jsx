@@ -76,7 +76,7 @@ const detailPorductById = () => {
           <div className="col-md-6 text-center">
             <h1 className="fw-bold">{productById.product_name}</h1>
             <h3 className="text-danger fw-bold">
-              {`฿${productById.selling_price_per_quantity}`}
+              {`฿${productById.selling_price_per_quantity} บาท/ชิ้น`}
               <button onClick={handleDecreaseQuantity} className="btn ms-3">
                 <h2 className="bi bi-patch-minus-fill"></h2>
               </button>
