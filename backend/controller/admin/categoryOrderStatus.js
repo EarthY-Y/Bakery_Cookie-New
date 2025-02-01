@@ -25,6 +25,7 @@ export const getListCategoryOrderStatus = async (req, res) => {
     }
 }
 
+//เอาเฉพาะ คำสั่งซื้อที่ยังไม่มีการจัดหมวดหมู่
 export const getStatusOrderslist = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {

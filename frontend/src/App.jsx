@@ -335,7 +335,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "/orderslist",
+            path: "/orderslist/:id",
             children: [
               {
                 path: "",
@@ -352,7 +352,7 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <ListHistoryOrders />,
+                // element: <ListHistoryOrders />,
               },
               {
                 path: "view/detail/order/:id",

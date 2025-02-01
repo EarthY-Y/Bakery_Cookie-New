@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { getStatusOrderService } from '../../../../API/admin/ordersService';
 function Sidebaradmin() {
   const [show, setShow] = useState(false);
+  const [getListOrderStatus, setListOrderStatus] = useState([]);
   const toggleOffcanvas = () => {
     setShow(!show);
   };
+
+  useEffect(() => {
+    const fetchData = async () => { 
+      try {
+        const getListOrderStatus = await getStatusOrderService()
+        console.log(getListOrderStatus)
+        setListOrderStatus(getListOrderStatus.data)
+      } catch (error) {
+        console.error("Error listMaterialService:", error);
+      }
+    }
+
+    fetchData()
+  }, []);
 
   return (
     <div>
@@ -58,8 +73,11 @@ function Sidebaradmin() {
               </h2>
               <div id="collapseOrders" className="accordion-collapse collapse show" data-bs-parent="#accordionOrders">
                 <div className="accordion-body">
-                  <Link className="nav-link text-dark" to="/orderslist">รายการการสั่งซื้อ</Link>
-                  <Link className="nav-link text-dark" to="/ordershistory">ประวัติการสั่งซื้อ</Link>
+                  {getListOrderStatus.map((orderStatus) => (
+                    <div key={orderStatus.status_order_id}>
+                      <Link className="nav-link text-dark" to={`/orderslist/${orderStatus.status_name}`}>{orderStatus.status_name}</Link>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -129,8 +147,11 @@ function Sidebaradmin() {
                 </h2>
                 <div id="collapseOrdersMobile" className="accordion-collapse collapse" data-bs-parent="#accordionOrdersMobile">
                   <div className="accordion-body">
-                    <Link className="nav-link text-dark" to="/orderslist">รายการการสั่งซื้อ</Link>
-                    <Link className="nav-link text-dark" to="/ordershistory">ประวัติการสั่งซื้อ</Link>
+                    {getListOrderStatus.map((orderStatus) => (
+                      <div key={orderStatus.status_order_id}>
+                        <Link className="nav-link text-dark" to={`/category/${orderStatus.status_name}`}>{orderStatus.status_name}</Link>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
