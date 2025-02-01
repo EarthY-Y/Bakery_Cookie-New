@@ -17,7 +17,7 @@ const ConfirmPopUpModal = ({ showModal, handleClose, handleConfirm, title, text 
           </div>
           <div className="modal-body">
             {/*value ข้อมูลที่จะส่งไป*/}
-            <p className='text-danger'><b>{text}</b></p>
+            <h5 className='text-danger'><b>{text}</b></h5>
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={handleClose}>ยกเลิก</button>

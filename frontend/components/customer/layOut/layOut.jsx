@@ -9,11 +9,11 @@ const layOutComponent = ({children}) => {
     <React.Fragment>
       <CartProvider>
         <div style={{ backgroundColor: '#FFF2E1'}}>
-          <div style={{ position: 'sticky', top: 0, zIndex: 1000, height: '65px', width: '100%'}}>
+          <div style={{ position: 'sticky', top: 0, zIndex: 1000, width: '100%'}}>
             <Navbar />
           </div>
           <div >
-            <main className="d-flex flex-column min-vh-100" style={{ paddingTop: '270px' }}>{children}</main>
+            <main className="d-flex flex-column min-vh-100">{children}</main>
           </div>
         </div>
       </CartProvider>

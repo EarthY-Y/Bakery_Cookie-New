@@ -50,7 +50,7 @@ const detailPorductById = () => {
       }
     }
     fetchData()
-  },[])
+  },[id])
 
   const handleSubmitProductMaterial = async (event) => {
     event.preventDefault();

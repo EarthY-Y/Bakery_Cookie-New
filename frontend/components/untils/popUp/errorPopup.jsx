@@ -24,7 +24,7 @@ const ErrorPopup = ({ onClose, handleConfirm, message, text }) => {
             <button type="button" className="btn-close btn-close-white" onClick={handleClose} aria-label="Close"></button>
           </div>
           <div className="modal-body text-center">
-            <p className="text-danger fs-5">{errorMessage}</p>
+            <h5 className="text-danger fs-5">{errorMessage}</h5>
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={handleClose}>Close</button>

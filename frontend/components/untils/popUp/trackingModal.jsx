@@ -30,12 +30,12 @@ const TrackingModal = ({ showModal, handleCloseModal, tracking }) => {
                             <h6 className="fw-bold">
                               {tracking.length - index}) {item.status_description} -{" "} <span className="text-muted">{item.location}</span>
                             </h6>
-                            <p className="mb-1 text-muted small">{item.status_date} ({item.postcode})</p>
-                            <p className="mb-0">{item.status_detail}</p>
+                            <h5 className="mb-1 text-muted small">{item.status_date} ({item.postcode})</h5>
+                            <h5 className="mb-0">{item.status_detail}</h5>
                             {item.delivery_description && (
-                              <p className="text-danger small mb-0">หมายเหตุ: {item.delivery_description}</p>
+                              <h5 className="text-danger small mb-0">หมายเหตุ: {item.delivery_description}</h5>
                             )}
-                            {/* {item.receiver_name && (<p className="text-success small">ผู้รับ: {item.receiver_name}</p>)} */}
+                            {/* {item.receiver_name && (<h5 className="text-success small">ผู้รับ: {item.receiver_name}</h5>)} */}
                             {/* {item.signature && (<img src={item.signature}alt="ลายเซ็น"style={{ width: "100px", marginTop: "10px" }}/>)} */}
                           </div>
                         </div>

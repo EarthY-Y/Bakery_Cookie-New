@@ -46,7 +46,7 @@ const detailPorductById = () => {
       }
     }
     detailProduct()
-  },[])
+  },[id])
   const handelErrorAddCart = async() => {
     setError("กรุณาสมัครบัญชีเเละเช้าสู่ระบบก่อนสั่งซื้อสินค้า")
   }

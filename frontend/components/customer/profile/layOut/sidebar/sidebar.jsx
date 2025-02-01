@@ -16,7 +16,7 @@ function Sidebar() {
       </div>
 
       {/* หน้าจอเล็ก */}
-      <div className="border-0 d-block d-lg-none" > {/* style={{ whiteSpace: "nowrap" }} ทำให้คำไม่ตก */}
+      <div className="border-0 d-block d-lg-none mb-3 mt-3" style={{ width: '100%' }} > {/* style={{ whiteSpace: "nowrap" }} ทำให้คำไม่ตก */}
         {/* ส่วนของโปรไฟล์ */}
         <div className="row text-center">
           <Link className="text-dark text-decoration-none col-3" to="/profile">

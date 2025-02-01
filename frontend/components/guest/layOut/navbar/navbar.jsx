@@ -47,7 +47,7 @@ const Navbar = () => {
                   <button type="button" className="btn btn-outline text-white rounded-pill mx-1" data-bs-toggle="dropdown" aria-expanded="false">หมวดหมู่</button>
                   <ul className="dropdown-menu mt-0" aria-labelledby="dropdownMenuButton1">
                     {categoryList.map((item, index)=>(
-                      <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                      <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} >{item.category_name}</Link></li>
                     ))}
                   </ul>
                 </div>
@@ -88,7 +88,7 @@ const Navbar = () => {
                 {categoryList.length !== 0 ? (
                   <><ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
                     {categoryList.map((item, index)=>(
-                      <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                      <li key={index}><Link className="dropdown-item" to={`/list/category/product/`+ item.category_name}>{item.category_name}</Link></li>
                     ))}
                     </ul>
                   </>

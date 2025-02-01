@@ -90,17 +90,17 @@ const OrderTracking = () => {
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>รายการสั่งซื้อ</h2>
+        <h4>รายการสั่งซื้อ</h4>
       </div>
       <h4>รอการชำระเงิน</h4>
         {currentOrders.map((order) => (
           <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
             <div className="card border-secondary">
-              <div className="card-header d-flex justify-content-between">
+              <div className="card-header">
                 <span>รหัสคำสั่งซื้อ: {order.orders_id}<button  className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
-                <p className="badge bg-warning text-dark">{order.status_name}</p>
+                <span className="badge bg-warning text-dark">{order.status_name}</span>
               </div>
               <div className="card-body">
                 <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
@@ -142,11 +142,8 @@ const OrderTracking = () => {
         return(
           <div key={order.orders_id} className="col-md-12 mb-4">
           <div className="card border-secondary">
-            <div className="card-header d-flex justify-content-between">
-              <span>
-                รหัสคำสั่งซื้อ: {order.orders_id}
-                <button className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button>
-              </span>
+            <div className="card-header">
+              <span>รหัสคำสั่งซื้อ: {order.orders_id}<button className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
               <p className="badge bg-warning text-dark">{order.status_name}</p>
             </div>
             <div className="card-body">

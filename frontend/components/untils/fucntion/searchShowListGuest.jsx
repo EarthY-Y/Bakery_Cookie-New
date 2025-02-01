@@ -47,7 +47,7 @@ const searchShowListGuest = ({ name, itemKeys }) => {
         <ul className="list-group position-absolute d-none d-md-block" style={{ zIndex: 1000, width: "400px" }}>
           {filteredProducts.map((item, index) => (
             <li key={index} className="list-group-item">
-              <Link to={`/Cookie&New/${item.product_id}`} className='text-black' onClick={location.reload} style={{ textDecoration: "none"}}>
+              <Link to={`/Cookie&New/${item.product_id}`} className='text-black' style={{ textDecoration: "none"}}>
                 {item.product_name} {/* เปลี่ยนเป็นฟิลด์ที่ต้องการแสดง */}
               </Link>
             </li>
@@ -59,7 +59,7 @@ const searchShowListGuest = ({ name, itemKeys }) => {
         <ul className="list-group position-absolute d-block d-md-none" style={{ zIndex: 1000, width: "68%" }}>
           {filteredProducts.map((item, index) => (
             <li key={index} className="list-group-item">
-              <Link to={`/Cookie&New/${item.product_id}`} className='text-black' onClick={location.reload} style={{ textDecoration: "none"}}>
+              <Link to={`/Cookie&New/${item.product_id}`} className='text-black' style={{ textDecoration: "none"}}>
                 {item.product_name} {/* เปลี่ยนเป็นฟิลด์ที่ต้องการแสดง */}
               </Link>
             </li>
