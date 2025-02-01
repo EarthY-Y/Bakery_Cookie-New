@@ -10,8 +10,8 @@ const layOutComponent = ({children}) => {
         <div style={{ position: 'sticky', top: 0, zIndex: 1000, height: '65px', width: '100%'}}>
           <Navbar />
         </div >
-        <div >
-          <main className="d-flex flex-column min-vh-100" style={{ paddingTop: '250px' }}>{children}</main>
+        <div className={`${window.innerWidth >= 992 ? 'pt-5' : ''}`} style={{ marginTop: window.innerWidth >= 992 ? '250px' : '0px' }}>
+          <main className="d-flex flex-column min-vh-100">{children}</main>
         </div>
       </div>
       <Footer/>

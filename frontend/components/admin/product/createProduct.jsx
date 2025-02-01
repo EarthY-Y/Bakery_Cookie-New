@@ -340,7 +340,7 @@ const CreateProduct = () => {
           </div> */}
 
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวนชิ้นที่ทำต่อครั้ง</label>
+            <label className="col-sm-2 col-form-label">จำนวนชิ้นที่ทำ/ครั้ง</label>
             <div className="col-sm-5">
               <div className="input-group">
                 <input type="number" name='quantityPerTime'className="form-control" placeholder="จำนวน" value={formData.quantityPerTime || ''} onChange={handleChange} />

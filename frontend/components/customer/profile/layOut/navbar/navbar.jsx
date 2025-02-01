@@ -56,7 +56,7 @@ function Navbar() {
   /*  มากกว่าเป็น true น้อยกว่าเป็น false */
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);

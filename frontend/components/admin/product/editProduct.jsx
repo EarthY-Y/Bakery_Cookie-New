@@ -505,7 +505,7 @@ const EditProduct = () => {
               <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มบรรจุภัณฑ์</button>
           </div> */}
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวนที่ทำ/ครั้ง</label>
+            <label className="col-sm-2 col-form-label">จำนวนชิ้นที่ทำ/ครั้ง</label>
             <div className="col-sm-5">
               <div className="input-group">
                 <input type="number" name='quantity_per_time'className="form-control" placeholder="จำนวน" value={formData.quantity_per_time || ''} onChange={handleChange} />

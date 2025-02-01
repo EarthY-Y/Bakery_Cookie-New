@@ -102,14 +102,6 @@ const listMaterialById = () => {
 
       <div className="mb-4 card col-md-12 px-40 rounded shadow border bg-light card-body">
         <h3>ส่วนประกอบของสินค้า</h3>
-        <div className="text-center mb-4">
-          <img src={API_URL_PICTURE + productById[0]?.productpic_name} height={250} width={400} alt="Material" className="rounded img-fluid" />
-        </div>
-        <div className="mb-3">
-          <label className="form-label fw-bold">ชื่อวัตถุดิบ</label>
-          <p className="border p-2 rounded bg-white">{productById[0]?.product_name}</p>
-        </div>
-
         {matrialProductMyId.map((product, index) => (
           <div key={index} className="border p-3 rounded mb-4" style={{ background: '#EBEAEA' }}>
             <div className="mb-3 row">
