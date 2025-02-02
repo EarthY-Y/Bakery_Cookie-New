@@ -83,28 +83,30 @@ const OrderTracking = () => {
         const isCancelable = showButtonCancel.some((status) => status.status_name === order.status_name);
         return (
           <div key={order.orders_id} className="col-md-12 mb-4" /* ใช้ Bootstrap Grid */>
-          <div className="card border-secondary">
-            <div className="card-header">
-              <span>รหัสคำสั่งซื้อ: {order.orders_id}<button className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
-              <span className="badge bg-warning text-dark">{order.status_name}</span>
-            </div>
-            <div className="card-body">
-              <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
-              <p className="card-text">ราคารวม: {numberGrouping(order.price)} บาท</p>
-              <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
-            </div>
-            <div className="card-footer d-flex justify-content-between">
-              {order.status_name === "รอการชำระเงิน" ? (
-                <Link to={`/payment/${order.cartId}`} className="btn btn-primary">ชำระเงิน</Link>
-              ) : isCancelable ? (
-                <div className=" d-flex justify-content-between">
-                  <button className="btn btn-danger" onClick={() => { setShowCancelModal(true); setOrderId(order.orders_id); }}>ยกเลิกคำสั่งซื้อ</button>
+            <div className="card border-secondary">
+              <div className="card-header">
+                <span>รหัสคำสั่งซื้อ: {order.orders_id}<button className="btn bi bi-copy" onClick={() => handleCopy(order.orders_id)}></button></span>
+                <span className="badge bg-warning text-dark">{order.status_name}</span>
+              </div>
+              <div className="card-body">
+                <p className="card-text">ปริมาณ: {order.quantity} ชิ้น</p>
+                <p className="card-text">ราคารวม: {numberGrouping(order.price)} บาท</p>
+                <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
+              </div>
+              <div className="card-footer d-flex justify-content-between">
+                {order.status_name === "รอการชำระเงิน" ? (
+                  <Link to={`/payment/${order.cartId}`} className="btn btn-primary">ชำระเงิน</Link>
+                ) : isCancelable ? (
+                  <div className=" d-flex justify-content-between">
+                    <button className="btn btn-danger" onClick={() => { setShowCancelModal(true); setOrderId(order.orders_id); }}>ยกเลิกคำสั่งซื้อ</button>
+                  </div>
+                ) : ("")}
+                <div className=" d-flex justify-content-end">
+                  <Link to={`view/detail/${order.orders_id}`} className="btn btn-secondary ">  รายละเอียด</Link>
                 </div>
-              ) : (<button className="btn btn-danger"disabled="false">ยกเลิกคำสั่งซื้อ</button>)}
-              <Link to={`view/detail/${order.orders_id}`} className="btn btn-secondary d-flex justify-content-end"> รายละเอียด</Link>
+              </div>
             </div>
           </div>
-        </div>
         )
       })}
 
