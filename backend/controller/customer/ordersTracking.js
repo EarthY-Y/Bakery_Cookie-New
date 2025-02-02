@@ -230,7 +230,7 @@ export const getStatusListForCancelOrders = async (req, res) => {
         const results = await new Promise((resolve, reject)=> {
             db.query(`SELECT so.status_name FROM status_order so 
                      LEFT JOIN category_status_order cso ON cso.category_status_order_id = so.category_status_order_id
-                     WHERE so.is_active = 1 AND cso.category_status_order_name LIKE ?`, ["รอ%"],
+                     WHERE so.is_active = 1 AND cso.category_status_order_name LIKE ?`, ["รอดำ%"],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)
@@ -268,6 +268,50 @@ export const cancleOrder = async (req, res) => {
 
         const results = await new Promise((resolve, reject)=> {
             db.query("UPDATE orders SET status = ?, updated_by = ? WHERE orders_id = ?", [cancelStatusId, token.customerId, idOrder],
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
+    }
+}
+
+export const getStatusOrderslist = async (req, res) => {
+    try {
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT * FROM status_order WHERE is_active = 1`,
+                    (err, result) => { 
+                if (err) return reject(err)
+                resolve(result)
+            })
+        })
+        // console.log("results",results);
+        return res.status(200).json(results);
+    } catch (error) {
+        console.error("มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล:", error);
+        res.status(400).json({ message: "มีบางอย่างผิดพลาด กรุณาเเจ้งฝ่ายดูเเล", error });
+    }
+}
+
+export const getOrderslistById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const results = await new Promise((resolve, reject)=> {
+            db.query(`SELECT o.orders_id, o.quantity, o.total_price_product as price, o.cartId, ocd.cost_shipping, 
+                     ocd.cost_package, so.status_name, o.created_at, osh.change_time as updated_at,
+                     osh.note, CONCAT(f_name, ' ', l_name)  as fullname FROM orders o 
+                     LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
+                     INNER JOIN status_order so ON so.status_order_id = o.status
+                     LEFT JOIN order_status_history osh ON osh.orders_id = o.orders_id
+                     LEFT JOIN customer c ON c.customer_id = o.customer_id
+                     WHERE so.status_name = ?
+                     GROUP BY o.orders_id
+                     ORDER BY o.created_at DESC;`, [id],
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

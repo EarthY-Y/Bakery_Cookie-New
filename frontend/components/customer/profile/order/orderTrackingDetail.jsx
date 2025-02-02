@@ -71,9 +71,7 @@ const OrderTracking = () => {
         const detailData = detailResponse.data[0];
         setOrdersDetail(detailData);
         if (detailData?.status === "รอการชำระเงิน") setShowBtnPay(true);
-        if (detailData?.status === "จัดส่งสำเร็จ") setShowCanCel(false);
         if (detailData?.status === "ยกเลิก") {
-          setShowCanCel(false);
           setShowStep(false);
         }
         const isCancelable = getStatusListForCancelOrders.data.some((status) => status.status_name === detailData.status);

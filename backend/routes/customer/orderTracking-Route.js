@@ -1,5 +1,7 @@
 import express from "express";
 import {
+    getOrderslistById,
+    getStatusOrderslist,
     getOrderslistWaitStatement,
     getOrderslistCheckOut,
     getOrderslistCancel,
@@ -17,6 +19,8 @@ import { verifyCustomerMid } from "../../middleware/authUser.js"
 const router = express()
 router.use(express.json());
 
+router.get('/customers/get/status/list', verifyCustomerMid, getStatusOrderslist);
+router.get('/customers/get/orders/list/by/:id', verifyCustomerMid, getOrderslistById);
 router.get('/customers/get/orders/list/waitstatement', verifyCustomerMid, getOrderslistWaitStatement);
 router.get('/customers/get/orders/list/inprocess', verifyCustomerMid, getOrderslistCheckOut);
 router.get('/customers/get/orders/list/cancel', verifyCustomerMid, getOrderslistCancel);

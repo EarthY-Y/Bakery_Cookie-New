@@ -4,6 +4,7 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService, createCartService, getCartService } from '../../../API/customer/productService';
 import { useCart } from '../layOut/navbar/CartContext';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const detailPorductById = () => {
@@ -12,8 +13,8 @@ const detailPorductById = () => {
   const [productById, setproductMyId] = useState([])
   const [CartId, setCartId] = useState()
   const [quantity, setQuantity] = useState(1);
-  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleIncreaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -44,7 +45,7 @@ const detailPorductById = () => {
         setproductMyId(getDetailProductById.data[0])
       }
       catch (error) {
-        console.log(error)
+        setError(error)
       }finally{
         setIsLoading(false);
       }
@@ -132,6 +133,9 @@ const detailPorductById = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

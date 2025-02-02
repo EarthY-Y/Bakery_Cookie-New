@@ -17,7 +17,7 @@ const listMaterialById = () => {
   const [totalWeight, setTotalWeight] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);;
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {

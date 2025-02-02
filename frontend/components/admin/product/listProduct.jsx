@@ -4,13 +4,15 @@ import { formatDate } from '../../untils/frommatters/datetime';
 import { Table, Button } from 'react-bootstrap';
 import { listProductService, deleteProductByIdService } from '../../../API/admin/productService';
 import Search from '../../untils/fucntion/search';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const listProduct = () => {
   const [products, setProducts] = useState([]);
   const [productsSearch, setProductsSearch] = useState([]);
-  
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const getPosts = async () => {
       try {
@@ -19,7 +21,7 @@ const listProduct = () => {
         
         setProducts(res.data);
       } catch (err) {
-        console.error("Error data:", err);
+        setError(err)
       }
     };
 
@@ -114,6 +116,9 @@ const listProduct = () => {
           </div>
         </div>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
 
   );

@@ -19,6 +19,42 @@ export const getlistOrdersWaitPayment = async() => {
   }
 }
 
+export const getStatusOrderslistService = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/status/list", 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
+export const getOrderslistByIdService = async(id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.get(API_URL + "/get/orders/list/by/" + id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
 export const getlistOrdersprocess = async() => {
   try {
     const authToken = localStorage.getItem('token')

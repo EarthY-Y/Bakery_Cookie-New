@@ -7,6 +7,7 @@ import { logout } from "../../../../API/authService";
 import { useCart } from "./CartContext";
 import SearchShowList from '../../../untils/fucntion/searchShowList';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
@@ -18,7 +19,7 @@ const Navbar = memo(() => {
   const [cartId, setCartId] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const { totalPrice } = useCart();
-  const [productsSearch, setProductsSearch] = useState([]);
+  const [error, setError] = useState(null);
 
   const handleLogout = () => {
     logout()
@@ -46,7 +47,7 @@ const Navbar = memo(() => {
         setCategoryList(getCategory.data)
         setProflieCustomer(getProfileCustomer.data[0])
       } catch (error) {
-        alert(error);
+        setError(error)
       }
     };
     fetchData();
@@ -170,6 +171,9 @@ const Navbar = memo(() => {
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/contact">ติดต่อสอบถาม</Link>
           </nav>
         </div>
+      )}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
       )}
     </div>
   );

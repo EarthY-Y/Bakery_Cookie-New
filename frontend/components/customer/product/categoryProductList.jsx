@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { listProductCategoryService } from '../../../API/customer/productService';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
 const categoryProductList = () => {
   const [productsCategory, setProductsCategory] = useState([]);
   const {id} = useParams()
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -17,7 +19,7 @@ const categoryProductList = () => {
         console.log(res);
         setProductsCategory(res.data);
       } catch (err) {
-        console.error("Error data:", err);
+        setError(err);
       }finally{
         setIsLoading(false);
       }
@@ -48,6 +50,9 @@ const categoryProductList = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
 
   );
