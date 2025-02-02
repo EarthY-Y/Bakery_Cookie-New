@@ -8,6 +8,7 @@ import SearchShowList from '../../../../untils/fucntion/searchShowList';
 import { numberGrouping } from '../../../../untils/frommatters/numberFormatting';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_LOGO
+const API_URL_PICTUREPROFILE = import.meta.env.VITE_API_Port_PICTURE_PROFILE
 
 function Navbar() {
   const [productCart, setproductCart] = useState([])
@@ -107,7 +108,7 @@ function Navbar() {
                   </li>
                   <li className="nav-item dropdown ms-auto d-flex align-items-start position-relative">
                     <button className="btn dropdown-toggle d-flex align-items-center caret-off w-100 mb-2" data-bs-toggle="dropdown" aria-expanded="false" style={{ border: "1.5px solid #000", borderRadius: "10px", backgroundColor: "transparent", color: "#FFFFFF" }}>
-                      <img src={API_URL_PICTURE + proflieCustomer.customerpic} alt="" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
+                      <img src={API_URL_PICTUREPROFILE + proflieCustomer.customerpic} alt="" className="mb-0" style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "8px" }} />
                       <span>{proflieCustomer.username}</span>
                     </button>
                     <ul className="dropdown-menu dropdown-menu-start mt-0 w-100" aria-labelledby="profileDropdown" style={{ minWidth: "unset" }}>
