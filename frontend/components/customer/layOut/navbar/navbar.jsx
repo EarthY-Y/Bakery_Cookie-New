@@ -9,7 +9,7 @@ import SearchShowList from '../../../untils/fucntion/searchShowList';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import ErrorPopup from '../../../untils/popUp/errorPopup';
 
-const API_URL_PICTUREPROFILE = import.meta.env.VITE_API_Port_PICTURE_PROFILE
+const API_URL_PICTUREPROFILE = import.meta.env.VITE_API_Port_PICTURE_LOGO
 
 const Navbar = memo(() => {
   const [productCart, setProductCart] = useState([]);
