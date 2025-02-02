@@ -48,9 +48,9 @@ function Sidebar() {
                     listStatusOrders.map((status, index) => (
                       <li key={index}>
                         {history.includes(status.status_name) ? (
-                          <Link className="dropdown-item" to={`/profile/orderHistory/${status.status_name}`}>{status.status_name}</Link>
+                          <Link className="dropdown-item" to={`/profile/orderHistory/${status.status_name}`}>{status.status_name}  ({status.countOrders})</Link>
                         ) : (
-                          <Link className="dropdown-item" to={`/profile/orderTracking/${status.status_name}`}>{status.status_name}</Link>
+                          <Link className="dropdown-item" to={`/profile/orderTracking/${status.status_name}`}>{status.status_name}  ({status.countOrders})</Link>
                         )}
                       </li>
                     ))
@@ -88,7 +88,7 @@ function Sidebar() {
                 {listStatusOrders.length > 0 ? (
                   listStatusOrders.map((status, index) => (
                     <li key={index}>
-                      <Link className="dropdown-item" to={`/profile/orderTracking/${status.status_name}`}>{status.status_name}</Link>
+                      <Link className="dropdown-item" to={`/profile/orderTracking/${status.status_name}`}>{status.status_name} ({status.countOrders})</Link>
                     </li>
                   ))
                 ) : (
