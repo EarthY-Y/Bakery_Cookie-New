@@ -124,7 +124,7 @@ const profile = () => {
     
   }
   return (
-    <div className="p-4">
+    <div className="container">
     <h4>ข้อมูลของฉัน</h4>
     <form onSubmit={handleSubmit} encType="multipart/form-data">
       <div className="mb-3 text-center">

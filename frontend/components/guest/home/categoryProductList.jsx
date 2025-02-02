@@ -23,7 +23,7 @@ const categoryProductList = () => {
     };
 
     getProducts();
-  }, []);
+  }, [id]);
   return(
       <div className="container">
         <h2 className="text-center my-4" style={{ fontWeight: "bold" }}>{id}</h2>

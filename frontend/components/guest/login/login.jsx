@@ -13,17 +13,34 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
+  
+  //หาไม่เจอผู้ใช้งานในระบบจะเเจ้งเตือน เเละทำการ logout แต่จะเช็คก่อนว่ามีการ login อยู่หรือไม่
   useEffect(() =>{
-    liff.init({liffId: '2006630207-4ENd2JnL', }) 
+    const LineAuth = async() => {
+      await liff.init({liffId: '2006630207-4ENd2JnL', }) 
+      if(liff.isLoggedIn()){
+        liff.logout()
+        setError('ผู้ใช้ไม่ได้ผูกบัญชี LINE กับระบบ')
+      }
+    }
+    LineAuth()
   },[])
+
   const handleLoginLine = async() =>{
     try {
       if(!liff.isLoggedIn()){
         liff.login() //ทำการ login ผ่าน Line
       }
+      // else{
+      //   liff.logout()
+      //   setError('ไม่พบผู้ใช้งานในระบบ')
+      // }
     } catch (error) {
+      if(liff.isLoggedIn()){
+        liff.logout()
+      }
       console.log(error);
+      setError(error);
     }
   }
   // login ด้วย userName password
@@ -42,9 +59,6 @@ const Login = () => {
       if(userRole === 'admin'){
         setIsLoading(false)
         navigate("/dashboard");
-      }else {
-        setIsLoading(false)
-        navigate("");
       }
     } catch (err) {
       setError(err);

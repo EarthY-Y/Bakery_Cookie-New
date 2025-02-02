@@ -39,9 +39,9 @@ const Footer = () => {
                 <p className="small m-0">หมวดหมู่</p>
               </button>
               {categoryList.length !== 0 ? (
-                  <><ul className="dropdown-menu mt-2" aria-labelledby="dropdownMenuButton1">
+                  <><ul className="dropdown-menu mt-2 mb-4" aria-labelledby="dropdownMenuButton1">
                     {categoryList.map((item, index)=>(
-                      <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name} onClick={location.reload}>{item.category_name}</Link></li>
+                      <li key={index}><Link className="dropdown-item" to={`/category/`+ item.category_name}>{item.category_name}</Link></li>
                     ))}
                     </ul>
                   </>

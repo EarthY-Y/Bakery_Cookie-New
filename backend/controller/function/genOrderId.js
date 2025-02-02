@@ -1,5 +1,4 @@
-export const generateOrderId = (phoneNumber) => {
-  // ดึงวันที่ปัจจุบันในรูปแบบ YYYYMMDD
+export const generateOrderId = async (phoneNumber, countOrder) => {
   const phoneStr = String(phoneNumber);
 
   // ดึงวันที่ปัจจุบันในรูปแบบ YYYYMMDD
@@ -12,10 +11,10 @@ export const generateOrderId = (phoneNumber) => {
   // ดึง 3 ตัวเลขหลังสุดจากเบอร์โทร
   const phonePart = phoneStr.slice(-3);
 
-  // สร้างเลขสุ่ม 4 หลัก
-  const randomNumber = Math.floor(1000 + Math.random() * 9000);
+  // นำ countOrder มา format ให้เป็น 4 หลัก
+  const orderCount = String(countOrder).padStart(4, '0');
 
   // รวมรหัสทั้งหมด
-  const orderId = `${formattedDate}-${phonePart}-${randomNumber}`;
+  const orderId = `${formattedDate}-${phonePart}-${orderCount}`;
   return orderId;
-}
+};

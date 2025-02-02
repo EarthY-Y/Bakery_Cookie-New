@@ -61,17 +61,17 @@ const listMaterialById = () => {
 
         <div className="mb-3">
           <label className="form-label fw-bold">ต้นทุนวัตถุดิบ</label>
-          <p className="border p-2 rounded bg-white">{materialMyId.cost}</p>
+          <p className="border p-2 rounded bg-white">{materialMyId.cost} บาท</p>
         </div>
 
         <div className="">
           <label className="form-label fw-bold">ปริมาณ</label>
-          <p className="border p-2 rounded bg-white">{materialMyId.quantity}</p>
+          <p className="border p-2 rounded bg-white">{materialMyId.quantity} กรัม</p>
         </div>
 
         <div className="mb-3">
           <label className="form-label fw-bold">ต้นทุนต่อปริมาณ</label>
-          <p className="border p-2 rounded bg-white">{materialMyId.cost_per_quantity}</p>
+          <p className="border p-2 rounded bg-white">{materialMyId.cost_per_quantity} บาทต่อกรัม</p>
         </div>
 
         <div className="pb-4">

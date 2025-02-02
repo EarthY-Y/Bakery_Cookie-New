@@ -48,17 +48,17 @@ const ListPackageById = () => {
 
         <div className="mb-3">
           <label className="form-label fw-bold">ต้นทุนบรรจุภัณฑ์</label>
-          <p className="border p-2 rounded bg-white">{packageById.cost}</p>
+          <p className="border p-2 rounded bg-white">{packageById.cost} บาท</p>
         </div>
 
         <div className="mb-3">
-          <label className="form-label fw-bold">ปริมาณที่ทำ/ครั้ง</label>
-          <p className="border p-2 rounded bg-white">{packageById.quantity}</p>
+          <label className="form-label fw-bold">จำนวนทั้งหมด/ชุด</label>
+          <p className="border p-2 rounded bg-white">{packageById.quantity} ชิ้น</p>
         </div>
 
         <div className="">
           <label className="form-label fw-bold">ราคา/ชิ้น</label>
-          <p className="border p-2 rounded bg-white">{packageById.cost_per_quantity}</p>
+          <p className="border p-2 rounded bg-white">{packageById.cost_per_quantity} บาทต่อชิ้น</p>
         </div>
 
         <div className="mb-3 row">

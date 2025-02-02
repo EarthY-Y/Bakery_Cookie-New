@@ -88,6 +88,24 @@ export const listProductByIdService = async(id) => {
   }
 }
 
+export const listMaterialProductByIdService = async(id) => {
+  try {
+    const authToken = localStorage.getItem('tokenAdmin')
+    const response = await axios.get(API_URL + "/product/material/"+id, 
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    ); 
+    //console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error listProductByIdService:", error);
+  }
+}
+
+
 export const editProductService = async(fromData, id) => { 
   console.log(fromData);
   try {

@@ -125,7 +125,7 @@ const CreatePackage = () => {
 
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อบรรจุภัณฑ์</label>
-            <div className="row col-sm-5">
+            <div className="col-sm-5">
               <input type="text" name='package_name' className="form-control" placeholder="ชื่อบรรจุภัณฑ์" value={packageName} onChange={(e) => setPackageName(e.target.value)}/>
                 {/* formData.package_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
@@ -135,26 +135,35 @@ const CreatePackage = () => {
 
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">จำนวนทั้งหมด/ชุด</label>
-            <div className="row col-sm-5">
-              <input type="text" name='quantity' className="form-control" placeholder="จำนวน" value={packageQuantity} onChange={(e) => setPackageQuantity(e.target.value)}/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="text" name='quantity' className="form-control" placeholder="จำนวน" value={packageQuantity} onChange={(e) => setPackageQuantity(e.target.value)}/>
+                <span className="input-group-text">ชิ้น</span>
+              </div>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคา/ชุด</label>
-            <div className="row col-sm-5">
-              <input type="text" name='cost' className="form-control" placeholder="ราคาที่ซื้อมาต่อชุด" value={packageCost} onChange={(e) => setPackageCost(e.target.value)}/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="text" name='cost' className="form-control" placeholder="ราคาที่ซื้อมาต่อชุด" value={packageCost} onChange={(e) => setPackageCost(e.target.value)}/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="text" name='costPreQuantity' className="form-control" placeholder="ราคาบรรจุภัณฑ์" value={packageCostPerQuantity} onChange={(e) => setPackageCostPerQuantity(e.target.value)} readOnly/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="text" name='costPreQuantity' className="form-control" placeholder="ราคาบรรจุภัณฑ์" value={packageCostPerQuantity} onChange={(e) => setPackageCostPerQuantity(e.target.value)} readOnly/>
+                <span className="input-group-text">บาทต่อชิ้น</span>
+              </div>
             </div>
           </div>
 
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">การใช้งาน</label>
-            <div className='row col-sm-5'>
+            <div className='col-sm-5'>
               <select className="form-select" onChange={(e) => setStatusactive(e.target.value)} value={active}  required aria-label="Default select example" placeholder="เลือก">
                 <option value="1">ใช้งาน</option>
                 <option value="0">ไม่ใช้งาน</option>

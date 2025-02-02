@@ -1,38 +1,43 @@
 //rafce shortKey
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Navbar from './navbar/navbar'
 import Sidebar from './sidebar/sidebar'
 import Footer from '../layOut/footer/footer'
 
-const layOutComponent = ({ children }) => {
+const layOutComponent = React.memo(({ children }) => {
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 992);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <React.Fragment>
       <div style={{ backgroundColor: '#FFF2E1' }}>
-        {/* Navbar */}
-        <div style={{ position: 'sticky', top: 0, zIndex: 1000, width: '100%', }} > {/* เเค่เอาขนาดความสูงออกก็ทำให้เว้นระยะห่าง auto ระหว่าง navbar กับ main ได้เเล้ว */}
-        <Navbar />
+        <div style={{ position: 'fixed', top: 0, zIndex: 1000, width: '100%' }}>
+          <Navbar />
         </div>
-        <div className="container d-flex mb-5" style={{ minHeight: '80vh'}}>
-          {/* Sidebar */}
+        <div className="container d-flex mb-5" style={{ paddingTop: isDesktop ? '355px' : '105px' }}>
           <div className="d-none d-lg-block">
             <Sidebar />
           </div>
-          
-          {/* Main Content */}
-          <main className="flex-grow-1 p-3 bg-white mt-3" >
-            {/* Sidebar (Mobile - Above Content) */}
-            <div className="d-lg-none d-block mb-3 w-5">
+          <div className="flex-grow-1 p-3" style={{ overflow: 'auto' }}>
+            <div className="d-lg-none d-block bg-light shadow-sm mb-3" style={{ width: '100%' }}>
               <Sidebar />
             </div>
-            {children}
-          </main>
+            <div className="bg-light shadow-sm mt-0 pt-3 pb-3" style={{ borderRadius: "8px" }}>
+              <main className="d-flex flex-column">{children}</main>
+            </div>
+          </div>
         </div>
-
-        {/* Footer */}
         <Footer />
       </div>
     </React.Fragment>
   );
-};
+});
 
 export default layOutComponent;

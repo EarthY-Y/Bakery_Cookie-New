@@ -71,9 +71,7 @@ const OrderTracking = () => {
         const detailData = detailResponse.data[0];
         setOrdersDetail(detailData);
         if (detailData?.status === "รอการชำระเงิน") setShowBtnPay(true);
-        if (detailData?.status === "จัดส่งสำเร็จ") setShowCanCel(false);
         if (detailData?.status === "ยกเลิก") {
-          setShowCanCel(false);
           setShowStep(false);
         }
         const isCancelable = getStatusListForCancelOrders.data.some((status) => status.status_name === detailData.status);
@@ -153,10 +151,10 @@ const OrderTracking = () => {
   const handleCloseTrackingModal = () => setShowTrackingModal(false);
 
   return (
-    <div className="container mt-1  mb-5">
+    <div className="container">
       <div className='align-items-center row mb-4'>
         <div className='col-12 col-lg-6'>
-          <h3>สถานะคำสั่งซื้อ</h3>
+          <h4>สถานะคำสั่งซื้อ</h4>
         </div>
         <div className='col-12 col-lg-6 text-lg-end'>
           <span ><b>รหัสคำสั่งซื้อ:</b> {ordersDetail.orders_id}<button className="btn bi bi-copy" onClick={() => handleCopy(ordersDetail.orders_id)}></button></span>

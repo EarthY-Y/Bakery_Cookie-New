@@ -156,7 +156,7 @@ const orderHistoryById = () => {
             <div className="row">
               <label className="form-label fw-bold">รหัสพัสดุ</label>
               <div className='col-md-4 col-8'>
-                <input type="text" className="form-control" placeholder="รหัสไปรษณีย์"
+                <input type="text" className="form-control" placeholder="รหัสพัสดุ"
                   value={postCode}
                   onChange={(e) => setPostCode(e.target.value)} />
               </div>

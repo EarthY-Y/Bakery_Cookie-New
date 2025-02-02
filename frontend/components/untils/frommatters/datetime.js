@@ -1,4 +1,7 @@
 export function formatDate(isoString) {
+
+    if (!isoString) return "ยังไม่มีวันที่ทำรายการ";
+
     const date = new Date(isoString);
   
     // Extract date components

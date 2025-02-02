@@ -39,7 +39,7 @@ const Signup2 = () => {
         <div className="col-md-6">
           <div className="card">
             <div className="px-5 card-body">
-              <h3 className="mb-4 card-title text-center">สมัครสมาชิก</h3>
+              <h3 className="mb-4 card-title text-center">ข้อมูลบัญชีผู้ใช้</h3>
 
               <form onSubmit={handleSubmit} encType="multipart/form-data">
                <div className="row mb-4">
@@ -70,7 +70,7 @@ const Signup2 = () => {
                     </Link>
                   </div>
                   <div className="col-5">
-                    <button style={{ backgroundColor: '#FFE194'}} type="submit" className="btn btn-outline-dark w-100">สมัครสมาชิก</button>
+                    <button style={{ backgroundColor: '#C1F2B0' }} type="submit" className="btn btn-outline-dark w-100">ยืนยัน (2/2)</button>
                   </div>
                 </div>
 

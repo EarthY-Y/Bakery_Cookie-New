@@ -68,28 +68,37 @@ const createMaterial = () => {
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อวัตถุดิบ</label>
-            <div className="row col-sm-4">
+            <div className="col-sm-4">
               <input type="text" className="form-control" placeholder="ชื่อวัตถุดิบ" value={MaterialName} onChange={(e) => setMaterial_name(e.target.value)} required/>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ปริมาณวัตถุดิบ</label>
-            <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="หน่วยเป็นกรัม" value={Quantities}onChange={(e) => setQuantity(e.target.value)} required/>
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="หน่วยเป็นกรัม" value={Quantities}onChange={(e) => setQuantity(e.target.value)} required/>
+                <span className="input-group-text">กรัม</span>
+              </div>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนวัตถุดิบที่ซื้อมา</label>
-            <div className="row col-sm-4">
-              <input type="number" className="form-control" placeholder="หน่วยเป็นบาท" value={Costes} onChange={(e) => setCost(e.target.value)} required/>
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="number" className="form-control" placeholder="หน่วยเป็นบาท" value={Costes} onChange={(e) => setCost(e.target.value)} required/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อปริมาณ</label>
-            <div className="row col-sm-4">
-              <input type="text" className="form-control" placeholder="ต้นทุนต่อจำนวน" value={CostesPerQuantities} // แสดงค่า CostesPerQuantities ที่คำนวณได้
-                readOnly // ตั้งค่าให้อ่านได้อย่างเดียว
-              />
+            <div className="col-sm-4">
+              <div className="input-group">
+                <input type="text" className="form-control" placeholder="ต้นทุนต่อจำนวน" value={CostesPerQuantities} // แสดงค่า CostesPerQuantities ที่คำนวณได้
+                  readOnly // ตั้งค่าให้อ่านได้อย่างเดียว
+                />
+                <span className="input-group-text">บาทต่อกรัม</span>
+              </div>
             </div>
           </div>
 

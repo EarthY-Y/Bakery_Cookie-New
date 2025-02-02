@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listProductService } from '../../../API/customer/productService';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
+
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   useEffect(() => {
     setIsLoading(true);
     const getProducts = async () => {
@@ -14,24 +18,27 @@ const Home = () => {
         console.log(res.data);
         setProducts(res.data);
       } catch (err) {
-        console.error("Error data:", err);
-      }finally{
+        setError(err);
+      } finally {
         setIsLoading(false);
       }
     };
 
     getProducts();
   }, []);
-  return(
+  return (
     <div className="container">
       <div id="productCarousel" className="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="3000">
-      <div className="carousel-inner overflow-hidden" style={{ height: "50vh" }}>
-        {products.map((product, index) => (
-          <div key={product.product_id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
-            <img src={API_URL_PICTURE + product.productpic_name} className="d-block" alt={product.product_name} style={{ width: "100%", height: "100%", objectFit: "cover",}}/>
-          </div>
-        ))}
-      </div>
+        <div className="carousel-inner overflow-hidden">
+          {products.map((product, index) => (
+            <div key={product.product_id} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+              <img src={API_URL_PICTURE + product.productpic_name} className="d-block w-100 h-50 d-none d-md-block"
+                alt={product.product_name} style={{ objectFit: "cover" }} />
+              <img src={API_URL_PICTURE + product.productpic_name} className="d-block w-100 h-auto d-md-none"
+                alt={product.product_name} style={{ objectFit: "cover" }} />
+            </div>
+          ))}
+        </div>
         <button className="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Previous</span>
@@ -46,16 +53,17 @@ const Home = () => {
 
       <div className="container">
         <div className="row g-4 justify-content-start card-container">
-        {products.map((product) => (
-          <div key={product.product_id} className="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center" style={{ cursor: "pointer" }}>
-              <Link to={`/product/${product.product_id}`} className="card shadow-sm" 
-                style={{ textDecoration: "none",color: "inherit",width: "100%",maxWidth: "300px", // จำกัดความกว้างของ 
+          {products.map((product) => (
+            <div key={product.product_id} className="col-6 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center" style={{ cursor: "pointer" }}>
+              <Link to={`/product/${product.product_id}`} className="card shadow-sm"
+                style={{
+                  textDecoration: "none", color: "inherit", width: "100%", maxWidth: "300px", // จำกัดความกว้างของ 
                   cardminHeight: "350px", // ล็อคความสูงของ card ให้เท่ากัน
                 }}>
-                <img src={API_URL_PICTURE + product.productpic_name} className="card-img-top" alt={product.product_name} style={{ height: "200px", objectFit: "cover" }}/>
+                <img src={API_URL_PICTURE + product.productpic_name} className="card-img-top" alt={product.product_name} style={{ height: "200px", objectFit: "cover" }} />
                 <div className="card-body d-flex flex-column justify-content-between">
                   <h5 className="card-title">{product.product_name}</h5>
-                  <p className="card-text">ราคา: {product.selling_price_per_quantity} บาท</p>
+                  <p className="card-text">ราคาต่อชิ้น: {product.selling_price_per_quantity} บาท</p>
                 </div>
               </Link>
             </div>
@@ -63,9 +71,12 @@ const Home = () => {
         </div>
       </div>
       <LoadingPopup
-        isLoading = {isLoading}
+        isLoading={isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

@@ -43,7 +43,6 @@ const cartProduct = () => {
           navigate(-1)
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
         setError(error);
       }finally {
         setIsLoading(false);

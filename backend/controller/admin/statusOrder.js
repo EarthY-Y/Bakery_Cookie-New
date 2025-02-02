@@ -50,7 +50,8 @@ export const getStatusOrder = async (req, res) => {
             //so.* ก็จริงเเต่สุดท้ายข้อมูลของ created_by,updated_by จะโดนอันใหม่ทับไป 
             db.query(`SELECT so.*, a_created.username as created_by, a_updated.username as updated_by FROM status_order so
                      LEFT JOIN admin a_created ON a_created.admin_id = so.created_by
-                     LEFT JOIN admin a_updated ON a_updated.admin_id = so.updated_by`,
+                     LEFT JOIN admin a_updated ON a_updated.admin_id = so.updated_by
+                     ORDER BY so.status_name DESC`,
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

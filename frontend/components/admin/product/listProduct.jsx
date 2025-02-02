@@ -5,6 +5,7 @@ import { Table, Button } from 'react-bootstrap';
 import { listProductService, deleteProductByIdService } from '../../../API/admin/productService';
 import Search from '../../untils/fucntion/search';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
@@ -12,7 +13,8 @@ const listProduct = () => {
   const [products, setProducts] = useState([]);
   const [productsSearch, setProductsSearch] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const getPosts = async () => {
       try {
@@ -22,7 +24,7 @@ const listProduct = () => {
                 
         setProducts(res.data);
       } catch (err) {
-        console.error("Error data:", err);
+        setError(err)
       }finally{
         setIsLoading(false);
       }
@@ -115,6 +117,9 @@ const listProduct = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
 
   );

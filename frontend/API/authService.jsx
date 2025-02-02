@@ -18,7 +18,6 @@ export const login = async (userName, passWord) => {
     console.log(res);
     return res;
   } catch (error) {
-    console.error("Error during login:", error);
     throw error; // ส่ง error ออกไปให้ component จัดการ
   }
 };
@@ -29,7 +28,6 @@ export const loginLINE = async (profile) => {
     console.log(res);
     return res;
   } catch (error) {
-    console.error("Error during login:", error);
     throw error; // ส่ง error ออกไปให้ component จัดการ
   }
 };
@@ -62,9 +60,6 @@ export const ProtectedRouteAdmin = () => {
 
   useEffect(() => {
     const verifyToken = async () => {
-      if(!tokenPostManAPI){
-        getTokenPostTH()
-      }
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
@@ -81,6 +76,9 @@ export const ProtectedRouteAdmin = () => {
         console.log('Response from verifyAdmin:', resAdmin.data);
         
         if (resAdmin.data.results && resAdmin.data.results.length !== 0) {
+          if(!tokenPostManAPI){
+            getTokenPostTH()
+          }
           setIsAdmin(true);
         } else {
           console.log("User is not an admin. Redirecting to login...");
@@ -116,9 +114,6 @@ export const ProtectedRouteCustomer = () => {
 
   useEffect(() => {
     const verifyToken = async () => {
-      if(!tokenPostManAPI){
-        getTokenPostTH()
-      }
       if (!token) {
         console.log("No token found. Redirecting to login...");
         setLoading(false);
@@ -136,6 +131,9 @@ export const ProtectedRouteCustomer = () => {
           console.log('Response from verifyCustomer:', resCustomer.data);
 
           if (resCustomer.data.results && resCustomer.data.results.length !== 0) {
+            if(!tokenPostManAPI){
+              getTokenPostTH()
+            } 
             setIsCustomer(true);
           } else {
             console.log("User is not an customer. Redirecting to login...");
@@ -266,13 +264,16 @@ export const CheckRouteAdmin = () => {
 
 // ฟังก์ชันในการลบ token
 function removeToken() {
-  location.reload(); 
   localStorage.removeItem('token'); // ลบ token ออกจาก Local Storage
+  localStorage.removeItem('TOKEN_KEY');
+  localStorage.removeItem('tokenPostManAPI');
+  localStorage.removeItem('EXPIRATION_KEY');
   liff.init({liffId: '2006630207-4ENd2JnL', }) 
   if(liff.isLoggedIn()){
     liff.logout()
   }
   console.log('Token has been removed. Please log in again.');
+  location.reload(); 
 }
 
 // ฟังก์ชันในการตรวจสอบและลบ token อัตโนมัติ
@@ -298,9 +299,12 @@ function autoRemoveToken(token) {
 }
 
 function removeTokenAdmin() {
-  location.reload(); 
   localStorage.removeItem('tokenAdmin');
+  localStorage.removeItem('TOKEN_KEY');
+  localStorage.removeItem('tokenPostManAPI');
+  localStorage.removeItem('EXPIRATION_KEY');
   console.log('Token has been removed. Please log in again.');
+  location.reload(); 
 }
 function autoRemoveTokenAdmin(token) {
   if (!token) return;

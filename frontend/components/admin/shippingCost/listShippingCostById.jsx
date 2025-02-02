@@ -46,11 +46,11 @@ const listShippingById = () => {
         </div>
         <div className="mb-3">
             <label className="form-label fw-bold">ราคา</label>
-            <p className="border p-2 rounded bg-white">{shippingMyId.price}</p>
+            <p className="border p-2 rounded bg-white">{shippingMyId.price} บาท</p>
         </div>
         <div className="mb-3">
             <label className="form-label fw-bold">เวลาที่ใช้</label>
-            <p className="border p-2 rounded bg-white">{shippingMyId.estimated_delivery_days}</p>
+            <p className="border p-2 rounded bg-white">{shippingMyId.estimated_delivery_days} วัน</p>
         </div>
         <div className="">
             <label className="form-label fw-bold">บรรจุภัณฑ์ที่ใช้</label>

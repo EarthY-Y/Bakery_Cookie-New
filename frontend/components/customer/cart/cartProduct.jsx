@@ -148,7 +148,7 @@ const cartProduct = () => {
               </div>
             ))
           ) : (
-            <p className="row bg-white p-3 justify-content-center align-items-center">ไม่มีสินค้าในตะกร้า</p>
+            <h5 className="row bg-white p-3 justify-content-center align-items-center">ไม่มีสินค้าในตะกร้า</h5>
           )}
         </div>
         <div className="row bg-light p-3 border rounded text-end">

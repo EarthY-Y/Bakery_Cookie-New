@@ -1,12 +1,13 @@
 import React, { useContext,useEffect, useState} from 'react';
 import Select from 'react-select';
 import { Link,useNavigate,useParams } from 'react-router-dom';
-import { listProductByIdService, listProductPackageByIdService, listProductPackageService } from '../../../API/admin/productService';
+import { listProductByIdService, listMaterialProductByIdService, listProductPackageByIdService, listProductPackageService } from '../../../API/admin/productService';
 import { listMaterialService } from '../../../API/admin/materialService';
 import { editProductService } from '../../../API/admin/productService';
 import LoadingPopup from '../../untils/popUp/loading';
 import ErrorPopup from '../../untils/popUp/errorPopup';
 import TooltipUntils from '../../untils/popUp/tooltip';
+import {numberGrouping} from '../../untils/frommatters/numberFormatting';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
@@ -20,7 +21,7 @@ const EditProduct = () => {
   const [pricePreQuantity, setpricePreQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);;
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [active, setStatusactive] = useState("1");
   const { id } = useParams();
@@ -34,11 +35,13 @@ const EditProduct = () => {
         // โหลดข้อมูลพร้อมกันเพื่อลดปัญหาการโหลดข้อมูลไม่ทัน
         const [
           productResponse,
+          materialProductResponse,
           materialsResponse,
           packagesResponse,
           productPackagesResponse,
         ] = await Promise.all([
           listProductByIdService(id),
+          listMaterialProductByIdService(id),
           listMaterialService(),
           listProductPackageService(),
           listProductPackageByIdService(id),
@@ -46,7 +49,7 @@ const EditProduct = () => {
 
         // จัดการข้อมูลสินค้า
         const productData = productResponse.data[0];
-        const ingredients = productResponse.data.map((item) => ({
+        const ingredients = materialProductResponse.data.map((item) => ({
           material_id: item.material_id || '',
           quantity: item.quantity || '',
           cost_per_quantity: item.cost_per_quantity || 0,
@@ -396,9 +399,10 @@ const EditProduct = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="container mt-5 p-3">
+
+        {/* ข้อมูลทั่วไปของสินค้า */}
         <div className="mb-4 card col-md-12 px-40 bg-light card-body">
-          <h5>เพิ่มสินค้า</h5>
-          
+          <h4>ข้อมูลทั่วไปของสินค้า</h4>
           <div className="mb-3 text-center">
             <div className="bg-white" style={{width: '100px',height: '100px',border: '1px dashed #ccc',borderRadius: '5px',position: 'relative',display: 'inline-flex',alignItems: 'center',justifyContent: 'center'}}>
               {formData.file ? (typeof formData.file === 'string' ? 
@@ -414,7 +418,7 @@ const EditProduct = () => {
 
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อสินค้า</label>
-            <div className="row col-sm-5">
+            <div className="col-sm-5">
               <input type="text" name='product_name'className="form-control" placeholder="ชื่อสินค้า" value={formData.product_name || ''} 
                 /* formData.product_name || '' ตั้งค่าเป็น string ว่างถ้าเป็น undefined 
                 เนื่องจาก ใน formData เราทำเป็น Dynamic เพิ่มตามจำนวน name ของ input 
@@ -423,11 +427,37 @@ const EditProduct = () => {
               />
             </div>
           </div>
-          
+
+          <div className="row mb-4 justify-content-center">
+            <label className="col-sm-2 col-form-label">การใช้งาน</label>
+            <div className="col-sm-5">
+              <select className="form-select" name="is_active" value={formData.is_active || active} onChange={handleChange}   required aria-label="Default select example" placeholder="เลือก">
+                <option value="1">วางขาย</option>
+                <option value="0">เลิกขาย</option>
+                {/* <option value="3">Three</option> */}
+              </select>
+            </div>
+          </div>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
+            <div className="col-sm-5">
+              <textarea className="form-control" name='description' placeholder="รายละเอียดสินค้า"
+                  value={formData.description || ''} 
+                  onChange={handleChange} 
+                  rows="3" // กำหนดความสูงของ textarea
+                  style={{ minWidth: '100%' }} // กำหนดความกว้างของ textarea
+                />
+            </div>
+          </div>
+        </div>
+
+        {/* ส่วนประกอบของสินค้า */}
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
+          <h4>ส่วนประกอบของสินค้า</h4>
           {(formData.ingredients || []).map((ingredient, index) => (
             <div key={index} className="row mb-3 justify-content-center ingredient-row">
               <label className="col-sm-2 col-form-label">วัตถุดิบอย่างที่ {index + 1}</label>
-              <div className="col-sm-3">
+              <div className="col-sm-2">
                 <Select
                   options={optionsMaterial}
                   name="material_id"
@@ -437,8 +467,12 @@ const EditProduct = () => {
                   placeholder="เลือกวัตถุดิบ"
                 />
               </div>
-              <div className="col-sm-1 mb-2">
-                <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
+              <div className="col-sm-2 mb-2">
+                <div className="input-group">
+                  <input type="number" name="quantity" placeholder="ปริมาณ" className="form-control" value={ingredient.quantity} onChange={(event) => handleInputChange(index, '', event)} required/>
+                  <span className="input-group-text">กรัม</span>
+                </div>
+
               </div>
               <div className="col-sm-1">
                 <button type="button" className="btn btn-danger me-5" onClick={() => handleRemoveRow(index)}><i className="bi bi-trash"></i></button>
@@ -451,8 +485,8 @@ const EditProduct = () => {
           </div>
           {(formData.packaging || []).map((packaging, index) => (
             <div key={packaging.tempId || packaging.package_id || index}  className="row mb-3 justify-content-center">
-              <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ {index + 1}</label>
-              <div className="col-sm-4 mb-2">
+              <label className="col-sm-2 col-form-label">บรรจุภัณฑ์ </label> {/* {index + 1} */}
+              <div className="col-sm-5 mb-2">
                 <Select
                   options={options}
                   value={options.find((option) => option.label === packaging.package_name) ||  packaging.package_name}
@@ -461,9 +495,9 @@ const EditProduct = () => {
                   placeholder="เลือกบรรจุภัณฑ์"
                 />
               </div>
-              <div className="col-sm-1">
+              {/* <div className="col-sm-1">
                   <button type="button" className="btn btn-danger me-5" onClick={() => handlePackageRemoveRow(index)}><i className="bi bi-trash"></i></button>
-              </div>
+              </div> */}
             </div>
           ))}
 
@@ -471,15 +505,36 @@ const EditProduct = () => {
               <button type="button" className="btn btn-primary" onClick={handlePackageAddRow}>เพิ่มบรรจุภัณฑ์</button>
           </div> */}
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">ต้นทุนสินค้า</label>
-            <div className="row col-sm-5">
-              <input type="number" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost().toFixed(2)} readOnly/>
+            <label className="col-sm-2 col-form-label">จำนวนชิ้นที่ทำ/ครั้ง</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='quantity_per_time'className="form-control" placeholder="จำนวน" value={formData.quantity_per_time || ''} onChange={handleChange} />
+                <span className="input-group-text">ชิ้น</span>
+              </div>
             </div>
           </div>
+
           <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">จำนวนที่ทำ/ครั้ง</label>
-            <div className="row col-sm-5">
-              <input type="number" name='quantity_per_time'className="form-control" placeholder="จำนวน" value={formData.quantity_per_time || ''} onChange={handleChange} />
+            <label className="col-sm-2 col-form-label">น้ำหนักต่อชิ้น</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='weight_per_piece'className="form-control" placeholder="ราคาสินค้า" value={formData.weight_per_piece || 0} onChange={handleChange} />
+                <span className="input-group-text">กรัม</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ต้นทุน และ ราคาขาย */}
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
+          <h4>ต้นทุน</h4>
+          <div className="row mb-3 justify-content-center">
+            <label className="col-sm-2 col-form-label">ต้นทุนสินค้า</label>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='costPerQuantity'className="form-control" placeholder="ต้นทุนสินค้า" value={calculateTotalCost().toFixed(2)} readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
@@ -488,59 +543,51 @@ const EditProduct = () => {
                 text="รวมต้นทุนเเฝงอีก 10 % เช่น ค่าน้ำ ค่าไฟ ค่าเเก๊ส เเละค่าบรรจุภัฑณ์"
               />
             </label>
-            <div className="row col-sm-5">
-              <input type="number" name='totalCost'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='totalCost'className="form-control" placeholder="จำนวน" value={totalCost} readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ต้นทุนต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="number" name='pricePreQuantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity}  readOnly/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='pricePreQuantity'className="form-control" placeholder="จำนวน" value={pricePreQuantity}  readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
           </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">น้ำหนักต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="number" name='weight_per_piece'className="form-control" placeholder="ราคาสินค้า" value={formData.weight_per_piece || 0} onChange={handleChange} />
-            </div>
-          </div>
+        </div>
+
+        {/* ราคาขาย */}
+        <div className="mb-4 card col-md-12 px-40 bg-light card-body">
+          <h4>ราคา</h4>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาขายต่อชิ้น</label>
-            <div className="row col-sm-5">
-              <input type="number" name='selling_price_per_quantity'className="form-control" placeholder="ราคาสินค้า" value={formData.selling_price_per_quantity || 0} onChange={handleChange} />
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='selling_price_per_quantity'className="form-control" placeholder="ราคาสินค้า" value={formData.selling_price_per_quantity || 0} onChange={handleChange} />
+                <span className="input-group-text">บาทต่อชิ้น</span>
+              </div>
             </div>
           </div>
           <div className="row mb-3 justify-content-center">
             <label className="col-sm-2 col-form-label">ราคาสินค้ารวม</label>
-            <div className="row col-sm-5">
-              <input type="number" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice } onChange={handleChange} readOnly/>
+            <div className="col-sm-5">
+              <div className="input-group">
+                <input type="number" name='price'className="form-control" placeholder="ราคาสินค้า" value={totalPrice} onChange={handleChange} readOnly/>
+                <span className="input-group-text">บาท</span>
+              </div>
             </div>
-          </div>
-          <div className="row mb-4 justify-content-center">
-            <label className="col-sm-2 col-form-label">การใช้งาน</label>
-            <div className="row col-sm-5">
-              <select className="form-select" name="is_active" value={formData.is_active || active} onChange={handleChange}   required aria-label="Default select example" placeholder="เลือก">
-                <option value="1">วางขาย</option>
-                <option value="0">เลิกขาย</option>
-                {/* <option value="3">Three</option> */}
-              </select>
-            </div>
-          </div>
-          <div className="row mb-3 justify-content-center">
-            <label className="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
-            <div className="row col-sm-5">
-              <textarea className="form-control" name='description' placeholder="รายละเอียดสินค้า"
-                  value={formData.description || ''} 
-                  onChange={handleChange} 
-                  rows="3" // กำหนดความสูงของ textarea
-                  style={{ minWidth: '100%' }} // กำหนดความกว้างของ textarea
-                />
-            </div>
-          </div>
-          <div className="d-flex justify-content-center gap-3 my-4">
-            <button type="submit" className="btn btn-success mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
           </div>
         </div>
+
+        {/* ปุ่มบันทึก */}
+        <div className="d-flex justify-content-center gap-3 my-4">
+            <button type="submit" className="btn btn-success mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
+          </div>
         <LoadingPopup
           isLoading = {isLoading}
         />

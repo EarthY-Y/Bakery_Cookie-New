@@ -3,6 +3,8 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { detailProductByIdService, createCartService, getCartService } from '../../../API/customer/productService';
 import { useCart } from '../layOut/navbar/CartContext';
 import LoadingPopup from '../../untils/popUp/loading';
+import ErrorPopup from '../../untils/popUp/errorPopup';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
 
 const detailPorductById = () => {
@@ -11,8 +13,8 @@ const detailPorductById = () => {
   const [productById, setproductMyId] = useState([])
   const [CartId, setCartId] = useState()
   const [quantity, setQuantity] = useState(1);
-  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleIncreaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -43,13 +45,13 @@ const detailPorductById = () => {
         setproductMyId(getDetailProductById.data[0])
       }
       catch (error) {
-        console.log(error)
+        setError(error)
       }finally{
         setIsLoading(false);
       }
     }
     fetchData()
-  },[])
+  },[id])
 
   const handleSubmitProductMaterial = async (event) => {
     event.preventDefault();
@@ -91,7 +93,7 @@ const detailPorductById = () => {
           <div className="col-md-6 text-center">
             <h1 className="fw-bold">{productById.product_name}</h1>
             <h3 className="text-danger fw-bold">
-              {`฿${productById.selling_price_per_quantity}`}
+              {`฿${productById.selling_price_per_quantity} บาท/ชิ้น`}
               <button onClick={handleDecreaseQuantity} className="btn ms-3">
                 <h2 className="bi bi-patch-minus-fill"></h2>
               </button>
@@ -131,6 +133,9 @@ const detailPorductById = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };
