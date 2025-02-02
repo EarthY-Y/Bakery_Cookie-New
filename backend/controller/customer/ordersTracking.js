@@ -1,7 +1,8 @@
 import db from "../../config/dataBase.js"
 import { v4 as uuidv4 } from 'uuid';
 import { passToken } from "../../middleware/passAuth.js";
-
+ 
+//ไม่ได้ใช้เเล้วเยอะมาก getOrderslistWaitStatement getOrderslistCheckOut มีในไฟล์อื่นอีกส่วนมากเป็น list การติดตามสินค้า เพราะเปลี่ยนมาใช้ getOrderslistById
 export const getOrderslistWaitStatement = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
@@ -284,7 +285,11 @@ export const cancleOrder = async (req, res) => {
 export const getStatusOrderslist = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT * FROM status_order WHERE is_active = 1`,
+            db.query(`SELECT so.status_name, COUNT(o.orders_id) as countOrders
+                     FROM status_order so
+                     LEFT JOIN orders o ON o.status = so.status_order_id
+                     WHERE is_active = 1
+                     GROUP BY so.status_name;`,
                     (err, result) => { 
                 if (err) return reject(err)
                 resolve(result)

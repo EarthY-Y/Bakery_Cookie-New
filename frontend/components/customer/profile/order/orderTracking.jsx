@@ -94,14 +94,16 @@ const OrderTracking = () => {
                 <p className="card-text">วันที่สั่งซื้อ: {formatDate(order.created_at)}</p>
               </div>
               <div className="card-footer d-flex justify-content-between">
-                {order.status_name === "รอการชำระเงิน" ? (
-                  <Link to={`/payment/${order.cartId}`} className="btn btn-primary">ชำระเงิน</Link>
-                ) : isCancelable ? (
-                  <div className=" d-flex justify-content-between">
-                    <button className="btn btn-danger" onClick={() => { setShowCancelModal(true); setOrderId(order.orders_id); }}>ยกเลิกคำสั่งซื้อ</button>
-                  </div>
-                ) : ("")}
-                <div className=" d-flex justify-content-end">
+                <div className=''>
+                  {order.status_name === "รอการชำระเงิน" ? (
+                    <Link to={`/payment/${order.cartId}`} className="btn btn-primary">ชำระเงิน</Link>
+                  ) : isCancelable ? (
+                    <div className=" d-flex justify-content-between">
+                      <button className="btn btn-danger" onClick={() => { setShowCancelModal(true); setOrderId(order.orders_id); }}>ยกเลิกคำสั่งซื้อ</button>
+                    </div>
+                  ) : ("")}
+                </div>
+                <div className="">
                   <Link to={`view/detail/${order.orders_id}`} className="btn btn-secondary ">  รายละเอียด</Link>
                 </div>
               </div>
