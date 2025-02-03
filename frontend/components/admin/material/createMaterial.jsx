@@ -37,7 +37,7 @@ const createMaterial = () => {
     // ตรวจสอบให้แน่ใจว่า Quantities และ Costes มีค่า และ Quantities ไม่เป็น 0
     if (Quantities && Costes && Quantities !== 0) {
       const costPerQuantity = parseFloat(Costes) / parseFloat(Quantities);
-      setCostesPerQuantities(costPerQuantity); //costPerQuantity.toFixed(4) ปัดเป็นทศนิยม 2 ตำแหน่ง
+      setCostesPerQuantities(costPerQuantity.toFixed(2)); //costPerQuantity.toFixed(4) ปัดเป็นทศนิยม 2 ตำแหน่ง
     } else {
       setCostesPerQuantities(""); // ตั้งค่าให้ว่างถ้ายังไม่มีข้อมูล
     }
