@@ -84,7 +84,7 @@ export const getOrderslistById = async (req, res) => {
 export const getStatusOrderslist = async (req, res) => {
     try {
         const results = await new Promise((resolve, reject)=> {
-            db.query(`SELECT so.status_name, COUNT(o.orders_id) as countOrders
+            db.query(`SELECT so.status_order_id, so.status_name, COUNT(o.orders_id) as countOrders
                      FROM status_order so
                      LEFT JOIN orders o ON o.status = so.status_order_id
                      WHERE is_active = 1
