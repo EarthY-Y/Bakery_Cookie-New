@@ -29,7 +29,7 @@ const layOutComponent = React.memo(({ children }) => {
             <div className="d-lg-none d-block bg-light shadow-sm mb-3" style={{ width: '100%' }}>
               <Sidebar />
             </div>
-            <div className="bg-light shadow-sm mt-0 pt-3 pb-3" style={{ borderRadius: "8px" }}>
+            <div className="bg-light shadow-sm mt-0 pt-3 pb-3" style={{ borderRadius: "8px", minHeight: '50vh' }}>
               <main className="d-flex flex-column">{children}</main>
             </div>
           </div>
