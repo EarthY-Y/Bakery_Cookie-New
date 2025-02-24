@@ -6,6 +6,7 @@ import liff from '@line/liff'
 import { getTokenPostTH } from './postMan/thailandPost';
 
 const API_URL = import.meta.env.VITE_API_Port
+const API_LINE_LOGIN = import.meta.env.VITE_LINE_LOGIN
 
 //ระบบ login
 export const login = async (userName, passWord) => {
@@ -268,7 +269,7 @@ function removeToken() {
   localStorage.removeItem('TOKEN_KEY');
   localStorage.removeItem('tokenPostManAPI');
   localStorage.removeItem('EXPIRATION_KEY');
-  liff.init({liffId: '2006630207-4ENd2JnL', }) 
+  liff.init({liffId: API_LINE_LOGIN, }) 
   if(liff.isLoggedIn()){
     liff.logout()
   }

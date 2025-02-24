@@ -4,12 +4,13 @@ import liff from '@line/liff'
 import { listProductService } from '../../../API/guest/guestProductService';
 import LoadingPopup from '../../untils/popUp/loading';
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PRODUCT
+const API_LINE_LOGIN = import.meta.env.VITE_LINE_LOGIN
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   // const handleLoginLine = async() =>{
-  //   await liff.init({liffId: '2006630207-4ENd2JnL', }) // Use own liffId
+  //   await liff.init({liffId: VITE_LINE_LOGIN, }) // Use own liffId
   //   if(!liff.isLoggedIn()){
   //     liff.login() //ทำการ login ผ่าน Line
   //     return false
