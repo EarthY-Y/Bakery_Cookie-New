@@ -9,6 +9,7 @@ function Sidebar() {
   const [isLoading, setIsLoading] = useState(false);
   const [listStatusOrders, setListStatusOrders] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  // const dropdownRef = useRef(null); // อ้างอิง Dropdown
   const history = ["ยกเลิก", "จัดส่งสำเร็จ"]
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +30,17 @@ function Sidebar() {
       }
     };
     fetchData();
+  }, []);
+
+  // ตรวจจับการคลิกนอก Dropdown เพื่อปิด
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -60,47 +72,58 @@ function Sidebar() {
                 </ul>
               )}
             </div>
-
-            <Link className="nav-link text-dark" to="/profile/orderHistory">ประวัติการสั่งซื้อ</Link>
           </nav>
         </div>
       </div>
 
-
       {/* หน้าจอเล็ก */}
-      <div className="border-0 d-block d-lg-none mb-3 mt-3" style={{ width: '100%' }}>
+      <div className="border-0 d-block d-lg-none mb-3 mt-3" style={{ width: '100%' }} >
         <div className="row text-center">
-          <Link className="text-dark text-decoration-none col-3" to="/profile">
+          <Link className="text-dark text-decoration-none col-4" to="/profile">
             <i className="bi bi-person-circle fs-4"></i>
             <p className="small">บัญชี</p>
           </Link>
-          <Link className="text-dark text-decoration-none col-3" to="/profile/customer/address">
+          <Link className="text-dark text-decoration-none col-4" to="/profile/customer/address">
             <i className="bi bi-geo-alt fs-4"></i>
             <p className="small">ที่อยู่</p>
           </Link>
-          <div className="col-3 position-relative">
-            <button className="btn btn-link text-dark text-decoration-none p-0" onClick={() => setDropdownOpen(!dropdownOpen)}>
+
+          {/* ติดตามคำสั่งซื้อ (Dropdown Responsive) */}
+          <div className="col-4 position-relative dropdown"
+            tabIndex={0} // ทำให้ element นี้ focus ได้ (จำเป็นสำหรับ onBlur)
+            onBlur={() => setDropdownOpen(false)} // ปิด dropdown เมื่อ focus หายไป
+          >
+            {/* ปุ่มกดเปิด Dropdown */}
+            <button className="btn btn-link text-dark text-decoration-none p-0 dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)} aria-expanded={dropdownOpen}>
               <i className="bi bi-truck fs-4"></i>
               <p className="small">คำสั่งซื้อ</p>
             </button>
-            {dropdownOpen && (
-              <ul className="dropdown-menu show position-absolute w-100 text-center">
+            <div className={`dropdown-menu border rounded shadow-sm p-2 text-start ${dropdownOpen ? "show" : ""}`} 
+             style={{left: "50%",transform: "translateX(-70%)",maxWidth: "90vw",overflow: "auto",maxHeight: "300px",whiteSpace: "nowrap",}}>
+              <p className="fw-bold text-center mb-2">สถานะคำสั่งซื้อ</p>
+              <ul className="list-unstyled mb-0">
                 {listStatusOrders.length > 0 ? (
                   listStatusOrders.map((status, index) => (
                     <li key={index}>
-                      <Link className="dropdown-item" to={`/profile/orderTracking/${status.status_name}`}>{status.status_name} ({status.countOrders})</Link>
+                      {history.includes(status.status_name) ? (
+                        <Link className="dropdown-item small py-1 d-block text-truncate"
+                          to={`/profile/orderHistory/${status.status_name}`}>
+                          {status.status_name} ({status.countOrders})
+                        </Link>
+                      ) : (
+                        <Link className="dropdown-item small py-1 d-block text-truncate"
+                          to={`/profile/orderTracking/${status.status_name}`}>
+                          {status.status_name} ({status.countOrders})
+                        </Link>
+                      )}
                     </li>
                   ))
                 ) : (
-                  <li className="dropdown-item text-muted">ไม่มีข้อมูล</li>
+                  <li className="dropdown-item text-muted small py-1">ไม่มีข้อมูล</li>
                 )}
               </ul>
-            )}
+            </div>
           </div>
-          <Link className="text-dark text-decoration-none col-3" to="/profile/orderHistory">
-            <i className="bi bi-clock-history fs-4"></i>
-            <p className="small">ประวัติการซื้อ</p>
-          </Link>
         </div>
       </div>
 
