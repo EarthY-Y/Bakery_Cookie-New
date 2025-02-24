@@ -70,7 +70,7 @@ const Login = () => {
             <div className="row mb-3 justify-content-center">
               <div className="col-6 text-center">
                 {/* <button style={{ backgroundColor: '#F2EEB0' }} onClick={() => navigate(-1)} type="button" className="btn btn-outline-dark w-100">กลับ</button> */}
-                <button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark col-12" >เข้าสู่ระบบด้วย LINE </button>
+                <button style={{ backgroundColor: '#00cc00' }} type="button" className="btn btn-outline-dark col-12" >เข้าสู่ระบบด้วย LINE </button>
               </div>
               <div className="col-6 text-center">
                 <button style={{ backgroundColor: '#A8E5F8' }} type="submit" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
