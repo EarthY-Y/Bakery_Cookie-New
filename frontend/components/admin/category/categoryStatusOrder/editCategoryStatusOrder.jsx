@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { updateCategoryOrderStatusService, getListOrderStatusService, getCategoryOrderStatusByIdService } from '../../../../API/admin/categoryOrderStatusService';
+import { updateCategoryOrderStatusService, getCategoryOrderStatusByIdService } from '../../../../API/admin/categoryOrderStatusService';
 import { getStatusOrderListService } from '../../../../API/admin/ordersService';
 import { formatDate } from '../../../untils/frommatters/datetime';
 import LoadingPopup from '../../../untils/popUp/loading';
@@ -60,7 +60,10 @@ const EditCategoryStatusOrder = () => {
           getStatusOrderListService(),
           getCategoryOrderStatusByIdService(id),
         ]);
-  
+
+        console.log(getStatusOrderList.data);
+        console.log(getCategoryOrderStatusById.data);
+      
         const categoryOrderStatusData = getCategoryOrderStatusById.data || [];
         const statusOrderData = getStatusOrderList.data || [];
   
@@ -91,7 +94,7 @@ const EditCategoryStatusOrder = () => {
   return (
     <div className="container mt-5 p-3">
       <div className="mb-4 card col-md-12 px-40 bg-light card-body">
-        <h4>แก้ไขสถานะ</h4>
+        <h4>แก้ไขสถานะคำสั่งซื้อ</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อประเภทสถานะคำสั่งซื้อ</label>

@@ -29,7 +29,7 @@ const CategoryById = () => {
   return (
     <div className="container mt-5 p-3">
       <div className="mb-4 card col-md-12 px-40 card-body bg-light shadow">
-        <h4></h4>
+        <h4>รายละเอียดประเภทสินค้า</h4>
         <div className="mb-4 ">
           <label className="col-form-label">ชื่อประเภทสินค้า</label>
           <input type="text" className="form-control" value={categoryName}readOnly/>

@@ -35,7 +35,7 @@ const CategoryStatusOrderById = () => {
       <div className="mb-4 card col-md-12 px-40 card-body bg-light shadow">
         <h4></h4>
         <div className="mb-4 ">
-          <label className="col-form-label">ชื่อประเภทบรรจุภัณฑ์</label>
+          <label className="col-form-label">ชื่อประเภทสถานะคำสั่งซื้อ</label>
           <input type="text" className="form-control" value={categoryName} readOnly/>
         </div>
         <div>

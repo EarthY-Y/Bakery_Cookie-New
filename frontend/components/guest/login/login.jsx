@@ -5,7 +5,7 @@ import { login } from '../../../API/authService';
 import ErrorPopup from '../../untils/popUp/errorPopup';
 import LoadingPopup from '../../untils/popUp/loading';
 
-const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
+const API_LINE_LOGIN = import.meta.env.VITE_LINE_LOGIN
 
 const Login = () => {
   const [userName, setuserName] = useState("");
@@ -17,7 +17,7 @@ const Login = () => {
   //หาไม่เจอผู้ใช้งานในระบบจะเเจ้งเตือน เเละทำการ logout แต่จะเช็คก่อนว่ามีการ login อยู่หรือไม่
   useEffect(() =>{
     const LineAuth = async() => {
-      await liff.init({liffId: '2006630207-4ENd2JnL', }) 
+      await liff.init({liffId: API_LINE_LOGIN, }) 
       if(liff.isLoggedIn()){
         liff.logout()
         setError('ผู้ใช้ไม่ได้ผูกบัญชี LINE กับระบบ')
@@ -90,14 +90,14 @@ const Login = () => {
                 <a href="#" className="small">ลืมรหัสผ่าน</a>
               </div> */}
               <div className="row mb-3 justify-content-center">
-                <div className="col-5 text-center">
-                  <button style={{ backgroundColor: '#F2EEB0' }} onClick={() => navigate(-1)} type="button" className="btn btn-outline-dark w-100">กลับ</button>
+                <div className="col-6 text-center">
+                  {/* <button style={{ backgroundColor: '#F2EEB0' }} onClick={() => navigate(-1)} type="button" className="btn btn-outline-dark w-100">กลับ</button> */}
+                  <button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark col-12" >เข้าสู่ระบบด้วย LINE </button>
                 </div>
-                <div className="col-5 text-center">
+                <div className="col-6 text-center">
                   <button style={{ backgroundColor: '#A8E5F8' }} type="submit" className="btn btn-outline-dark w-100">เข้าสู่ระบบ</button>
                 </div>
               </div>
-              <button style={{ backgroundColor: '#00cc00' }} type="button" onClick={handleLoginLine} className="btn btn-outline-dark w-100" >เข้าสู่ระบบด้วย LINE </button>
               <div className="text-center mt-3">
                 <p className="small">ยังไม่ได้เป็นสมาชิก? <Link to="/signup">สมัครสมาชิก</Link></p>
               </div>

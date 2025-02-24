@@ -71,7 +71,7 @@ const EditCategory = () => {
     <div className="container mt-5 p-3">
 
       <div className="mb-4 card col-md-12 px-40 bg-light card-body">
-        <h4>แก้ไขสถานะ</h4>
+        <h4>แก้ไขประเภทสินค้า</h4>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="row mb-4 justify-content-center">
             <label className="col-sm-2 col-form-label">ชื่อประเภทสินค้า</label>
