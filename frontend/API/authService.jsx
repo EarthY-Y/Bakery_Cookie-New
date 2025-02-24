@@ -269,7 +269,7 @@ function removeToken() {
   localStorage.removeItem('TOKEN_KEY');
   localStorage.removeItem('tokenPostManAPI');
   localStorage.removeItem('EXPIRATION_KEY');
-  liff.init({liffId: API_LINE_LOGIN, }) 
+  liff.init({liffId: '2006630207-4ENd2JnL', }) 
   if(liff.isLoggedIn()){
     liff.logout()
   }
