@@ -7,7 +7,7 @@ import ErrorPopup from '../../../untils/popUp/errorPopup';
 import { logout } from '../../../../API/authService';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
-const API_LINE_LOGIN = import.meta.env.LINE_LOGIN
+const API_CONNECT_LOGIN = import.meta.env.VITE_LINE_CONNECT_LOGIN
 // console.log(API_LINE_LOGIN); //ใช้ .env ไม่ได้ได้ค่ามาเป็น undefine
 
 const profile = () => {
@@ -41,7 +41,7 @@ const profile = () => {
   }, [])
 
   const handleLoginLine = async() =>{
-    await liff.init({liffId: '2006630207-agRmBy9G' }) // Use own liffId
+    await liff.init({liffId: API_CONNECT_LOGIN }) // Use own liffId
     if(!liff.isLoggedIn()){
       liff.login() //ทำการ login ผ่าน Line
       return false
@@ -57,7 +57,7 @@ const profile = () => {
       const getCkeckLoginLine = await checkConnectionLineIDService()
       setCheckLoginLine(getCkeckLoginLine.data[0])
       if(!getCkeckLoginLine.data[0].provider_login_id){
-        await liff.init({liffId: '2006630207-agRmBy9G' })
+        await liff.init({liffId: API_CONNECT_LOGIN })
         if(liff.isLoggedIn()){
           const profile = await liff.getProfile()
           console.log(profile);
