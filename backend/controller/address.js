@@ -1,6 +1,4 @@
 import db from "../config/dataBase.js"
-import { v4 as uuidv4 } from 'uuid';
-import argon2 from "argon2";
 
 export const getAllAddress = async(req, res) => {
     try {
