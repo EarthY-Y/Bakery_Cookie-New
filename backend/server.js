@@ -34,6 +34,8 @@ import { fileURLToPath } from 'url';
   
 //เรียกใช้ express ด้วย app
 const app = express();
+
+//ใน ES Module ไม่มี __filename, __dirname เพื่อให้ Server สามารถใช้งาน folder ได้
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -68,7 +70,10 @@ app.use(session ({
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running `);
 })
+
+//เรียกใช้งานไฟล์ที่อยู่ในโฟลเดอร์ upload โดยใช้ express.static เพื่อให้สามารถเข้าถึงโฟลเดอร์ได้จากภายนอก
 app.use('/picture', express.static(path.join(__dirname, 'picture')));
+
 //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
 app.use(customerRoute)
 app.use(orderRounte)

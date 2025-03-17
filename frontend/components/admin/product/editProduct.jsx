@@ -34,7 +34,7 @@ const EditProduct = () => {
         // await new Promise((resolve) => setTimeout(resolve, 3000)); //ถ้าอยากลองดูหน้า loading
         // โหลดข้อมูลพร้อมกันเพื่อลดปัญหาการโหลดข้อมูลไม่ทัน
         const [
-          productResponse,
+          productResponse, //เป็น object ที่บรรจุ array
           materialProductResponse,
           materialsResponse,
           packagesResponse,
@@ -49,12 +49,14 @@ const EditProduct = () => {
 
         // จัดการข้อมูลสินค้า
         const productData = productResponse.data[0];
+        //เก็บข้อมูลเเบบ object ที่เป็น array 
         const ingredients = materialProductResponse.data.map((item) => ({
           material_id: item.material_id || '',
           quantity: item.quantity || '',
           cost_per_quantity: item.cost_per_quantity || 0,
           material_name: item.material_name || '',
         }));
+        //initialData เป็น object ที่มี key-value หลายตัว เป็น object ที่ใช้เก็บค่าเริ่มต้นของ formData
         const initialData = {
           product_name: productData.product_name || '',
           quantity_per_time: productData.quantity_per_time || '',
@@ -67,15 +69,18 @@ const EditProduct = () => {
 
         // จัดการข้อมูลวัสดุ
         setListMaterials(materialsResponse.data);
+        setPackageById(packagesResponse.data); //packagesResponse.data เป็น array[] ที่เก็บมี object{} data:[{},{}]
 
-        // จัดการข้อมูลแพ็คเกจ
-        setPackageById(packagesResponse.data);
+        // จัดการข้อมูลแพ็คเกจโดยเอามาเเค่ id เเละชื่อ โดยใช้ .map ซึ่ง .map จะใช้กับ array เเละ return ค่าออกมาเป็น array ใหม่
         const packaging = productPackagesResponse.data.map((item) => ({
           package_product_id: item.package_product_id || '',
           package_name: item.package_name || '',
         }));
+        // console.log("packaging :",packaging);
 
-        setFormData({ ...initialData, packaging });
+        //กำหนดค่าเริ่มต้นให้กับ formData 
+        setFormData({ ...initialData, packaging }); //packaging เป็นเพียง array ที่จะถูกเพิ่มเป็น key ทำให้ไม่ต้องใช้ spread operator
+        // console.log("formData :", formData);
         setOriginalData({ ...initialData, packaging });
         setStatusactive(productData.is_active)
 
@@ -93,7 +98,7 @@ const EditProduct = () => {
 
   const calculateTotalCost = () => {
     // คำนวณต้นทุนวัตถุดิบ
-    const ingredientCost = (formData.ingredients || []).reduce((totalCost, ingredient) => {
+    const ingredientCost = (formData.ingredients || []).reduce((totalCost, ingredient) => { // ใช้ reduce ในการคำนวณต้นทุนรวมทั้งหมด totalCost
       const material = listMaterials.find((mat) => mat.material_id === ingredient.material_id);
       const quantity = parseFloat(ingredient.quantity || 0);
       if (material && !isNaN(quantity)) {
