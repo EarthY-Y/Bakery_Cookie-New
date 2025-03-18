@@ -161,35 +161,31 @@ export const getGrowthUpSales = async (req, res) => {
                         SELECT 
                             DATE_FORMAT(o.created_at, '%Y-%m') AS sale_month,
                             SUM(o.total_price_product + ocd.cost_shipping + ocd.cost_package) AS total_sales
-                        FROM orders o 
+                        FROM orders o
                         LEFT JOIN order_cost_details ocd ON ocd.orders_id = o.orders_id
                         LEFT JOIN status_order so ON so.status_order_id = o.status
-                        WHERE so.status_name NOT LIKE "ยกเลิก%" 
-                        AND so.status_name NOT LIKE "รอ%" 
-                        AND o.created_at >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR), '%Y-01-01')
-                        GROUP BY DATE_FORMAT(o.created_at, '%Y-%m')
+                        WHERE so.status_name NOT LIKE 'ยกเลิก%' 
+                        AND so.status_name NOT LIKE 'รอ%' 
+                        AND o.created_at >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 YEAR), '%Y-01-01') # INTERVAL กำหนดระยะเวลาที่ต้องการ DATE_SUB คำสั่งลบระยะเวลา เพื่อเอาข้อมูลย้อนหลัง 1 ปี
+                        GROUP BY sale_month
                     ),
                     comparison_data AS (
                         SELECT 
                             ms1.sale_month, 
-                            ms1.total_sales,
-                            ms2.total_sales AS previous_month_sales,
-                            ROUND(((COALESCE(ms1.total_sales, 0) - COALESCE(ms2.total_sales, 0)) / COALESCE(ms2.total_sales, 1)) * 100, 2) AS growth_percentage #//!จะได้รู้ยอดของเดือนนี้ว่าโตจากเดือนที่เเล้วเท่าไหร่เลยต้องหาความเเตกต่างเเลยเอาไปหารของเดือนนี้
+                            ms1.total_sales, 
+                            LAG(ms1.total_sales, 1) OVER (ORDER BY ms1.sale_month) AS previous_month_sales, # LAG คำสั่งใช้ในการดึงข้อมูลก่อนหน้ามาใช้
+                                ROUND(((ms1.total_sales - LAG(ms1.total_sales, 1) OVER (ORDER BY ms1.sale_month)) /  #OVER ใช้ในการเรียงลำดับข้อมูลเพื่อให้ LAG ดึงข้อมูลก่อนหน้ามาใช้ได้
+                                    NULLIF(LAG(ms1.total_sales, 1) OVER (ORDER BY ms1.sale_month), 0)) * 100, 2) 
+                             AS growth_percentage
                         FROM monthly_sales ms1
-                        LEFT JOIN monthly_sales ms2 ON (
-                            (ms1.sale_month = CONCAT(YEAR(NOW()), '-01') AND ms2.sale_month = CONCAT(YEAR(NOW()) -1, '-12')) 
-                            OR 
-                            ms1.sale_month = DATE_FORMAT(DATE_SUB(STR_TO_DATE(ms2.sale_month, '%Y-%m'), INTERVAL -1 MONTH), '%Y-%m')
-                            )
                     )
-                SELECT * FROM comparison_data
-                ORDER BY sale_month DESC;`, 
+                    SELECT * FROM comparison_data ORDER BY sale_month DESC;`, 
                 (err, result) => {
                 if (err) return reject(err)
                 resolve(result)
             }) 
         })
-        // console.log(results)
+        console.log(results)
         return res.status(200).json(results);
     } catch (error) {
         console.error("Error get admin:", error);
