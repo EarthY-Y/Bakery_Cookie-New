@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, getStatusListForCancelOrdersService, orderTrackingAddressService } from '../../../../API/customer/orderTrackingService';
-import { getTracking } from '../../../../API/postMan/thailandPost'
+import { orderDetailById, orderHistoryById, orderProductById, cancelOrder, getStatusListForCancelOrdersService,
+   orderTrackingAddressService, getTracking } from '../../../../API/customer/orderTrackingService';
 import { formatDate,formatDateThai } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import { copyToClipboard } from '../../../untils/fucntion/copyToClipboard';

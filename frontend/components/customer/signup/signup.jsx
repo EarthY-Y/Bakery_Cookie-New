@@ -7,7 +7,7 @@ const Signup = () => {
   const { formData, setFormData } = useContext(FormContext);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value.trimStart() }); //...formData อัปเดทเฉพาะฟิลด์นั้นๆ เรียกว่า Spread Operator เเละ trimStart ทำให้ start ไม่ได้
+    setFormData({ ...formData, [e.target.name]: e.target.value.trimStart() }); //...formData อัปเดทเฉพาะฟิลด์นั้นๆ เรียกว่า Spread Operator เเละ trimStart คือการตัดช่องว่างหน้าข้อความ
   };
   const handleSubmit = (e) => {
     e.preventDefault();

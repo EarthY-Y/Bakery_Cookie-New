@@ -14,6 +14,10 @@ import {
     cancleOrder
 } from "../../controller/customer/ordersTracking.js"
 
+import { getTokenPostTH,
+        getTracking
+ } from "../../controller/thailandPost.js";
+
 import { verifyCustomerMid } from "../../middleware/authUser.js"
 
 const router = express()
@@ -31,4 +35,5 @@ router.get('/customers/get/order/product/by/:id', verifyCustomerMid, getOrdersPr
 router.get('/customers/get/order/address/tracking/by/:id', verifyCustomerMid, getOrderTrackingAddress);
 router.get('/customers/get/status/list/for/cancel/orders', verifyCustomerMid, getStatusListForCancelOrders);
 router.patch('/customers/cancle/order/product/by/:id', verifyCustomerMid, cancleOrder);
+router.patch('/customers/get/tracking/:id', getTracking);
 export default router

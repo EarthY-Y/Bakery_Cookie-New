@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import LoadingPopup from '../components/untils/popUp/loading';
 import liff from '@line/liff'
-import { getTokenPostTH } from './postMan/thailandPost';
 
 const API_URL = import.meta.env.VITE_API_Port
 const API_LINE_LOGIN = import.meta.env.VITE_LINE_LOGIN
@@ -11,10 +10,6 @@ const API_LINE_LOGIN = import.meta.env.VITE_LINE_LOGIN
 //ระบบ login
 export const login = async (userName, passWord) => {
   try {
-    const tokenPostManAPI = localStorage.getItem('tokenPostManAPI');
-    if (!tokenPostManAPI) {
-      await getTokenPostTH()
-    }
     const res = await axios.post(API_URL+'/login', { userName, passWord });
     console.log(res);
     return res;
@@ -77,9 +72,6 @@ export const ProtectedRouteAdmin = () => {
         console.log('Response from verifyAdmin:', resAdmin.data);
         
         if (resAdmin.data.results && resAdmin.data.results.length !== 0) {
-          if(!tokenPostManAPI){
-            getTokenPostTH()
-          }
           setIsAdmin(true);
         } else {
           console.log("User is not an admin. Redirecting to login...");
@@ -132,9 +124,6 @@ export const ProtectedRouteCustomer = () => {
           console.log('Response from verifyCustomer:', resCustomer.data);
 
           if (resCustomer.data.results && resCustomer.data.results.length !== 0) {
-            if(!tokenPostManAPI){
-              getTokenPostTH()
-            } 
             setIsCustomer(true);
           } else {
             console.log("User is not an customer. Redirecting to login...");

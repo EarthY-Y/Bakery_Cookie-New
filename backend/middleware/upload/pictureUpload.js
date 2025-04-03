@@ -31,7 +31,7 @@ const upload = multer({
         fileSize: 2 * 1024 * 1024 // จำกัดขนาดไฟล์ 5MB
     }
 });
-
+//file เป็นเหมือน "กุญแจ" (Key) ที่ใช้ระบุชื่อของไฟล์ที่ถูกอัปโหลดใน FormData จาก frontend
 const uploadSingle = upload.single('file');
 
 export { uploadSingle };

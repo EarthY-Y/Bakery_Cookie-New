@@ -21,9 +21,9 @@ const CreatePackage = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
+    //ตรวจสอบว่ามีข้อมูลที่เป็น file เพื่อใช้ในการอัปโหลดไฟล์ของ multer และมีการเลือกไฟล์ไหม 
     if (name === 'file' && files.length > 0) {
-      // ตรวจสอบว่าเป็น input file และมีการเลือกไฟล์
+      
       const file = files[0]; // เอาไฟล์แรกที่ถูกเลือก
       setFormData(prev => ({ ...prev, [name]: file })); // เก็บไฟล์ใน formData
     } else {

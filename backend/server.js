@@ -27,6 +27,9 @@ import GuestProductRoute from './routes/guest/guestProduct-Route.js'
 import DashboardRoute from './routes/admin/dashboardRoute.js'
 import OrderHistoryRoute from './routes/admin/orderHistory-Route.js'
 import ManageCustomer from './routes/admin/manageCustomer-Route.js'
+
+import {getTokenPostTH} from './controller/thailandPost.js'
+
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -34,6 +37,8 @@ import { fileURLToPath } from 'url';
   
 //เรียกใช้ express ด้วย app
 const app = express();
+
+//ใน ES Module ไม่มี __filename, __dirname เพื่อให้ Server สามารถใช้งาน folder ได้
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -65,6 +70,11 @@ app.use(session ({
   }
 }))
 
+//ตอนนี้ render ที่เป็น  Hosting ฝั่ง server จะ sleep ทุก 15 นาทีถ้าไม่มีคนใช้งาน
+getTokenPostTH().then(() => {
+  console.log("🚀 Server started with tracking token!");
+});
+
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running `);
 })
@@ -74,6 +84,9 @@ app.use('/picture/upload/product', express.static(path.join(__dirname, 'upload/i
 app.use('/picture/upload/profile/customer', express.static(path.join(__dirname, 'upload/image/profileCustomer')));
 app.use('/picture/upload/profile/admin', express.static(path.join(__dirname, 'upload/image/profileAdmin')));
 app.use('/picture/upload/payment', express.static(path.join(__dirname, 'upload/image/payment')));
+
+//เรียกใช้งานไฟล์ที่อยู่ในโฟลเดอร์ upload โดยใช้ express.static เพื่อให้สามารถเข้าถึงโฟลเดอร์ได้จากภายนอก
+app.use('/picture', express.static(path.join(__dirname, 'picture')));
 
 //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
 app.use(customerRoute)

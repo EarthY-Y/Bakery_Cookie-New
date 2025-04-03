@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { getStatusOrderslistService } from '../../../../../API/customer/orderTrackingService';
 import ErrorPopup from '../../../../untils/popUp/errorPopup';
@@ -9,7 +9,7 @@ function Sidebar() {
   const [isLoading, setIsLoading] = useState(false);
   const [listStatusOrders, setListStatusOrders] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const dropdownRef = useRef(null); // อ้างอิง Dropdown
+  const dropdownRef = useRef(null); // อ้างอิง Dropdown
   const history = ["ยกเลิก", "จัดส่งสำเร็จ"]
   useEffect(() => {
     const fetchData = async () => {

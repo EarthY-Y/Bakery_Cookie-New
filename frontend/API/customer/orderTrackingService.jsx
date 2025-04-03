@@ -217,3 +217,39 @@ export const cancelOrder = async(id,reason) => {
   }
 }
 
+export const getTokenPostTH = async() => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.patch(API_URL + "/customer/create/tokenPostTH",
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
+export const getTracking = async(id) => {
+  try {
+    const authToken = localStorage.getItem('token')
+    const response = await axios.patch(API_URL + "/get/tracking/"+id,
+      {
+        headers: {
+          'authorization': `Bearer ${authToken}`
+        }
+      }
+    );  
+    console.log(response);
+    return response.data
+  }catch (error) {
+    console.error("Error validateAddressCustomer:", error);
+    throw error;
+  }
+}
+
