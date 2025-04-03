@@ -27,6 +27,9 @@ import GuestProductRoute from './routes/guest/guestProduct-Route.js'
 import DashboardRoute from './routes/admin/dashboardRoute.js'
 import OrderHistoryRoute from './routes/admin/orderHistory-Route.js'
 import ManageCustomer from './routes/admin/manageCustomer-Route.js'
+
+import {getTokenPostTH} from './controller/thailandPost.js'
+
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -66,6 +69,11 @@ app.use(session ({
     secure: 'auto',
   }
 }))
+
+//ตอนนี้ render ที่เป็น  Hosting ฝั่ง server จะ sleep ทุก 15 นาทีถ้าไม่มีคนใช้งาน
+getTokenPostTH().then(() => {
+  console.log("🚀 Server started with tracking token!");
+});
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running `);

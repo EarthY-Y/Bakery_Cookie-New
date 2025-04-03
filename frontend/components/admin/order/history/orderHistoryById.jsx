@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { getOrderHistoryByIdService, updateStatusOrderService, getStatusOrderHistoryByIdService } from '../../../../API/admin/ordersHistoryService';
-import { getStatusOrderListService } from '../../../../API/admin/ordersService'
-import { getOrderAddressService } from '../../../../API/admin/ordersService'
+import { getStatusOrderListService, getTracking, getOrderAddressService } from '../../../../API/admin/ordersService'
 import { formatDate,formatDateThai } from '../../../untils/frommatters/datetime';
 import { numberGrouping } from '../../../untils/frommatters/numberFormatting';
 import ConfirmPopUpModal from '../../../untils/popUp/confirmPopUp';
 import LoadingPopup from '../../../untils/popUp/loading';
 import ErrorPopup from '../../../untils/popUp/errorPopup';
-import { getTracking } from '../../../../API/postMan/thailandPost';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 
