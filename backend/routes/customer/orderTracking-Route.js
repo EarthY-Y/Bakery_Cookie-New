@@ -35,6 +35,5 @@ router.get('/customers/get/order/product/by/:id', verifyCustomerMid, getOrdersPr
 router.get('/customers/get/order/address/tracking/by/:id', verifyCustomerMid, getOrderTrackingAddress);
 router.get('/customers/get/status/list/for/cancel/orders', verifyCustomerMid, getStatusListForCancelOrders);
 router.patch('/customers/cancle/order/product/by/:id', verifyCustomerMid, cancleOrder);
-router.get('/customers/customer/create/tokenPostTH', verifyCustomerMid, getTokenPostTH);
-router.get('/customers/customer/get/tracking', verifyCustomerMid, getTracking);
+router.patch('/customers/get/tracking/:id', getTracking);
 export default router

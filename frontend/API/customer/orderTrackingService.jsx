@@ -238,7 +238,7 @@ export const getTokenPostTH = async() => {
 export const getTracking = async(id) => {
   try {
     const authToken = localStorage.getItem('token')
-    const response = await axios.patch(API_URL + "/customer/get/tracking"+id,
+    const response = await axios.patch(API_URL + "/get/tracking/"+id,
       {
         headers: {
           'authorization': `Bearer ${authToken}`
@@ -246,7 +246,7 @@ export const getTracking = async(id) => {
       }
     );  
     console.log(response);
-    return response
+    return response.data
   }catch (error) {
     console.error("Error validateAddressCustomer:", error);
     throw error;

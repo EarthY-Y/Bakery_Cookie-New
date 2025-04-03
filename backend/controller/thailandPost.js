@@ -2,7 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 
 dotenv.config(); // โหลดไฟล์ .env
-
+let tokenPostManAPI = null; // ประกาศตัวแปร global เพื่อเก็บ Token
 //สรุปปัญหาที่เจอคือมีไฟล์ที่ frontend ที่ใช้เรียกใช้่งาน Fuction getTracking() โดยตรงเลยติดปัญหาตรงที่วคำสั่ง process.env เป็นของ backend frontend ไม่สามารถใช้ได้
 
 const POSTTOKEN = process.env.POSTTOKEN;
@@ -16,13 +16,17 @@ export const getTokenPostTH = async () => {
         'Content-Type': 'application/json'
       }
     });
+    tokenPostManAPI = response.data.token
     console.log(response.data);
   } catch (error) {
     console.error("Error:", error);
   }
 };
 
-export const getTracking = async (id) => {
+export const getTracking = async (req, res) => {
+  const id = req.params.id;
+  // console.log("ID:", id);
+  
   const API_URL = 'https://trackapi.thailandpost.co.th/post/api/v1/track';
   try {
     const data = {
@@ -30,7 +34,8 @@ export const getTracking = async (id) => {
       language: "TH",
       barcode: [`${id}`]
     };
-
+    console.log(tokenPostManAPI);
+    
     const response = await axios.post(API_URL, data, {
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +45,7 @@ export const getTracking = async (id) => {
     });
 
     console.log(JSON.stringify(response.data));
-    return response.data; // หรือ JSON.stringify(response.data) หากต้องการส่งคืนในรูปแบบ string
+    return res.status(200).json(response.data); // หรือ JSON.stringify(response.data) หากต้องการส่งคืนในรูปแบบ string
   } catch (error) {
     console.error("Error getTracking:", error);
     throw error; // หากต้องการโยนข้อผิดพลาดกลับไป
