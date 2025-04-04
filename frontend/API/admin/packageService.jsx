@@ -56,7 +56,6 @@ export const editPackageService = async (id, fromData) => {
     const res = await axios.patch(API_URL + "/package/edit/" + id, fromData, {
       headers: {
         authorization: `Bearer ${authToken}`,
-        "Content-Type": "multipart/form-data",
       },
     });
     console.log(res);

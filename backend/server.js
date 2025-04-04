@@ -55,7 +55,7 @@ app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ�
 app.use(cors({
   origin: process.env.FRONTEND, //กำหนดอยู่ใน vite.config
   //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
-  credential: true,
+  // credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
 }));
 

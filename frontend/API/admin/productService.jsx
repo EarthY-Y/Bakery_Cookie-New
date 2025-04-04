@@ -10,7 +10,7 @@ export const createProductService = async(fromData) => {
           {
               headers: {
                   'authorization': `Bearer ${authToken}`,
-                   'Content-Type': 'multipart/form-data'
+                  "Content-Type": "multipart/form-data",
               }
           }
       );
@@ -115,7 +115,6 @@ export const editProductService = async(fromData, id) => {
         {
             headers: {
                 'authorization': `Bearer ${authToken}`,
-                 'Content-Type': 'multipart/form-data'
             }
         }
     );
