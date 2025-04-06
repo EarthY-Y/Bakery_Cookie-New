@@ -37,7 +37,7 @@ const categoryProductList = () => {
                 <img src={API_URL_PICTURE + product.productpic_name} className="card-img-top" alt={product.product_name} style={{ height: "200px", objectFit: "cover" }}/>
                 <div className="card-body d-flex flex-column justify-content-between">
                   <h5 className="card-title">{product.product_name}</h5>
-                  <p className="card-text">ราคา: {product.selling_price_per_quantity} บาท</p>
+                  <p className="card-text">ราคา: {product.selling_price_per_quantity} บาท/ชิ้น</p>
                 </div>
               </Link>
             </div>
