@@ -316,7 +316,7 @@ const EditProduct = () => {
     }
   
     if (Object.keys(updatedData).length === 0 && deletedIngredientsCopy.length === 0) {
-      alert('ไม่มีการเปลี่ยนแปลงข้อมูล');
+      setError('ไม่มีการเปลี่ยนแปลงข้อมูล');
       return;
     }
 

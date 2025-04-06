@@ -2,6 +2,7 @@ import React, { useContext,useState, useEffect } from 'react';
 import axios from 'axios'
 import { getProvice, getAmphure, getTambon, createAddressCustomer } from '../../../../API/customer/addressService';
 import { Link, useNavigate } from 'react-router-dom';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
 
 const CreateAddress = () => {
   const [provinces, setProvinces] = useState([]);
@@ -16,6 +17,8 @@ const CreateAddress = () => {
   const [amphuresId, setAmphuresId] = useState("");
   const [tambonsId, setTambonsId] = useState("");
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const getProviceCustomer = async() => {
         try {
@@ -27,7 +30,7 @@ const CreateAddress = () => {
             setProvinces(response.data)
           }
           catch (error) {
-            alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
+            setError(error)
           }
       }
     getProviceCustomer()
@@ -44,7 +47,7 @@ const CreateAddress = () => {
             setAmphures(response.data)
           }
           catch (error) {
-            alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
+            setError(error)
           }
       }
     getAmphureCustomer()
@@ -62,7 +65,7 @@ const CreateAddress = () => {
             setTambons(response.data)
           }
           catch (error) {
-            alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่")
+            setError(error)
           }
       }
     getTambonCustomer()
@@ -163,6 +166,9 @@ const CreateAddress = () => {
           </div>
         </div>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

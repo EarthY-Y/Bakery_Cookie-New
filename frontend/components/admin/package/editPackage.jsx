@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { packageDetailByIdService, editPackageService } from '../../../API/admin/packageService';
+import ErrorPopup from '../../untils/popUp/ErrorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 const CreatePackage = () => {
@@ -15,6 +16,7 @@ const CreatePackage = () => {
   const [packageCostPerQuantity, setPackageCostPerQuantity] = useState('');
   const [active, setStatusactive] = useState("1");
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getpackageById = async () => {
@@ -34,7 +36,7 @@ const CreatePackage = () => {
       }
 
       catch (error) {
-        alert(error)
+        setError(error)
       }
     }
     getpackageById()
@@ -78,7 +80,7 @@ const CreatePackage = () => {
       }
     
       if (Object.keys(updatedData).length === 0) {
-        alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
+        setError('ไม่มีข้อมูลที่เปลี่ยนแปลง');
         return;
       }
 
@@ -91,6 +93,7 @@ const CreatePackage = () => {
       console.log(res);
       navigate(-1);
     } catch (error) {
+      setError(error);
       console.log(error); // แสดงข้อผิดพลาด
     }
   };
@@ -175,6 +178,9 @@ const CreatePackage = () => {
             <button type="submit" className="btn btn-success mt-3 px-4 ms-5"> บันทึกข้อมูล </button>
           </div>
         </div>
+        {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
       </div>
     </form>
   );

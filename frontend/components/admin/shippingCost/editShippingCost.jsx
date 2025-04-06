@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
 import { updateShippingService, listShippingByIdService, listShippingPackageService } from '../../../API/admin/shippingCostService';
 import { Link, useParams } from 'react-router-dom';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const EditShipping = () => {
   const [shippingMyId, setShippingMyId] = useState([]);
@@ -17,6 +18,7 @@ const EditShipping = () => {
   const [active, setStatusactive] = useState("1");
   const navigate = useNavigate();
   const { id } = useParams();
+  const [error, setError] = useState(null);
   
   // useEffect สำหรับดึงข้อมูลวัตถุดิบ
   useEffect(() => {
@@ -38,7 +40,7 @@ const EditShipping = () => {
         setPackageId(response.data[0].package_id)
         setStatusactive(response.data[0].is_active)
       } catch (error) {
-        alert(error);
+        setError(error)
       }
     };
     getlistShippingById();
@@ -157,6 +159,9 @@ const EditShipping = () => {
           </div>
         </form>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
   );
 };

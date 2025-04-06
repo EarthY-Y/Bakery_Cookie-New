@@ -60,7 +60,7 @@ const EditMaterial = () => {
       }
     
       if (Object.keys(updatedData).length === 0) {
-        alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
+        setError('ไม่มีข้อมูลที่เปลี่ยนแปลง');
         return;
       }
 

@@ -4,6 +4,8 @@ import { getProvice, getAmphure, getTambon, createAddressCustomer } from '../../
 import { getAddressById, updateAddressById } from '../../../../API/customer/addressCustomerService'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingPopup from '../../../untils/popUp/loading';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
+
 const CreateAddress = () => {
   const {id} = useParams()
   const [provinces, setProvinces] = useState([]);
@@ -20,6 +22,7 @@ const CreateAddress = () => {
   const [tambonsId, setTambonsId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +45,8 @@ const CreateAddress = () => {
         // ตั้งค่าข้อมูลที่อยู่ของลูกค้า
         const address = addressResponse.data[0];
         setAddressById(address);
+        console.log(address);
+        
         setHouseNo(address?.houseNo);
   
         // ตั้งค่าข้อมูลจังหวัดที่ตรงกับที่อยู่
@@ -77,8 +82,7 @@ const CreateAddress = () => {
           }
         }
       } catch (error) {
-        alert("คุณยังไม่ได้กรอกข้อมูลที่อยู่");
-        console.error(error);
+        setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -96,16 +100,15 @@ const CreateAddress = () => {
           selectedProvince ? getAmphure(selectedProvince) : Promise.resolve({ data: [] }),
           selectedAmphure ? getTambon(selectedAmphure) : Promise.resolve({ data: [] })
         ]);
-
+  
         console.log(amphureResponse.data, tambonResponse.data);
-        
   
         // ตั้งค่าอำเภอและตำบล
         setAmphures(amphureResponse.data || []);
         setTambons(tambonResponse.data || []);
   
         // ตั้งค่าข้อมูลตำบลที่ตรงกับ addressById
-        if (addressById.tambon_id && tambonResponse.data.length > 0) {
+        if (addressById?.tambon_id && tambonResponse.data.length > 0) {
           const matchedTambon = tambonResponse.data.find(
             (tambon) => tambon.tambon_id === addressById.tambon_id
           );
@@ -115,31 +118,46 @@ const CreateAddress = () => {
           }
         }
       } catch (error) {
+        setError(error);
         console.error("Error loading dependent data:", error);
       }
     };
   
     fetchDependentData();
   }, [selectedProvince, selectedAmphure, addressById]);
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       setIsLoading(true);
-      console.log(tambonsId, amphuresId, provincesId, houseNo, postCode);
-      if(tambonsId.length===0 && amphuresId.length===0 && provincesId.length===0 && houseNo.length===0 && postCode.length===0){ //เเต่ถ้าลูกค้ากรอกข้อมูลเดิมมาก็จะไม่เข้าเพราะมีข้อมูล
-        alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
-        return;
+  
+      // ตรวจสอบการเปลี่ยนแปลงข้อมูล
+      const hasChanges =
+        String(selectedTambon) !== String(addressById.tambon_id) ||
+        String(selectedAmphure) !== String(addressById.amphure_id) ||
+        String(selectedProvince) !== String(addressById.province_id) ||
+        String(houseNo) !== String(addressById.houseNo) ||
+        String(postCode) !== String(addressById.zip_code);
+  
+      console.log("Data changed:", hasChanges);
+  
+      // หากไม่มีการเปลี่ยนแปลงข้อมูล
+      if (!hasChanges) {
+        alert('ไม่มีการเปลี่ยนแปลงข้อมูล');
+        return; // หยุดการทำงานของฟังก์ชันไม่ให้ส่งข้อมูล
       }
-      const res = await updateAddressById(tambonsId, amphuresId, provincesId, houseNo, postCode, id);
-      navigate(-1); //-1 เพื่อย้อนกลับไปหน้าก่อนหน้านี้
+  
+      // หากมีการเปลี่ยนแปลงจริง ๆ ก็ทำการบันทึก
+      const res = await updateAddressById(selectedTambon, selectedAmphure, selectedProvince, houseNo, postCode, id);
+      console.log("Address updated:", res);
+      navigate(-1); // ย้อนกลับไปหน้าก่อนหน้านี้
     } catch (err) {
-        console.log(err);
-    }finally{
+      console.log(err);
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
+  
   return (
     <div className="mt-5" >
       <div className="row justify-content-center">
@@ -218,6 +236,9 @@ const CreateAddress = () => {
         isLoading = {isLoading}
       />
       {isLoading ? <div className="modal-backdrop fade show"></div> : <div className=""></div>}
+      {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
     </div>
   );
 };

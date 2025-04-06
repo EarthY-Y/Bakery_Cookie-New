@@ -2,8 +2,11 @@ import React, { useState, useEffect }  from 'react';
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getCategoryService } from "../../../../API/guest/guestProductService"
+import ErrorPopup from '../../../untils/popUp/errorPopup';
+
 const Footer = () => {
   const [categoryList, setCategoryList] = useState([]);
+  const [error, setError] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -14,7 +17,7 @@ const Footer = () => {
         ])
         setCategoryList(getCategory.data)
       } catch (error) {
-        alert(error);
+        setError(error)
       }
     };
     fetchData();
@@ -58,6 +61,9 @@ const Footer = () => {
             </Link>
           </div>
         </div>
+        {error && (
+          <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+        )}
       </div>
     </footer>
   );
