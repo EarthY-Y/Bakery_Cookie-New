@@ -1,4 +1,11 @@
 {
+  "name": "bakery_cookie-new",
+  "private": true,
+  "type": "module",
+  "description": "project จบ ปี 4",
+  "version": "1.0.0",
+  "main": "backend/index.js",
+  "homepage": "https://bakerycookieandnew.onrender.com",
   "dependencies": {
     "@line/liff": "^2.25.0",
     "@popperjs/core": "^2.11.8",
@@ -10,6 +17,7 @@
     "chart.js": "^4.4.7",
     "core-js": "^3.41.0",
     "cra-template": "1.2.0",
+    "eta": "^3.5.0",
     "force": "^0.0.3",
     "fuse.js": "^7.0.0",
     "react": "^18.3.1",
@@ -24,13 +32,6 @@
     "react-select": "^5.8.3",
     "vite": "^5.4.1"
   },
-  "name": "bakery_cookie-new",
-  "private": true,
-  "type": "module",
-  "description": "project จบ ปี 4",
-  "version": "1.0.0",
-  "main": "backend/index.js",
-  "homepage": "https://bakerycookieandnew.onrender.com",
   "devDependencies": {
     "@aws-amplify/backend": "^1.8.0",
     "@aws-amplify/backend-cli": "^1.4.2",
@@ -65,5 +66,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }
