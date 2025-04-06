@@ -50,7 +50,7 @@
     "globals": "^15.9.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "vite": "^0.10.3"
+    "vite": "^4.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
