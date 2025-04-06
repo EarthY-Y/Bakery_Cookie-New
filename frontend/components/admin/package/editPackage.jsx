@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { packageDetailByIdService, editPackageService } from '../../../API/admin/packageService';
-import ErrorPopup from '../../untils/popUp/ErrorPopup';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PACKAGE
 const CreatePackage = () => {
