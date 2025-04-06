@@ -277,7 +277,7 @@ function autoRemoveToken(token) {
     if (timeUntilExpiration > 0) {
         setTimeout(() => { // ตั้งเวลาให้ตรงตามเวลาที่เหลือก่อน token จะหมด
             removeToken(); 
-            alert('Token has expired. Please log in again.');
+            // alert('Token has expired. Please log in again.');
         }, timeUntilExpiration);
     } else {
         removeToken(); // หาก token หมดอายุแล้วให้ลบทันที
@@ -306,7 +306,7 @@ function autoRemoveTokenAdmin(token) {
     if (timeUntilExpiration > 0) {
         setTimeout(() => { // ตั้งเวลาให้ตรงตามเวลาที่เหลือก่อน token จะหมด
             removeTokenAdmin(); 
-            alert('Token has expired. Please log in again.');
+            // alert('Token has expired. Please log in again.');
         }, timeUntilExpiration);
     } else {
       removeTokenAdmin(); // หาก token หมดอายุแล้วให้ลบทันที

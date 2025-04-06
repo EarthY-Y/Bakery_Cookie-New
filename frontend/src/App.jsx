@@ -1,81 +1,145 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider} from 'react-router-dom'
-import {ProtectedRouteAdmin ,ProtectedRouteCustomer, CheckRouteCustomer, CheckRouteAdmin} from '../API/authService';
-import Dashboard from '../page/admin-page/dashboard-page/dashboard-page'
-import Login from '../page/login-page/login-page'
-import LoginLine from '../page/login-page/loginLine-page';
-import ListProduct from '../page/admin-page/product-page/listProduct-page'
-import ListPorductById from '../page/admin-page/product-page/listPorductById-page'
-import EditPorductById from '../page/admin-page/product-page/EditProduct-page'
-import ListMaterial from '../page/admin-page/material-page/listMaterial-page'
-import ListMaterialById from '../page/admin-page/material-page/listByIdMaterial-page';
-import EditMaterial from '../page/admin-page/material-page/editMaterial-page';
-import CreateMaterial from '../page/admin-page/material-page/createMaterial-page'
-import CreateAdmin from '../page/admin-page/createAdmin-page'
-import Admin from '../page/admin-page/listAdmin-page'
-import Signup from '../page/customer-page/signup-page/signup-page'
-import Signup2 from '../page/customer-page/signup-page/signup2-page'
-import ListAdmin from '../page/admin-page/listAdmin-page'
-import CreateProductMaterial from '../page/admin-page/product-page/createMaterialProduct-page';
-import Home from '../page/customer-page/home/home-page'
-import GuestHome from '../page/guest/guestHome-page'
-import CategoryProductListGuest from '../page/guest/categoryProductList-page';
-import GuestDetailPorductById from '../page/guest/guestDetailPorductById-page'
+import { useState, lazy, Suspense } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { ProtectedRouteAdmin, ProtectedRouteCustomer, CheckRouteCustomer, CheckRouteAdmin } from '../API/authService'
 import ErrorBoundary from '../components/error/ErrorBoundary'
 import { ErrorFallback } from '../components/error/errorFallback'
 import { FormProviderSignUpService } from '../API/signUpService'
 import { FormProviderProductService } from '../API/admin/productService'
-import CreateProduct from '../page/admin-page/product-page/createProduct-page'
-import DetailPorductById from '../page/customer-page/product/detailPorductById-page';
-import CategoryProductList from '../page/customer-page/product/categoryProductList-page copy';
-import Cart from '../page/customer-page/cart-page/cartProduct-page';
-import Payment from '../page/customer-page/cart-page/payment-page';
-import CreateAddress from '../page/customer-page/profile-page/createAddress-page';
-import LisetOrder from '../page/admin-page/order-page/listOrders-page'
-import ListHistoryOrders from '../page/admin-page/order-page/history-page/listHistoerOrders-page';
-import OrderHistoryById from '../page/admin-page/order-page/history-page/ordersHistoryById-page';
-import Orders from '../page/customer-page/cart-page/orders-page';
-import OrderById from '../page/admin-page/order-page/ordersBtId-page';
-import Status from '../page/admin-page/status/orders/status-page';
-import CreateStatusOrder from '../page/admin-page/status/orders/createStatusOrder-page'
-import EditOrderStatus from '../page/admin-page/status/orders/editOrderStatus-page'
-import StatusCart from '../page/admin-page/status/cart/statusCart-page';
-import CreateStatusCart from '../page/admin-page/status/cart/createStatusCart-page'
-import EditCratStatus from '../page/admin-page/status/cart/editCartStatus-page'
-import Categoey from '../page/admin-page/category/categoryProduct/listCategory-page';
-import CreateCategory from '../page/admin-page/category/categoryProduct/createCategory-page'
-import EditCategory from '../page/admin-page/category/categoryProduct/editCategory-page';
-import CategoryById from '../page/admin-page/category/categoryProduct/categoryById-page'
-import ListCategoryPackage from '../page/admin-page/category/categoryPackge/listCategoryPackage-page';
-import CreateCategoryPackage from '../page/admin-page/category/categoryPackge/createCategoryPackage-page'
-import EditCategoryPackage from '../page/admin-page/category/categoryPackge/editCategoryPackage-page';
-import CategoryByIdPackage from '../page/admin-page/category/categoryPackge/categoryPackgeById-page'
-import ListCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/listCategoryStatusOrder-page';
-import CreateCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/createCategoryStatusOrder-page'
-import EditCategoryStatusOrder from '../page/admin-page/category/categoryStatusOrder/editCategoryStatusOrder-page';
-import CategoryByIdStatusOrder from '../page/admin-page/category/categoryStatusOrder/categoryStatusOrderById-page'
-import Profile from '../page/customer-page/profile-page/profile-page';
-import ChangePassword from '../page/customer-page/profile-page/changePassword-page';
-import ListAddress from '../page/customer-page/profile-page/listAddress-page'
-import EditAddress from '../page/customer-page/profile-page/editAddress-page'
-import OrderTracking from '../page/customer-page/profile-page/orderTracking-page'
-import OrderTrackingDetail from '../page/customer-page/profile-page/orderTrackingDetail-page';
-import HistoryOrder from '../page/customer-page/profile-page/historyOrder-page';
-import CreatePackage from '../page/admin-page/package-page/createPackage-page';
-import ListPackage from '../page/admin-page/package-page/listPackage-page';
-import PackageById from '../page/admin-page/package-page/listPackageById-page';
-import EditPackageById from '../page/admin-page/package-page/editPackage-page';
-import ListShippingCost from '../page/admin-page/shippingCost-page/listShippingCost-page'
-import ListShippingCostById from '../page/admin-page/shippingCost-page/listShippingCostById-page'
-import EditShippingCost from '../page/admin-page/shippingCost-page/editShippingCost-page'
-import CreateShippingCost from '../page/admin-page/shippingCost-page/createShippingCost-page'
-import ManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustomer-page';
-import EditManagerCustomer from '../page/admin-page/manageCustomer-page/manageCustomerById-page';
-import LineOA from '../page/customer-page/communicate-page/lineOA-page';
-import GuestLineOA from '../page/guest/lineOA-page';
-import StepByStep from '../page/guest/stepByStep-page';
-import UserManual from '../page/customer-page/home/stepByStep-page';
+import LoadingSpinner from '../components/untils/popUp/LoadingSpinner' // สมมติว่ามี component นี้อยู่แล้ว
 
+// Lazy load components based on routes
+// Guest and Auth Components
+const GuestHome = lazy(() => import('../page/guest/guestHome-page'))
+const Login = lazy(() => import('../page/login-page/login-page'))
+const LoginLine = lazy(() => import('../page/login-page/loginLine-page'))
+const Signup = lazy(() => import('../page/customer-page/signup-page/signup-page'))
+const Signup2 = lazy(() => import('../page/customer-page/signup-page/signup2-page'))
+const GuestDetailPorductById = lazy(() => import('../page/guest/guestDetailPorductById-page'))
+const CategoryProductListGuest = lazy(() => import('../page/guest/categoryProductList-page'))
+const GuestLineOA = lazy(() => import('../page/guest/lineOA-page'))
+const StepByStep = lazy(() => import('../page/guest/stepByStep-page'))
+
+// Admin Components
+const Dashboard = lazy(() => import('../page/admin-page/dashboard-page/dashboard-page'))
+const ListAdmin = lazy(() => import('../page/admin-page/listAdmin-page'))
+const CreateAdmin = lazy(() => import('../page/admin-page/createAdmin-page'))
+
+// Admin - Product Management
+const ListProduct = lazy(() => import('../page/admin-page/product-page/listProduct-page'))
+const ListPorductById = lazy(() => import('../page/admin-page/product-page/listPorductById-page'))
+const EditPorductById = lazy(() => import('../page/admin-page/product-page/EditProduct-page'))
+const CreateProduct = lazy(() => import('../page/admin-page/product-page/createProduct-page'))
+const CreateProductMaterial = lazy(() => import('../page/admin-page/product-page/createMaterialProduct-page'))
+
+// Admin - Material Management
+const ListMaterial = lazy(() => import('../page/admin-page/material-page/listMaterial-page'))
+const ListMaterialById = lazy(() => import('../page/admin-page/material-page/listByIdMaterial-page'))
+const EditMaterial = lazy(() => import('../page/admin-page/material-page/editMaterial-page'))
+const CreateMaterial = lazy(() => import('../page/admin-page/material-page/createMaterial-page'))
+
+// Admin - Orders Management
+const LisetOrder = lazy(() => import('../page/admin-page/order-page/listOrders-page'))
+const ListHistoryOrders = lazy(() => import('../page/admin-page/order-page/history-page/listHistoerOrders-page'))
+const OrderHistoryById = lazy(() => import('../page/admin-page/order-page/history-page/ordersHistoryById-page'))
+const OrderById = lazy(() => import('../page/admin-page/order-page/ordersBtId-page'))
+
+// Admin - Status Management
+const Status = lazy(() => import('../page/admin-page/status/orders/status-page'))
+const CreateStatusOrder = lazy(() => import('../page/admin-page/status/orders/createStatusOrder-page'))
+const EditOrderStatus = lazy(() => import('../page/admin-page/status/orders/editOrderStatus-page'))
+const StatusCart = lazy(() => import('../page/admin-page/status/cart/statusCart-page'))
+const CreateStatusCart = lazy(() => import('../page/admin-page/status/cart/createStatusCart-page'))
+const EditCratStatus = lazy(() => import('../page/admin-page/status/cart/editCartStatus-page'))
+
+// Admin - Category Management
+const Categoey = lazy(() => import('../page/admin-page/category/categoryProduct/listCategory-page'))
+const CreateCategory = lazy(() => import('../page/admin-page/category/categoryProduct/createCategory-page'))
+const EditCategory = lazy(() => import('../page/admin-page/category/categoryProduct/editCategory-page'))
+const CategoryById = lazy(() => import('../page/admin-page/category/categoryProduct/categoryById-page'))
+const ListCategoryPackage = lazy(() => import('../page/admin-page/category/categoryPackge/listCategoryPackage-page'))
+const CreateCategoryPackage = lazy(() => import('../page/admin-page/category/categoryPackge/createCategoryPackage-page'))
+const EditCategoryPackage = lazy(() => import('../page/admin-page/category/categoryPackge/editCategoryPackage-page'))
+const CategoryByIdPackage = lazy(() => import('../page/admin-page/category/categoryPackge/categoryPackgeById-page'))
+const ListCategoryStatusOrder = lazy(() => import('../page/admin-page/category/categoryStatusOrder/listCategoryStatusOrder-page'))
+const CreateCategoryStatusOrder = lazy(() => import('../page/admin-page/category/categoryStatusOrder/createCategoryStatusOrder-page'))
+const EditCategoryStatusOrder = lazy(() => import('../page/admin-page/category/categoryStatusOrder/editCategoryStatusOrder-page'))
+const CategoryByIdStatusOrder = lazy(() => import('../page/admin-page/category/categoryStatusOrder/categoryStatusOrderById-page'))
+
+// Admin - Package Management
+const CreatePackage = lazy(() => import('../page/admin-page/package-page/createPackage-page'))
+const ListPackage = lazy(() => import('../page/admin-page/package-page/listPackage-page'))
+const PackageById = lazy(() => import('../page/admin-page/package-page/listPackageById-page'))
+const EditPackageById = lazy(() => import('../page/admin-page/package-page/editPackage-page'))
+
+// Admin - Shipping Cost Management
+const ListShippingCost = lazy(() => import('../page/admin-page/shippingCost-page/listShippingCost-page'))
+const ListShippingCostById = lazy(() => import('../page/admin-page/shippingCost-page/listShippingCostById-page'))
+const EditShippingCost = lazy(() => import('../page/admin-page/shippingCost-page/editShippingCost-page'))
+const CreateShippingCost = lazy(() => import('../page/admin-page/shippingCost-page/createShippingCost-page'))
+
+// Admin - Customer Management
+const ManagerCustomer = lazy(() => import('../page/admin-page/manageCustomer-page/manageCustomer-page'))
+const EditManagerCustomer = lazy(() => import('../page/admin-page/manageCustomer-page/manageCustomerById-page'))
+
+// Customer Components
+const Home = lazy(() => import('../page/customer-page/home/home-page'))
+const LineOA = lazy(() => import('../page/customer-page/communicate-page/lineOA-page'))
+const UserManual = lazy(() => import('../page/customer-page/home/stepByStep-page'))
+const DetailPorductById = lazy(() => import('../page/customer-page/product/detailPorductById-page'))
+const CategoryProductList = lazy(() => import('../page/customer-page/product/categoryProductList-page copy'))
+const Cart = lazy(() => import('../page/customer-page/cart-page/cartProduct-page'))
+const Orders = lazy(() => import('../page/customer-page/cart-page/orders-page'))
+const Payment = lazy(() => import('../page/customer-page/cart-page/payment-page'))
+const CreateAddress = lazy(() => import('../page/customer-page/profile-page/createAddress-page'))
+
+// Customer - Profile Management
+const Profile = lazy(() => import('../page/customer-page/profile-page/profile-page'))
+const ChangePassword = lazy(() => import('../page/customer-page/profile-page/changePassword-page'))
+const ListAddress = lazy(() => import('../page/customer-page/profile-page/listAddress-page'))
+const EditAddress = lazy(() => import('../page/customer-page/profile-page/editAddress-page'))
+const OrderTracking = lazy(() => import('../page/customer-page/profile-page/orderTracking-page'))
+const OrderTrackingDetail = lazy(() => import('../page/customer-page/profile-page/orderTrackingDetail-page'))
+const HistoryOrder = lazy(() => import('../page/customer-page/profile-page/historyOrder-page'))
+import ErrorPopup from '../components/untils/popUp/errorPopup'
+
+const RouteErrorBoundary = ({ children }) => {
+  const [error, setError] = useState(null);
+
+  // ฟังก์ชันสำหรับจัดการ error ที่เกิดขึ้นในระหว่างการโหลด component
+  const handleError = (err) => {
+    console.error("Route error:", err);
+    setError(err.message || "เกิดข้อผิดพลาดในการโหลดหน้า");
+    // คุณสามารถทำการ log error ไปยัง service หรือทำอย่างอื่นได้ที่นี่
+  };
+
+  // ล้าง error เมื่อปิด popup
+  const clearError = () => {
+    setError(null);
+  };
+
+  return (
+    <>
+      {error && (
+        <ErrorPopup 
+          message={error} 
+          text="เชื่อมต่อล้มเหลว" 
+          onClose={clearError} 
+        />
+      )}
+      <ErrorBoundary onError={handleError}>
+        {children}
+      </ErrorBoundary>
+    </>
+  );
+};
+// Wrapping component for lazy loading with suspense
+const SuspenseWrapper = ({ children }) => (
+  <RouteErrorBoundary>
+    <Suspense fallback={<LoadingSpinner />}>
+      {children}
+    </Suspense>
+  </RouteErrorBoundary>
+);
 const router = createBrowserRouter([
   {
     path: "",
@@ -86,26 +150,26 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <GuestHome />,
+            element: <SuspenseWrapper><GuestHome /></SuspenseWrapper>,
           },
           {
             path: "Cookie&New/:id",
-            element: <GuestDetailPorductById />,
+            element: <SuspenseWrapper><GuestDetailPorductById /></SuspenseWrapper>,
           },
           {
             path: "/list/category/product/:id",
-            element: <CategoryProductListGuest />,
+            element: <SuspenseWrapper><CategoryProductListGuest /></SuspenseWrapper>,
           },
           {
             path: "/login",
             children: [
               {
                 path: '',
-                element: <Login />,
+                element: <SuspenseWrapper><Login /></SuspenseWrapper>,
               },
               {
                 path: 'line',
-                element: <LoginLine />,
+                element: <SuspenseWrapper><LoginLine /></SuspenseWrapper>,
               }
             ]
           },
@@ -115,16 +179,20 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: (
-                  <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
-                    <Signup />
+                  <FormProviderSignUpService>
+                    <SuspenseWrapper>
+                      <Signup />
+                    </SuspenseWrapper>
                   </FormProviderSignUpService>
                 ),
               },
               {
                 path: "step2",
                 element: (
-                  <FormProviderSignUpService>  {/* ห่อหุ้มด้วย FormProviderSignUpService ที่นี่ */}
-                    <Signup2 />
+                  <FormProviderSignUpService>
+                    <SuspenseWrapper>
+                      <Signup2 />
+                    </SuspenseWrapper>
                   </FormProviderSignUpService>
                 ),
               },
@@ -132,41 +200,41 @@ const router = createBrowserRouter([
           },
           {
             path: "guest-contact",
-            element: <GuestLineOA />,
+            element: <SuspenseWrapper><GuestLineOA /></SuspenseWrapper>,
           },
           {
             path: "guestManual",
-            element: <StepByStep />,
+            element: <SuspenseWrapper><StepByStep /></SuspenseWrapper>,
           },
         ]
       }, 
       
       //route Admin
       {
-        element: <ProtectedRouteAdmin />, // ใช้ ProtectedLayout ที่นี่
+        element: <ProtectedRouteAdmin />,
         children: [
           {
             path: "/dashboard",
-            element: <Dashboard />,
+            element: <SuspenseWrapper><Dashboard /></SuspenseWrapper>,
           },
           {
             path: "/material",
             children: [
               {
                 path: "",
-                element: <ListMaterial />,
+                element: <SuspenseWrapper><ListMaterial /></SuspenseWrapper>,
               },
               {
                 path: "view/:id",
-                element: <ListMaterialById />,
+                element: <SuspenseWrapper><ListMaterialById /></SuspenseWrapper>,
               },
               {
-                path: "create", // ลบ '/' หน้า path
-                element: <CreateMaterial />,
+                path: "create",
+                element: <SuspenseWrapper><CreateMaterial /></SuspenseWrapper>,
               },
               {
                 path: "edit/:id",
-                element: <EditMaterial />,
+                element: <SuspenseWrapper><EditMaterial /></SuspenseWrapper>,
               },
             ],
           },
@@ -175,19 +243,19 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <ListShippingCost />,
+                element: <SuspenseWrapper><ListShippingCost /></SuspenseWrapper>,
               },
               {
                 path: "view/:id",
-                element: <ListShippingCostById />,
+                element: <SuspenseWrapper><ListShippingCostById /></SuspenseWrapper>,
               },
               {
-                path: "create", // ลบ '/' หน้า path
-                element: <CreateShippingCost />,
+                path: "create",
+                element: <SuspenseWrapper><CreateShippingCost /></SuspenseWrapper>,
               },
               {
                 path: "edit/:id",
-                element: <EditShippingCost />,
+                element: <SuspenseWrapper><EditShippingCost /></SuspenseWrapper>,
               },
             ],
           },
@@ -199,19 +267,19 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    element: <Categoey />,
+                    element: <SuspenseWrapper><Categoey /></SuspenseWrapper>,
                   },
                   {
                     path: "view/:id",
-                    element: <CategoryById />,
+                    element: <SuspenseWrapper><CategoryById /></SuspenseWrapper>,
                   },
                   {
                     path: "create",
-                    element: <CreateCategory />,
+                    element: <SuspenseWrapper><CreateCategory /></SuspenseWrapper>,
                   },
                   {
                     path: "edit/:id",
-                    element: <EditCategory />,
+                    element: <SuspenseWrapper><EditCategory /></SuspenseWrapper>,
                   },
                 ],
               },
@@ -221,19 +289,19 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    element: <ListCategoryPackage />,
+                    element: <SuspenseWrapper><ListCategoryPackage /></SuspenseWrapper>,
                   },
                   {
                     path: "view/:id",
-                    element: <CategoryByIdPackage />,
+                    element: <SuspenseWrapper><CategoryByIdPackage /></SuspenseWrapper>,
                   },
                   {
                     path: "create",
-                    element: <CreateCategoryPackage />,
+                    element: <SuspenseWrapper><CreateCategoryPackage /></SuspenseWrapper>,
                   },
                   {
                     path: "edit/:id",
-                    element: <EditCategoryPackage />,
+                    element: <SuspenseWrapper><EditCategoryPackage /></SuspenseWrapper>,
                   },
                 ],
               },
@@ -243,19 +311,19 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    element: <ListCategoryStatusOrder />,
+                    element: <SuspenseWrapper><ListCategoryStatusOrder /></SuspenseWrapper>,
                   },
                   {
                     path: "view/:id",
-                    element: <CategoryByIdStatusOrder />,
+                    element: <SuspenseWrapper><CategoryByIdStatusOrder /></SuspenseWrapper>,
                   },
                   {
                     path: "create",
-                    element: <CreateCategoryStatusOrder />,
+                    element: <SuspenseWrapper><CreateCategoryStatusOrder /></SuspenseWrapper>,
                   },
                   {
                     path: "edit/:id",
-                    element: <EditCategoryStatusOrder />,
+                    element: <SuspenseWrapper><EditCategoryStatusOrder /></SuspenseWrapper>,
                   },
                 ],
               },
@@ -266,37 +334,40 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <ListProduct />,
+                element: <SuspenseWrapper><ListProduct /></SuspenseWrapper>,
               },
               {
                 path: "view/:id",
-                element: <ListPorductById />,
+                element: <SuspenseWrapper><ListPorductById /></SuspenseWrapper>,
               },
               {
-                path: "create", // ลบ '/' หน้า path
+                path: "create",
                 children: [
                   {
                     path: "",
                     element: (
                       <FormProviderProductService>
-                        <CreateProduct />
+                        <SuspenseWrapper>
+                          <CreateProduct />
+                        </SuspenseWrapper>
                       </FormProviderProductService>
-                      ),
+                    ),
                   },
                   {
-                    path: "materialproduct", // ลบ '/' หน้า path
+                    path: "materialproduct",
                     element: (
-                    <FormProviderProductService>
-                      <CreateProductMaterial />
-                    </FormProviderProductService>
+                      <FormProviderProductService>
+                        <SuspenseWrapper>
+                          <CreateProductMaterial />
+                        </SuspenseWrapper>
+                      </FormProviderProductService>
                     ),
                   },
                 ]
-                
               },
               {
                 path: "edit/:id",
-                element: <EditPorductById />,
+                element: <SuspenseWrapper><EditPorductById /></SuspenseWrapper>,
               },
             ],
           },
@@ -305,19 +376,19 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <ListPackage />,
+                element: <SuspenseWrapper><ListPackage /></SuspenseWrapper>,
               },
               {
                 path: "view/:id",
-                element: <PackageById />,
+                element: <SuspenseWrapper><PackageById /></SuspenseWrapper>,
               },
               {
-                path: "create", // ลบ '/' หน้า path
-                element: <CreatePackage/>
+                path: "create",
+                element: <SuspenseWrapper><CreatePackage /></SuspenseWrapper>,
               },
               {
                 path: "edit/:id",
-                element: <EditPackageById />,
+                element: <SuspenseWrapper><EditPackageById /></SuspenseWrapper>,
               },
             ],
           },
@@ -326,11 +397,11 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <ListAdmin />,
+                element: <SuspenseWrapper><ListAdmin /></SuspenseWrapper>,
               },
               {
                 path: "create",
-                element: <CreateAdmin />,
+                element: <SuspenseWrapper><CreateAdmin /></SuspenseWrapper>,
               },
             ],
           },
@@ -339,11 +410,11 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <LisetOrder />,
+                element: <SuspenseWrapper><LisetOrder /></SuspenseWrapper>,
               },
               {
                 path: "view/detail/order/:id",
-                element: <OrderById />,
+                element: <SuspenseWrapper><OrderById /></SuspenseWrapper>,
               },
             ],
           },
@@ -352,11 +423,11 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                // element: <ListHistoryOrders />,
+                element: <SuspenseWrapper><ListHistoryOrders /></SuspenseWrapper>,
               },
               {
                 path: "view/detail/order/:id",
-                element: <OrderHistoryById />,
+                element: <SuspenseWrapper><OrderHistoryById /></SuspenseWrapper>,
               },
             ],
           },
@@ -368,15 +439,15 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    element: <Status />,
+                    element: <SuspenseWrapper><Status /></SuspenseWrapper>,
                   },
                   {
                     path: "create",
-                    element: <CreateStatusOrder />
+                    element: <SuspenseWrapper><CreateStatusOrder /></SuspenseWrapper>,
                   },
                   {
                     path: "edit/order/:id",
-                    element: <EditOrderStatus/>
+                    element: <SuspenseWrapper><EditOrderStatus /></SuspenseWrapper>,
                   },
                 ]
               },
@@ -385,15 +456,15 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    element: <StatusCart />,
+                    element: <SuspenseWrapper><StatusCart /></SuspenseWrapper>,
                   },
                   {
                     path: "create",
-                    element: <CreateStatusCart/>
+                    element: <SuspenseWrapper><CreateStatusCart /></SuspenseWrapper>,
                   },
                   {
                     path: "edit/cart/:id",
-                    element: <EditCratStatus/>
+                    element: <SuspenseWrapper><EditCratStatus /></SuspenseWrapper>,
                   },
                 ]
               },
@@ -404,11 +475,11 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <ManagerCustomer />,
+                element: <SuspenseWrapper><ManagerCustomer /></SuspenseWrapper>,
               },
               {
                 path: "view/:id",
-                element: <EditManagerCustomer/>
+                element: <SuspenseWrapper><EditManagerCustomer /></SuspenseWrapper>,
               },
             ]
           },
@@ -416,47 +487,47 @@ const router = createBrowserRouter([
       },
     
       //route User
-      { //ProtectedRouteCustomer จะถูกใช้งานเเค่รอบเดียวคือตอน render หน้าเว็บเเต่ถ้ามีการเปลี่ยน component ของในจะไม่ถูกเรียกใช้
-        element: <ProtectedRouteCustomer />, // ใช้ ProtectedLayout ที่นี่
+      {
+        element: <ProtectedRouteCustomer />,
         children: [
           {
             path: "/home",
-            element: <Home />,
+            element: <SuspenseWrapper><Home /></SuspenseWrapper>,
           },
           {
             path: "/contact",
-            element: <LineOA />,
+            element: <SuspenseWrapper><LineOA /></SuspenseWrapper>,
           },
           {
             path: "userManual",
-            element: <UserManual />,
+            element: <SuspenseWrapper><UserManual /></SuspenseWrapper>,
           },
           {
             path: "/product/:id",
-            element: <DetailPorductById />,
+            element: <SuspenseWrapper><DetailPorductById /></SuspenseWrapper>,
           },
           {
             path: "/category/:id",
-            element: <CategoryProductList />,
+            element: <SuspenseWrapper><CategoryProductList /></SuspenseWrapper>,
           },
           {
             path: "/cart/:id",
-            element: <Cart />,
+            element: <SuspenseWrapper><Cart /></SuspenseWrapper>,
           },
           {
             path: "/orders/:id",
-            element: <Orders />,
+            element: <SuspenseWrapper><Orders /></SuspenseWrapper>,
           },
           {
             path: "/payment/:id",
-            element: <Payment />,
+            element: <SuspenseWrapper><Payment /></SuspenseWrapper>,
           },
           {
             path: "/create/address",
             children: [
               {
                 path: "",
-                element: <CreateAddress />,
+                element: <SuspenseWrapper><CreateAddress /></SuspenseWrapper>,
               },
             ],
           },
@@ -465,22 +536,22 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <Profile />,
+                element: <SuspenseWrapper><Profile /></SuspenseWrapper>,
               },
               {
                 path: "changePassword",
-                element: <ChangePassword />,
+                element: <SuspenseWrapper><ChangePassword /></SuspenseWrapper>,
               },
               {
                 path: "customer/address",
                 children: [
                   {
                     path: "",
-                    element: <ListAddress />,
+                    element: <SuspenseWrapper><ListAddress /></SuspenseWrapper>,
                   },
                   {
                     path: "edit/:id",
-                    element: <EditAddress />,
+                    element: <SuspenseWrapper><EditAddress /></SuspenseWrapper>,
                   },
                 ],
               },
@@ -489,11 +560,11 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    element: <OrderTracking />,
+                    element: <SuspenseWrapper><OrderTracking /></SuspenseWrapper>,
                   },
                   {
                     path: "view/detail/:id",
-                    element: <OrderTrackingDetail />,
+                    element: <SuspenseWrapper><OrderTrackingDetail /></SuspenseWrapper>,
                   },
                 ]
               },
@@ -502,11 +573,11 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: "",
-                    element: <HistoryOrder />,
+                    element: <SuspenseWrapper><HistoryOrder /></SuspenseWrapper>,
                   },
                   {
                     path: "view/detail/:id",
-                    element: <OrderTrackingDetail />,
+                    element: <SuspenseWrapper><OrderTrackingDetail /></SuspenseWrapper>,
                   },
                 ]
               },
@@ -516,7 +587,6 @@ const router = createBrowserRouter([
       }
     ]
   },
-
 ]);
 
 function App() {

@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getCategoryService } from '../../../../API/guest/guestProductService'
 import SearchShowListGuest from '../../../untils/fucntion/searchShowListGuest';
+import ErrorPopup from '../../../untils/popUp/errorPopup';
+
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_LOGO
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
+  const [error, setError] = useState(null);
+  
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -18,7 +22,7 @@ const Navbar = () => {
           // console.log(getListProduct.data);
           setCategoryList(getCategory.data)
         } catch (error) {
-          alert(error);
+          setError(error)
         }
       };
       fetchData();
@@ -100,6 +104,9 @@ const Navbar = () => {
             <Link className="btn btn-outline text-white rounded-pill mx-1" to="/guest-contact">ติดต่อสอบถาม</Link>
           </nav>
         </div>
+      )}
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
       )}
     </div>
   );

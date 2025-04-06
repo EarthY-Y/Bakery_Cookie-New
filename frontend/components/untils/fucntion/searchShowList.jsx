@@ -2,11 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { listProductService } from '../../../API/customer/productService';
+import ErrorPopup from '../popUp/errorPopup';
 
 const SearchShowList = ({ name, itemKeys }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
   //useMemo เพื่อเก็บ instance ของ Fuse ช่วยลดการสร้างตัวแปรใหม่ทุกครั้งที่ component render หรือ data เปลี่ยนแปลง
   const fuse = useMemo(() => new Fuse(products, {
     keys: ["product_name"], //ได้เเค่ Array
@@ -24,7 +26,7 @@ const SearchShowList = ({ name, itemKeys }) => {
         // console.log(getListProduct.data);
         setProducts(getListProduct.data);
       } catch (error) {
-        alert(error);
+        setError(error)
       }
     };
     fetchData();
@@ -75,6 +77,10 @@ const SearchShowList = ({ name, itemKeys }) => {
           <li className="text-black">ไม่พบข้อมูล</li>
         </ul>
         )}
+
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
     
   );

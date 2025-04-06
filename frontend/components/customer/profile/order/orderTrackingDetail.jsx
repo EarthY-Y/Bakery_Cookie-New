@@ -77,7 +77,11 @@ const OrderTracking = () => {
         const isCancelable = getStatusListForCancelOrders.data.some((status) => status.status_name === detailData.status);
         setShowCanCel(isCancelable)
         setPostCode(detailResponse.data[0]?.post_code || "")
-
+        if (postCode) {
+          const trackingData = await getTracking(postCode); // รอข้อมูลจาก API
+          console.log("trackingData:", trackingData.response.items[postCode]); // ดูข้อมูลใน console
+          setTracking(trackingData.response.items[postCode]); // ตั้งค่า state ด้วยข้อมูลที่ได้
+        }
         const historyData = historyResponse.data;
         setOrdersHistory(historyData);
         setLatestStatus(historyResponse.data[0] || [])
@@ -97,23 +101,6 @@ const OrderTracking = () => {
 
     fetchOrders();
   }, [id]);
-
-  useEffect(() => {
-    const trackingData = async () => {
-      if (postCode) {
-        try {
-          const trackingData = await getTracking(postCode); // รอข้อมูลจาก API
-          console.log("trackingData:", trackingData.response.items[postCode]); // ดูข้อมูลใน console
-          setTracking(trackingData.response.items[postCode]); // ตั้งค่า state ด้วยข้อมูลที่ได้
-        } catch (error) {
-          console.error("Error fetching tracking data:", error); // จัดการกับ error
-        }
-      }
-    };
-
-    trackingData();
-  }, [postCode])
-
 
   const isCompleted = (stepName) => {
     return ordersHistory.some((status) => status.status_name === stepName);

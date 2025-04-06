@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { listShippingByIdService } from '../../../API/admin/shippingCostService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const listShippingById = () => {
   const {id} = useParams();
   const [shippingMyId, setShippingId] = useState([])
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getlistShippingById = async()=> {
@@ -21,7 +23,7 @@ const listShippingById = () => {
       }
       
       catch (error) {
-        alert(error)
+        setError(error)
       }
     }
     getlistShippingById()
@@ -82,6 +84,9 @@ const listShippingById = () => {
           <Link to={`/shipping/edit/${id}`} className="text-center px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
 
   );

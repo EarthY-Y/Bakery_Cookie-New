@@ -5,15 +5,17 @@ import { CartProvider } from './navbar/CartContext';
 
 const LayoutComponent = ({ children }) => {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
-
+  
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 992);
     };
     window.addEventListener('resize', handleResize);
+  
+    // clean-up function to remove event listener
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+  }, []); // [] ทำให้ event listener จะถูกติดตั้งแค่ครั้งเดียว
+  
   return (
     <React.Fragment>
         <div style={{ backgroundColor: '#FFF2E1', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

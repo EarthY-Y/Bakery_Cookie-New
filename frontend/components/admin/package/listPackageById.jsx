@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import { packageDetailByIdService } from '../../../API/admin/packageService';
 import { formatDate } from '../../untils/frommatters/datetime';
+import ErrorPopup from '../../untils/popUp/errorPopup';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE_PACKAGE
 
 const ListPackageById = () => {
   const { id } = useParams();
   const [packageById, setpackageById] = useState([])
-
+  const [error, setError] = useState(null);
+  
   useEffect(() => {
     const getpackageById = async () => {
       try {
@@ -22,7 +24,7 @@ const ListPackageById = () => {
       }
 
       catch (error) {
-        alert(error)
+        setError(error)
       }
     }
     getpackageById()
@@ -85,6 +87,9 @@ const ListPackageById = () => {
           <Link to={`/package/edit/${id}`} className="text-center mt-3 px-4 btn btn-warning"><i className="bi bi-pencil"></i> แก้ไข </Link>
         </div>
       </div>
+      {error && (
+        <ErrorPopup message={error} text="เชื่อมต่อล้มเหลว" onClose={() => setError(null)} />
+      )}
     </div>
 
   );
