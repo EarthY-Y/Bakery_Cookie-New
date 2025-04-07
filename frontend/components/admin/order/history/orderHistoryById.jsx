@@ -53,7 +53,9 @@ const orderHistoryById = () => {
       } catch (error) {
         setError(error)
       } finally {
-        setIsLoading(false);
+        if(tracking) {
+          setIsLoading(false);
+        }
       }
     }
 
@@ -69,6 +71,8 @@ const orderHistoryById = () => {
           setTracking(trackingData.response.items[postCode]); // ตั้งค่า state ด้วยข้อมูลที่ได้
         } catch (error) {
           console.error("Error fetching tracking data:", error); // จัดการกับ error
+        }finally {
+          setIsLoading(false);
         }
       }
     };
