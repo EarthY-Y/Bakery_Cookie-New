@@ -238,7 +238,7 @@ export const getTokenPostTH = async() => {
 export const getTracking = async(id) => {
   try {
     const authToken = localStorage.getItem('token')
-    const response = await axios.post(API_URL + "/get/tracking/"+id,
+    const response = await axios.post(API_URL + "/get/customer/tracking/"+id,
       {
         headers: {
           'authorization': `Bearer ${authToken}`
