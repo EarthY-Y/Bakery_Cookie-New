@@ -31,6 +31,6 @@ router.get('/admin/get/status/list/for/changeOrders', verifyAdminMid, getStatusL
 router.get('/admin/get/order/address/:id', verifyAdminMid, getOrdersAddressById);
 router.patch('/admin/update/postCode/order/:id', verifyAdminMid, updatePostCodeOrder);
 router.patch('/admin/update/status/order/:id', verifyAdminMid, updateStatusOrder);
-router.post('/admin/get/tracking/:id',verifyAdminMid, getTracking);
+router.post('/admin/get/tracking/:id', getTracking);
 
 export default router
