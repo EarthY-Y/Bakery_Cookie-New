@@ -26,6 +26,7 @@ export const getTokenPostTH = async () => {
 export const getTracking = async (req, res) => {
   const id = req.params.id;
   // console.log("ID:", id);
+  console.log('tokenPostManAPI',tokenPostManAPI);
   
   const API_URL = 'https://trackapi.thailandpost.co.th/post/api/v1/track';
   try {
