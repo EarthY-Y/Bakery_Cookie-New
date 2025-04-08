@@ -55,16 +55,6 @@ app.use('/picture/upload/profile/customer', express.static(path.join(__dirname, 
 app.use('/picture/upload/profile/admin', express.static(path.join(__dirname, 'upload/image/profileAdmin')));
 app.use('/picture/upload/payment', express.static(path.join(__dirname, 'upload/image/payment')));
 
-app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"], // อนุญาตแค่แหล่งข้อมูลที่มาจากตัวเอง
-      scriptSrc: ["'self'", `${process.env.FRONTEND}`], // อนุญาตแค่สคริปต์จากตัวเองและ CDN ที่เชื่อถือได้
-      connectSrc: ["'self'", `${process.env.THAILANDPOST}`], // อนุญาตให้ทำการเชื่อมต่อจาก Thailand Post API
-    },
-  },
-}));
-
 //app.use(bodyParser.urlencoded({ extended: true })); //ใช้ body-parser เพื่อแปลงข้อมูลที่ส่งมาจาก client เป็น JSON object
 
 const limiterAPIAuth = rateLimit({
@@ -102,6 +92,16 @@ app.use(cors({
   //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
   // credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
+}));
+
+app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"], // อนุญาตแค่แหล่งข้อมูลที่มาจากตัวเอง
+      scriptSrc: ["'self'", `${process.env.FRONTEND}`], // อนุญาตแค่สคริปต์จากตัวเองและ CDN ที่เชื่อถือได้
+      connectSrc: ["'self'", `${process.env.THAILANDPOST}`], // อนุญาตให้ทำการเชื่อมต่อจาก Thailand Post API
+    },
+  },
 }));
 
 //อนุญาติการใช้ session storage
