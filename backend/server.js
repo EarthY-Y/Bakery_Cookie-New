@@ -51,7 +51,16 @@ const app = express();
 //เรียกใช้งานไฟล์ที่อยู่ในโฟลเดอร์ upload โดยใช้ express.static เพื่อให้สามารถเข้าถึงโฟลเดอร์ได้จากภายนอก
 app.use('/picture', express.static(path.join(__dirname, 'picture'))); //เรียกใช้ก่อน Helmet เพราะว่า Helmet จะทำให้ไม่สามารถเข้าถึงไฟล์ได้จาก origin อื่นได้
 
-app.use(helmet()) //ใช้ helmet เพื่อป้องกันการโจมตีจาก web ต่างๆ
+app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"], // อนุญาตแค่แหล่งข้อมูลที่มาจากตัวเอง
+      scriptSrc: ["'self'", `${process.env.FRONTEND}`], // อนุญาตแค่สคริปต์จากตัวเองและ CDN ที่เชื่อถือได้
+      connectSrc: ["'self'", `${process.env.THAILANDPOST}`], // อนุญาตให้ทำการเชื่อมต่อจาก Thailand Post API
+    },
+  },
+}));
+
 //app.use(bodyParser.urlencoded({ extended: true })); //ใช้ body-parser เพื่อแปลงข้อมูลที่ส่งมาจาก client เป็น JSON object
 
 const limiterAPIAuth = rateLimit({
@@ -85,7 +94,7 @@ app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ�
 
 //กำหนดต้นทางหรือ origin ที่จะเข้ามาใช้ API ของเรา
 app.use(cors({
-  origin: process.env.FRONTEND, //กำหนดอยู่ใน vite.config
+  origin: [process.env.FRONTEND,process.env.THAILANDPOST], //กำหนดอยู่ใน vite.config
   //methods: ['GET', 'POST'], // วิธีการที่อนุญาต
   // credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
