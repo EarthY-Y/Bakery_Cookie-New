@@ -75,12 +75,10 @@ const limiterAPI = rateLimit({
   standardHeaders: true, // ส่งคืน headers มาตรฐาน (X-RateLimit-*)
   legacyHeaders: false, // ปิดการใช้งาน `X-RateLimit-*` headers
   handler: (req, res, next, options) => {
-    console.error(`Rate limit exceeded: IP=${req.ip}, Route=${req.originalUrl}, Current=${req.rateLimit.current}, Limit=${req.rateLimit.limit}`);
-    res.status(429).send('Too Many Requests');
-  },
-  // ทำการบันทึกเมื่อมีการเรียกใช้ API 
-  onLimitReached: (req, res, options) => {
-    console.warn(`Rate limit reached: IP=${req.ip}, Route=${req.originalUrl}`);
+    console.log('User hit the limit:', req.ip)
+    res.status(429).json({
+      message: 'Too many requests, please try again later.'
+    })
   }
 });
  
@@ -121,7 +119,7 @@ app.use(orderRounte/* , limiterAPI */)
 app.use(materialRounte/* , limiterAPI */)
 app.use(productRoute/* , limiterAPI */)
 app.use(PackageRoute/* , limiterAPI */)
-app.use(authRoute, limiterAPIAuth)
+app.use(authRoute/*, limiterAPIAuth */)
 app.use(adminRoute/* , limiterAPI */)
 app.use(paymentRoute/* , limiterAPI */)
 app.use(AddressRoute/* , limiterAPI */)

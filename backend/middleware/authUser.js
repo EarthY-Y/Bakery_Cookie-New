@@ -14,6 +14,9 @@ export const verifyCustomer = async (req, res, next) => {
         db.query("SELECT customer_id FROM customer WHERE customer_id = ? and is_active = ?",
             [authToken.customerId, "1"],
             (err, results) => {
+                if(err){
+                    return res.status(422).json(err)
+                }
                 if (results.length === 0) {
                     console.log('in length = 0');
                     return res.status(404).json({ message: "User not found" });
@@ -52,6 +55,6 @@ export const verifyCustomerMid = async (req, res, next) => {
 
     } catch (err) {
         console.log('Error', err)
-        return res.status(500).send({ message: 'Server error' })
+        return res.status(500).send(err)
     }
 }

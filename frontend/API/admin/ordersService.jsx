@@ -292,8 +292,8 @@ export const updatePostCodeOrderService = async (id, postCode) => {
 
 export const getTracking = async(id) => {
   try {
-    const authToken = localStorage.getItem('token')
-    const response = await axios.patch(API_URL + "/get/tracking/"+id,
+    const authToken = localStorage.getItem('tokenAdmin')
+    const response = await axios.post(API_URL + "/get/tracking/"+id,
       {
         headers: {
           'authorization': `Bearer ${authToken}`

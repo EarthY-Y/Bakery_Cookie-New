@@ -15,6 +15,9 @@ export const verifyAdmin = async (req, res , next) => {
         db.query("SELECT admin_id FROM admin WHERE admin_id = ?", //อนาคตต้องเพิ่มการเช็ค role ด้วยได้มาจาก 3 ตารางเชื่อมมกันเเต่จะ select เเค่ชื่อมาเช็ค
             [authToken.admin_id], 
             (err, results) => {
+                if(err){
+                    return res.status(422).json(err)
+                }
                 if (results.length === 0) {
                     return res.status(404).json({ message: "User not found" });
                 }
@@ -52,6 +55,6 @@ export const verifyAdminMid = async (req, res , next) => {
         
     } catch (err) {
         console.log('Error',err)
-        return res.status(500).send({ message: 'Server error' })
+        return res.status(500).send(err)
     }
 }
