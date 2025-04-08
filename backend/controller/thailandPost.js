@@ -17,7 +17,7 @@ export const getTokenPostTH = async () => {
       }
     });
     tokenPostManAPI = response.data.token
-    console.log(response.data);
+    // console.log(response.data);
   } catch (error) {
     console.error("Error:", error);
   }
@@ -34,7 +34,6 @@ export const getTracking = async (req, res) => {
       language: "TH",
       barcode: [`${id}`]
     };
-    console.log(tokenPostManAPI);
     
     const response = await axios.post(API_URL, data, {
       headers: {
@@ -44,11 +43,14 @@ export const getTracking = async (req, res) => {
       maxBodyLength: Infinity
     });
 
-    console.log(JSON.stringify(response.data));
+    // console.log('response getTracking' , JSON.stringify(response.data));
     return res.status(200).json(response.data); // หรือ JSON.stringify(response.data) หากต้องการส่งคืนในรูปแบบ string
   } catch (error) {
     console.error("Error getTracking:", error);
-    throw error; // หากต้องการโยนข้อผิดพลาดกลับไป
+    return res.status(500).json({ 
+      message: "เกิดข้อผิดพลาดในการติดตามพัสดุ", 
+      error 
+    });
   }
 };
 
