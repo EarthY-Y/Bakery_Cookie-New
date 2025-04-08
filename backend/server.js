@@ -32,8 +32,6 @@ import DashboardRoute from './routes/admin/dashboardRoute.js'
 import OrderHistoryRoute from './routes/admin/orderHistory-Route.js'
 import ManageCustomer from './routes/admin/manageCustomer-Route.js'
 
-import {getTokenPostTH} from './controller/thailandPost.js'
-
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import { join, dirname } from 'path';
@@ -57,15 +55,15 @@ app.use('/picture/upload/profile/customer', express.static(path.join(__dirname, 
 app.use('/picture/upload/profile/admin', express.static(path.join(__dirname, 'upload/image/profileAdmin')));
 app.use('/picture/upload/payment', express.static(path.join(__dirname, 'upload/image/payment')));
 
-// app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
-//   contentSecurityPolicy: {
-//     directives: {
-//       defaultSrc: ["'self'"], // อนุญาตแค่แหล่งข้อมูลที่มาจากตัวเอง
-//       scriptSrc: ["'self'", `${process.env.FRONTEND}`], // อนุญาตแค่สคริปต์จากตัวเองและ CDN ที่เชื่อถือได้
-//       connectSrc: ["'self'", `${process.env.THAILANDPOST}`], // อนุญาตให้ทำการเชื่อมต่อจาก Thailand Post API
-//     },
-//   },
-// }));
+app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"], // อนุญาตแค่แหล่งข้อมูลที่มาจากตัวเอง
+      scriptSrc: ["'self'", `${process.env.FRONTEND}`], // อนุญาตแค่สคริปต์จากตัวเองและ CDN ที่เชื่อถือได้
+      connectSrc: ["'self'", `${process.env.THAILANDPOST}`], // อนุญาตให้ทำการเชื่อมต่อจาก Thailand Post API
+    },
+  },
+}));
 
 //app.use(bodyParser.urlencoded({ extended: true })); //ใช้ body-parser เพื่อแปลงข้อมูลที่ส่งมาจาก client เป็น JSON object
 
@@ -116,11 +114,6 @@ app.use(session ({
     secure: 'auto',
   }
 }))
-
-//ตอนนี้ render ที่เป็น  Hosting ฝั่ง server จะ sleep ทุก 15 นาทีถ้าไม่มีคนใช้งาน
-getTokenPostTH().then(() => {
-  console.log("🚀 Server started with tracking token!");
-});
 
 //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
 app.use(customerRoute/* , limiterAPI */)
