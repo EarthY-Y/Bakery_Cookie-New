@@ -53,9 +53,7 @@ const orderById = () => {
       } catch (error) {
         setError(error)
       }finally {
-        if(tracking) {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     }
 
