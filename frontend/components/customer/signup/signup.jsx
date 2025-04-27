@@ -25,14 +25,14 @@ const Signup = () => {
                 <div className="row mb-4">
                   <label htmlFor="fname" className="col-3 col-auto col-form-label">ชื่อ</label>
                   <div className="col-8">
-                    <input name='f_name' type="text" minLength={5} onChange={handleChange} value={formData.f_name} required className="form-control" id="fname" placeholder="ชื่อ" />
+                    <input name='f_name' type="text" minLength={1} onChange={handleChange} value={formData.f_name} required className="form-control" id="fname" placeholder="ชื่อ" />
                   </div>
                 </div>
 
                 <div className="row mb-4">
                   <label htmlFor="sname" className="col-3 col-auto col-form-label">นามสกุล</label>
                   <div className="col-8">
-                    <input name='l_name' type="text" minLength={5} onChange={handleChange} value={formData.l_name} required className="form-control" id="sname" placeholder="นามสกุล" />
+                    <input name='l_name' type="text" minLength={1} onChange={handleChange} value={formData.l_name} required className="form-control" id="sname" placeholder="นามสกุล" />
                   </div>
                 </div>
 
