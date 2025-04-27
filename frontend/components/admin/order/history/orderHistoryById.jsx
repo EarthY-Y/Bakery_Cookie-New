@@ -52,10 +52,6 @@ const orderHistoryById = () => {
         setOrderAddress(getOrderAddress.data[0])
       } catch (error) {
         setError(error)
-      } finally {
-        if(tracking) {
-          setIsLoading(false);
-        }
       }
     }
 
@@ -74,6 +70,8 @@ const orderHistoryById = () => {
         }finally {
           setIsLoading(false);
         }
+      }else {
+        setIsLoading(false);
       }
     };
 

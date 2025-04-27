@@ -89,16 +89,13 @@ const OrderTracking = () => {
       } catch (err) {
         console.error("Error fetching orders data:", err);
         setError(err)
-      }finally {
-        if(tracking) {
-          setIsLoading(false);
-        }
       }
     };
 
     fetchOrders();
   }, [id]);
 
+  //เอาไปไว้รวมกับ fetchOrders ไม่ได้เพราะว่าต้องรอข้อมูจาก setPostCode ก่อน
   useEffect(() => {
     const trackingData = async () => {
       if (postCode) {
@@ -108,9 +105,12 @@ const OrderTracking = () => {
           setTracking(trackingData.response.items[postCode]); // ตั้งค่า state ด้วยข้อมูลที่ได้
         } catch (error) {
           console.error("Error fetching tracking data:", error); // จัดการกับ error
-        }finally {
+        }finally { 
+          //เพราะการเรียกใช้งาน API ของไปรษณีย์เสร็จที่หลัง ถึงเราจะใช้ useState เก็บ true/false เพื่อเอาไปมันก็ย้อนกลับไปทำ finally ของ fetchOrders ก็ไม่ทันเพราะมันเสร็จก่อนเเละก็ไม่สน t/f ยังไงก็ต้อง setIsLoading(false);
           setIsLoading(false);
         }
+      }else {
+        setIsLoading(false);
       }
     };
 
