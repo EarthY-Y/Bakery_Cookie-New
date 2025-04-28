@@ -6,6 +6,7 @@ import { numberGrouping } from '../../untils/frommatters/numberFormatting';
 import LoadingPopup from '../../untils/popUp/loading';
 import ErrorPopup from '../../untils/popUp/errorPopup';
 import AlertPopUp from '../../untils/popUp/alertPopUp';
+import { useCart } from '../layOut/navbar/CartContext';
 import ConfirmPopUpModal from '../../untils/popUp/confirmPopUp';
 
 const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
@@ -13,6 +14,7 @@ const API_URL_PICTURE = import.meta.env.VITE_API_Port_PICTURE
 const cartProduct = () => {
   const {id} = useParams();
   const navigate = useNavigate()
+  const { addToCart } = useCart();
   const [productCart, setProductCart] = useState([])
   const [totalPrice, setTotalPrice] = useState(0); 
   const isPaymentDisabled = totalPrice < 250;  // กำหนดเงื่อนไขการเปิด/ปิดปุ่ม
@@ -52,25 +54,30 @@ const cartProduct = () => {
     setProductCart(updatedCart);
   };
 
-  const handleUpdateCartProduct = async (cart_product_id, status, value) => {
-    try {
-      const response = await upadateCartService(cart_product_id, status, value);
-      if (!response.data) throw new Error('ไม่มีข้อมูล');
-    } catch (error) {
-      setError(error);
-    }
-  };
+    const handleUpdateCartProduct = async (cart_product_id, status, value) => {
+      try {
+        const response = await upadateCartService(cart_product_id, status, value);
+        if (!response.data) throw new Error('ไม่มีข้อมูล');
+      } catch (error) {
+        setError(error);
+      }
+    };
+    //ที่รู้ว่าเป็น product ตัวไหนเพราะว่าใช้ cart_product_id 
+    const handleQuantityChange = (cart_product_id, change) => {
+      setProductCart((prevCart) =>
+        prevCart.map((item) =>
+          item.cart_product_id === cart_product_id
+            ? { ...item, quantity: Math.max(item.quantity + change, 1) } //Math.max กันไม่ให้ต่ำกว่า 1
+            : item
+        )
+      );
+      handleUpdateCartProduct(cart_product_id, change > 0 ? 'add' : 'minus', 1);
 
-  const handleQuantityChange = (cart_product_id, change) => {
-    setProductCart((prevCart) =>
-      prevCart.map((item) =>
-        item.cart_product_id === cart_product_id
-          ? { ...item, quantity: Math.max(item.quantity + change, 1) }
-          : item
-      )
-    );
-    handleUpdateCartProduct(cart_product_id, change > 0 ? 'add' : 'minus', 1);
-  };
+      const itemToAdd = productCart.find((item) => item.cart_product_id === cart_product_id); //หาเเค่ 1 ตัวเเล้วส่งไปด้วยการใช้ find ไม่ต้องใช้ map ที่ต้อง loop ทั้งหมด
+      if (itemToAdd) {
+        addToCart(itemToAdd, 1);
+      }
+    };
 
   const handleDeleteProductCart = (id) => {
     deletePorductCartService(id)

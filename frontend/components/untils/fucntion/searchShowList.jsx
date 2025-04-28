@@ -9,7 +9,10 @@ const SearchShowList = ({ name, itemKeys }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  //useMemo เพื่อเก็บ instance ของ Fuse ช่วยลดการสร้างตัวแปรใหม่ทุกครั้งที่ component render หรือ data เปลี่ยนแปลง
+  /*useMemo เพื่อเก็บ instance ของ Fuse ช่วยลดการสร้างตัวแปรใหม่ทุกครั้งที่ component render หรือ data เปลี่ยนแปลง 
+  ช่วยให้ไม่ต้องสร้าง Fuse ใหม่ทุกครั้งที่มีการพิมพ์ค้นหา (searchTerm เปลี่ยน)
+  เพราะ searchTerm เปลี่ยนมันไม่กระทบ products ดังนั้น fuse instance ยังใช้ตัวเดิมได้เลย
+  */
   const fuse = useMemo(() => new Fuse(products, {
     keys: ["product_name"], //ได้เเค่ Array
     threshold: 0.2,
@@ -18,15 +21,23 @@ const SearchShowList = ({ name, itemKeys }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [
-          getListProduct,
-        ] = await Promise.all([
-          listProductService(),
-        ])
-        // console.log(getListProduct.data);
-        setProducts(getListProduct.data);
+        //! ข้อเสียคือถ้าในระหว่าง 1 ชม. นี้มีการเพิ่มเมนูใหม่มาลูกค้าจะไม่เห็น วิธีเเก้คือทำ ปุ่มให้ล้าง cache หรือ localStorage, ใช้ API ส่งข้อมูลใหม่มาเมื่อมีการสร้างสินค้าใหม่, Background Refresh (Pre-fetch ใหม่เบื้องหลัง)
+        const cachedData = localStorage.getItem('productList');
+        const cachedTimestamp = localStorage.getItem('productListTimestamp');
+        const oneHour = 60 * 60 * 1000;
+
+        if (cachedData && cachedTimestamp && (Date.now() - cachedTimestamp < oneHour)) {
+          console.log('โหลดข้อมูลจาก Cache');
+          setProducts(JSON.parse(cachedData));
+        } else {
+          console.log('เรียกข้อมูลจาก API');
+          const [getListProduct] = await Promise.all([listProductService()]);
+          setProducts(getListProduct.data);
+          localStorage.setItem('productList', JSON.stringify(getListProduct.data));
+          localStorage.setItem('productListTimestamp', Date.now());
+        }
       } catch (error) {
-        setError(error)
+        setError(error);
       }
     };
     fetchData();

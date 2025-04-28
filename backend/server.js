@@ -46,7 +46,7 @@ const __dirname = dirname(__filename);
 //เรียกใช้ express ด้วย app
 const app = express();
 
-//เรียกใช้งานไฟล์ที่อยู่ในโฟลเดอร์ upload โดยใช้ express.static เพื่อให้สามารถเข้าถึงโฟลเดอร์ได้จากภายนอก
+//เรียกใช้งานไฟล์ที่อยู่ในโฟลเดอร์ upload โดยใช้ express.static เพื่อให้สามารถเข้าถึงโฟลเดอร์ได้จากภายนอก ไม่ใช่การใช้ cache เเต่จะเก็บไว้ใน folder ของฝั่ง server ถ้า server ดับไฟล์หายไปเลย
 app.use('/picture', express.static(path.join(__dirname, 'picture'))); //เรียกใช้ก่อน Helmet เพราะว่า Helmet จะทำให้ไม่สามารถเข้าถึงไฟล์ได้จาก origin อื่นได้
 
 app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
