@@ -52,8 +52,6 @@ const orderById = () => {
         setOrderAddress(getOrderAddress.data[0])
       } catch (error) {
         setError(error)
-      }finally {
-        setIsLoading(false);
       }
     }
 
@@ -72,6 +70,8 @@ const orderById = () => {
         }finally {
           setIsLoading(false);
         }
+      }else {
+        setIsLoading(false);
       }
     };
 
