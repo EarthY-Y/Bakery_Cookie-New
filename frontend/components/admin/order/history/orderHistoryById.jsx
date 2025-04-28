@@ -59,18 +59,17 @@ const orderHistoryById = () => {
   }, [])
 
   useEffect(() => {
+    setIsLoading(true);
     const trackingData = async () => {
-      if (postCode) {
-        try {
-          const trackingData = await getTracking(postCode); // รอข้อมูลจาก API
-          console.log("trackingData:", trackingData.response.items[postCode]); // ดูข้อมูลใน console
-          setTracking(trackingData.response.items[postCode]); // ตั้งค่า state ด้วยข้อมูลที่ได้
-        } catch (error) {
-          console.error("Error fetching tracking data:", error); // จัดการกับ error
-        }finally {
-          setIsLoading(false);
+      try {
+        if (postCode) {
+          const trackingData = await getTracking(postCode);
+          console.log("trackingData:", trackingData.response.items[postCode]);
+          setTracking(trackingData.response.items[postCode]);
         }
-      }else {
+      } catch (error) {
+        console.error("Error fetching tracking data:", error);
+      }finally { 
         setIsLoading(false);
       }
     };
