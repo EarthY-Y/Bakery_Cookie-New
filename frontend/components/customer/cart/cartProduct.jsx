@@ -42,28 +42,47 @@ const cartProduct = () => {
     getCart()
   },[])
 
-  const inputAmount = (value, cart_product_id) => {
-    const updatedCart = productCart.map((item) => {
-      if (item.cart_product_id === cart_product_id) {
-        const newValue = Math.max(Number(value), 1); // ตรวจสอบให้ค่าต่ำสุดคือ 1 ใช้ parseInt(value) ก้็ได้เพื่อเเปลงค่าให้มี dataType เดียวกัน
-        handleUpdateCartProduct(cart_product_id, "input" , newValue)
-        return { ...item, quantity: newValue };
-      }
-      return item;
-    });
-    setProductCart(updatedCart);
+  const handleUpdateCartProduct = async (cart_product_id, status, value) => {
+    try {
+      const response = await upadateCartService(cart_product_id, status, value);
+      if (!response.data) throw new Error('ไม่มีข้อมูล');
+    } catch (error) {
+      setError(error);
+    }
   };
 
-    const handleUpdateCartProduct = async (cart_product_id, status, value) => {
-      try {
-        const response = await upadateCartService(cart_product_id, status, value);
-        if (!response.data) throw new Error('ไม่มีข้อมูล');
-      } catch (error) {
-        setError(error);
-      }
-    };
-    //ที่รู้ว่าเป็น product ตัวไหนเพราะว่าใช้ cart_product_id 
-    const handleQuantityChange = (cart_product_id, change) => {
+  // ใช้สำหรับกรอกจำนวนสินค้าเอง
+  const inputAmount = (value, cart_product_id) => {
+    const newValue = Math.max(Number(value), 1); // กันค่าติดลบ
+    const originalItem = productCart.find((item) => item.cart_product_id === cart_product_id); //หาว่ามี product ตัวนี้ในตะกร้าไหม
+    
+    if (!originalItem) return; // ถ้าไม่มีให้ return
+  
+    const oldQuantity = originalItem.quantity;
+    const diff = newValue - oldQuantity; // คำนวณความแตกต่างระหว่างจำนวนที่เปลี่ยนเเปลงกับจำนวนเดิม
+  
+    //อัพเดทจำนวนสินค้าลงในตะกร้า
+    const updatedCart = productCart.map((item) => 
+      item.cart_product_id === cart_product_id
+        ? { ...item, quantity: newValue }
+        : item
+    );
+    
+    setProductCart(updatedCart);
+  
+    if (diff !== 0) {
+      const status = diff > 0 ? 'add' : 'minus';
+      handleUpdateCartProduct(cart_product_id, status, Math.abs(diff)); //absค ค่าสมบูรณ์ คือไม่ติดลบ
+      addToCart(originalItem, diff); // diff เป็นค่าที่ทำให้รู้ว่าจำนวนสินค้าเพิ่มขึ้นหรือลดลง ทำให้ราคาที่ navbar เปลี่ยนเเปลงขึ้นลงตามที่ลูกค้ากรอกได้
+    }
+  };
+  
+  //ใช่สำหรับกดปุ่ม +, - 
+  const handleQuantityChange = (cart_product_id, change) => { //ที่รู้ว่าเป็น product ตัวไหนเพราะว่าใช้ cart_product_id 
+    let minQuantity = productCart.find((item) => item.cart_product_id === cart_product_id).quantity; //หาว่ามี product ตัวนี้ในตะกร้าไหม
+    console.log("minQuantity", minQuantity);
+    
+    if(minQuantity + change >= 1) {
       setProductCart((prevCart) =>
         prevCart.map((item) =>
           item.cart_product_id === cart_product_id
@@ -72,19 +91,27 @@ const cartProduct = () => {
         )
       );
       handleUpdateCartProduct(cart_product_id, change > 0 ? 'add' : 'minus', 1);
-
       const itemToAdd = productCart.find((item) => item.cart_product_id === cart_product_id); //หาเเค่ 1 ตัวเเล้วส่งไปด้วยการใช้ find ไม่ต้องใช้ map ที่ต้อง loop ทั้งหมด
       if (itemToAdd) {
-        addToCart(itemToAdd, 1);
+        addToCart(itemToAdd, change);
       }
-    };
+    }else {
+      setError("จำนวนสินค้าถึงจำนวนขั้นต่ำที่กำหนดแล้ว")
+    }
+  };
 
   const handleDeleteProductCart = (id) => {
     deletePorductCartService(id)
       .then(() => {
         setProductCart((prev) => prev.filter((item) => item.cart_product_id !== id));
+        
       })
       .catch(err => console.log(err))
+      .finally(() => {
+        const deleteProductCart = productCart.find((item) => item.cart_product_id === id);
+        let deleteProductCartQauntity = 0 - deleteProductCart.quantity; //จำนวนที่ลบออกไป
+        addToCart(deleteProductCart, deleteProductCartQauntity); // ส่งค่าลงไปใน cartContext เพื่อให้ราคาที่ navbar เปลี่ยนเเปลงตามที่ลูกค้ากดลบ
+      })
   }
 
   // คำนวณราคาทั้งหมด
