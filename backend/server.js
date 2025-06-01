@@ -60,7 +60,6 @@ app.use(helmet({ //ใช้ helmet เพื่อป้องกันกา�
 }));
 
 //app.use(bodyParser.urlencoded({ extended: true })); //ใช้ body-parser เพื่อแปลงข้อมูลที่ส่งมาจาก client เป็น JSON object
-
 const limiterAPIAuth = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minutes
   max: 500, // limit each IP to 100 requests per windowMs

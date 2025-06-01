@@ -6,24 +6,35 @@ test.describe('Username/Password Login', () => {
   });
 
   test('login success should redirect to /home', async ({ page }) => {
-    await page.fill('input[placeholder="ชื่อผู้ใช้"]', 'cookie');
+    await page.fill('input[placeholder="ชื่อผู้ใช้"]', 'supanat');
     await page.fill('input[placeholder="รหัสผ่าน"]', '1234');
     console.log('✅ filled username and password');
-    await page.click('button:has-text("เข้าสู่ระบบ")');
+    await page.click('button[type="submit"]');
     console.log('✅ clicked login button');
 
-    await page.waitForURL('http://localhost:5173/home');
+    await page.waitForURL(/\/home$/); // ✅ เช็คแบบ flexible
     await expect(page).toHaveURL(/\/home$/);
   });
 
-  test('login failed should show error popup', async ({ page }) => {
+  test('login failed user not Found', async ({ page }) => {
     await page.fill('input[placeholder="ชื่อผู้ใช้"]', 'cookie');
-    await page.fill('input[placeholder="รหัสผ่าน"]', '123');
+    await page.fill('input[placeholder="รหัสผ่าน"]', '1234');
     console.log('✅ filled username and password');
-    await page.click('button:has-text("เข้าสู่ระบบ")');
+    await page.click('button[type="submit"]');
     console.log('✅ clicked login button');
 
     const errorPopup = page.locator('.modal-body');
-    await expect(errorPopup).toContainText('เข้าสู่ระบบล้มเหลว');
+    await expect(errorPopup).toContainText('User not found');
+  });
+
+  test('login failed worng password', async ({ page }) => {
+    await page.fill('input[placeholder="ชื่อผู้ใช้"]', 'supanat');
+    await page.fill('input[placeholder="รหัสผ่าน"]', '123');
+    console.log('✅ filled username and password');
+    await page.click('button[type="submit"]');
+    console.log('✅ clicked login button');
+
+    const errorPopup = page.locator('.modal-body');
+    await expect(errorPopup).toContainText('Wrong Password');
   });
 });
