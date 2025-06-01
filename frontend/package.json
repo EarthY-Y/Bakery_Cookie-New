@@ -8,6 +8,7 @@
   "homepage": "https://bakerycookieandnew.onrender.com",
   "dependencies": {
     "@line/liff": "^2.25.0",
+    "@playwright/test": "^1.52.0",
     "@popperjs/core": "^2.11.8",
     "@tanstack/react-query": "^5.62.2",
     "aws-amplify": "^6.10.2",
@@ -20,6 +21,7 @@
     "eta": "^3.5.0",
     "force": "^0.0.3",
     "fuse.js": "^7.0.0",
+    "playwright": "^1.52.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-chartjs-2": "^5.2.0",
