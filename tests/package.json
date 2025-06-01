@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "playwright": "^1.52.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  },
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:ui": "playwright test --ui"
+  }
+}
