@@ -46,48 +46,38 @@ const __dirname = dirname(__filename);
 //เรียกใช้ express ด้วย app
 const app = express();
 
-//เรียกใช้งานไฟล์ที่อยู่ในโฟลเดอร์ upload โดยใช้ express.static เพื่อให้สามารถเข้าถึงโฟลเดอร์ได้จากภายนอก ไม่ใช่การใช้ cache เเต่จะเก็บไว้ใน folder ของฝั่ง server ถ้า server ดับไฟล์หายไปเลย
-app.use('/picture', express.static(path.join(__dirname, 'picture'))); //เรียกใช้ก่อน Helmet เพราะว่า Helmet จะทำให้ไม่สามารถเข้าถึงไฟล์ได้จาก origin อื่นได้
-
-app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"], // อนุญาตแค่แหล่งข้อมูลที่มาจากตัวเอง
-      scriptSrc: ["'self'", `${process.env.FRONTEND}`], // อนุญาตแค่สคริปต์จากตัวเองและ CDN ที่เชื่อถือได้
-      connectSrc: ["'self'", `${process.env.THAILANDPOST}`], // อนุญาตให้ทำการเชื่อมต่อจาก Thailand Post API
-    },
-  },
-}));
-
 //app.use(bodyParser.urlencoded({ extended: true })); //ใช้ body-parser เพื่อแปลงข้อมูลที่ส่งมาจาก client เป็น JSON object
-const limiterAPIAuth = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minutes
-  max: 500, // limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again later.",
-});
+// const limiterAPIAuth = rateLimit({
+//   windowMs: 1 * 60 * 1000, // 1 minutes
+//   max: 500, // limit each IP to 100 requests per windowMs
+//   message: "Too many requests from this IP, please try again later.",
+// });
 
 /*การเเยก rate limit สำหรับ API เเต่ละประเภทจะช่วยเพิ่มความเสรียมให้กับ API ของเรา
 โดยการกำหนดจำนวน request ที่อนุญาตในช่วงเวลาที่กำหนด */
-const limiterAPI = rateLimit({
-  windowMs: 1 * 60 * 1000, 
-  max: 500,
-  message: "Too many requests from this IP, please try again later.",
-  standardHeaders: true, // ส่งคืน headers มาตรฐาน (X-RateLimit-*)
-  legacyHeaders: false, // ปิดการใช้งาน `X-RateLimit-*` headers
-  handler: (req, res, next, options) => {
-    console.log('User hit the limit:', req.ip)
-    res.status(429).json({
-      message: 'Too many requests, please try again later.'
-    })
-  }
-});
- 
-app.use(express.json({ //convert object to json object
-  strict: true,  // ตั้งค่าให้ตรวจสอบ JSON ที่ไม่ถูกต้องอย่างเคร่งครัด
-  limit: '1mb',  // จำกัดขนาดของ body เพื่อป้องกันการส่งข้อมูลที่มากเกินไป
-}));
+// const limiterAPI = rateLimit({
+//   windowMs: 1 * 60 * 1000, 
+//   max: 500,
+//   message: "Too many requests from this IP, please try again later.",
+//   standardHeaders: true, // ส่งคืน headers มาตรฐาน (X-RateLimit-*)
+//   legacyHeaders: false, // ปิดการใช้งาน `X-RateLimit-*` headers
+//   handler: (req, res, next, options) => {
+//     console.log('User hit the limit:', req.ip)
+//     res.status(429).json({
+//       message: 'Too many requests, please try again later.'
+//     })
+//   }
+// });
 
-app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ่าน backend
+// app.use(helmet({ //ใช้ helmet เพื่อป้องกันการโจมตีต่างๆ
+//   contentSecurityPolicy: {
+//     directives: {
+//       defaultSrc: ["'self'"], // อนุญาตแค่แหล่งข้อมูลที่มาจากตัวเอง
+//       scriptSrc: ["'self'", `${process.env.FRONTEND}`], // อนุญาตแค่สคริปต์จากตัวเองและ CDN ที่เชื่อถือได้
+//       connectSrc: ["'self'", `${process.env.THAILANDPOST}`], // อนุญาตให้ทำการเชื่อมต่อจาก Thailand Post API
+//     },
+//   },
+// }));
 
 //กำหนดต้นทางหรือ origin ที่จะเข้ามาใช้ API ของเรา
 app.use(cors({
@@ -96,6 +86,13 @@ app.use(cors({
   // credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Header ที่อนุญาต
 }));
+ 
+app.use(express.json({ //convert object to json object
+  strict: true,  // ตั้งค่าให้ตรวจสอบ JSON ที่ไม่ถูกต้องอย่างเคร่งครัด
+  limit: '1mb',  // จำกัดขนาดของ body เพื่อป้องกันการส่งข้อมูลที่มากเกินไป
+}));
+
+app.use(cookieParser()) //ทำให้ใช้งาน cookie ได้ผ่าน backend
 
 //อนุญาติการใช้ session storage
 app.use(session ({
@@ -107,6 +104,9 @@ app.use(session ({
     secure: 'auto',
   }
 }))
+
+//เรียกใช้งานไฟล์ที่อยู่ในโฟลเดอร์ upload โดยใช้ express.static เพื่อให้สามารถเข้าถึงโฟลเดอร์ได้จากภายนอก ไม่ใช่การใช้ cache เเต่จะเก็บไว้ใน folder ของฝั่ง server ถ้า server ดับไฟล์หายไปเลย
+app.use('/picture', express.static(path.join(__dirname, 'picture'))); //ต้องเรียกใช้ก่อน Helmet เพราะว่า Helmet จะทำให้ไม่สามารถเข้าถึงไฟล์ได้จาก origin อื่นได้
 
 //เอาไว้ข้างล่างเพราะว่า ต้อง set ค่าต่างๆจากด้านบนก่อนอย่างเช่น session ที่ set ด้านบน ที่มีอยู่ใน authRoute 
 app.use(customerRoute/* , limiterAPI */)
