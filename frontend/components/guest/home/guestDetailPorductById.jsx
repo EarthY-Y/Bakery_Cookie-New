@@ -94,7 +94,7 @@ const detailPorductById = () => {
 
             {/* ปุ่มเพิ่มสินค้า */}
             <div className="gap-3 mt-3 text-center" style={{ flexWrap: 'nowrap' }}>
-              <button className="btn btn-success" style={{ padding: '10px 20px', width: '160px', whiteSpace: 'nowrap' }} onClick={handelErrorAddCart}>เพิ่มไปยังตะกร้า</button>
+              <button  type='button' className="btn btn-success" style={{ padding: '10px 20px', width: '160px', whiteSpace: 'nowrap' }} onClick={handelErrorAddCart}>เพิ่มไปยังตะกร้า</button>
             </div>
           </div>
         </div>
